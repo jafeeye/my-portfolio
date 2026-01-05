@@ -7,27 +7,6 @@ toc: true
 
 ---
 
-
-一、設定AD主機
-
-二、設定WDS主機
-
-三、 設定MDT
-
-甲、CustomSetting.ini
-
-乙、Bootstrap.ini
-
-丙、自動安裝Script
-
-四、啟動WDS主機
-
-五、已知問題
-
-六、 結語
-
-七、 參考資料
-
 ## 一、設定AD主機
 
 1.  AD 主機安裝功能：新增角色功能：AD網域服務、DHCP伺服器、DNS伺服器
@@ -173,7 +152,7 @@ msiexec /i 7z2501-x64.msi /quiet
 msiexec /i LibreOffice_25.8.2_Win_x86-64.msi /quiet
 ```
 
-四、啟動MDT
+## 四、啟動MDT
 
 1.新增做好的MDT映像檔
 
@@ -197,7 +176,7 @@ msiexec /i LibreOffice_25.8.2_Win_x86-64.msi /quiet
 
 3.最後啟動就可進行大量安裝作業
 
-**五、已知問題**
+## **五、已知問題**
 
 **1.****確保權限有被分享 (****需要手動設定開UNC$****權限)**
 
