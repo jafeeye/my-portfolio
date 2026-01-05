@@ -185,6 +185,8 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "layouts/partials/google_analytics.html",
+    "layouts/partials",
     "public/p/wds-mdt-企業大量自動部屬/index.html",
     "public/p/wds-mdt-企業大量自動部屬",
     "public/p/wds-mdt大量自動部屬/index.html",
@@ -193,8 +195,6 @@
     "public/p/wds-mdt大量自動不",
     "public/p/wds-mdtㄉ/index.html",
     "public/p/wds-mdtㄉ",
-    "public/p/wds/index.html",
-    "public/p/wds",
-    "public/p/wdt-m/index.html"
+    "public/p/wds/index.html"
   ]
 }
