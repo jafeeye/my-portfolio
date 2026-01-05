@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on Example Site</title>
+        <link>http://localhost:1313/posts/</link>
+        <description>Recent content in Posts on Example Site</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Example Person</copyright><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title></title>
+        <link>http://localhost:1313/posts/mdt/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/posts/mdt/</guid>
+        <description>&lt;p&gt;ÿþï¿½N0-Šš[Aï¿½Dï¿½;N_jï¿½
+ï¿½ŒN0-Šš[Wï¿½Dï¿½Sï¿½;N_jï¿½
+ï¿½	N0-Šš[ï¿½
+ï¿½&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
