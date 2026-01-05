@@ -56,5 +56,5 @@ net stop remoteaccess & net start remoteaccess
 1.802.1X Wireless AP
 ![image.png](image5.png)
 
-2.VPN連線
+2.VPN連線 
 ![image.png](image6.png)
