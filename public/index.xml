@@ -693,11 +693,36 @@ Host IP 乙太網路：192.168.8.6
     Google Analytics&lt;/div&gt;
   &lt;/div&gt;
 
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_mol_cmlc.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+    電腦硬體裝修丙級&lt;/div&gt;
+  &lt;/div&gt;
+
 &lt;/div&gt;
 
 
 &lt;/div&gt;
 
+&lt;h2 id=&#34;其他證照&#34;&gt;其他證照
+&lt;/h2&gt;&lt;div style=&#34;display:flex; gap:20px; flex-wrap:wrap; justify-content:center;&#34;&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_lvmh.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+  LVMH&lt;/div&gt;
+  &lt;/div&gt;
 </description>
         </item>
         

@@ -10,13 +10,13 @@
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-tw"
-                href="http://localhost:1313/my-portfolio/zh-tw/categories/"
+                hreflang="ja"
+                href="http://localhost:1313/my-portfolio/ja/categories/"
                 />
     <xhtml:link
                 rel="alternate"
-                hreflang="ja"
-                href="http://localhost:1313/my-portfolio/ja/categories/"
+                hreflang="zh-tw"
+                href="http://localhost:1313/my-portfolio/zh-tw/categories/"
                 />
     <xhtml:link
                 rel="alternate"
