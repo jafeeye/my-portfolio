@@ -1,7 +1,7 @@
 baseurl: https://jafeeye.github.io/my-portfolio/
 languageCode: en-us
 theme: hugo-theme-stack
-title: Example Site
+title: PIN技術筆記
 copyright: Example Person
 
 # Theme i18n support
@@ -15,11 +15,11 @@ hasCJKLanguage: false
 languages:
     en:
         languageName: English
-        title: Example Site
+        title: PIN技術Blog
         weight: 1
         params:
             sidebar:
-                subtitle: Example description
+                subtitle: 踩點一下技術
     zh-cn:
         languageName: 简体中文
         title: 演示站点
@@ -228,7 +228,34 @@ params:
 ### See https://stack.jimmycai.com/config/menu
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
 menu:
-    main: []
+    main: 
+        - identifier: home
+          name: 首頁
+          url: /
+          weight: 1
+          params:
+            icon: home
+
+        - identifier: about
+          name: 關於
+          url: /about/
+          weight: 2
+          params:
+            icon: user
+        
+        - identifier: Certification
+          name: 考照心得
+          url: /certs/
+          weight: 3
+          params:
+            icon: user
+
+        - identifier: search
+          name: 搜尋文章
+          url: /search/
+          weight: 4
+          params:
+            icon: user
 
     social:
         - identifier: github
