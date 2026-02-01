@@ -627,7 +627,8 @@ Host IP 乙太網路：192.168.8.6
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/my-portfolio/about/</guid>
-        <description>&lt;h2 id=&#34;證照&#34;&gt;證照
+        <description>&lt;p&gt;繞了一大圈的工程師&lt;/p&gt;
+&lt;h2 id=&#34;證照&#34;&gt;證照
 &lt;/h2&gt;&lt;div class=&#34;cert-grid&#34;&gt;
   
 
