@@ -69,6 +69,11 @@
     <loc>http://localhost:1313/my-portfolio/tags/</loc>
     <xhtml:link
                 rel="alternate"
+                hreflang="zh-tw"
+                href="http://localhost:1313/my-portfolio/zh-tw/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
                 hreflang="ja"
                 href="http://localhost:1313/my-portfolio/ja/tags/"
                 />
@@ -76,11 +81,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="http://localhost:1313/my-portfolio/zh-cn/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-tw"
-                href="http://localhost:1313/my-portfolio/zh-tw/tags/"
                 />
     <xhtml:link
                 rel="alternate"

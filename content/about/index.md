@@ -118,3 +118,15 @@ toc: true
     ">
   Canva</div>
   </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_wd40.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+  WD-40 cert.</div>
+  </div>
