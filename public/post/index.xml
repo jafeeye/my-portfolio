@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Posts on PIN技術Blog</title>
+        <title>Posts on PIN技術筆記</title>
         <link>http://localhost:1313/my-portfolio/post/</link>
-        <description>Recent content in Posts on PIN技術Blog</description>
+        <description>Recent content in Posts on PIN技術筆記</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>en</language>
+        <language>en-us</language>
         <copyright>Example Person</copyright>
         <lastBuildDate>Tue, 17 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/post/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>PVE 安裝CML</title>
-        <link>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/</link>
+        <title>PVE 安裝CML ESXi</title>
+        <link>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</link>
         <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/</guid>
-        <description>&lt;h3 id=&#34;簡介&#34;&gt;簡介
+        <guid>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</guid>
+        <description>&lt;h2 id=&#34;cml&#34;&gt;CML
+&lt;/h2&gt;&lt;h3 id=&#34;簡介&#34;&gt;簡介
 &lt;/h3&gt;&lt;p&gt;新版CML採用Ubuntu 24.10發行版製作，原理是開機先將&lt;code&gt;cml_2.9.1xx.iso&lt;/code&gt;進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。&lt;/p&gt;
 &lt;p&gt;BIOS：OVMF (UEFI)&lt;br&gt;
 硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native&lt;br&gt;
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)&lt;br&gt;
 CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217.png&#34;
 	width=&#34;1560&#34;
 	height=&#34;1201&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;CML畫面圖&#34;
+		alt=&#34;CML&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -33,7 +34,106 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
 		data-flex-basis=&#34;311px&#34;
 	
 &gt;&lt;span style=&#34;display:none&#34;&gt;.&lt;/span&gt;&lt;/p&gt;
-</description>
+&lt;h2 id=&#34;nested-esxi&#34;&gt;Nested ESXi
+&lt;/h2&gt;&lt;h3 id=&#34;簡介-1&#34;&gt;簡介
+&lt;/h3&gt;&lt;p&gt;安裝嵌套式ESXi，要在PVE中啟用&lt;strong&gt;Enable NUMA&lt;/strong&gt;，才能進入使用畫面&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;類型&lt;/th&gt;
+          &lt;th&gt;設定&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Processors Type&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;Host&lt;/strong&gt;、&lt;strong&gt;Enable NUMA&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BIOS Type&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;SeaBIOS&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Network Type&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;VMware vmxnet3&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;gns3&#34;&gt;GNS3
+&lt;/h2&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;類型&lt;/th&gt;
+          &lt;th&gt;設定&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Processors Type&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;Host&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;BIOS Type&lt;/td&gt;
+          &lt;td&gt;&lt;strong&gt;SeaBIOS&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Network Type&lt;/td&gt;
+          &lt;td&gt;VirtIO&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Disk&lt;/td&gt;
+          &lt;td&gt;Not add&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;1.在 &lt;a class=&#34;link&#34; href=&#34;https://github.com/GNS3/gns3-gui/releases/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Github&lt;/a&gt; 下載 &lt;code&gt;GNS3.VM.KVM.3.x.x.zip&lt;/code&gt;，並使用scp把檔案上傳至&lt;code&gt;/var/lib/vz/images&lt;/code&gt;，因為qcow2在proxmox無法直接使用，需匯入指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;qm&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;importdisk&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vmid&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;xxxx&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qcow2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;qm&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;importdisk&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;134&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vz&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;images&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;GNS3_VM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;disk001&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qcow2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;qm&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;importdisk&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;134&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vz&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;images&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;GNS3_VM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;disk002&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qcow2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;rm&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;rf&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vz&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;images&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;GNS3_VM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;disk00x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qcow2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成
+&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217.png&#34;
+	width=&#34;901&#34;
+	height=&#34;465&#34;
+	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_230dc590525151d9.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_b393221e1a5e09ed.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;pvesct0217.png&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;193&#34;
+		data-flex-basis=&#34;465px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
+&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217.png&#34;
+	width=&#34;955&#34;
+	height=&#34;389&#34;
+	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_bd8cc8df23d256a7.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_78c02687af75c02a.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;pvesr260217.png&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;245&#34;
+		data-flex-basis=&#34;589px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;vyos&#34;&gt;VyOS
+&lt;/h2&gt;</description>
         </item>
         <item>
         <title>Radius 企業驗證伺服器架設 </title>

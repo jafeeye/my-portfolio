@@ -33,7 +33,7 @@
     <loc>http://localhost:1313/my-portfolio/post/</loc>
     <lastmod>2026-02-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/</loc>
+    <loc>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</loc>
     <lastmod>2026-02-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</loc>
@@ -72,11 +72,6 @@
     <loc>http://localhost:1313/my-portfolio/tags/</loc>
     <xhtml:link
                 rel="alternate"
-                hreflang="zh-tw"
-                href="http://localhost:1313/my-portfolio/zh-tw/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
                 hreflang="ja"
                 href="http://localhost:1313/my-portfolio/ja/tags/"
                 />
@@ -84,6 +79,11 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="http://localhost:1313/my-portfolio/zh-cn/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-tw"
+                href="http://localhost:1313/my-portfolio/zh-tw/tags/"
                 />
     <xhtml:link
                 rel="alternate"

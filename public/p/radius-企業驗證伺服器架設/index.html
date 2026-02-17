@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
 <title>Radius 企業驗證伺服器架設 </title>
@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="Radius 企業驗證伺服器架設 ">
 <meta property='og:description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/'>
-<meta property='og:site_name' content='PIN技術Blog'>
+<meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-05T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Radius 企業驗證伺服器架設 ">
 <meta name="twitter:description" content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
@@ -69,8 +69,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/my-portfolio">PIN技術Blog</a></h1>
-            <h2 class="site-description">踩點一下技術</h2>
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -181,10 +181,10 @@
                 
                 
                 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
 </svg>
 
 
@@ -194,37 +194,47 @@
             </a>
         </li>
         
-        <li class="menu-bottom-section">
-            <ol class="menu">
-                    
-                        <li id="i18n-switch">  
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M4 5h7" />
-  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
-  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
-  <path d="M12 20l4 -9l4 9" />
-  <path d="M19.1 18h-6.2" />
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
 </svg>
 
 
 
-                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
-                                
-                                    <option value="http://localhost:1313/my-portfolio/" selected>English</option>
-                                
-                                    <option value="http://localhost:1313/my-portfolio/ja/" >日本語</option>
-                                
-                                    <option value="http://localhost:1313/my-portfolio/zh-cn/" >简体中文</option>
-                                
-                                    <option value="http://localhost:1313/my-portfolio/zh-tw/" >正體中文</option>
-                                
-                                    <option value="http://localhost:1313/my-portfolio/ar/" >عربي</option>
-                                
-                            </select>
-                        </li>
-                    
                 
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
                 
                     <li id="dark-mode-toggle">

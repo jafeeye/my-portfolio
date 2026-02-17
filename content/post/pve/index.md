@@ -1,5 +1,5 @@
 ---
-title: PVE 安裝CML,ESXi...
+title: PVE 安裝CML ESXi
 date: 2026-02-17
 toc: true
 ---
@@ -12,12 +12,11 @@ BIOS：OVMF (UEFI)
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)  
 CD/DVD (ide1)：refplat-20250616-fcs.iso  
 
-![CML畫面圖](cml0217.png)<span style="display:none">.</span>
+![CML](cml0217.png)<span style="display:none">.</span>
 
 
 ## Nested ESXi
-
-## 簡介
+### 簡介
 安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面
 
 | 類型              | 設定                       |
@@ -49,3 +48,4 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
 ![pvesr260217.png](pvesr260217.png)
 
+## VyOS
