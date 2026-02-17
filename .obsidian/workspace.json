@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/radius/index.md",
+                "file": "content/post/pve/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -183,18 +183,24 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "ca51aa279fc78fde",
+  "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "content/post/pve/Pasted image 20260217110917.png",
+    "Pasted image 20260217110831.png",
+    "content/post/pve/index.md",
+    "content/post/mdt/index.md",
+    "content/about/index.md",
+    "content/post/pve",
+    "content/about/badge_az900.png",
+    "content/post/hello.md",
+    "content/post/radius/index.md",
     "content/post/radius/image1.png",
     "content/post/radius/image2.png",
-    "content/post/radius/index.md",
     "content/post/radius/image.png",
     "content/post/radius/image6.png",
     "content/post/radius/image5.png",
     "content/post/radius/image4.png",
     "content/post/radius/image3.png",
-    "content/post/mdt/index.md",
-    "content/post/hello.md",
     "content/post/radius",
     "layouts/partials/google_analytics.html",
     "layouts/partials",
@@ -203,7 +209,6 @@
     "public/p/wds-mdt大量自動部屬/index.html",
     "public/p/wds-mdt大量自動部屬",
     "public/p/wds-mdt大量自動不/index.html",
-    "public/p/wds-mdt大量自動不",
-    "public/p/wds-mdtㄉ/index.html"
+    "public/p/wds-mdt大量自動不"
   ]
 }
