@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/pve/index.md",
+                "file": "content/post/nutanix/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -185,6 +185,10 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "content/post/mdt/index.md",
+    "content/post/nutanix/index.md",
+    "content/post/pve/index.md",
+    "content/post/nutanix",
     "public/web/index.html",
     "public/web",
     "content/web/index.md",
@@ -205,19 +209,15 @@
     "resources/_gen/images/p",
     "resources/_gen/images/img",
     "resources/_gen/assets/scss",
-    "resources/_gen/images",
-    "resources/_gen/assets",
     "content/page/search/index.md",
     "content/search/index.md",
     "content/page/archives/index.md",
     "content/page/index.md",
-    "content/post/pve/index.md",
     "().md",
     "themes/hugo-theme-stack/README.md",
     "archetypes/default.md",
     "Pasted.md",
     "content/post/radius/index.md",
-    "content/post/mdt/index.md",
     "content/about/index.md",
     "content/post/hello.md"
   ]
