@@ -15,8 +15,10 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 ![CML畫面圖](cml0217.png)<span style="display:none">.</span>
 
 
-
 ## Nested ESXi
+
+## 簡介
+安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面
 
 | 類型              | 設定                       |
 | --------------- | ------------------------ |
@@ -24,7 +26,7 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 | BIOS Type       | **SeaBIOS**              |
 | Network Type    | **VMware vmxnet3**       |
 
-### GNS3
+## GNS3
 | 類型              | 設定          |
 | --------------- | ----------- |
 | Processors Type | **Host**    |
@@ -46,3 +48,4 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 
 3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
 ![pvesr260217.png](pvesr260217.png)
+
