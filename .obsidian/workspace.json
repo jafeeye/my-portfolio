@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/pve/index.md",
+                "file": "themes/hugo-theme-stack/README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "README"
             }
           }
         ]
@@ -185,31 +185,33 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
-    "content/post/pve/cml0217.png",
+    "assets/scss/custom.scss",
+    "assets/scss/新文字文件.txt",
+    "assets/scss/新增 Google Slides.gslides",
+    "assets/scss",
+    "assets/新增資料夾",
+    "static/css/custom.css",
+    "static/css/新文字文件.txt",
+    "static/css",
+    "static/新增資料夾",
+    "static",
+    "新增資料夾",
+    "public/p/pve-安裝cml/cml0217_hu_9aba0c1c799b27f3.png",
+    "public/p/pve-安裝cml/cml0217_hu_bd18de661c508ea4.png",
+    "resources/_gen/images/p/pve-安裝cml/cml0217_hu_bd18de661c508ea4.png",
+    "resources/_gen/images/p/pve-安裝cml/cml0217_hu_9aba0c1c799b27f3.png",
+    "public/p/pve-安裝cml/cml0217.png",
+    "archetypes/default.md",
+    "content/post/radius/image.png",
     "content/post/pve/index.md",
+    "content/post/pve/cml0217.png",
     "Pasted.md",
     "content/post/radius/index.md",
-    "content/post/radius/image.png",
     "content/post/mdt/index.md",
     "Pasted image 20260217110831.png",
     "content/about/index.md",
-    "content/post/pve",
     "content/about/badge_az900.png",
     "content/post/hello.md",
-    "content/post/radius/image1.png",
-    "content/post/radius/image2.png",
-    "content/post/radius/image6.png",
-    "content/post/radius/image5.png",
-    "content/post/radius/image4.png",
-    "content/post/radius/image3.png",
-    "content/post/radius",
-    "layouts/partials/google_analytics.html",
-    "layouts/partials",
-    "public/p/wds-mdt-企業大量自動部屬/index.html",
-    "public/p/wds-mdt-企業大量自動部屬",
-    "public/p/wds-mdt大量自動部屬/index.html",
-    "public/p/wds-mdt大量自動部屬",
-    "public/p/wds-mdt大量自動不/index.html",
-    "public/p/wds-mdt大量自動不"
+    "content/post/radius/image1.png"
   ]
 }

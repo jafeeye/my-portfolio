@@ -7,7 +7,35 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Mon, 05 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 17 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>PVE 安裝CML</title>
+        <link>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/</link>
+        <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/</guid>
+        <description>&lt;h3 id=&#34;簡介&#34;&gt;簡介
+&lt;/h3&gt;&lt;p&gt;新版CML採用Ubuntu 24.10發行版製作，原理是開機先將&lt;code&gt;cml_2.9.1xx.iso&lt;/code&gt;進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。&lt;/p&gt;
+&lt;p&gt;BIOS：OVMF (UEFI)&lt;br&gt;
+硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native&lt;br&gt;
+CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)&lt;br&gt;
+CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217.png&#34;
+	width=&#34;1560&#34;
+	height=&#34;1201&#34;
+	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;CML畫面圖&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;129&#34;
+		data-flex-basis=&#34;311px&#34;
+	
+&gt;&lt;span style=&#34;display:none&#34;&gt;.&lt;/span&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Radius 企業驗證伺服器架設 </title>
         <link>http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</link>
         <pubDate>Mon, 05 Jan 2026 00:00:00 +0000</pubDate>

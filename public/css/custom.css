@@ -1,0 +1,39 @@
+/* 基本：所有文章內圖片不爆版、等比例 */
+.article-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 一般圖片：不要貼邊（只作用在非 gallery 圖片） */
+.article-content img:not(.gallery-image) {
+  display: block;
+  margin: 1rem auto;
+}
+
+/* 3) Stack Gallery：關鍵在這裡！把 gallery 拉回內容，不要貼邊 */
+.article-page .main-article .article-content .gallery {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 16px !important;   /* 留白大小自己調 */
+  padding-right: 16px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 4) 保險：gallery 裡的 figure 也不要被拉寬/負邊距 */
+.article-page .main-article .article-content figure.gallery-image {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: 100% !important;
+}
+
+/* 5) gallery 裡的圖片維持比例（你原本這段可以留，但我幫你收斂） */
+.article-page .main-article .article-content img.gallery-image {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+
+.article-content .gallery { outline: 4px solid red !important; }
