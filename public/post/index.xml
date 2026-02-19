@@ -7,7 +7,18 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Tue, 17 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 18 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Nutanix</title>
+        <link>http://localhost:1313/my-portfolio/p/nutanix/</link>
+        <pubDate>Wed, 18 Feb 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/nutanix/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;13&lt;/p&gt;
+&lt;h2 id=&#34;實作&#34;&gt;實作
+&lt;/h2&gt;</description>
+        </item>
+        <item>
         <title>PVE 安裝CML ESXi</title>
         <link>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</link>
         <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
