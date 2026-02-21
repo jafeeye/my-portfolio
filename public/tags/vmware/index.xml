@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Vmware on PIN技術筆記</title>
+        <link>http://localhost:53757/my-portfolio/tags/vmware/</link>
+        <description>Recent content in Vmware on PIN技術筆記</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Thu, 19 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:53757/my-portfolio/tags/vmware/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ESXi 安裝設定</title>
+        <link>http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/</link>
+        <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/</guid>
+        <description>&lt;h3 id=&#34;取消esxi-虛擬內存&#34;&gt;取消ESXi 虛擬內存
+&lt;/h3&gt;&lt;p&gt;開機後按&lt;code&gt;Shift+o&lt;/code&gt; 在cdromBoot runweasel 後面加入&lt;code&gt;autoPartitionOSDataSize = 4096&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;內顯直通&#34;&gt;內顯直通
+&lt;/h3&gt;&lt;p&gt;UHD 630 直通方法&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主機/管理/系統/高級設定，在&lt;code&gt;VMkernel.Boot.disableACSCheck&lt;/code&gt; 修改為 True，作用為IOMMU強制獨立分組&lt;/li&gt;
+&lt;li&gt;主機-&amp;gt;管理-&amp;gt;硬體，UHD Graphics 630 切換為直通&lt;/li&gt;
+&lt;li&gt;使用SSH連進ESXi，並輸入&lt;code&gt;esxcli system settings kernel set -s vga -v FALSE&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;在虛擬機選項/高級/編輯設置，添加參數 &lt;code&gt;hypervisor.cpuid.v0&lt;/code&gt; 為 &lt;code&gt;FALSE&lt;/code&gt; ，欺騙作業系統不在虛擬機執行&lt;/li&gt;
+&lt;li&gt;在VM中的PCIE設備添加UHD Graphics 630&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;直通sata控制器&#34;&gt;直通SATA控制器
+&lt;/h3&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

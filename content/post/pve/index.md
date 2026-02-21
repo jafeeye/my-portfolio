@@ -49,3 +49,13 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 ![pvesr260217.png](pvesr260217.png)
 
 ## VyOS
+
+
+### 啟用NVME開機
+1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
+2. Options中把Boot Order加入hostpci
+3. 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以)
+```
+cat /sys/module/kvm_intel/parameters/nested   //檢查輸出為Y
+qm set <vmid> --cpu host
+```

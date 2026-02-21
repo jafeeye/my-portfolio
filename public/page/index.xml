@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Pages on PIN技術筆記</title>
-        <link>http://localhost:1313/my-portfolio/page/</link>
+        <link>http://localhost:53757/my-portfolio/page/</link>
         <description>Recent content in Pages on PIN技術筆記</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <copyright>Example Person</copyright><atom:link href="http://localhost:1313/my-portfolio/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Example Person</copyright><atom:link href="http://localhost:53757/my-portfolio/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Archives</title>
-        <link>http://localhost:1313/my-portfolio/archives/</link>
+        <link>http://localhost:53757/my-portfolio/archives/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/archives/</guid>
+        <guid>http://localhost:53757/my-portfolio/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>Search</title>
-        <link>http://localhost:1313/my-portfolio/search/</link>
+        <link>http://localhost:53757/my-portfolio/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/search/</guid>
+        <guid>http://localhost:53757/my-portfolio/search/</guid>
         <description></description>
         </item>
         

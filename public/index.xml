@@ -2,17 +2,37 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>PIN技術筆記</title>
-        <link>http://localhost:1313/my-portfolio/</link>
+        <link>http://localhost:53757/my-portfolio/</link>
         <description>Recent content on PIN技術筆記</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Wed, 18 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 19 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:53757/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ESXi 安裝設定</title>
+        <link>http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/</link>
+        <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/</guid>
+        <description>&lt;h3 id=&#34;取消esxi-虛擬內存&#34;&gt;取消ESXi 虛擬內存
+&lt;/h3&gt;&lt;p&gt;開機後按&lt;code&gt;Shift+o&lt;/code&gt; 在cdromBoot runweasel 後面加入&lt;code&gt;autoPartitionOSDataSize = 4096&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;內顯直通&#34;&gt;內顯直通
+&lt;/h3&gt;&lt;p&gt;UHD 630 直通方法&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主機/管理/系統/高級設定，在&lt;code&gt;VMkernel.Boot.disableACSCheck&lt;/code&gt; 修改為 True，作用為IOMMU強制獨立分組&lt;/li&gt;
+&lt;li&gt;主機-&amp;gt;管理-&amp;gt;硬體，UHD Graphics 630 切換為直通&lt;/li&gt;
+&lt;li&gt;使用SSH連進ESXi，並輸入&lt;code&gt;esxcli system settings kernel set -s vga -v FALSE&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;在虛擬機選項/高級/編輯設置，添加參數 &lt;code&gt;hypervisor.cpuid.v0&lt;/code&gt; 為 &lt;code&gt;FALSE&lt;/code&gt; ，欺騙作業系統不在虛擬機執行&lt;/li&gt;
+&lt;li&gt;在VM中的PCIE設備添加UHD Graphics 630&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;直通sata控制器&#34;&gt;直通SATA控制器
+&lt;/h3&gt;</description>
+        </item>
+        <item>
         <title>Nutanix</title>
-        <link>http://localhost:1313/my-portfolio/p/nutanix/</link>
+        <link>http://localhost:53757/my-portfolio/p/nutanix/</link>
         <pubDate>Wed, 18 Feb 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/nutanix/</guid>
+        <guid>http://localhost:53757/my-portfolio/p/nutanix/</guid>
         <description>&lt;h2 id=&#34;前言&#34;&gt;前言
 &lt;/h2&gt;&lt;p&gt;13&lt;/p&gt;
 &lt;h2 id=&#34;實作&#34;&gt;實作
@@ -20,10 +40,10 @@
         </item>
         <item>
         <title>PVE 安裝CML ESXi</title>
-        <link>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</link>
+        <link>http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</link>
         <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</guid>
+        <guid>http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</guid>
         <description>&lt;h2 id=&#34;cml&#34;&gt;CML
 &lt;/h2&gt;&lt;h3 id=&#34;簡介&#34;&gt;簡介
 &lt;/h3&gt;&lt;p&gt;新版CML採用Ubuntu 24.10發行版製作，原理是開機先將&lt;code&gt;cml_2.9.1xx.iso&lt;/code&gt;進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。&lt;/p&gt;
@@ -31,10 +51,10 @@
 硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native&lt;br&gt;
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)&lt;br&gt;
 CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217.png&#34;
 	width=&#34;1560&#34;
 	height=&#34;1201&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CML&#34;
@@ -114,10 +134,10 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217.png&#34;
+&lt;img src=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217.png&#34;
 	width=&#34;901&#34;
 	height=&#34;465&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_230dc590525151d9.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_b393221e1a5e09ed.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_230dc590525151d9.png 480w, http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_b393221e1a5e09ed.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;pvesct0217.png&#34;
@@ -129,10 +149,10 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217.png&#34;
+&lt;img src=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217.png&#34;
 	width=&#34;955&#34;
 	height=&#34;389&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_bd8cc8df23d256a7.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_78c02687af75c02a.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_bd8cc8df23d256a7.png 480w, http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_78c02687af75c02a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;pvesr260217.png&#34;
@@ -147,11 +167,21 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
 &lt;/h2&gt;</description>
         </item>
         <item>
-        <title>Radius 企業驗證伺服器架設 </title>
-        <link>http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</link>
+        <title>hello</title>
+        <link>http://localhost:53757/my-portfolio/p/hello/</link>
         <pubDate>Mon, 05 Jan 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</guid>
+        <guid>http://localhost:53757/my-portfolio/p/hello/</guid>
+        <description>&lt;h3 id=&#34;wewe&#34;&gt;wewe
+&lt;/h3&gt;&lt;h3 id=&#34;wewe-1&#34;&gt;wewe
+&lt;/h3&gt;</description>
+        </item>
+        <item>
+        <title>Radius 企業驗證伺服器架設 </title>
+        <link>http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</link>
+        <pubDate>Mon, 05 Jan 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/</guid>
         <description>&lt;p&gt;VM 環境&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;AD+CA：192.168.80.10  VMNet8 NAT 192.168.80.0/24&lt;/li&gt;
@@ -162,10 +192,10 @@ Host IP 乙太網路：192.168.8.6
 &lt;/ul&gt;
 &lt;p&gt;&lt;code&gt;VM：ncat -u -l 2300&lt;/code&gt;  -u 為發出udp，無指定為tcp
 &lt;code&gt;Host: ncat 192.168.8.50 2300&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image.png&#34;
 	width=&#34;2110&#34;
 	height=&#34;976&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_b3aa2ef45b2f92a2.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_4f38a24352202859.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_b3aa2ef45b2f92a2.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_4f38a24352202859.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -178,10 +208,10 @@ Host IP 乙太網路：192.168.8.6
 &gt;
 ※有時候VMware Workstation 端口轉發會失敗，重新啟動服務&lt;/p&gt;
 &lt;h2 id=&#34;設定8021x-wireless-ap及vpn&#34;&gt;設定802.1X Wireless AP及VPN
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1.png&#34;
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1.png&#34;
 	width=&#34;1197&#34;
 	height=&#34;1022&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_51052adfc886116d.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_fead0cf764ba0393.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_51052adfc886116d.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_fead0cf764ba0393.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -198,10 +228,10 @@ Host IP 乙太網路：192.168.8.6
 &lt;h3 id=&#34;vpn&#34;&gt;VPN
 &lt;/h3&gt;&lt;p&gt;條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他
 設定:驗證方法為空不能打勾&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2.png&#34;
 	width=&#34;2096&#34;
 	height=&#34;850&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_3adcc3a56972d477.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_e78cdebdc0e6232c.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_3adcc3a56972d477.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_e78cdebdc0e6232c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -217,10 +247,10 @@ Host IP 乙太網路：192.168.8.6
 設定:驗證方法為空不能打勾&lt;/p&gt;
 &lt;p&gt;(4) 網路原則&lt;/p&gt;
 &lt;h2 id=&#34;設定vpn-server&#34;&gt;設定VPN Server
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3.png&#34;
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3.png&#34;
 	width=&#34;1318&#34;
 	height=&#34;801&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_e5fb29cc30151537.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_de8ef4c49b16b6cc.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_e5fb29cc30151537.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_de8ef4c49b16b6cc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -242,10 +272,10 @@ Host IP 乙太網路：192.168.8.6
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net stop remoteaccess &amp;amp; net start remoteaccess
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4.png&#34;
 	width=&#34;691&#34;
 	height=&#34;598&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_cc9081ea5b239c78.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_209b65ea71f70a2.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_cc9081ea5b239c78.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_209b65ea71f70a2.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -258,10 +288,10 @@ Host IP 乙太網路：192.168.8.6
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;設定連線&#34;&gt;設定連線
 &lt;/h2&gt;&lt;p&gt;1.802.1X Wireless AP
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5.png&#34;
+&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5.png&#34;
 	width=&#34;2610&#34;
 	height=&#34;1141&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_ea428b7f505acd55.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_b2b68afec6918f9a.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_ea428b7f505acd55.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_b2b68afec6918f9a.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -273,10 +303,10 @@ Host IP 乙太網路：192.168.8.6
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;2.VPN連線
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6.png&#34;
+&lt;img src=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6.png&#34;
 	width=&#34;570&#34;
 	height=&#34;943&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_7b90b4e12d9753ca.png 480w, http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_85e4ba9355d8881f.png 1024w&#34;
+	srcset=&#34;http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_7b90b4e12d9753ca.png 480w, http://localhost:53757/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_85e4ba9355d8881f.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image.png&#34;
@@ -291,10 +321,10 @@ Host IP 乙太網路：192.168.8.6
         </item>
         <item>
         <title>WDS&#43;MDT 企業大量自動部屬</title>
-        <link>http://localhost:1313/my-portfolio/p/wds-mdt-%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E8%87%AA%E5%8B%95%E9%83%A8%E5%B1%AC/</link>
+        <link>http://localhost:53757/my-portfolio/p/wds-mdt-%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E8%87%AA%E5%8B%95%E9%83%A8%E5%B1%AC/</link>
         <pubDate>Mon, 05 Jan 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/wds-mdt-%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E8%87%AA%E5%8B%95%E9%83%A8%E5%B1%AC/</guid>
+        <guid>http://localhost:53757/my-portfolio/p/wds-mdt-%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E8%87%AA%E5%8B%95%E9%83%A8%E5%B1%AC/</guid>
         <description>&lt;h2 id=&#34;一設定ad主機&#34;&gt;一、設定AD主機
 &lt;/h2&gt;&lt;p&gt;1.  AD 主機安裝功能：新增角色功能：AD網域服務、DHCP伺服器、DNS伺服器&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;data:image/png;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwkHBgoJCAkLCwoMDxkQDw4ODx4WFxIZJCAmJSMgIyIoLTkwKCo2KyIjMkQyNjs9QEBAJjBGS0U&amp;#43;Sjk/QD3/2wBDAQsLCw8NDx0QEB09KSMpPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT3/wAARCAFzAgoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4&amp;#43;Tl5ufo6erx8vP09fb3&amp;#43;Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3&amp;#43;Pn6/9oADAMBAAIRAxEAPwD0Xxdqt1pdvatZzGJ5HKnEIkJ4z0rX064&amp;#43;02MDtIGlMal&amp;#43;MHdgZyO30qDVtJGprERM0MsWSjAAgEjHIqjYeHJ7K&amp;#43;jnfUDKqHJTygM8Hvn3rZyi6aj1MVGaqOXRkN34nng1W6tEhjKwlcOAzEAjJJUdeh446e9Lq3iqXS7hojZZwcB5H2BvlB4wD61rTaPazTSSsrb5AQSG9QR/Wq&amp;#43;oeG9P1KVpJ0be2dzBuTkAd89hWJsU77xcljfC3eyl2jbvctgjI3EgdwB9KS88Um11TyRCv2dSFYscNjbuLD2wRx1JrTutDsrtZvNiBkl6yEAsOMcEg44ofSUMkjR3E0XmY3BQh6ADOSpPQDvQBT1TWLqxv/KijWSPyhLxEzELnByc46ZP4VNd6xPbTugsmkRXVdyOMkEEk4OMcD1qaXRreY5keZuQw&amp;#43;fowGAc9cj8qJdFtpZXmzIs7rtaUN8x4x3yOmR07mgDOl8UML2SCC03hGUZZiOoB6AE9&amp;#43;1VNY8Zy6bcTRR2SP5UioS8hXIIBJ6dga1pvDdjNMZcOsh7ja36MCO3&amp;#43;TzRP4a0&amp;#43;4D70fc6ldwb5hkAE59cAdaAMXVPGF9ZahNDFbWXlx7eZJ8McqD0/GuujYtGrMNpIBIznFYV74O0&amp;#43;/u2uJpLgO2AQrLjgYHb2rdRdiKuScDGTQA6iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACqs2pWdvKY5rqFHXqrOARVqigBFYOoZSCpGQR3paKKACsj&amp;#43;0777B9t&amp;#43;z23k/e2&amp;#43;a27Gcf3cZrXrN/sZfs32b7ZdeR/wA8/kxjOcZ25/WgDSooooAKzo9UaS5FoICLtTmVN3yon97PcHt/TBrRqmml26bGXeJUff5u752J65PcHpjp09BQBcooooAbmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUALmjNJRQAuaM0lFAC5ozSUUAFQ3lx9ltmlzHlegkfaD7Z9amqrqYzp0&amp;#43;ZxAoUl5CM4Xv3HbNCE9inNrjI8pit/MhjTdvBP8Ac3DkAjvjgk1MdRnXTbi6a2CtCSdrllDKBnIyuf07VhLFeXVyJLaKPLQZdUhRlUlVAAy3p2649auwkxeFrsTFVcoyk7QuW24xgE85/H2rVxSMIzk2Wl1s/aDGYUmX5QGtpPM&amp;#43;Zs4HOMfdP6Vdj1CJ7eeaRXgSAnzPNABXABJ4Poax1c5vpjLvMKQyozQ&amp;#43;UCVZjgDvnpn3q0kUd7oE0sy7hOHnZCeh7KfpgAj1FJpFRkxf7ZfahxbKSoYq7uCpPOOFNTDU3Wwurh4o8wcgK52sNoI5IGOvpVBpZhBN&amp;#43;&amp;#43;vUdYU8hYoyVJ2D0U96nutxsNTVgC7si4PdiiD&amp;#43;ZoaQlJ9yVNUnlmEMcVsz7mBYTEpgKp67f9r9KempObO7naOJjbnA8uQsr/KD1x71lXMMq3pyRG0UjyMLclAyhI8j8s1cin8rQpruJriSFmMkQSQbtnAHLdjjP40NKw1J3HnWnVZP3dudsiJvWYmP5s8k44xj9atWuoJLZPc3BjhSN2Vm35XAOMgnHFZMkVw7v50l0t1lY0i3qybWycE987eTwemKt2jg6PdefFIiwBl2ySBwNo7H0&amp;#43;tDSsEZSvqJ/wAJCgjknMSm348o&amp;#43;aod/wDgJORk9B/KtP7VD9nM7SoIwPmbcCB7ZrnEgn22B8ub92Pm/wBBHy/IR&amp;#43;NXbZAdJ1XevIdz80Wwg&amp;#43;WvO3tRKKFCcupZk1d4kaR7RvLZgIgHUO/p8pPU&amp;#43;n51oqdyg&amp;#43;tYkelSSG0mFhp2I4yCpJ&amp;#43;bIHP3fb9avaXELeOaA&amp;#43;WHWUsyR52pu5AHA7UpJdCoSlfUvUUUVBqFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABQThSfQUUUActb&amp;#43;Ibz7JPK7RkrCrjftwCWA7Ecc9zVqfXL2C2Evl2xcsmELFThgxxnnJ4HPpVzUdUstHkiWWIZk6&amp;#43;Woyo7Ej0zVaLWovJuDJaRhmnMPlK8eWHlhssc46ZH5CgCveaxqi2sBSOFZTuLlDuHBHHQ44Pp3FV7jXtSS7hijkjKyImG2ADdgZ5PqT0Ht0rQs9as2YQpbbIWfbvCKiru3YBGe&amp;#43;05qNNbskTM1mmUzHuRVwDzhQCc4x36UAU7XxJfzeJUsmVPs5uZIycc4A44xn8frXWVinWLb&amp;#43;04rWO3QXDMu5sA4zjcMjuNw/OtqjoHUKKKKACmTQRzqFlQOoYMAemR0p9FAFR9Ls3csbdQT12krn8qnhgjtwREpAJyckn&amp;#43;dSUU7sVkRPaQSTiZ4w0i4IJ9s4/LJoFtCBKBGAJv8AWAfxcYqWilcLIb5aiHyhkIF2gAkYH1qKOxt412hC3ziTLsWJYdDkn2FT0UXCyKh0u0P3oi53Fsu7NknHXJ56Dj2qQ2NuY5o/KHlz58xRnDZ68VPRTuwsir/ZdlyPs0eGIYjHBIzjj8TT1sbZbdoFhUQs24p2Jzn&amp;#43;dT0UXYcq7CMoZSpzgjBwcVFDaQwRPGikq5JfcxYsTxyT14qaikOxTGkWQAAgwB2Dt/jViC2htUKQRhFJ3HHc&amp;#43;pqSindiUUtkFFFFIYUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFADHhikdXeNGdPusygkfSoX02zdY1NrDtjbcFCADOCOn41ZooAYYYmBDRIQeuVHP8AnNIbaAtuMMe4rszsGdvp9KkooAiS1gjbckEStgDIQA4HSpaKKACiiigAooooAKKKyZr&amp;#43;4W9cCRliD&amp;#43;Uq/ZWbJ65yD07e/NAGtRWVeXF6l1sjlRFAXAC8tn1B9&amp;#43;w9Kp6nqd9ZtD&amp;#43;/jjBiG4lQct83YA8cDvQB0NFYC6pfR2kErtCzNIwOTw3TC5AHOMn8O9STatcwacZCqLIHCZk3Dquc4x7emKANuiqGm3c900vneXgAEbQR1J4/Sr9ABRRRQAUUUUAFBIUEnoOTRTJv9S/&amp;#43;6aAH0jusa7nYKo7mlqnq1vJdadJFCu6QkEA4xwQec0ACaxYSIzJdRsFxnbzjJwP1qa3u7e7XdbzJIMZ&amp;#43;Vufyrm9P0G7ihuYmBBljRQZERcYbOMjOePUVoaVpc9uGWdTCDGqq8bDcD/Fn6nke1AGw8iRqWkdUUd2OBUK6hZsJCt1AREMuRIMKPf0qC6055LSWNJppWfHEknAwQfSqFppt1b29zHLASGClCjA5xj6ck5PbjHNAGpHqdnNbPPHcxtEihmYH7oPTI6ikGqWbKzCcYQbjwenr096yotGuxpk8TsTvIZYsgchgQSe3A6ZP1qvb6LeRw3SvCR5qcYKt82Qemfb9KAN2DVbK6VmhuY2VOWbOAPxNSLf2jxtIl1CyL1YOMDnHP41z&amp;#43;naDd2dhcJIpE7qoTyyrYIxg5OOe/THpUq6NdNp9xBNEGkZAEBlDpgEHbkrntz9etAG5FeW05IhuIpCoBIVwcA9KctxC0YkWVCh53A8Vz9vo95FYXSSKS0sCgDCkkj&amp;#43;HGcA9h1&amp;#43;uafHptwbK7iW1KO7AxZjiQbQQcfKfagDVTWLCRWZLqNggBbbzjJwP1qaC8t7pN0E8bjGeG6fWub07QbuKK5jZSDLGigyIihcNnGRnPHqKvabp09pHIJ7NJAYgqpleTxuz7EgEUAa/2qDyGmEqGJc5YHOMdai/tK0w5MwGwZOVI4zj09TWcNNM1tcBrLyp5Np&amp;#43;UKqABshRg8&amp;#43;vPX9Kh/sW5RZoj&amp;#43;8VlHzhRj7yk4BPP3T1wOaANZdVsnVmW4QqoySM9M449eSBxUsF7b3TssEquygEgehrnLfRdQj0&amp;#43;4iKssjRhUJcNj5skYJwMdR&amp;#43;OasaHp15pdxcTTxSOrxooQMpOR75oA3jPEITMZFEQGS5PFKsqMXCupKHDc9O/NYbWM82mGAW04lMisRNIpQjfngEsBx7U06JI9m1uIQGa3VDI2OWJUnJHJAwf5UAbiXMEkTSpNG0ajJdWBAHXrSW13BeR&amp;#43;ZbSpKvGSpzjjPPpXOr4euYI7yIHzUlQNkcAtuBHGeSAMc47VpaRZPaXEp2XAWQEsZSuN2c9ATk89fQCgDVoqO3haCLY0rynJO5&amp;#43;vJzipKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKglsYJpPMkQlsg5Dkcjp0NT1jT3t4t88SNMdrbQqRx4JPTqcnA5JoA0ZLGCUgsrAjurkE9OpB56Cl&amp;#43;xW&amp;#43;QfKHAwACcY57fifzrIvdVvba58kDBMfBMRIL4HPpjJ9etJeaxcxG22PEFljLEEgOx5&amp;#43;6CD6UAa7afbOu14t4&amp;#43;b75J69Tz3pDp1sUKGP5Tz94&amp;#43;mPX0rHOoXzafC/2hYnDP5jyFVBAx/s&amp;#43;9aun3DXHnEyrKEYKGQ5Gcc80AWIreOBmaNSCwAPJ6DpUlFFABRRRQAUUUUAFMm/1L/7pp9Mm/wBS/wDumgB9FFU9Xv20vSri8WEzGJc7AwGfxNAFyiuVtfGUj6dfSz2ime1GQI2wrjdtJOTxhs8egq94b8QvrX2iOaJElhPWM5Vl6Z6nHIPHpg0AblFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRXJQeM5p9Rt7b7PbKJpfLB8xicb2XI&amp;#43;XB6L&amp;#43;ZoA62iuWtvF091fWVvHaw7ZpGR3MmMfNgYHODgE4NdTQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAVWk0&amp;#43;1mkMksQdz0ZiSV/wB0/wAP4VZrEu9QulupE83yAHKqoCtxwAefUnoM0Aacmn2szFpYVcldrbudw9G9enelaygeMI0e5QNoBJOB7VjXOq3UVxEC8nlsiFiiL1IBPUY7&amp;#43;vTtRcardRfZVSVjJJEXKbUyevP4cdMdO9AGvLp9vNH5bKwj5&amp;#43;VXKjnrwKlgt0t0Kx78f7TFv51gnWLptJgnSVUZw&amp;#43;53wQCDnHTGcZ9Oh4p66jdvp7Si6VnE7LuQLjaFPsfT0oA36KyReXP2ScvcRq0O0M5jHynPfnH3cH8aq2Wq3U010GmDKkUjoAF42nA7c0AdBRWVY3k0t5FG8pdXjZiCQeRj0QetatABRRRQAUyb/Uv/ALpp9Mm/1L/7poAfUV1axXsBhuF3xMQWXs2DnB9uOlS0yXcdiq5Us2CQAex9aAKL6Bp7PcMINnnxiNhGdoABzwB0Oec1LaaZFZzNMJrmWQrtzNMXwOvA/AVY8mT/AJ&amp;#43;H/wC&amp;#43;V/wqOVlgx5175e7pu2jP6UAWKKrRukzbYr4O2M4UoTj8ql8pwQPtLZPQYX/CgCSio2idVLNcsAOpIX/CjyZP&amp;#43;fh/&amp;#43;&amp;#43;V/woAkoqB/3bKr3m1m&amp;#43;6G2gn6cU4RO2dtyxwcHAXg/lQBLRUfkyf8APw//AHyv&amp;#43;FHkyf8APw//AHyv&amp;#43;FAElFR&amp;#43;TJ/z8P8A98r/AIU2Mebny7zftODt2nB/KgCaio/KfOPtL59ML/hR5Mn/AD8P/wB8r/hQBJRUZicEA3LAnoMLz&amp;#43;lHkyf8/D/98r/hQBJRUJUh1Q3ZDtyFIXJ/DFO8mT/n4f8A75X/AAoAkoqPynLFftLZHJGF/wAKPJk/5&amp;#43;H/AO&amp;#43;V/wAKAJKKj8mT/n4f/vlf8KPJk/5&amp;#43;H/75X/CgCSio/Jk/5&amp;#43;H/AO&amp;#43;V/wAKPJk/5&amp;#43;H/AO&amp;#43;V/wAKAJKKj8mT/n4f/vlf8KPJk/5&amp;#43;H/75X/CgCSioZEkiUN57H5lGCq85IHpU1ABWV/wjWnG5iuGikaeJgyO0rZyGLc84PJrVrCh8VRTX0VqtpPukkKBuMcMRn3HGeKALKeHLCOZZUEwZX8zBmYgtnJJz3JArUrBtvFIutWNgtm29X2k7&amp;#43;nPJ6dPx55qa28QrcXEsX2WQGKXy25HHIGTnH94dM96ANiisuLWzJciL7HIEeTy0kDBlY9&amp;#43;Rxxg/kabb641xcLELU58xo2xIpK/NgHGfrQBrUVhQ&amp;#43;JTLdiA26IxdQAXbJBOMj5f5&amp;#43;1Pt/EBubkRRwIy&amp;#43;c0LOJCNpGOxH1/THWgDaorMi1nzJyhtJlXftDHjI3Bc4PuegpU1uJtSFoYLhd3Cu0ZGT34x0oA0qKxIfELS3awGBATtz854DHHp171Zj1d5Lz7P9guB0yeOOcZPbH40AaVFZEXiGKW7EIjUZYKP38ZbJ9s9hg8U2DxEJrpITZyIXlMYLOOn97Hp2oA2aKy7bXorpwI4JCu7DEFTtBICk898/Ud6rReJDJeCBrdEYuFALtkgtjI&amp;#43;X&amp;#43;ftQBu0VjW/iA3N0Io4EZfOaFnEhG0jHJyPr&amp;#43;mOtbNABRRRQAVR1PWbDRo431C4EKyEqpKk5P4Verhfin/yD9P8A&amp;#43;uzf&amp;#43;g1tQpqpUUH1McRUdKm5robf/Cc&amp;#43;Hv8AoIr/AN&amp;#43;3/wAKifxh4acODfqN5ySEcHPTg446CvIK27bTrdrWFxF5xZNzNuZefmJH4Ada9GWApR3b/A8uOY1pbJfid&amp;#43;/ibwpJgPeKQBjG2THQDpj0AFDeJvCjhA14CEXaoxJgD0/WuFt9JtprecqiGRXcJvZsYDEDoc9vTr3og0m2ka5aSHEUcoTdubHQcfjz64z2xUfU6Pd/gafXK/Zfid0/iXwpIio16CEzt4kyMnJ5py&amp;#43;KfCwVla9WQMdx8xHbnGM8j0rgzpFsmq3MLIxEaJsXB2ndgbjk575Az&amp;#43;NRvpNtFqRUCRohG0ixt1JU4wTnp3p/U6PdieNrrovxPQV8V&amp;#43;FkDYvI/m&amp;#43;9mNzk9icjr70L4q8KoGCXca7lKtiNxuB6545rzLVrKG1kU25Ow5UgnPIxk9ehzx9Kz6uOX0mrpszlmNWLs0v6&amp;#43;Z69H4t8MRSK6X43KCASJDgfj9Km/wCE58Pf9BFf&amp;#43;/b/AOFeN0U/7Op93/XyF/adXsv6&amp;#43;Z7J/wAJz4e/6CK/9&amp;#43;3/AMKP&amp;#43;E58Pf8AQRX/AL9v/hXjdFH9nUu7/r5B/adXsv6&amp;#43;Z7J/wnPh7/oIr/37f/CpIfFui38otbW&amp;#43;WSaUFUXYwycfSvF62PCX/I02H/XQ/wDoJqamApxg5JvQunmNSU1Fpas9rpj/AH4v9/8AoafTH&amp;#43;/F/v8A9DXkHsk1U7iaKDUImmdUUxOAWOOcrVyqlwry3kUYlkjTy2Y7McnK&amp;#43;3vQAwXEM&amp;#43;ow&amp;#43;TIj7Y3ztOccrVC&amp;#43;sNQm1ldQgEX&amp;#43;jlY4kY8shHz98DOR1/uD1rRRHgvok8&amp;#43;WRHRiQ5B5BXHb3qhfazLba3HEqsbOPCXDCMnDv935ugxgZH&amp;#43;2KAIZrC&amp;#43;kghcJcG4WGVG3ygguQvOM425B7enApZ7XWG3KJpRGkmwFGBZ05IfqOclR1/hPrUlxrF0LeKZY4kikt5JjtfcwwFI7Yz83Ip0niBw3lx2TyShzGyhuFcbjt6ei5/EUAF9ZTSXKM1t9r3WjQljtA3kjk88fhmoRYatFFKI5W3qjBDuADN8oBI9cBsZqxe3lx9oULObVRaNOVZVPzAjhvz7GoU1&amp;#43;WOKR5bZm2KzuN2CuNo2gY9W79MGgAFlfvDJDM9zIrwMsZ3hNjHdw/wAxJ4K4OTTfs2qCLbD9oRwmELSgqF8vGCMn5t/Of17VYOr3TwzhbRYpoYWkIlcjP3guBjJHy&amp;#43;1NbXZYoS8luj7BtbZJyX8vfwMfd7Z/SgB9gtyNVmhM8j2sADbmbJLMMbCe&amp;#43;ME/8CHpVSPTNRttOs4IZZI/veb5YXch/h6Fcgc9Se3WtG11N5r42ckASZPmfD5ATAKt0Gck4/A&amp;#43;lZNprtysSyXLSMCFYqUUEjDk4x1X5R75zQA&amp;#43;ay1VrnzVEvmqro7mQEFTIpwgyMfKD6fnzUzWuqJbyfPPMzKiKS4UqMHJwG65wOv/ANck1y688qlvEfK3GRVlyGHlhxzjg84qWHWJ/NPnQp5LXHlLIpPyAhdu4Y6kt9Pei3QL9SqljqqqzqHFy&amp;#43;HdmkBG7yQpx6HcD0Hp2qVrTUnDmOS5jRVdoUeUbt3ybdxyc8h&amp;#43;54PNJeateQTapEhTcBttCV6MIwzZ9cZ3fTNPHiBhIkKwiV2RcNuKgtuRWB47Fx0zQBJf2l2NRM&amp;#43;np&amp;#43;9kj2s0gUoMA7SO4IJ&amp;#43;hqGKx1Nohm5uFIjdlDMBh8rtB5ORw3fufany&amp;#43;I1g8vzIMnLLIqMSUYb/AGwQdh9/ahtfmWVoBZCSZWxiKTcCNqt1x1&amp;#43;YDH45oC4xbbU/NEswl2SbWlSORQy/fO0HjgZTvzz701rbV9ly/nTGXflIxjYw3HHO7IGMA4x&amp;#43;PeZtelWXDWgEYJ&amp;#43;bzecCTy&amp;#43;mOuecUR67PNGjR2BAlP7tnfaCNrNzx1&amp;#43;X9evWjzA2FzsG4YbHIzmnVkQ6hd3ljeyQCFXUjyAW7FFb5u2fm&amp;#43;lRQ68S6xRwTzFBmZnwrJyw5xwcbTnH4ZoA3KKwpfEEgtiGg8udohMAsgOIyud2SOx&amp;#43;Xp1qSXXXSNGjtfMMsjJEivyduc7uOD8vTmgDZoqlY6gbuaeKSEwyRYOxjklTnB9Ox6E1doAiuf8AVD/eX/0IU6m3P&amp;#43;qH&amp;#43;8v/AKEKdQAVz66Rpct9FeJPJ5iSKUUAADLEgYx0zkV0FZVtpt3F5AkmidYX34C4z149sZz7n0oAqw2Viuoqqm9WcSYy24ISMtjHTGD/AJNI82ktqEcCXMqStIMLGvykkqQpOOmU/U1ZGkSnUBdyR25cuHf1Yjpg44wMD3x2qhBoFxFqaT&amp;#43;YDslVsLOMYBPBG3k8/pQBNG&amp;#43;knVY2GTIjttHlj7zPjOfQHgVJAth9sjK30jSRsDGdmFy3y9cYOcfrQNEdJ4pBKGYshcbwACHLHHGTS22jzxX/ANoZo2QyEiMzPke5OcHA6DH40AV7SHSf7QR7e9cyCUIESPALAdGwOfU574PapYbfSmu4JFvI2cSts&amp;#43;6MkNkjP1I&amp;#43;v40238P3EN8JjKrKkoZV3fw9&amp;#43;3B68knPtU1lo1xaxBXKM7Om9g7EbFA459xx060ANhgsXvQYr2Le8rOBsUOSGyRk89T/AJxSQRaa2oxvHetJOJGdQFUnryMhc459amOmTtMGkeCX95uU4wUBcM3rnoB&amp;#43;JqpaaBd2dwrq0ToG3YJ4BOCTyCfXoRQBej0CGJ0cXExZGDc7cHGO2PYD1qrDHZ/2qhjuLhpFPSS3LDJYk4bHHIP0raC/v2fzSQVChM8Agnn68/pWXDobw3y3XmKWGD5eW2A5OcDPBwevfJz1oAZALGHUFZL&amp;#43;UXMrE7cfIctgjbjAycc9Se9VrOLRzfBobkrLJMCgdVGSB06ZIOOPQ9Kli0a&amp;#43;hvFaJ4EgWYSBAF6ZP&amp;#43;z6H160600S6ttokkikXcpIBI24IJ7c8DH40AFqunQ&amp;#43;XBDdyuPOGGMe4MVwu0MBgcqM1Fb2&amp;#43;mpqKNFcziUSBQiwEAkevy8g9c9Cee1XIdNniu1bZAUVtwbJGM4JAHbnPeqFt4VaDVxdlovLE5kCZPC5JAxjtx3oAUDS01KAGaQzCUlQYSvJfpyM9cDP19TXSVzw0CaPUreZVj8tHLuFbaCS24cd8V0NABRRRQAVyXxA0a&amp;#43;1mzsk0&amp;#43;3MzRyMzAMBgY9zXW0VpSqOnJTXQzq01Vg4PqeN/wDCDeIP&amp;#43;gc3/fxP8alXwf4lUoRYMQgwAXQjGSeRnnqa9frNnvLtLpoojbtiVVCtlTtK5Pr/ACFdf9o1OyOL&amp;#43;zKXd/18jzhPDfiuMkpZsCep3R56k&amp;#43;vqSaRPDPitHdls2DO29jmPJPr&amp;#43;ld/c6xcJJiMRqCqt844GQCee55rXtpTNbpIduWGfl6Uvr8/5UV/Z8P5n955M/hPxQ&amp;#43;7Nk437d210XOBgdDS/8Ir4nyubDIVDGAzRkbTycjPNeuUU/wC0J/yoX9nU/wCZnkEvg/xJLGIzpoVAd21DGoz68Gov&amp;#43;EG8Qf8AQOb/AL&amp;#43;J/jXslFCzGouiE8tpPdv&amp;#43;vkeN/wDCDeIP&amp;#43;gc3/fxP8aP&amp;#43;EG8Qf9A5v&amp;#43;/if417JRT/ALRqdkL&amp;#43;zKXd/wBfI8b/AOEG8Qf9A5v&amp;#43;/if40f8ACDeIP&amp;#43;gc3/fxP8a9koo/tGp2Qf2ZS7v&amp;#43;vkeN/wDCDeIP&amp;#43;gc3/fxP8a0fD3hLWrDXrS6urJo4YmLO29TgYPoa9Tpk3&amp;#43;pf/dNTLH1JRcWlqVDLqcZKSb0H0x/vxf7/APQ0&amp;#43;mP9&amp;#43;L/f/oa4T0B8xKwuQcEKcV594f0P&amp;#43;1tEtr&amp;#43;61TVvPm358u5wAA2O/wCFegT/APHvJ/un&amp;#43;Vcd4XgiufBFhHLMsWfMw3m7GB35BB9qxnFSqJPs/wBD0cPVnRws5wdnzR/KQ628LWl3cyRx6xrBkh&amp;#43;Vj9qztPBx09xTZvCthFqMVg&amp;#43;rayZLgF8&amp;#43;f8uR03HHU4OP90&amp;#43;lb2jWsNmFhinilIVmZhIGZ2JGWP40&amp;#43;60O1urmSeV5PtDurq4bBQL0AHTHJ/76NP2MOxn/AGhif5/yOXk8L6NGVVdY1NyweRds4wSMbjnGO/XvU8vhHSTETLruoMj/ADkG5B3ds4xz0/T2roZdHVrRIZLpxHHG0QOFHyEAY&amp;#43;o2jmmy&amp;#43;HreR3fe25pTKu4BlXIIK49PmY/U0exp9g/tDE/z/kc5eeErJLiMG91m5dYjMHW4U7VBHIz/AEp8fhfS5Mk65qa7w33rofMuASenTkda6S6sIjPFtu/s2YjAEXaNy5HAz0P0qM6BaSRzxh22OGQgEfLkqf02jrR7GHYP7QxP8/5HOt4U0eGFJBrWpbY0ZkCz8qo&amp;#43;9gY46GiPwlo3ysut6ghMORm4CkJjOOnAxzj0rpotGSLfslKCWMxzKiBQ/Xn2PzGmNoSyI0ctzIyMMlcAfPs2bunp29aPYw7B/aGJ/n/Iw4PCOnzsHh17VGaQ7ARdcnHOOnbOfxrLOj6b9riii1DWH&amp;#43;by1cXOMfNg4&amp;#43;X8e1drbacY9VuLxsAOqoig57ct7EgKP&amp;#43;AisyHRdOiuN6X8RmaRcfczkEZH1PHuKPY0&amp;#43;wv7QxP8/wCRgw&amp;#43;HNK&amp;#43;0Jb29/rO6Ryp2SgAclcnjpxUSaHp73yxm81VZfMUKXugGOTtDAbcn6/rXQi20x9UiaLVf9KWX7pKnc2TkfqR&amp;#43;XpUttpVmuoebBqEJZGG5ExyQejc9yM/UD0oVGHYHmGJ/n/I56HQ7K5uhEl/q77pmiLreKfmAAPUDtn8B3qzP4QsLeeTZqWpeYpVWd7oIMkZA3Y64AP5VtR6bYi/TF7CZllLbA3zMd24gjdyeO/v&amp;#43;Fqa1SS6kK3MA8yVZFVwG&amp;#43;dRtIxkZ4x9DR7GHYP7QxP8AP&amp;#43;RyjeGdPjSS4l1DU90LbdyXiNjjd94gY7/n71G/hrS4bIyC41kqrrmOOZGwxBwflyOMV1M0VvdRtbyajaBmddojVV2kHsNx&amp;#43;bOOeeg4qJ9MsZrI2Iv4jlzsOE37u4OMZPPPQ80exh2D&amp;#43;0MT/P8AkYdt4asLuTb/AGjrSZlMQZrhSC33u2euCfrUWu&amp;#43;Gk8Ow2t5Z6jqBke9jVg82Qdx5J4611cGii2kjEcg8lZBIVIwcgEAD2yc1m&amp;#43;PP&amp;#43;QTZf9f8P8zUVaUIwbSOrBY2vUrxhOV035HR/Z4cMPKTDgBhtHzD0NILWAbMQRDywQnyD5R7elS0V0HkkZhiPWND8u37o6en0prWlu&amp;#43;7dBE287myg5PqamooAYkUcZYxxqpc5YqMZPvT6KKAIrn/AFQ/3l/9CFOptz/qh/vL/wChCnUAFcVHa6jFr1sWF48SzEuwZtozIfbpz3rtaKAOMstOuY9c&amp;#43;0yRXJgaVSvyjC/McZOc449O/NXEsriK5ikmTchnHzso3Md&amp;#43;c&amp;#43;vr7Y7109FAHHWdpOmrJujIQyIxPlbsHOeWIGB2OO&amp;#43;OetMtYLz&amp;#43;14HNuVQXOSPLbgZHOSPXn8Op6V2lLmgDlobK4s7yQt9ocSTll2bsJ8ydSOowW5PvUkFncLq0fyOC0rNKRK23YpwMAg&amp;#43;3fnn1rpKKAOYs7dkv4iUmKCZmLAOPLyd3Jzzk4X8OagsrW5j1NS6TBI7nLFmc8kfTAXB49&amp;#43;uK66igDz&amp;#43;xgkXxPGzJN5H2kgMYzgAE4Ocd8LXeATfamJZPI2jaoHzbu/PpUuaSgAooooAKKKKACiiigAooooAKKKKACoHsoHJby9rHPzKdp568jvU9VpJ3VyASAG7gUAD6fbOc7CD6qxHYAfkBU8USwxhEzgepJP5monkcEgMOg6CpkJKAk5NAC0UUUAFFFFABRRRQAUUUUAFMm/1L/wC6afTJv9S/&amp;#43;6aAH0x/vxf7/wDQ0&amp;#43;mP9&amp;#43;L/AH/6GgB0/wDx7yf7p/lXKeCJoofDmmNM6oDHMAWOP&amp;#43;Wgrq5/&amp;#43;PeT/dP8q5XwOryeGdNjWaSNSkzHZjkiT3Huayf8Vej/AEO2H&amp;#43;5z/wAUfykdALiGfUofJkRysb52nOOVqhfWGoza0uoQLF/oxWOJGPLIR&amp;#43;874Gcjr/cHrWiqPBfRJ58siujEh8dQVx296z77W5LXXI4gCbOPCXBEZOHf7vzdBjAyP9sVqcRFNY30kELhLhrhYZUbfKCC5C84zjbkH9OKWe11htyiaQRJJsBRgWdOSH6jnJUdf4T60&amp;#43;41q4W3imVIUikt5Jvlk3MAApHbGfm5FOk8RMreXHZs8wcxsob7rjcdvT0XP4igBb6ymkuUZ7X7XutGhLHaBvJHJ54/DNQix1aKKURytvVGCEMMO3ygE&amp;#43;&amp;#43;A2M1Yvb2cXChZ/sqi0acq6qfmBHDe30NQp4hkjikeW3Ztis7jcAVxtG0DHq3fpigAFnfyQyQzPcyK8DLGd4TYx3cP8xJ424OTTfs2qCLbD9oRxHhC0qlQvl4weT82/v8ArjirB1m4eGcLarFNDC0jCV8f3guBjJB2&amp;#43;1MbX3ihLyQRtsG1tkvJfy9/Ax93tn9KAJLEXP8Aas0BnkktYAG3M2SWYY2E&amp;#43;2Cf&amp;#43;BD0rG0zR7vT75S8MirJcljgbgF7Nwcc1v2uqPPfGzkgCTp8zgPkBMAq3QZyTj8D6VjLd6s2uo/nt/Z/mKmzK5OTjqB9aOodDNtNK1FPEqTPaTC2Fxv37exY&amp;#43;&amp;#43;emK1ILJ01L5bWVY2kV2lO9iSGOeCMDtTbfVLtr&amp;#43;BVu3dXk24Kgggsfb0ptvqd&amp;#43;&amp;#43;ppC8spV5FKkkKMFugGPmyOR2wDQgZcitLsX0RZJ/LW5ZyD90DLHP3/f&amp;#43;7VG00W7W/gmkhmXbO7ghhjbnI4/oamt9SvWv41lknjRrhlC4DBk3Addvrjrjr9BXUUIDk7fS7yPVFYxTCEurPtOF4OcnJO7HTHTnOOKkt9MvEv0dlaRTcM7NKuSvzcYPcYBPPt7V1FFABXMePP&amp;#43;QTZf9f8AD/M109cx48/5BNl/1/w/zNZVv4bOzL/96h6nT0UUVqcYUUUUAFFFFAEVz/qh/vL/AOhCnU25/wBUP95f/QhTqACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKY0MbEkqCT1p9QNcEMwAHBxzQBKYkJzjn1zTgAowBgCq80zo4wcA47VOhJRd3XHNAC0UUUAFFFFABRRRQAUUUUAFMm/1L/7pp9Mm/1L/wC6aAH0x/vxf7/9DT6Y/wB&amp;#43;L/f/AKGgB0//AB7yf7p/lXJ&amp;#43;DVB8Jac2ZQ4EoBjbHG/n&amp;#43;ldZP/x7yf7p/lXIeFbRbzwRYxtJ5YzJhhJsYHeSCD7YrJ/xV6P9Dth/uc/8Ufykb9hLDPfOFklkkhBRtz5Ck4JH16U&amp;#43;fUYIriaF7ZzHGyedIAu0FuhIzk9ucVHpFitiqxJIj4DFm35Z2JBLH606bT4pb&amp;#43;XddECfYXgGMtt6e&amp;#43;PWtTiIxqWl&amp;#43;UjeVHhvMbaEUkEHByB3PT3pbu/ggXbdWDYcNK6sEPC7RuPPJ5HvxS/2JaGGNPMPy78OuAxJOc59QR&amp;#43;lSC1hLRXt3cJP5CsFkZVCjJXn6/L196AItSv7aC8SN7aKWSNQ25x9zJ4wcH0P5VBNrsMPlb7NR56/MzEBQSSME4x/D/8AWqxdxadfu80t1CyogU4kAC5yMkg984qlLpdjcRox1G3zABucY&amp;#43;Xk&amp;#43;/HLHr3xQA59atLeK2k&amp;#43;xRhTGWjII&amp;#43;XOeBx3x&amp;#43;vSr0U9o1tazraxh7lQiKqj7uCSM&amp;#43;gANUZdAtdRkUreJK8UXlOQAxIOevPfPPrirHk2lnFZQ/bYFa14PmOBlSCD349fwoAS1vo1ujKY42NwOXScOdqqSABgcdfxNNtr7T57wslkBKDtD/uyeAD0BJ44HSp4LI26wJ9ptggAC7YdrOMdM7ufU4qG20e3spCTdISVKurouAvPC91HPcmgCta32lzSxtFpTpJhpFHlopG32znJ&amp;#43;nNbENpZSBLiKCE7wGVwgzjqP6VnW3h9bRmltZwZQzFdy8HI4zjuPb8q17aAW1rFApJEaBAT3wMUANWytlcOsEYYNuzt5zzz&amp;#43;pqeiigAooooAK5jx5/yCbL/AK/4f5munrmPHn/IJsv&amp;#43;v&amp;#43;H&amp;#43;ZrKt/DZ2Zf8A71D1OnooorU4wooooAKKKKAIrn/VD/eX/wBCFOptz/qh/vL/AOhCnUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUwxITnHPrmn0UAJsX0pQABgdKKKACiiigAooooAKKKKACiiigApk3&amp;#43;pf8A3TT6ZN/qX/3TQA&amp;#43;mP9&amp;#43;L/f8A6Gn0x/vxf7/9DQA6f/j3k/3T/KuE8Oatb23g&amp;#43;yRLuzFzH5hMU0oX&amp;#43;POPYkdK7488GsC48KaNLexxjT7dFKM52Rrycj29zWc4y5lKJ2UKtJUpUqt9Wnpbpfv6lbRNXso2aa81O1E02XKGdcRDjCjnsP1pl3qGnzX93turMmZojHP58eI9vU5znI9KtL4S0WG9iT7BA6ujEh416grjt7mqN5pGmw3V5HFotmyRNCFfy1wu4jOe5o/eeX4h/sfeX4f5laN7OMwwtfWhtJDNJKqXSBo3YMPl5/iyD7EH1rRGqWc&amp;#43;jCGbUbJZVlUrtmRdyhgQWCnHuQPT8KrfY9DkKLFoNjuJKP5hChJFUsy5x2x&amp;#43;tNW20WVXeHw3A0a7QGZAvzHbweOPve/Sl&amp;#43;88h2wfeX4f5jWvLURTxSalayMVT5xPuHBzwcgnp29RVeG8iTSp4xf24mIRU3zIwwGJ4GRjGfUZxmtLUNI0Ww8ueTR7RbdGMc2YMfMRlSpPUZG3/gQq9aeE9J&amp;#43;yRG60qyM5UGTbEAM96P3nkK2D7y/D/MydF1CC2S/D6laoZIgIi8yZDYPcH157dfxqeLXNOSNUGqGKBoECpEUYDjBzkHBrV/4RPQv&amp;#43;gTZ/9&amp;#43;hR/wAInoX/AECbP/v0Kf7zyC2D7y/D/MwLu8sprqJ4bq12CNN26SAlTgA8sPmOBjsAc1FqEthPegw3Vm0bQBMtImcAD5PvYX8vb3rpP&amp;#43;ET0L/oE2f/AH6FH/CJ6F/0CbP/AL9Cl&amp;#43;88gtg&amp;#43;8vuX&amp;#43;ZU0rW9MjluCdQtEQiMYMqqC4X5iBn6D8K0v7f0n/oJ2X/f9f8ag/wCET0L/AKBNn/36FH/CJ6F/0CbP/v0KP3nkFsH3l&amp;#43;H&amp;#43;ZP8A2/pP/QTsv&amp;#43;/6/wCNH9v6T/0E7L/v&amp;#43;v8AjUH/AAiehf8AQJs/&amp;#43;/Qo/wCET0L/AKBNn/36FH7zyHbB95fh/mT/ANv6T/0E7L/v&amp;#43;v8AjR/b&amp;#43;k/9BOy/7/r/AI1B/wAInoX/AECbP/v0KP8AhE9C/wCgTZ/9&amp;#43;hR&amp;#43;88gtg&amp;#43;8vw/zJ/wC39J/6Cdl/3/X/ABrnvGeq2F5p1lFa3tvNJ9uhO2OQMcZPYVtf8InoX/QJs/8Av0KdH4X0WGVZI9LtFdCGUiMcEUpRqSVnY1o1cJRqKpHmbXoatFFFbHmhRRRQAUUUUARXP&amp;#43;qH&amp;#43;8v/AKEKdTbn/VD/AHl/9CFOoAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApk3&amp;#43;pf/AHTT6ZN/qX/3TQA&amp;#43;mP8Afi/3/wChp9Mf78X&amp;#43;/wD0NAE1UL5We6hESyGTYxykgXjI/wDrVfqleSm3u4pcw42MuJJQncHj16UAR2yul&amp;#43;nnrLuMbbS0oYDkZ4wPakuNUs4Z2iljbe1wlufkByxGVY&amp;#43;3v606Cc3V9G2YAERuEmDk5I7Y9qiv9Et7&amp;#43;6mmeaRHkgNvhCPlOchh/tDtQBXhl0eSFHm2hEldlM5U&amp;#43;YxzliPpzz2q5LfabHf&amp;#43;U3k&amp;#43;cyku&amp;#43;B8oXB&amp;#43;Y/iKjTQ7YFgkrEBPLwMHA2BP5CmNoEZZV&amp;#43;1SBE3GNcL8rEgk5xzyM/jQBd&amp;#43;3WNxGAZ4HVmUAMR1Jwox65H5inDULZ4ZZIpVlWJdzbDnjGaoT&amp;#43;HYrnLSzy&amp;#43;awYs6gDLHGGx2K44&amp;#43;tWItHiia42OypPH5exRgAYxn3PvQAQ6xA65nV7Y7FkAkx8ynoQQT&amp;#43;VPm1aziWQ&amp;#43;ejtGhcojAkgDPH4c1T/ALDiuYY2e6M0kW1Y32jaoXIxgdepz&amp;#43;HpQNADmdJJdtuzbo441ACnywmen14oA0BqFoZjD9oi8wMF27hnPpTH1ewjYq15CCOo3iqV3oTPbyJDKxb5hDuIHklmDFgcZJBAIqddHt1KbJGAVgVAx1EZj/kSaALL6jZxlg9zEpUBjlhwDjH8x&amp;#43;YpsWp2s85hilDv5Xm/KMgrkj&amp;#43;YPFUofDttb5&amp;#43;fIBVgzKNwIKk8&amp;#43;h2jirlvp4trlpY5W&amp;#43;cMGUgd3LZ/AsaAGwatby2iXLsIYpP9WzsPmHrwf/1VKNRtC0qi5izF9/5h8vOP58Vnt4cheQyySBnLlmBjXYQRg/L0ye5qcaTbS/Z3SUskUryDaRhwzbtp9g2D/wABFAE6anasgJmRTsEhUsCQD9OKkivLedwkUyOxXdhTnis/&amp;#43;wYo7N7f7Q4hIRiGA&amp;#43;&amp;#43;m3DZ9PlHFT22kx211HPGwXahUrGoUPnnJx19qANCiiigAooooAKKKKACiiigCK5/1Q/3l/wDQhTqbc/6of7y/&amp;#43;hCnUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUyb/Uv/ALpp9Mm/1L/7poAfTH&amp;#43;/F/v/ANDT6Y/34v8Af/oaAJqpXEsUOowtM6IpicAscd1q7VScPJeRxLM8a&amp;#43;WzHZjk5Udx7mgBgngm1KHyZI3IjfOwg45WsvVdLvZNQlltYg8agXceWA3XCDaF&amp;#43;hA61rKskN9EnnySK6MSHx1BXHQe9V9UvLu2niW2MBXIaQNnKoOrHHbOKAKEOl6jDEY42eMbSxMbqCz&amp;#43;X3P&amp;#43;&amp;#43;T/&amp;#43;qia11SS7WbZN5qLICwkULg7cBB2OAefX8KzfFOqX1nqMKR3UkYeFeIj8pJJ5/wA&amp;#43;1XJtVvYjABcbVFokj7kB52klj3JwOnH1oAsSQ6yo3WxlKZLqkjqWAU5VCf8AayR7ADmrVpa3ga7gvGlmheIKHLBSTjBC4P68f1qlfX1&amp;#43;Zbfy5XXckRcRRkjLE57HtjvVa61W/i&amp;#43;yN5suxo08zAC8nJJLEcdMnvjNAFuK11RTBGheG3RiAyxqHP3cF1DAdNw4z9KlW21dFRUlctKpaRncHy2UkgD2bIBx2FUrnUr&amp;#43;MxAPMF&amp;#43;zKzSLhhvJGBgKevqM9eldFYyNLYwOzF2ZASxABPvgUAZ2m22oCWBrqacoA7OrED5vlABwTkfePX&amp;#43;lVr2C8htZSkTo1s1xOsoIw24Pt298/N3HauiooA5q8tNSuLS4iCXbQSo6xIZV3hioA3HP3c7v84xJLbalcXkhkjmW3WSNwqS91fsc9NuDjj8TXQ0UAYtpZ3k1hdx6k8zmVNrIuBzzkocnrx6Djp1qGGDVjLbhmaGFTwY0UE/N1dQ2BkccZ&amp;#43;groKKAOekstX&amp;#43;yiFZZH8y33yF3UkShSNnPZiQfT5T61JPDqbRMFM6uZj5jKQRs&amp;#43;bbsGRjHy56d&amp;#43;tbtFAGdp8d7FeTrcu8sRVSsj4XnHICgkY754/HrWjRRQAUUUUAFFFFABRRRQBFc/wCqH&amp;#43;8v/oQp1Nuf9UP95f8A0IU6gAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACmTf6l/900&amp;#43;mTf6l/wDdNAD6Y/34v9/&amp;#43;hp9Mf78X&amp;#43;/8A0NAE1UL1Wa6hESymTYxykgXjI9fwq/VK8lNvdxS5hxsZcSShO4PHr0oAjtldL9PPWbcY22lpAw6jPAH0p9zeRWdwM20zvKQrPHEW7HGTTYJzdX0bZgARG4SYOTkjt&amp;#43;FQanaQ3d7EslxaJIpDKkikuev&amp;#43;0OOfSgClq17olrcBLzT98gjVlzCOAc4HPTGKmN9pRhhmSxWSNY1cPtQbFIyPvEHt0FLqGm2Fyym7urdGaILwAOmRuGSeMEj8qnawtJrGG3WW18wx7FcIMMpHZc&amp;#43;nSgCnf&amp;#43;ILDT4VaS0/cuqsDgZ5B7AdgKLrUtOtrezkmsEIdVwo2nZkZAAPXoKl1fQItQmPmXYijkCose0YBGenOPXtS3OgQvHbIbvyzDF5fPO7oAcE8f8A16AGXmp2UE0StZIQ8a7XYhVXOcDPQd6kPiGGBYkSBebcTBFkUFV4HT0qK90i1MkIm1COKWJEG58BsKMAjJ45yfrS3GnWUvll76AEQqA27BwD1BDDAJx09T&amp;#43;ABtwS&amp;#43;fBHLsZN6htrYyPyqSobSJYbSKNGDqqgBh396moAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAIrn/VD/AHl/9CFOptz/AKof7y/&amp;#43;hCnUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUyb/AFL/AO6afTJv9S/&amp;#43;6aAH0x/vxf7/APQ0&amp;#43;mP9&amp;#43;L/f/oaAJqpXEsUWowtM6IDE4Bc47rV2qs4eS8jiWZ41MbMdmOSCvqD6mgCMTQTalB5EkbkRvnYQccrVXUbCa81DejOESMgkg49cDB&amp;#43;Yk4znjgd6uKskN9EhnkkR0YkPjqCuOg9zWF4m1jUbG7EVlLHFwuA20l85yQD9KALUdpdb0kWCQKRESpZQDh93I65GfaorjRZ/Nt5zGXaOLa0SHKt8ykg5wPX24qhqOvaqkVm9rMu57ZZZV2ofm9Kv3Oo3YMDCRyjQowMZHzEgkk8e2AKLAOk015reFVsFLqhWUSKvCk9FP94du3vS6jpL3ZL28bIgiQJGykBSGPACkYIz&amp;#43;tVbzVL6F7bE0hjKKJMALzzkltuBwMn2zxTb7WL&amp;#43;DyVjadnNsrMFUEFj6HHJPYDn2oAl1XTbxr2F4EkZk2jdHkZx15JIGc4ycnqc8U250u7ZojGspCWyx7GGQDnk5HRhjqP610OnTNcadbSuSWeNSSRjJxVmgCvYI0dhAjqEZUAKgYA46YqxRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUARXP&amp;#43;qH&amp;#43;8v8A6EKdTbn/AFQ/3l/9CFOoAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigApk3&amp;#43;pf8A3TT6ZN/qX/3TQA&amp;#43;mP9&amp;#43;L/f8A6Gn0x/vxf7/9DQBNVC&amp;#43;DNdRCJZTLsblHC8ZHXP4VfqleSm3uopcxY2MuHkCdweM9elAEdsrpfp56zbjG2wvIGHUZ4A&amp;#43;lV9V1Kyt7iSC6s3mbyt5YIMY54ycc9fzqzBObq&amp;#43;jbMICI3CTByckdh9KrarpNrcXi3NxdJDgYIbA57EH1HPXNAFPUtfsbC4RZLDzDLEoBOPun&amp;#43;HuKml12ztbcgWrf8eocoCAQMEhf5/nVTU9Dtb94C2rW8QSARqMA5HJz97vmp9Q0m0u7aGO41KFVMAjxkBZAARu&amp;#43;97&amp;#43;tACX2r6RaxWjSWasrojoGCjap4HB9MU691bSYolkNgt03lIwSKNXO05x&amp;#43;H&amp;#43;NLc6ZYypAs19bBEjXaGwflHQgknjPfmpL3TtPu0jWe9iRRGp/duF3BcgNnPTn9KAJjrcMEVuscKxo6AqJJFjCDHQ56dP8AOKSXxAIxGRauweNH4YcZpw0pX0&amp;#43;CFrvfDHEEU4yCduA3Xnrn8qr3ehvcSb5dRXewC/MnGRzwNw/KgCR/EcYlVEt5GLIjAZ5&amp;#43;bHUde9alncC7tIpwpTeudp6is/8AsCJliMkruyKoIJOxtq4Bxn2B69qv2dt9js4oAd3lrjIGKAJ6KKKACiiigAooooAKKKKACiiigAooooAKKKKAIrn/AFQ/3l/9CFOptz/qh/vL/wChCnUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUyb/Uv/umn0yb/Uv/ALpoAfTH&amp;#43;/F/v/0NPpj/AH4v9/8AoaAJqpXEsUWowmZ0QGJwC5A7rV2qs4eS8jiWZ41MbMdmOSCo7g&amp;#43;poAjE0EupQeRJG5Eb52EHHK1j63pl/fasDAJBDgLuzgLgE5HOQecdK2lWSG&amp;#43;iQzySI6MSHx1BXHQD1NY2v6zd2t/9mt8quFO4Y5PPGSOO3NAFa40q8mit1itJHEVvgBiF2tlvU9cGrsum3kgjkjZ1ZbeMPvZhyA3AAB78kd89aqSanqJMccc7mRoFJwoOTnHQL1468/TvUl9qN8Utngmlw0aF9qA8kemO/H0oAhu9OvHe0kghmDIqjCjDDGe5OBnOOmRye1N1DTNQkaFYI5Ai26qGCgsG56nI6e3PPUVYm1O&amp;#43;jubVRMwZoEdoiFOSQ2T69QOgou9SvluIWW4lRBGrNiHKtyd2T7cfT8aALF5a3D6TZQvGS32d49g6CQx4XP6jPqaPsFxBdicQ5bz3yHCshjLZJPOVOMkEfQ1FNqmoQ28D&amp;#43;aylbcSyB7c5c46cZI59gOnNNu9Tu4b2H/Sii&amp;#43;QssoKAgABi3Bwegz&amp;#43;FAG3pKsmmQBgy8HaG6hcnaD&amp;#43;GKuVy2oarfwzW5EjbGRPMCAKMkEk7iCBxgn2zRc6nfxmIb5VX7MrNIuGG8kYGAp6&amp;#43;oz16UAdTRVexkaWxgkdy7MgJYjGffFWKACiiigAooooAKKKKACiiigAooooAKKKKAIrn/VD/AHl/9CFOptz/AKof7y/&amp;#43;hCnUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUyb/AFL/AO6afTJv9S/&amp;#43;6aAH0x/vxf7/APQ0&amp;#43;mP9&amp;#43;L/f/oaAJqoXwZrqERLKZdjco4XjI65/Cr9UryU293FL&amp;#43;6xsZcPIE7g8Z69KAI7ZXW/Tz1m3GNtheQMOoz0H0qvqmp2em3DPJZPNOuCDHGCxyCOCfYGrME5ur6Nv3ICI3CTByckdh9Kq6rpMV5cNM91FF9zcGHHGcZ5HqaAK02paVGFJ0wOrRIwLInTsMk9uPzqebUdPtlt91i4VlWRSqLhABxnntgD/APVTLjQrWYILi8ACxIm3AC4GcHB/zxUsuiwG0QG5VcxLCZASu4A&amp;#43;zDPGcDmgBJdVtkuY4/sLMs6owZAMncDj/Oe9aNpFavBHNDAqq8YUZXB2&amp;#43;lZ1/p1hJOGe&amp;#43;WF/L8v5pASEII4J5zySCc1oRXVrbW8Ub3cHyoMEuBkdAetAEjWVuyBDCmxQABjgAHIH0p8lvFNjzI0fBDDIzz60w31qMZuYRldw&amp;#43;ccj1&amp;#43;lTKwYAqQQehFAFdtOtH27raI7fu5Ucf5xStYWrY3QRnC7Rx0Ht&amp;#43;dWKKAGoixoqIAFUYAHYU6iigAooooAKKKKACiiigAooooAKKKKACiiigCK5/wBUP95f/QhTqbc/6of7y/8AoQp1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFMm/1L/7pp9Mm/1L/wC6aAH0x/vxf7/9DT6Y/wB&amp;#43;L/f/AKGgCaqVxJDFqMJndFBicAuQO61LJdeXdpCVyGXO7PTkDp&amp;#43;NYnjTX5PDekSagitIsKgmMMF3Euq9SD03GgDVE0EupQeQ8bkRvnYQccr6VjeI9NmvbpsW7SxHy/4SRxnPAPuD2/GqvgPxbL4st5Lpo2hVJHiMZkDg4CEHIUf3jVLVbZLnX70yXN1uE2BHHcFVChE64PHJrWlT9o7XMqtX2aWl7l650W8lWEQW2MQRp5jAZyOowfp39aNQ0S&amp;#43;1GO1AjXCQqjJJuAU88gZxnn8K5yyt/Na9WSbUC0UjKgE0jHGf9k9fSq1v&amp;#43;9trppLq7SVZCI4/tLkkBWOBz/s9x610fU9/e/A5vrtvs/j/AMA7DUNNuLhrb/RJpDFEgyOBxxjk9ev59aL7T72SW0khhmDIkY&amp;#43;X73A55JwOuM4yOueK4&amp;#43;GORmkjNzdszSiJM3ZBTgEkgkfT8&amp;#43;KLHfcJtFxcPJ57JGGuX/eDACjI4GSabwX978BfXv7v4nZXOl3bNEY1lIW2WPY65AOeTkDgjHbOfxFdFYI0dhAjoEZYwCqjAHHTFeY6cn2u0uCtzcl1aTyi9w5OAQBwGGc9PqaW3XeJWa6mP&amp;#43;kNGiGdwdoU5I&amp;#43;bnHocdOtL6pv734Asbf7P4/8AAPVaK8WEl2Z73E945ikWOKFLh8ks2Bz16A/iaGmmfVY4Ev7lY0TfclLhmVMAl8HPPA/Or&amp;#43;of3vwJ/tD&amp;#43;7&amp;#43;J7TRXiMF3cT2N5Mt1feZG6eWouGxtZsY9SammnuBqVrbLeTxyMds6faHdY2yeM55IGM89aPqD25vwF/aKtfl/E9oorxWO/knVR9skJ8xQWimlUAEEfMWzjnH61duN1veW0Ul1dL5jD5ftEoLKOCcEdz0wf50ngWnbm/ApY9NX5fxPXaK8mu4yk8UUdzeKJZvLyLpmK5GAOvUHORXqltk20WTk7Bk/hXPWo&amp;#43;zSd73OmjX9q2rWsS0UUVgbhRRRQAUUUUAFFFFAEVz/qh/vL/wChCnU25/1Q/wB5f/QhTqACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKZN/qX/wB00&amp;#43;gjIwelABTH&amp;#43;/F/v/0NPpskaSrtkUMM5waAHGNDIJCo3gYDY5Aqve6dBqAAuBuUAgqQGVhkHkEEdQKd9kg/55LR9kg/55LQBFZaRbae&amp;#43;62UIOflVVVcnGThQOeBWdfeDrK/vp7t7m&amp;#43;ikmILiKbaucAdMewrW&amp;#43;yQf88lo&amp;#43;yQf88lqoTlB3iyJwjNWkjn2&amp;#43;H2mPnddagdxJOZ&amp;#43;pPXt7CkHw90sOzi51AMx3MwnGScEZ6e5/Ouh&amp;#43;yQf88lo&amp;#43;yQf88lrT6xV/mM/q1L&amp;#43;U58fD/TQ5cXWobiclvPGc4xnp1xQnw&amp;#43;0yKIxR3OoJGeCqzAD&amp;#43;VdB9kg/wCeS0fZIP8AnktH1ir/ADB9WpfymEvgOwTdtvdSG772J&amp;#43;v6U0eAdOXcFutQG47j&amp;#43;&amp;#43;HJ9TxW/wDZIP8AnktH2SD/AJ5LR9Yq/wAwfVqX8pz8fw/0uJ5HS4vg0n3m80ZPOc9Ouec0h&amp;#43;Hulnfm5vz5i7GJmByuc46eorofskH/ADyWj7JB/wA8lo&amp;#43;sVf5g&amp;#43;rUv5Tm1&amp;#43;G&amp;#43;jpnZNfLkgnEwHTp2p7fD3S3lWRrnUGkU5VjPkj8cV0P2SD/nktH2SD/nktP6zV/mD6rR/lRgnwDpxx/pV/wAHIxKo5/75pp&amp;#43;H2mMpU3WokFt2DP39eldB9kg/55LR9kg/55LS&amp;#43;sVf5g&amp;#43;rUv5TDHgWw8xpDd6gztkktMDzjGenXHeujjQRxqi9FAAqD7JB/wA8lo&amp;#43;yQf8APJaidSU/iZpCnGHwos0VW&amp;#43;yQf88lo&amp;#43;yQf88lqCyzRVb7JB/zyWj7JB/zyWgCzRVb7JB/zyWj7JB/zyWgCzRVb7JB/wA8lo&amp;#43;yQf8APJaAJLn/AFQ/3l/9CFOqIWsCsCIlyDkVLQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAM85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oahooAm85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oahooAm85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oahooAm85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oahooAm85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oahooAm85PX9DR5yev6GoaKAJvOT1/Q0ecnr&amp;#43;hqGigCbzk9f0NHnJ6/oaqT3CWyBnDncwUBRkk/5FQ/2hH/AM8bj/v3/wDXoA0fOT1/Q0ecnr&amp;#43;hrO/tBP8Anjcf9&amp;#43;//AK9H9oR/88bj/v3/APXoA0fOT1/Q0ecnr&amp;#43;hrO/tBP&amp;#43;eNx/37/wDr0f2hH/zxuP8Av3/9egDR85PX9DR5yev6Gs1tSiRSzRXAUck&amp;#43;X0/Wpri5S1Cb1di7bVCLk5xn&amp;#43;lNK4m7Fzzk9f0NHnJ6/oazf7RT/AJ4XP/fv/wCvR/aKf88Ln/v3/wDXp8rFzI0vOT1/Q0ecnr&amp;#43;hrN/tFP8Anhc/9&amp;#43;//AK9H9op/zwuf&amp;#43;/f/ANejlYcyNLzk9f0NHnJ6/oazf7RT/nhc/wDfv/69H9pRblDRXC7mC5aPjJOB3o5WHMjS85PX9DR5yev6GoaKkom85PX9DR5yev6GqzOFYLtZiRnCjNHmH/nlL/3zQBZ85PX9DR5yev6Gq3mH/nlL/wB80eYf&amp;#43;eUv/fNAFnzk9f0NHnJ6/oareYf&amp;#43;eUv/AHzR5h/55S/980AWfOT1/Q0ecnr&amp;#43;hqt5uCAUkGTjJWo57tIJFRlkZmXdhFzx0oAu&amp;#43;cnr&amp;#43;ho85PX9DWd/aEf/ADxuP&amp;#43;/f/wBej&amp;#43;0E/wCeNx/37/8Ar0AaPnJ6/oaPOT1/Q1nf2gn/ADxuP&amp;#43;/f/wBej&amp;#43;0E/wCeNx/37/8Ar0AaPnJ6/oaPOT1/Q1nf2hH/AM8bj/v3/wDXp0d9HJMseyZWfON6YHAzQBf85PX9DR5yev6GoaKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAqah9yD/rsP5Gs&amp;#43;a8lj1GG3EBETjJnbJUn&amp;#43;6MdD7tgfWtO7geeNBGyBkcN82cHgjt9ah&amp;#43;zXf8Aet//AB6gChfXDR3FqkM0CuzsGWV8AjaTzjmpXku8jyoYHXA&amp;#43;YzEZ/wDHTUr6Y8jFpIrF2PUtGSfzxUgtLlQAptgBwAAwAoAxNTnvBcIsd0sIyuUVCxzhuBz82Tjt6VHczX8t4kEcsiyeYYikb7AMQ7txPP8AEf0re&amp;#43;x3G/f/AKLvxjdhs49M0CyuBI0g&amp;#43;yh2ABbDZIHT&amp;#43;dAGfE8ps72OaTzWhYpvxjPygn8iSK09Q/1tr/10b/0A1CdOn8h4kNsivnO0N1PU/WrV5byT&amp;#43;UYWQNG5b5wcEYI7fWqjuTLYxWhl/tjy1nuWh8oOy/aCNpLEZA7jjpVsyXm/At4NmevnnOPptqx9lu853WufXDUv2W8/vW3/AI9Ry&amp;#43;Yc3kYjS3r6sqJeLs3NiMR8n5l6jPQAHnjv7VUuNTvoPNvBK7QJbSSTRBc7PnZQy98rtGR3Ga6RbO6UsV&amp;#43;yAtyxCsM/WhLK6j3bPsi7mLHAbknqaXL5hzeRnWV1L9juWklDtEFYO4J5MasQccnBPbnmpobiS6soZZrZ7dzMmY3PP3xz9D74PqKtpY3MWfL&amp;#43;yLuYscBuSeppTZXTlA724UOrHaGzwQf6VSVncTd1axoUUUVBY0f8fC/7h/mKlqFg/mK6beARhvw/wpd03/TL9aAKV7cSxXgUOQvBA34Hpz8pwB15qC7nuI7gqJ3A8sfdIwOB83&amp;#43;frWmDKCSBFk9evNH73j5YeOB14oApSXExY4lZAMjHHGI92T&amp;#43;P8q0UYvGrEYLKCR6VCY2bcDHAQwAPB5A6U/dN/wBMv1oAWf7qf761Suv&amp;#43;P9P&amp;#43;uJ/9Cq0wlfaG8sAMDxmoLm2lluFliaMYQqQ4PrntQBFWZ4gaRNM3QmQSBxjyywJ656Vq/Zbv&amp;#43;9b/APj1H2W7/vW//j1AHO2l5L9gmL3cj&amp;#43;SUXJYbicEnaQORjHXPRu9WtCu7u5e4W9GHUKwHOAGJ9QD2rW&amp;#43;xXAx/x68DA&amp;#43;U8Uos7kMzA2oZupAbJ&amp;#43;tACUif8f1t9W/8AQTT/ALLd/wB63/8AHqWK0nFzFJK8O1M8IDk5GO9AF2iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q==&#34;
@@ -762,34 +792,34 @@ Host IP 乙太網路：192.168.8.6
         </item>
         <item>
         <title>Archives</title>
-        <link>http://localhost:1313/my-portfolio/archives/</link>
+        <link>http://localhost:53757/my-portfolio/archives/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/archives/</guid>
+        <guid>http://localhost:53757/my-portfolio/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>Search</title>
-        <link>http://localhost:1313/my-portfolio/search/</link>
+        <link>http://localhost:53757/my-portfolio/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/search/</guid>
+        <guid>http://localhost:53757/my-portfolio/search/</guid>
         <description></description>
         </item>
         <item>
         <title>好站連結</title>
-        <link>http://localhost:1313/my-portfolio/web/</link>
+        <link>http://localhost:53757/my-portfolio/web/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/web/</guid>
+        <guid>http://localhost:53757/my-portfolio/web/</guid>
         <description></description>
         </item>
         <item>
         <title>關於</title>
-        <link>http://localhost:1313/my-portfolio/about/</link>
+        <link>http://localhost:53757/my-portfolio/about/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/about/</guid>
+        <guid>http://localhost:53757/my-portfolio/about/</guid>
         <description>&lt;p&gt;繞了一大圈的工程師&lt;/p&gt;
 &lt;h2 id=&#34;證照&#34;&gt;證照
 &lt;/h2&gt;&lt;div class=&#34;cert-grid&#34;&gt;

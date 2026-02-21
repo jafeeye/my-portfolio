@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/esxi/index.md",
+                "file": "content/post/pve/index.md",
                 "mode": "source",
                 "source": false
               },
@@ -185,11 +185,13 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "content/post/pve/cml0217.png",
+    "content/post/nutanix/index.md",
+    "content/post/VMware 架構.md",
+    "content/post/esxi/index.md",
     "content/web/index.md",
     "content/post/radius/image.png",
-    "content/post/esxi/index.md",
     "content/post/mdt/index.md",
-    "content/post/nutanix/index.md",
     "content/post/esxi",
     "content/post/pve/index.md",
     "content/post/nutanix",
