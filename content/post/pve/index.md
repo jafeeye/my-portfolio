@@ -70,7 +70,9 @@ qm set <vmid> --cpu host
 ```
 
 
+## 安裝 VirtIO Net 網路驅動
 
+## 更換 VirtIO SCSI 控制器裝置
 
 
 ## 參考資料
