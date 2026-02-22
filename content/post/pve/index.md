@@ -60,9 +60,7 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 3. 啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
 ![[Pasted image 20260222114008.png]]
 
-
-
-### 啟用NVME開機
+## 啟用NVME開機
 1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
 2. Options中把Boot Order加入hostpci
 3. 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以)
