@@ -49,6 +49,17 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 ![pvesr260217.png](pvesr260217.png)
 
 ## VyOS
+企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔
+
+
+
+## Windows 7
+1. 因為版本或更新問題，實測在32位元 qemu agent 有相容性問題無法安裝，最後vxKex先裝上，再執行先qemu-agent.msi ，跳出priviledge fail到 `C:\Program Files\qemu-ga` 右鍵相容性成W10，再去msi按retry可成功安裝，再去Options啟用 Qemu Guest Agent，安裝完可在管理介面看到IP並控制開關機
+![[Pasted image 20260222114258.png]]
+2. 安裝spice-guest-tool，裝完可以畫面隨Chome視窗放大縮小
+3. 啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
+![[Pasted image 20260222114008.png]]
+
 
 
 ### 啟用NVME開機
@@ -59,3 +70,10 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 cat /sys/module/kvm_intel/parameters/nested   //檢查輸出為Y
 qm set <vmid> --cpu host
 ```
+
+
+
+
+
+## 參考資料
+1. 安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818

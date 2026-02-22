@@ -13,26 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/企業VPN架設.md",
+                "file": "content/post/pve/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "企業VPN架設"
-            }
-          },
-          {
-            "id": "46ade5767f06b846",
-            "type": "leaf",
-            "state": {
-              "type": "diagrams-net",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Diagram"
+              "title": "index"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -196,14 +185,19 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
-    "content/post/pve/index.md",
+    "Pasted image 20260222114258.png",
+    "Pasted image 20260222114008.png",
+    "content/post/備份流程.md",
+    "Diagram.svg.xml",
+    "Diagram.svg",
+    "content/web/index.md",
     "content/post/企業VPN架設.md",
+    "content/post/pve/index.md",
     "content/post/新文字文件.txt",
     "content/post/pve/cml0217.png",
     "content/post/nutanix/index.md",
     "content/post/VMware 架構.md",
     "content/post/esxi/index.md",
-    "content/web/index.md",
     "content/post/radius/image.png",
     "content/post/mdt/index.md",
     "content/post/esxi",
@@ -216,13 +210,10 @@
     "resources/_gen/images/p/radius-企業驗證伺服器架設/image5_hu_ea428b7f505acd55.png",
     "resources/_gen/images/p/radius-企業驗證伺服器架設/image4_hu_209b65ea71f70a2.png",
     "resources/_gen/images/p/radius-企業驗證伺服器架設/image4_hu_cc9081ea5b239c78.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image3_hu_de8ef4c49b16b6cc.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image3_hu_e5fb29cc30151537.png",
     "resources/_gen/images/p/pve-安裝cml-esxi",
     "resources/_gen/images/p/radius-企業驗證伺服器架設",
     "resources/_gen/assets/scss/style.scss_77b10c8e87ff110a62c52933fe3f7f11.json",
     "resources/_gen/assets/scss/style.scss_77b10c8e87ff110a62c52933fe3f7f11.content",
-    "resources/_gen/images/p",
     "content/page/search/index.md",
     "content/search/index.md",
     "content/page/archives/index.md",
