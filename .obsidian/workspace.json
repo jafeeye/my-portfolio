@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/2026家用Sever架設指南.md",
+                "file": "content/post/PVE 企業進階設定.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026家用Sever架設指南"
+              "title": "PVE 企業進階設定"
             }
           }
         ]
@@ -185,8 +185,14 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
-    "content/post/static/homelab.svg",
+    "content/post/static/pvesdn20260228.png",
+    "content/post/pve/index.md",
+    "content/post/pve/pvesct0217.png",
+    "content/post/PVE 企業進階設定.md",
+    "content/post/pve/pvesr260217.png",
+    "content/post/ESXi與PVE斷線除錯.md",
     "content/post/2026家用Sever架設指南.md",
+    "content/post/static/homelab.svg",
     "content/未命名.md",
     "content/post/企業拓譜圖架設.md",
     "content/post/static/nsx12.png",
@@ -197,8 +203,6 @@
     "content/post/Windows 7 更新.md",
     "content/post/Windows 好用指令工具.md",
     "content/post/static",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/pve/index.md",
     "content/post/備份流程.md",
     "content/post/VMware 架構.md",
     "content/post/hello.md",
@@ -216,8 +220,6 @@
     "content/post/nutanix",
     "public/web/index.html",
     "public/web",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image6_hu_85e4ba9355d8881f.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image6_hu_7b90b4e12d9753ca.png",
     "resources/_gen/images/p/pve-安裝cml-esxi",
     "resources/_gen/images/p/radius-企業驗證伺服器架設",
     "resources/_gen/assets/scss/style.scss_77b10c8e87ff110a62c52933fe3f7f11.json",
@@ -228,7 +230,6 @@
     "().md",
     "themes/hugo-theme-stack/README.md",
     "archetypes/default.md",
-    "Pasted.md",
-    "content/post/radius/index.md"
+    "Pasted.md"
   ]
 }
