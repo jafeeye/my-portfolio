@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=53757&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n1 2 3 4 qm importdisk &lt;vmid&gt; &lt;path/xxxx.qcow2&gt; &lt;storage&gt; qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk002.qcow2 local rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成 ">
 <title>PVE 安裝CML ESXi</title>
 
-<link rel='canonical' href='http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
 
 <link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="PVE 安裝CML ESXi">
 <meta property='og:description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n1 2 3 4 qm importdisk &lt;vmid&gt; &lt;path/xxxx.qcow2&gt; &lt;storage&gt; qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk002.qcow2 local rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成 ">
-<meta property='og:url' content='http://localhost:53757/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-17T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="PVE 安裝CML ESXi">
@@ -296,6 +296,8 @@
     </li>
     <li><a href="#gns3">GNS3</a></li>
     <li><a href="#vyos">VyOS</a></li>
+    <li><a href="#windows-7">Windows 7</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
   </ol>
 </nav>
         </div>
@@ -487,7 +489,21 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso</p>
 	
 ></p>
 <h2 id="vyos">VyOS
-</h2>
+</h2><p>企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔</p>
+<h2 id="windows-7">Windows 7
+</h2><ol>
+<li>因為版本或更新問題，實測在32位元 qemu agent 有相容性問題無法安裝，最後vxKex先裝上，再執行先qemu-agent.msi ，跳出priviledge fail到 <code>C:\Program Files\qemu-ga</code> 右鍵相容性成W10，再去msi按retry可成功安裝，再去Options啟用 Qemu Guest Agent，安裝完可在管理介面看到IP並控制開關機
+![[Pasted image 20260222114258.png]]</li>
+<li>安裝spice-guest-tool，裝完可以畫面隨Chome視窗放大縮小</li>
+<li>啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
+![[Pasted image 20260222114008.png]]</li>
+</ol>
+<h2 id="參考資料">參考資料
+</h2><ol>
+<li>安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818</li>
+<li>pveCLI 提供許多pve特殊教學：https://pvecli.xuan2host.com/proxmox-host-name-change/</li>
+</ol>
+
 </section>
 
 

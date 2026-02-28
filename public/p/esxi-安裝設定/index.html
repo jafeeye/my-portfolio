@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=53757&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="取消ESXi 虛擬內存\r開機後按Shift+o 在cdromBoot runweasel 後面加入autoPartitionOSDataSize = 4096\n內顯直通\rUHD 630 直通方法\n主機/管理/系統/高級設定，在VMkernel.Boot.disableACSCheck 修改為 True，作用為IOMMU強制獨立分組 主機-&gt;管理-&gt;硬體，UHD Graphics 630 切換為直通 使用SSH連進ESXi，並輸入esxcli system settings kernel set -s vga -v FALSE 在虛擬機選項/高級/編輯設置，添加參數 hypervisor.cpuid.v0 為 FALSE ，欺騙作業系統不在虛擬機執行 在VM中的PCIE設備添加UHD Graphics 630 直通SATA控制器\r">
 <title>ESXi 安裝設定</title>
 
-<link rel='canonical' href='http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/'>
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/'>
 
 <link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="ESXi 安裝設定">
 <meta property='og:description' content="取消ESXi 虛擬內存\r開機後按Shift+o 在cdromBoot runweasel 後面加入autoPartitionOSDataSize = 4096\n內顯直通\rUHD 630 直通方法\n主機/管理/系統/高級設定，在VMkernel.Boot.disableACSCheck 修改為 True，作用為IOMMU強制獨立分組 主機-&gt;管理-&gt;硬體，UHD Graphics 630 切換為直通 使用SSH連進ESXi，並輸入esxcli system settings kernel set -s vga -v FALSE 在虛擬機選項/高級/編輯設置，添加參數 hypervisor.cpuid.v0 為 FALSE ，欺騙作業系統不在虛擬機執行 在VM中的PCIE設備添加UHD Graphics 630 直通SATA控制器\r">
-<meta property='og:url' content='http://localhost:53757/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/'>
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='vmware' /><meta property='article:published_time' content='2026-02-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-19T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="ESXi 安裝設定">

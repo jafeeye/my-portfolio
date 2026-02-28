@@ -29,7 +29,7 @@ qm set <vmid> --cpu host
 
 ## SDN 取得IP
 目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工
-![](./static/pvesdn20260228.png)
+![](pvesdn20260228.png)
 
 安裝dnsmasq才可在VM自動獲取IP
 ```
