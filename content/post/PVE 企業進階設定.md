@@ -40,21 +40,32 @@ systemctl disable --now dnsmasq
 ps aux | grep dnsmasq
 ```
 
+PVE主機是`192.168.8.80` 環境是使用`192.168.8.0/24`，要把VM 用SDN分配成 `192.168.10.0/24`，但又希望8.x網段可以連去10.x網段，要開啟路由表功能
+```
+# 檢查PVE封包轉發
+cat /proc/sys/net/ipv4/ip_forward
+# 開啟PVE封包轉發
+sysctl -w net.ipv4.ip_forward=1
+# 永久化
+vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
+```
+
+- Windows 加入路由表 `route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.80`
+- 路由器加入路由表
 ## SDN Fabrics
 ```
 apt update
 apt install frr frr-pythontools
 systemctl enable frr.service
 ```
-
-
 ## 去虛擬化
 
 
 ## HA功能
 
-## ＯＣＩ功能
+## ＯCI功能
 
+## ceph
 
 
 ## 參考資料
