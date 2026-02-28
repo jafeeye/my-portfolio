@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/各系統資源.md",
+                "file": "content/post/2026家用Sever架設指南.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "各系統資源"
+              "title": "2026家用Sever架設指南"
             }
           }
         ]
@@ -185,18 +185,27 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
-    "content/post/Windows 7 更新.md",
-    "content/post/各系統資源.md",
-    "content/post/pve/index.md",
-    "content/post/Windows 好用指令工具.md",
-    "content/post/VMware 架構.md",
+    "content/post/static/homelab.svg",
+    "content/post/2026家用Sever架設指南.md",
+    "content/未命名.md",
+    "content/post/企業拓譜圖架設.md",
+    "content/post/static/nsx12.png",
+    "content/post/static/VMware-Products.jpg",
     "content/post/企業VPN架設.md",
+    "content/web/index.md",
+    "content/post/各系統資源.md",
+    "content/post/Windows 7 更新.md",
+    "content/post/Windows 好用指令工具.md",
+    "content/post/static",
+    "content/post/ESXi與PVE斷線除錯.md",
+    "content/post/pve/index.md",
     "content/post/備份流程.md",
+    "content/post/VMware 架構.md",
+    "content/post/hello.md",
     "Pasted image 20260222114258.png",
     "Pasted image 20260222114008.png",
     "Diagram.svg.xml",
     "Diagram.svg",
-    "content/web/index.md",
     "content/post/新文字文件.txt",
     "content/post/pve/cml0217.png",
     "content/post/nutanix/index.md",
@@ -209,13 +218,9 @@
     "public/web",
     "resources/_gen/images/p/radius-企業驗證伺服器架設/image6_hu_85e4ba9355d8881f.png",
     "resources/_gen/images/p/radius-企業驗證伺服器架設/image6_hu_7b90b4e12d9753ca.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image5_hu_b2b68afec6918f9a.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image5_hu_ea428b7f505acd55.png",
-    "resources/_gen/images/p/radius-企業驗證伺服器架設/image4_hu_209b65ea71f70a2.png",
     "resources/_gen/images/p/pve-安裝cml-esxi",
     "resources/_gen/images/p/radius-企業驗證伺服器架設",
     "resources/_gen/assets/scss/style.scss_77b10c8e87ff110a62c52933fe3f7f11.json",
-    "resources/_gen/assets/scss/style.scss_77b10c8e87ff110a62c52933fe3f7f11.content",
     "content/page/search/index.md",
     "content/search/index.md",
     "content/page/archives/index.md",
@@ -224,8 +229,6 @@
     "themes/hugo-theme-stack/README.md",
     "archetypes/default.md",
     "Pasted.md",
-    "content/post/radius/index.md",
-    "content/about/index.md",
-    "content/post/hello.md"
+    "content/post/radius/index.md"
   ]
 }

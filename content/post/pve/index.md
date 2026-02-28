@@ -60,6 +60,9 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 3. 啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
 ![[Pasted image 20260222114008.png]]
 
+
+## Virtiofs
+
 ## 啟用NVME開機
 1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
 2. Options中把Boot Order加入hostpci
@@ -77,3 +80,4 @@ qm set <vmid> --cpu host
 
 ## 參考資料
 1. 安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818
+2. pveCLI 提供許多pve特殊教學：https://pvecli.xuan2host.com/proxmox-host-name-change/

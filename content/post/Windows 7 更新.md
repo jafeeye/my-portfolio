@@ -14,3 +14,4 @@ toc: true
 3. Windows Management Framework 5.1 (需安裝 KB3191566、.NetFramework 4.5 above)
 4. Servicing Stack Update (KB4490628)
 5. SHA-2 支援更新 (KB4474419)
+6. CredSSP 修補 (包含在KB4103718)
