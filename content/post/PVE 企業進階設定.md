@@ -46,3 +46,18 @@ apt update
 apt install frr frr-pythontools
 systemctl enable frr.service
 ```
+
+
+## 去虛擬化
+
+
+## HA功能
+
+## ＯＣＩ功能
+
+
+
+## 參考資料
+1.　[BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
+
+
