@@ -11,12 +11,14 @@
             "id": "1d27ec04b6941f88",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "static/Diagram.svg"
+                "file": "content/post/pve/index.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "Diagram"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ]
@@ -181,16 +183,21 @@
       "bases:建立新的 base": false
     }
   },
-  "active": "ca51aa279fc78fde",
+  "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "static/Pastedimage20260222114008.png",
+    "static/Pastedimage20260222114258.png",
     "content/post/pve/index.md",
-    "content/post/PVE 企業進階設定.md",
     "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/Windows 好用指令工具.md",
-    "static/Pasted image 20260222114258.png",
-    "static/Pasted image 20260222114008.png",
-    "content/post/Windows 7 更新.md",
     "content/post/VMware 架構.md",
+    "content/post/PVE 企業進階設定.md",
+    "Pasted.md",
+    "static/iventoyscr260228.png",
+    "static/iventoy260228.png",
+    "content/post/radius/index.md",
+    "static/Diagram.svg",
+    "content/post/Windows 好用指令工具.md",
+    "content/post/Windows 7 更新.md",
     "content/post/備份流程.md",
     "content/post/企業VPN架設.md",
     "content/post/企業拓譜圖架設.md",
@@ -199,12 +206,8 @@
     "public/homelab.svg",
     "static/VMware-Products.jpg",
     "static/nsx12.png",
-    "static/homelab.svg",
-    "public/pvesdn20260228.png",
-    "static/pvesdn20260228.png",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
-    "content/post/radius/index.md",
     "public/p/企業vpn架設/index.html",
     "public/p/企業vpn架設",
     "public/p/企業拓譜圖參考/index.html",
@@ -226,7 +229,6 @@
     "content/page/archives/index.md",
     "content/page/index.md",
     "().md",
-    "themes/hugo-theme-stack/README.md",
-    "archetypes/default.md"
+    "themes/hugo-theme-stack/README.md"
   ]
 }

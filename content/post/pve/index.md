@@ -52,13 +52,24 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔
 
 
+## iVentoy
+
+1.敲入參數
+```
+bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)"
+```
+2.參考 [YT影片](https://www.youtube.com/watch?v=TNseK41A0DQ)，使用Advanced 並且輸入`192.168.8.X/24` 自訂成以下參數
+![](iventoy260228.png)
+3.安裝後豋入SCP把ISO檔放進去就可以啟動服務
+![](iventoyscr260228.png)
+
 
 ## Windows 7
 1. 因為版本或更新問題，實測在32位元 qemu agent 有相容性問題無法安裝，最後vxKex先裝上，再執行先qemu-agent.msi ，跳出priviledge fail到 `C:\Program Files\qemu-ga` 右鍵相容性成W10，再去msi按retry可成功安裝，再去Options啟用 Qemu Guest Agent，安裝完可在管理介面看到IP並控制開關機
-![[Pasted image 20260222114258.png]]
+![](Pastedimage20260222114258.png)
 2. 安裝spice-guest-tool，裝完可以畫面隨Chome視窗放大縮小
 3. 啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
-![[Pasted image 20260222114008.png]]
+![](Pastedimage20260222114008.png)
 
 
 
