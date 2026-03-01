@@ -87,6 +87,8 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 4. 直接填入API位置 `https://192.168.8.x/api` ，並且填入FingerPrint跟token完成
 ![](pvenetbox260301.png)
 
+## PowerDNS 整合
+
 ## 參考資料
 1.　[BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
 
