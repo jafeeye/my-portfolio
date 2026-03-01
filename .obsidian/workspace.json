@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/ESXi與PVE斷線除錯.md",
+                "file": "content/post/PVE 企業進階設定.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ESXi與PVE斷線除錯"
+              "title": "PVE 企業進階設定"
             }
           }
         ]
@@ -185,16 +185,16 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "content/post/ESXi與PVE斷線除錯.md",
+    "content/post/備份流程.md",
+    "content/post/各系統資源.md",
+    "content/post/企業VPN架設.md",
     "content/post/PVE 企業進階設定.md",
     "content/post/Windows 好用指令工具.md",
     "content/post/Windows 7 更新.md",
     "content/post/2026家用Sever架設指南.md",
     "content/post/企業拓譜圖架設.md",
-    "content/post/企業VPN架設.md",
-    "content/post/備份流程.md",
-    "content/post/ESXi與PVE斷線除錯.md",
     "content/post/VMware 架構.md",
-    "content/post/各系統資源.md",
     "static/netbox01260301.png",
     "static/netbox260301.png",
     "static/pvenetbox260301.png",

@@ -90,6 +90,7 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 ## PowerDNS 整合
 
 ## 參考資料
-1.　[BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
+1. [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
+2. [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
 
 
