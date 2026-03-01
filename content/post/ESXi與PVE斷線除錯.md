@@ -10,10 +10,8 @@ toc: true
 ```
 journalctl --until "2026-02-27 11:00:00" -n 100 -r
 ```
-
 在指令發現這條
-Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow
-
+`Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
 懷疑是驅動出現 `Detected Hardware Unit Hang` 關閉電源休眠可解決問題
 ```
 # 關閉卸載功能，這能避免 
@@ -23,18 +21,20 @@ systemctl restart networking
 ```
 
 Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
-
 1. `nano /etc/network/interfaces`
 2. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
 
 ## ESXi 
-
 ```
 esxcli network nic tso set -n vmnic0 -e 0
 ```
 持久化設定
-/etc/rc.local.d/local.sh 在exit0之前加入下面這條
+/etc/rc.local.d/local.sh 在exit0 之前加入下面這條
 ```
 esxcli network nic tso set -n vmnic0 -e 0
+```
+重開機生效
+```
+/sbin/auto-backup.sh
 ```
 
