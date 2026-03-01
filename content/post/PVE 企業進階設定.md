@@ -63,10 +63,29 @@ systemctl enable frr.service
 
 ## HA功能
 
-## ＯCI功能
+## OCI功能
 
 ## ceph
 
+
+## NetBox API 整合
+整合NetBox，讓Proxmox在獲取IP可以透過IPAM
+1. 打開NetBox，輸入token
+![](netbox01260301.png)
+
+2. 因為API要使用SSL連線，必須把憑證匯入PVE信任憑證，
+```
+openssl s_client -showcerts -connect 192.168.8.128:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /usr/local/share/ca-certificates/netbox.crt
+#更新系統信任清單
+update-ca-certificates
+```
+3. 憑證匯入後加入API出現hotsname錯誤，代表PVE認可憑證，不過IP位置憑證內登記的名字（可能是 `netbox.example.com`）跟 IP 對不起來，直接在PVE查看 fingerprint 
+![](netbox260301.png)
+```
+openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint -sha256
+```
+4. 直接填入API位置 `https://192.168.8.x/api` ，並且填入FingerPrint跟token完成
+![](pvenetbox260301.png)
 
 ## 參考資料
 1.　[BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)

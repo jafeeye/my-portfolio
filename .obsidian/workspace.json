@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/pve/index.md",
+                "file": "content/post/PVE 企業進階設定.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "PVE 企業進階設定"
             }
           }
         ]
@@ -185,10 +185,13 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "static/netbox01260301.png",
+    "static/netbox260301.png",
+    "static/pvenetbox260301.png",
+    "content/post/ESXi與PVE斷線除錯.md",
+    "content/post/pve/index.md",
     "static/Pastedimage20260222114008.png",
     "static/Pastedimage20260222114258.png",
-    "content/post/pve/index.md",
-    "content/post/ESXi與PVE斷線除錯.md",
     "content/post/VMware 架構.md",
     "content/post/PVE 企業進階設定.md",
     "Pasted.md",
@@ -204,8 +207,6 @@
     "public/VMware-Products.jpg",
     "public/nsx12.png",
     "public/homelab.svg",
-    "static/VMware-Products.jpg",
-    "static/nsx12.png",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
     "public/p/企業vpn架設/index.html",
