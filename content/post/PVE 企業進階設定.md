@@ -89,6 +89,32 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 
 ## PowerDNS 整合
 
+
+
+
+## 編輯LXC容器檔案
+
+
+
+
+
+## Olivetin Addons
+`find / -name "*olivetin*"`
+
+找到下面路徑
+```
+root@pve-server:~# find / -name "*olivetin*"
+/var/www/olivetin
+/var/lib/dpkg/info/olivetin.conffiles
+/var/lib/dpkg/info/olivetin.md5sums
+/var/lib/dpkg/info/olivetin.list
+find: ‘/proc/12645/task/12645/net’: Invalid argument
+find: ‘/proc/12645/net’: Invalid argument
+```
+修改下面資料
+
+
+
 ## 參考資料
 1. [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
 2. [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
