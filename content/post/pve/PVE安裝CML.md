@@ -42,6 +42,10 @@ Vitro SCSI Single
 安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H
 RAM 要20G
 
+重啟登入帳號`root`密碼`nutanix/4u`
+![](260308-nutanix.png)
+
+
 
 
 ## GNS3
@@ -81,6 +85,12 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
 ![](iventoy260228.png)
 3.安裝後豋入SCP把ISO檔放進去就可以啟動服務
 ![](iventoyscr260228.png)
+
+
+## Gitlab LXC 安裝
+
+![](260308-gitlab.png)
+
 
 
 ## Windows 7
