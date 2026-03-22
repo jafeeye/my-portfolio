@@ -101,6 +101,8 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 ## Olivetin Addons
 `find / -name "*olivetin*"`
 
+
+
 找到下面路徑
 ```
 root@pve-server:~# find / -name "*olivetin*"
@@ -112,6 +114,14 @@ find: ‘/proc/12645/task/12645/net’: Invalid argument
 find: ‘/proc/12645/net’: Invalid argument
 ```
 修改下面資料
+
+
+
+
+
+### PVE Tools 9
+工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
+
 
 
 

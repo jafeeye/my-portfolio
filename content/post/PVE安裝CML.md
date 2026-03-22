@@ -7,12 +7,14 @@ toc: true
 ### 簡介
 新版CML採用Ubuntu 24.10發行版製作，原理是開機先將`cml_2.9.1xx.iso`進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。  
 
+
 BIOS：OVMF (UEFI)  
 硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native  
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)  
 CD/DVD (ide1)：refplat-20250616-fcs.iso  
+在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得
 
-![CML](cml0217.png)<span style="display:none">.</span>
+![CML](static/cml0217.png)<span style="display:none">.</span>
 
 
 ## Nested ESXi
@@ -66,10 +68,10 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 ```
 
 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成
-![pvesct0217.png](pvesct0217.png)
+![pvesct0217.png](static/pvesct0217.png)
 
 3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
-![pvesr260217.png](pvesr260217.png)
+![pvesr260217.png](static/pvesr260217.png)
 
 ## VyOS
 企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔

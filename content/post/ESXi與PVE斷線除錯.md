@@ -25,6 +25,9 @@ Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
 2. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
 
 ## ESXi 
+
+實際案例遇到i219v當拔除超過5分鐘後就無法再連線，根據排除因為i219v是消費級晶片,第一思路關閉自動協商調整成1000Mbps失效，第二關閉EEE省電模組寫死在驅動，雖然ESXi 可以使用但是社群版驅動`ne1000` ，BIOS也找不到可以關閉EEE選項，只好直接放棄ESXi
+
 ```
 esxcli network nic tso set -n vmnic0 -e 0
 ```
@@ -38,3 +41,6 @@ esxcli network nic tso set -n vmnic0 -e 0
 /sbin/auto-backup.sh
 ```
 
+
+ESXI 7升8
+![[Pasted image 20260321174801.png]]
