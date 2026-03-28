@@ -107,7 +107,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
- K12 <br/>Educators</div>
+ Google AI in<br/> K12 Educators</div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
@@ -119,7 +119,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
- Generative AI</div>
+ Generative AI <br/>for Educators</div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
