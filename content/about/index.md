@@ -99,6 +99,54 @@ toc: true
 <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_k12.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+ K12 <br/>Educators</div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_GenerativeAI.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+ Generative AI</div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_gemini.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+ Gemini Educator </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_level1.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+  Google Educator <br />Level 1</div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
     <img src="badge_level2.png" width="80" />
       <div style="
     margin-top:6px;
@@ -107,8 +155,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
-  Google Educator 
-  Level 2</div>
+  Google Educator <br />Level 2</div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
