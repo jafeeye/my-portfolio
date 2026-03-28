@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/about/index.md",
+                "file": "content/post/Windows 好用工具.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "Windows 好用工具"
             }
           }
         ]
@@ -185,6 +185,10 @@
   },
   "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
+    "static/260328-rdcman.png",
+    "content/post/Windows 7 更新.md",
+    "content/web/index.md",
+    "content/about/index.md",
     "content/about/badge_k12.png",
     "content/about/badge_GenerativeAI.png",
     "content/about/badge.png",
@@ -195,7 +199,6 @@
     "content/about/64a11048-1905-4bd8-acc3-7c244ef936d2.png",
     "content/about/badge_level1.png",
     "content/about/1d7e2366-7c9f-4026-bb32-8686842087ba.png",
-    "content/about/badge_level2.png",
     "content/post/PVE 企業進階設定.md",
     "content/post/PVE安裝CML.md",
     "content/post/ESXi 安裝設定.md",
@@ -208,13 +211,11 @@
     "content/post/radius/2026 影音資料庫.md",
     "content/post/Synology.md",
     "content/post/網路實務疑難-2.md",
-    "content/about/index.md",
     "content/post/hyper-v 進階功能.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/Nutanix.md",
     "content/post/LXC 容器.md",
-    "content/post/Windows 好用指令工具.md",
-    "content/post/Windows 7 更新.md",
+    "content/post/Windows 好用工具.md",
     "content/post/2026家用Sever架設指南.md",
     "content/post/VMware 架構.md",
     "Pasted.md",
@@ -229,7 +230,6 @@
     "public/p/windows-好用指令工具/index.html",
     "public/p/windows-好用指令工具",
     "public/p/windows-7-更新/index.html",
-    "content/未命名.md",
-    "content/web/index.md"
+    "content/未命名.md"
   ]
 }

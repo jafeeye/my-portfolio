@@ -1,5 +1,5 @@
 ---
-title: Windows 好用指令、工具
+title: Windows 好用工具及指令
 date: 2026-02-22
 toc: true
 ---
@@ -40,11 +40,13 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 `psexec [\\\\computer[,computer2[,...] | @file]][-u user [-p psswd]][-n s][-r servicename][-h][-l][-s|-e][-x][-i [session]][-c [-f|-v]][-w directory][-d][-<priority>][-a n,n,...][-verbose] cmd [arguments]`
 **`BgInfo`**
 **`shellrunas /reg [/quiet]`**
+
 RDCMan
+![](260328-rdcman.png)
 
 #### Windows RSAT
 
 #### APP-V
-### Windows Ternailms
+### Windows Terminal
 
 ### Windows Perforance Analyze
