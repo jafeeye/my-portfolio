@@ -11,7 +11,7 @@ toc: true
 ## 證照
 
 
-{{< certs >}}
+
 
 <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
 
@@ -89,7 +89,7 @@ toc: true
 
 </div>
 
-{{< /certs >}}
+
 
 
 ## 其他證照
