@@ -119,7 +119,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
- Generative AI <br/>for Educators</div>
+ Google Generative <br/>AI for Educators</div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
@@ -131,7 +131,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
- Gemini Educator </div>
+ Google Gemini <br/>Educator </div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
