@@ -99,6 +99,19 @@ toc: true
 <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
+    <img src="badge_level2.png" width="80" />
+      <div style="
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    ">
+  Google Educator 
+  Level 2</div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
     <img src="badge_lvmh.png" width="80" />
       <div style="
     margin-top:6px;
@@ -132,4 +145,9 @@ toc: true
     color:#555;
     ">
   WD-40 cert.</div>
+  </div>
+
+
+
+
   </div>

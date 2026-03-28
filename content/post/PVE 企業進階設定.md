@@ -100,6 +100,9 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 
 ## Olivetin Addons
 `find / -name "*olivetin*"`
+`systemctl start OliveTin.service`
+`sudo systemctl restart OliveTin.service`
+
 
 
 

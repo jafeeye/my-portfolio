@@ -5,7 +5,7 @@ toc: true
 ---
 ## CML
 ### 簡介
-新版CML採用Ubuntu 24.10發行版製作，原理是開機先將`cml_2.9.1xx.iso`進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。  
+新版CML採用Ubuntu 24.10發行版製作，原理是開機先將`cml_2.9.1xx.iso`進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項
 
 
 BIOS：OVMF (UEFI)  
@@ -13,6 +13,7 @@ BIOS：OVMF (UEFI)
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)  
 CD/DVD (ide1)：refplat-20250616-fcs.iso  
 在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得
+
 
 ![CML](static/cml0217.png)<span style="display:none">.</span>
 
