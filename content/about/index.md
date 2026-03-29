@@ -7,6 +7,8 @@ toc: true
 
 繞了一大圈的工程師
 
+技能
+![Kubuntu](https://img.shields.io/badge/-KUbuntu-%230079C1?style=for-the-badge&logo=kubuntu&logoColor=white)![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)![Red Hat](https://img.shields.io/badge/Red%20Hat-EE0000?style=for-the-badge&logo=redhat&logoColor=white)![Cisco](https://img.shields.io/badge/cisco-%23049fd9.svg?style=for-the-badge&logo=cisco&logoColor=black)
 
 ## 證照
 
@@ -60,7 +62,7 @@ toc: true
     letter-spacing:0.04em;
     color:#555;
     ">
-    OCI AI Foundations</div>
+    OCI AI <br/>Foundations</div>
   </div>
 
   <div style="display:flex; flex-direction:column; align-items:center; text-align:center;">
@@ -198,3 +200,8 @@ toc: true
 
 
   </div>
+
+## 聯絡我
+
+- [Credly 連結](https://www.credly.com/users/jun-ping-ni/badges)
+- Linkedin
