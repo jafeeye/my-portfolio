@@ -102,6 +102,7 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 `find / -name "*olivetin*"`
 `systemctl start OliveTin.service`
 `sudo systemctl restart OliveTin.service`
+`nano /etc/OliveTin/config.yaml`
 
 
 
@@ -122,7 +123,7 @@ find: ‘/proc/12645/net’: Invalid argument
 
 
 
-### PVE Tools 9
+## PVE Tools 9
 工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
 
 

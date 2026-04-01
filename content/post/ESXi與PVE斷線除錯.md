@@ -13,16 +13,45 @@ journalctl --until "2026-02-27 11:00:00" -n 100 -r
 在指令發現這條
 `Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
 懷疑是驅動出現 `Detected Hardware Unit Hang` 關閉電源休眠可解決問題
+
+
 ```
-# 關閉卸載功能，這能避免 
-Hardware Unit Hang ethtool -K eno1 tso off gso off 
+# 關閉卸載功能Hardware Unit Hang，這能避免
+ethtool -K enx00e01c680083 tso off gso off 
+ethtool -K eno1 tso off gso off 
 # 重新啟動網卡服務 
 systemctl restart networking
 ```
 
 Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
-1. `nano /etc/network/interfaces`
-2. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
+1. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
+
+## USB 網卡優化設定
+
+想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能
+
+```
+auto lo
+iface lo inet loopback
+
+iface nic0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.8.90/24
+        gateway 192.168.8.1
+        bridge-ports nic0 enx00e01c680083
+        bridge-stp off
+        bridge-fd 0
+        post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off
+
+iface nic1 inet manual
+source /etc/network/interfaces.d/*
+```
+
+- bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡
+- post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能
+
 
 ## ESXi 
 
