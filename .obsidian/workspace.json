@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/CML 教學.md",
+                "file": "content/post/linux 指令.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CML 教學"
+              "title": "linux 指令"
             }
           }
         ]
@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 215.5
+    "width": 215.5,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -174,61 +175,62 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "bases:建立新的 base": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
     }
   },
-  "active": "ca51aa279fc78fde",
+  "active": "1d27ec04b6941f88",
   "lastOpenFiles": [
-    "content/post/Windows 好用工具.md",
-    "content/post/Windows 7 更新.md",
-    "content/post/Synology.md",
-    "content/post/PVE 企業進階設定.md",
-    "content/post/PVE安裝CML.md",
-    "content/post/Nutanix.md",
-    "content/post/NextCloud 架設.md",
-    "content/post/LXC 容器.md",
-    "content/post/hyper-v 進階功能.md",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/ESXi 安裝設定.md",
-    "content/post/網路實務疑難-2.md",
-    "content/post/網路實務疑難-1.md",
-    "content/post/備份流程.md",
-    "content/post/各系統資源.md",
-    "content/post/企業VPN架設.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/2026家用Sever架設指南.md",
-    "static/260401-CML.png",
-    "content/post/CML 教學.md",
-    "content/about/index.md",
-    "content/post/radius/2026 影音資料庫.md",
-    "static/260328-rdcman.png",
-    "content/web/index.md",
-    "content/about/badge_k12.png",
-    "content/about/badge_GenerativeAI.png",
-    "content/about/badge.png",
-    "content/about/a22b915c-f11b-4524-8e8e-8858e3556f21.png",
-    "content/about/b520a3c2-cda6-449a-a837-7c43ea764fae.png",
-    "content/about/badge_gemini.png",
-    "content/about/badge_gemnii.png",
-    "content/about/64a11048-1905-4bd8-acc3-7c244ef936d2.png",
-    "content/post/proj/MDT企業大量自動部屬.md",
-    "content/post/VMware 架構.md",
-    "Pasted.md",
-    "public/pvesdn20260228.png - 捷徑.lnk",
-    "static/pvesdn20260228.png - 捷徑.lnk",
-    "public/p/企業vpn架設/index.html",
-    "public/p/企業vpn架設",
-    "public/p/企業拓譜圖參考/index.html",
-    "public/p/企業拓譜圖參考",
-    "public/post/img",
-    "public/p/windows-好用指令工具/index.html",
-    "public/p/windows-好用指令工具",
-    "public/p/windows-7-更新/index.html"
+    "themes/hugo-theme-stack/theme.toml",
+    "themes/hugo-theme-stack/netlify.toml",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider/twitter.html",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider/base.html",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/include.html",
+    "themes/hugo-theme-stack/layouts/partials/footer/components/script.html",
+    "themes/hugo-theme-stack/layouts/partials/footer/components/custom-font.html",
+    "themes/hugo-theme-stack/layouts/partials/comments/provider/waline.html",
+    "themes/hugo-theme-stack/layouts/partials/comments/provider/vssue.html",
+    "themes/hugo-theme-stack/layouts/partials/comments/provider/utterances.html",
+    "themes/hugo-theme-stack/images/tn.png",
+    "themes/hugo-theme-stack/images/screenshot.png",
+    "themes/hugo-theme-stack/exampleSite/content/page/about/index.zh-cn.md",
+    "themes/hugo-theme-stack/exampleSite/content/page/about/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/rich-content/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/matt-le-SJSpo9hQf7s-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.ar.md",
+    "themes/hugo-theme-stack/exampleSite/content/categories/Test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/categories/Test/_index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/math-typesetting/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/the-creative-exchange-d2zvqp3fpro-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/luca-bravo-alS7ewQ41M8-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-tw.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.ja.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/hudai-gayiran-3Od_VKcDEAA-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/helena-hertz-wWZzXlDpMog-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/florian-klauer-nptLmg6jqDo-unsplash.jpg",
+    "themes/hugo-theme-stack/exampleSite/content/page/search/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/page/links/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/page/archives/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/_index.md",
+    "themes/hugo-theme-stack/exampleSite/content/_index.zh-tw.md",
+    "themes/hugo-theme-stack/exampleSite/content/_index.zh-cn.md",
+    "themes/hugo-theme-stack/exampleSite/content/_index.ja.md",
+    "themes/hugo-theme-stack/exampleSite/README.md",
+    "themes/hugo-theme-stack/archetypes/tags.md",
+    "themes/hugo-theme-stack/archetypes/default.md",
+    "themes/hugo-theme-stack/archetypes/categories.md",
+    "themes/hugo-theme-stack/README.md",
+    "content/post/CML 教學.md"
   ]
 }
