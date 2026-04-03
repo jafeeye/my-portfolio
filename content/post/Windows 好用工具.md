@@ -43,6 +43,9 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 
 RDCMan
 ![](260328-rdcman.png)
+`Tools\Options\Experiences` 可以調整連線穩定度，可調成boradband 比較穩定
+
+
 
 #### Windows RSAT
 
