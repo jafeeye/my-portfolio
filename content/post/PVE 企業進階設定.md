@@ -122,7 +122,24 @@ find: ‘/proc/12645/net’: Invalid argument
 
 
 
+### 修改硬碟大小
+當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
+當要Shrink虛擬磁碟，需透過指令縮寫指令
+```
+qemu-img resize --shrink /var/lib/vz/images/148/vm-148-disk-0.qcow2 50G
+qm rescan --vmid 148  //重新偵測硬碟大小
+```
 
+
+### 啟用防火牆
+1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
+2. `Node/Firewall` 選項Firewall切換成Yes
+3. VM選項Firewall切換成Yes
+ 
+### 增加本機額外儲存設備
+1. `Node/Disks/Directory` 在Create Directory 可將空磁碟格式化成Ext4 
+2. `Datacenter/Storage` 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
+\* ISO檔可以直接掛載NAS 存放區域節省本機空間
 ## PVE Tools 9
 工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
 
