@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/盤點工具.md",
+                    "file": "content/post/PVE 企業進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "盤點工具"
+                  "title": "PVE 企業進階設定"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -246,13 +246,13 @@
       "templates:插入模板": false,
       "command-palette:開啟命令面板": false,
       "bases:建立新的 base": false,
-      "workspaces:管理工作區配置": false,
       "markdown-importer:開啟 Markdown 格式轉換器": false,
       "terminal:Open terminal": false
     }
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
+    "content/post/PVE 企業進階設定.md",
     "content/post/盤點工具.md",
     "content/post/網路實務疑難-2.md",
     "content/post/備份流程.md",
@@ -270,7 +270,6 @@
     "content/post/NextCloud 架設.md",
     "content/post/LXC 容器.md",
     "content/post/hyper-v 進階功能.md",
-    "content/post/PVE 企業進階設定.md",
     "content/post/linux 指令.md",
     "content/post/ESXi與PVE斷線除錯.md",
     "content/post/ESXi 安裝設定.md",

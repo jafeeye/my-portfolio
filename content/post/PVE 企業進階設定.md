@@ -20,12 +20,12 @@ qm set <vmid> --cpu host
 
 ## 安裝驅動
 雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上
-### VirtIO Net 網路驅動
-`Etherent` 控制裝置：`/NetKVM/OS類型`
 
-### 更換 VirtIO SCSI 控制器
-
-### Virtiofs
+`Etherent` 控制裝置：`/NetKVM/OS類型` : VirtIO Net 網路驅動
+PCI 控制器裝置 、`PCI\VEN_1AF4&DEV_1003`：**VirtIO Console Driver** `D:\vioserial\w10\amd64`
+大型存放控制器、PCI\VEN_1AF4&DEV_105A：VirtIO Balloon Driver
+SCSI 控制器
+Virtiofs
 
 ## SDN 取得IP
 目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工
