@@ -21,5 +21,6 @@ source ~/.zshrc      //   重新讀取設定檔
 ```
 要快速顯示檔案輸入cd，tab兩次出現資料夾，再按tab做選擇
 
+## 網路
 
-
+`ifreload -a` debian 設定網路重新載入設定

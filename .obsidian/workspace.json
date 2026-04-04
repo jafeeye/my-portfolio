@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -253,6 +253,15 @@
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
     "content/post/PVE 企業進階設定.md",
+    "static/260404-v2v.png",
+    "content/post/PVE安裝CML.md",
+    "content/post/hyper-v 進階功能.md",
+    "static/260404-whp01.png",
+    "static/260404-whp02.png",
+    "content/post/linux 指令.md",
+    "content/post/Nutanix.md",
+    "content/post/LXC 容器.md",
+    "content/post/CML 教學.md",
     "content/post/盤點工具.md",
     "content/post/網路實務疑難-2.md",
     "content/post/備份流程.md",
@@ -265,15 +274,9 @@
     "content/post/Windows 好用工具.md",
     "content/post/Windows 7 更新.md",
     "content/post/Synology.md",
-    "content/post/PVE安裝CML.md",
-    "content/post/Nutanix.md",
     "content/post/NextCloud 架設.md",
-    "content/post/LXC 容器.md",
-    "content/post/hyper-v 進階功能.md",
-    "content/post/linux 指令.md",
     "content/post/ESXi與PVE斷線除錯.md",
     "content/post/ESXi 安裝設定.md",
-    "content/post/CML 教學.md",
     "未命名.base",
     "content/about/index.md",
     "content/post/各系統資源.md",
@@ -285,10 +288,6 @@
     "content/about/badge.png",
     "content/about/a22b915c-f11b-4524-8e8e-8858e3556f21.png",
     "content/about/b520a3c2-cda6-449a-a837-7c43ea764fae.png",
-    "content/about/badge_gemini.png",
-    "content/about/badge_gemnii.png",
-    "content/about/64a11048-1905-4bd8-acc3-7c244ef936d2.png",
-    "content/post/proj/MDT企業大量自動部屬.md",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
     "public/p/企業vpn架設/index.html",

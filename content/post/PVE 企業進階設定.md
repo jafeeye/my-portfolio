@@ -146,6 +146,15 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 
 
 
+
+## P2V
+把目前開機的作業系統,使用對應軟體可直接熱轉換
+Disk2vhd
+StarWind V2V
+先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+![](260404-v2v.png)
+
+
 ## 參考資料
 1. [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
 2. [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
