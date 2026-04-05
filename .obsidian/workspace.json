@@ -10,7 +10,7 @@
           {
             "id": "607afdc406120674",
             "type": "tabs",
-            "dimension": 82.3943661971831,
+            "dimension": 76.15894039735099,
             "children": [
               {
                 "id": "cb583e33fb4710ed",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026家用Sever架設指南.md",
+                    "file": "content/post/NextCloud 架設.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026家用Sever架設指南"
+                  "title": "NextCloud 架設"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "75bad47c4255191f",
             "type": "tabs",
-            "dimension": 17.6056338028169,
+            "dimension": 23.841059602649008,
             "children": [
               {
                 "id": "9ecff68fee9fd216",
@@ -252,6 +252,13 @@
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
+    "content/post/NextCloud 架設.md",
+    "static/20260405-nc3.png",
+    "static/20260405-nc2.png",
+    "static/20260405-nc1.png",
+    "static/20260405-nc4.png",
+    "static/Pasted image 20241031144701.png",
+    "static/Pasted image 20241031145738.png",
     "content/post/2026家用Sever架設指南.md",
     "content/post/2026 影音資料庫.md",
     "content/post/企業拓譜圖架設.md",
@@ -261,15 +268,9 @@
     "static/homelab.svg",
     "static/homelab-diagram-v1.svg",
     "static/homelab-diagram-v1.drawio",
-    "static/Diagram.svg",
-    "content/post/NextCloud 架設.md",
     "content/post/PVE 企業進階設定.md",
-    "static/260404-pve.png",
     "content/post/PVE安裝CML.md",
-    "static/260404-v2v.png",
     "content/post/hyper-v 進階功能.md",
-    "static/260404-whp01.png",
-    "static/260404-whp02.png",
     "content/post/linux 指令.md",
     "content/post/Nutanix.md",
     "content/post/LXC 容器.md",
@@ -288,7 +289,6 @@
     "未命名.base",
     "content/about/index.md",
     "content/post/各系統資源.md",
-    "static/260401-CML.png",
     "content/web/index.md",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",

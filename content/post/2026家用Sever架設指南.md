@@ -10,7 +10,7 @@ toc: true
 
 三層式架構? Data Plane、Control Plane 
 列印VM：PaperMF、AirPrint、Windows 區網印表機
-備份VM：
+備份VM：WS2022-Recuse
 VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce
 Mointor VM：
 

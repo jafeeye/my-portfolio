@@ -16,9 +16,12 @@ mkdir file1
 3. 登入NextCloud後，先按右上角/應用程式/已停用應用程式,啟用External storage support ，然後在右上角/個人設定/外部儲存空間,掛載 `/var/www/file1` 資料夾  
 ![[Pasted image 20241031144701.png]]
 
+4. 使用下面指令可以掃描nextcloud所有檔案系統 docker exec --user www-data nextcloud-app php occ files:scan -all
+
+
 >[!Note] 重要
 為避免系統的權限和檔案保護問題，target目錄盡量不要是NAS的共享根目錄，並授於適當的權限
-額外:使用下面指令可以掃描nextcloud所有檔案系統 docker exec --user www-data nextcloud-app php occ files:scan -all
+
 
 ### External sites
 
@@ -105,8 +108,14 @@ volumes:
 
 ### 方法 2 - 使用PVE Script
 1. 使用Nextcloud 腳本 (VM)
-2. 
-
+2. 按照部分下一步
+![](20260405-nc1.png)
+3. 按照步驟下一步
+![](20260405-nc2.png)
+4. 按照步驟下一步
+![](20260405-nc3.png)
+5. 按照步驟下一步
+![](20260405-nc4.png)
 
 
 
