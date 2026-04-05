@@ -30,7 +30,14 @@ services:
     container_name: nextcloud-db
     image: mariadb:10.11
     restart: always
-    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+	command: >  
+      --transaction-isolation=READ-COMMITTED  
+      --binlog-format=ROW  
+      --innodb-buffer-pool-size=512M  
+      --innodb-log-file-size=128M  
+      --innodb-flush-method=O_DIRECT  
+      --innodb-flush-log-at-trx-commit=2  
+      --max-connections=200
     volumes:
       - ./db:/var/lib/mysql
     environment:
@@ -42,6 +49,14 @@ services:
     container_name: nextcloud-redis
     image: redis:alpine
     restart: always
+    command: >  
+      redis-server  
+      --appendonly yes  
+      --appendfsync everysec  
+      --maxmemory 256mb  
+      --maxmemory-policy allkeys-lru 
+    volumes:
+      - ./redis:/data
   app:
     container_name: nextcloud-app
     image: nextcloud
@@ -59,6 +74,7 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
+      - REDIS_HOST=redis
   collabora:
     image: mietzen/synology-collabora:24.04.9.1.1
     container_name: collabora-app
@@ -85,6 +101,12 @@ volumes:
 >[!Note] 重要
 >如果要用外部文件檔案WOPI，可以使用OnlyOffice，OXOOL不能在群暉Container Manager 使用會出錯
 >無法播放MKV與MP4檔案，可能是瀏覽器不支援H.265編碼，Chrome目前支援
+
+
+### 方法 2 - 使用PVE Script
+1. 使用Nextcloud 腳本 (VM)
+2. 
+
 
 
 

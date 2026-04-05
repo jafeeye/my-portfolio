@@ -5,14 +5,18 @@ toc: true
 ---
 ## 前言
 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄
-
-
+![[Diagram.svg]]
+![](homelab-diagram.svg)
 
 三層式架構? Data Plane、Control Plane 
 列印VM：PaperMF、AirPrint、Windows 區網印表機
 備份VM：
 VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce
 Mointor VM：
+
+
+
+
 
 
 ## 參考資料

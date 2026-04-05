@@ -69,7 +69,7 @@ systemctl enable frr.service
 
 
 ## NetBox API 整合
-整合NetBox，讓Proxmox在獲取IP可以透過IPAM
+整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)
 1. 打開NetBox，輸入token
 ![](netbox01260301.png)
 
@@ -144,8 +144,9 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
 
 
-
-
+## 從ESXi 遷移
+會有驅動問題，在Windows不能開機就選SATA
+![](260404-pve.png)
 
 ## P2V
 把目前開機的作業系統,使用對應軟體可直接熱轉換

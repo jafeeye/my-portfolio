@@ -10,7 +10,7 @@
           {
             "id": "607afdc406120674",
             "type": "tabs",
-            "dimension": 70.7436399217221,
+            "dimension": 82.3943661971831,
             "children": [
               {
                 "id": "cb583e33fb4710ed",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PVE 企業進階設定.md",
+                    "file": "content/post/2026家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PVE 企業進階設定"
+                  "title": "2026家用Sever架設指南"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "75bad47c4255191f",
             "type": "tabs",
-            "dimension": 29.256360078277886,
+            "dimension": 17.6056338028169,
             "children": [
               {
                 "id": "9ecff68fee9fd216",
@@ -252,9 +252,21 @@
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
+    "content/post/2026家用Sever架設指南.md",
+    "content/post/2026 影音資料庫.md",
+    "content/post/企業拓譜圖架設.md",
+    "Diagram.svg",
+    "Diagram.svg.xml",
+    "static/homelab-diagram.svg",
+    "static/homelab.svg",
+    "static/homelab-diagram-v1.svg",
+    "static/homelab-diagram-v1.drawio",
+    "static/Diagram.svg",
+    "content/post/NextCloud 架設.md",
     "content/post/PVE 企業進階設定.md",
-    "static/260404-v2v.png",
+    "static/260404-pve.png",
     "content/post/PVE安裝CML.md",
+    "static/260404-v2v.png",
     "content/post/hyper-v 進階功能.md",
     "static/260404-whp01.png",
     "static/260404-whp02.png",
@@ -266,36 +278,24 @@
     "content/post/網路實務疑難-2.md",
     "content/post/備份流程.md",
     "content/post/企業VPN架設.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/2026 影音資料庫.md",
-    "content/post/2026家用Sever架設指南.md",
     "content/post/企業常用備份軟體.md",
     "content/post/網路實務疑難-1.md",
     "content/post/Windows 好用工具.md",
     "content/post/Windows 7 更新.md",
     "content/post/Synology.md",
-    "content/post/NextCloud 架設.md",
     "content/post/ESXi與PVE斷線除錯.md",
     "content/post/ESXi 安裝設定.md",
     "未命名.base",
     "content/about/index.md",
     "content/post/各系統資源.md",
     "static/260401-CML.png",
-    "static/260328-rdcman.png",
     "content/web/index.md",
-    "content/about/badge_k12.png",
-    "content/about/badge_GenerativeAI.png",
-    "content/about/badge.png",
-    "content/about/a22b915c-f11b-4524-8e8e-8858e3556f21.png",
-    "content/about/b520a3c2-cda6-449a-a837-7c43ea764fae.png",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
     "public/p/企業vpn架設/index.html",
     "public/p/企業vpn架設",
     "public/p/企業拓譜圖參考/index.html",
     "public/p/企業拓譜圖參考",
-    "public/post/img",
-    "public/p/windows-好用指令工具/index.html",
-    "public/p/windows-好用指令工具"
+    "public/post/img"
   ]
 }
