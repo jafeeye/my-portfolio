@@ -72,4 +72,4 @@ secrets:
 docker 的寫法是外映射內
 maridb Port 3306(外):3306(內)
 secret 的txt內容指定帳號及密碼
-![[Pasted image 20260406144630.png]]
+![[Pasted-img-20260406144630.png]]

@@ -159,18 +159,21 @@ StarWind V2V
 ## PVE 使用vDSM掛載 iSCSI
 
 1. 先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
-![[Pasted image 20260406141556.png]]
-2. 在DSM將此硬碟格式化成儲存集區
-![[Pasted image 20260406142129.png]]
+![](Pasted-img-20260406141556.png)
+2. 建立儲存集區
+![[Pasted-img-20260406142129.png]]
 3. 在DSM 硬碟格式化成儲存空間
-![[Pasted image 20260406142351.png]]
+![[Pasted-img-20260406142351.png]]
 4. SAN Manager 建立LUN及Target
-![[Pasted image 20260406142723.png]]
+![[Pasted-img-20260406142723.png]]
 
 5. Windows 掛載iSCSi，選探索入口輸入Synology IP 位置，按下進階，連線方式跟啟動IP絕對不要用預設值不然會導致逾時無法連線，本機介面卡選ISCSI Inititaor、啟動器IP選擇自己本機電腦位置(有出現多個IP是因為電腦本身有多個網路介面)，如果iSCSI有設定密碼要勾選CHAP登入
-![[Pasted image 20260406143049.png]]
+![[Pasted-img-20260406143049.png]]
  6. 都設定正確就會在目標自動出現target，按連線即可
-![[Pasted image 20260406143515.png]]
+![[Pasted-img-20260406143515.png]]
+
+
+
 ## 參考資料
 1. [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
 2. [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)

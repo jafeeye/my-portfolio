@@ -12,9 +12,9 @@ cd /var/www
 mkdir file1
 ```
 2. 在Container Manager映射正確資料夾，將Synology空間掛載至容器內file1，
-![[Pasted image 20241031145738.png]]
+![[Pasted-img-20241031145738.png]]
 3. 登入NextCloud後，先按右上角/應用程式/已停用應用程式,啟用External storage support ，然後在右上角/個人設定/外部儲存空間,掛載 `/var/www/file1` 資料夾  
-![[Pasted image 20241031144701.png]]
+![[Pasted-img-20241031144701.png]]
 
 4. 使用下面指令可以掃描nextcloud所有檔案系統 docker exec --user www-data nextcloud-app php occ files:scan -all ，不然會導致NC卡住
 
