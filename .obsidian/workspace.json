@@ -10,7 +10,7 @@
           {
             "id": "607afdc406120674",
             "type": "tabs",
-            "dimension": 76.15894039735099,
+            "dimension": 84.05103668261563,
             "children": [
               {
                 "id": "cb583e33fb4710ed",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/NextCloud 架設.md",
+                    "file": "content/post/2026家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "NextCloud 架設"
+                  "title": "2026家用Sever架設指南"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "75bad47c4255191f",
             "type": "tabs",
-            "dimension": 23.841059602649008,
+            "dimension": 15.94896331738437,
             "children": [
               {
                 "id": "9ecff68fee9fd216",
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -252,50 +252,50 @@
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
-    "content/post/NextCloud 架設.md",
-    "static/20260405-nc3.png",
-    "static/20260405-nc2.png",
-    "static/20260405-nc1.png",
-    "static/20260405-nc4.png",
-    "static/Pasted image 20241031144701.png",
-    "static/Pasted image 20241031145738.png",
     "content/post/2026家用Sever架設指南.md",
-    "content/post/2026 影音資料庫.md",
     "content/post/企業拓譜圖架設.md",
-    "Diagram.svg",
-    "Diagram.svg.xml",
+    "content/post/企業常用備份軟體.md",
+    "content/post/企業VPN架設.md",
+    "未命名.base",
+    "Pasted image 20260321174801.png",
     "static/homelab-diagram.svg",
+    "static/cml0217.png",
+    "static/lab.svg",
+    "static/netbox01260301.png",
+    "static/nsx12.png",
+    "static/netbox260301.png",
+    "static/iventoy260228.png",
+    "static/Diagram.svg",
+    "static/lab.svg.xml",
+    "static/lab.xml",
+    "static/Diagram.svg.xml",
     "static/homelab.svg",
-    "static/homelab-diagram-v1.svg",
-    "static/homelab-diagram-v1.drawio",
-    "content/post/PVE 企業進階設定.md",
     "content/post/PVE安裝CML.md",
-    "content/post/hyper-v 進階功能.md",
     "content/post/linux 指令.md",
+    "content/post/ESXi與PVE斷線除錯.md",
+    "content/post/ESXi 安裝設定.md",
+    "content/post/PVE 企業進階設定.md",
+    "content/post/hyper-v 進階功能.md",
+    "content/post/NextCloud 架設.md",
+    "content/post/2026 影音資料庫.md",
+    "static/homelab-diagram.svg.xml",
+    "static/homelab-diagram-v1.drawio",
     "content/post/Nutanix.md",
     "content/post/LXC 容器.md",
     "content/post/CML 教學.md",
     "content/post/盤點工具.md",
     "content/post/網路實務疑難-2.md",
     "content/post/備份流程.md",
-    "content/post/企業VPN架設.md",
-    "content/post/企業常用備份軟體.md",
     "content/post/網路實務疑難-1.md",
     "content/post/Windows 好用工具.md",
     "content/post/Windows 7 更新.md",
     "content/post/Synology.md",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/ESXi 安裝設定.md",
-    "未命名.base",
     "content/about/index.md",
     "content/post/各系統資源.md",
     "content/web/index.md",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
     "public/p/企業vpn架設/index.html",
-    "public/p/企業vpn架設",
-    "public/p/企業拓譜圖參考/index.html",
-    "public/p/企業拓譜圖參考",
-    "public/post/img"
+    "public/p/企業vpn架設"
   ]
 }

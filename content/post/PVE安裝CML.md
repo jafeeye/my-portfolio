@@ -104,6 +104,14 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
 ![](Pastedimage20260222114008.png)
 
 
+### vDSM
+
+
+
+
+
+
+
 
 
 
