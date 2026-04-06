@@ -1,5 +1,5 @@
 ---
-title: 2026家用Sever架設指南
+title: 2026 家用Sever架設指南
 date: 2026-02-28
 toc: true
 ---
@@ -7,13 +7,13 @@ toc: true
 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄
 
 
-![[homelab-diagram.svg|697]]
+![](homelab-diagram.svg)
 
 
-三層式架構：Data Plane、Control Plane 
-列印VM：PaperMF、AirPrint、Windows 區網印表機
-備份VM：WS2022-Recuse
-VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce
+三層式架構：Data Plane、Control Plane  
+列印VM：PaperMF、AirPrint、Windows 區網印表機  
+備份VM：WS2022-Recuse  
+VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce  
 Mointor VM：
 
 ![](lab.svg)
