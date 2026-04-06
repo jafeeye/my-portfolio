@@ -106,10 +106,19 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
 
 ### vDSM
 
+```
+docker run -it --rm -p 5000:5000 --cap-add NET_ADMIN --device-cgroup-rule='c *:* rwm' --sysctl net.ipv4.ip_forward=1 --device /dev/net/tun --device /dev/kvm --device /dev/vhost-net --stop-timeout 60 -v /vdsm/storage1:/storage -v /vdsm/storage2:/storage2 -e CPU_CORES=2 -e RAM_SIZE=4096M -e DISK_SIZE=16G -e DISK2_SIZE=2T -e DISK_FMT=qcow2 -e ALLOCATE=N vdsm/virtual-dsm:latest
+```
+
+Docker套娃，設定群暉Docker服務
+```shell
+vi /var/packages/ContainerManager/etc/dockerd.json
+systemctl daemon-reload
+systemctl restart pkg-ContainerManager-dockerd
+```
 
 
-
-
+https://github.com/vdsm/virtual-dsm/issues/382
 
 
 

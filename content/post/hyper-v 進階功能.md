@@ -7,6 +7,8 @@ toc: true
 一些Hyper-V 的進階功能
 
 
+## 二代強制使用舊式vhd
+
 
 ## 開啟兼容WHP
 備註:要Windows Server 2022 才能開啟
