@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PVE 企業進階設定.md",
+                    "file": "content/post/PVE安裝CML.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PVE 企業進階設定"
+                  "title": "PVE安裝CML"
                 }
               }
             ]
@@ -252,8 +252,17 @@
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
-    "content/post/PVE 企業進階設定.md",
     "content/post/PVE安裝CML.md",
+    "content/post/PVE 企業進階設定.md",
+    "content/post/VMware Workstation 進階功能.md",
+    "content/post/hyper-v 進階功能.md",
+    "content/post/企業共享設定.md",
+    "static/Pasted image 20260406170629.png",
+    "content/post/企業VPN架設.md",
+    "content/post/企業常用備份軟體.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/2026 影音資料庫.md",
+    "content/post/企業拓譜圖架設.md",
     "content/post/Windows 7 更新.md",
     "content/post/Windows 好用工具.md",
     "Pasted image 20260321174801.png",
@@ -265,19 +274,12 @@
     "static/Pasted-img-20260406142129.png",
     "static/Pasted-img-20241031145738.png",
     "static/Pasted-img-20241031144701.png",
-    "static/Pasted-img-20260406141556.png",
-    "content/post/2026 家用Sever架設指南.md",
-    "content/post/2026 影音資料庫.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/企業常用備份軟體.md",
-    "content/post/企業VPN架設.md",
     "content/post/各系統資源.md",
     "content/post/網路實務疑難-1.md",
     "content/post/網路實務疑難-2.md",
     "content/post/CML 教學.md",
     "content/post/盤點工具.md",
     "content/post/linux 指令.md",
-    "content/post/hyper-v 進階功能.md",
     "content/post/immch 安裝教學.md",
     "content/post/ESXi與PVE斷線除錯.md",
     "content/post/ESXi 安裝設定.md",
@@ -292,7 +294,6 @@
     "static/Diagram.svg.xml",
     "static/homelab-diagram.svg.xml",
     "static/homelab-diagram-v1.drawio",
-    "content/post/備份流程.md",
     "public/pvesdn20260228.png - 捷徑.lnk",
     "static/pvesdn20260228.png - 捷徑.lnk",
     "public/p/企業vpn架設/index.html",
