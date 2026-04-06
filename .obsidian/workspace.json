@@ -10,7 +10,7 @@
           {
             "id": "607afdc406120674",
             "type": "tabs",
-            "dimension": 73.69914853358563,
+            "dimension": 81.07852412488174,
             "children": [
               {
                 "id": "cb583e33fb4710ed",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/企業遠端桌面方案.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "企業遠端桌面方案"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "75bad47c4255191f",
             "type": "tabs",
-            "dimension": 26.300851466414382,
+            "dimension": 18.92147587511826,
             "children": [
               {
                 "id": "9ecff68fee9fd216",
@@ -252,13 +252,15 @@
   },
   "active": "9ecff68fee9fd216",
   "lastOpenFiles": [
+    "content/post/企業遠端桌面方案.md",
+    "static/Pasted image 20241110163706.png",
+    "content/post/企業共享設定.md",
+    "content/post/企業常用備份軟體.md",
+    "content/post/企業拓譜圖架設.md",
+    "content/post/企業系統選擇.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/2026 影音資料庫.md",
     "content/post/備份流程.md",
-    "content/post/企業共享設定.md",
-    "content/post/企業系統選擇.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/企業常用備份軟體.md",
     "content/post/企業VPN架設.md",
     "content/post/網路實務疑難-2.md",
     "content/post/linux 指令.md",
@@ -282,12 +284,9 @@
     "static/Pasted-img-20260406142723.png",
     "static/Pasted-img-20260406142351.png",
     "static/Pasted-img-20260406142129.png",
-    "static/Pasted-img-20241031145738.png",
     "content/post/網路實務疑難-1.md",
     "content/post/盤點工具.md",
     "content/post/LXC 容器.md",
-    "content/post/pichome.md",
-    "content/post/Nutanix.md",
     "未命名.base",
     "static/lab.svg.xml",
     "static/lab.xml",
