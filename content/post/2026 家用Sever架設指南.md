@@ -20,11 +20,5 @@ Mointor VM：
 
 
 
-
-
-
-
-
 ## 參考資料
 1. 2026年-家庭/工作室/小企业免费的云桌面VDI方案--VDI for PVE8/9，https://yangwenqing.com/archives/2473/。超有價值文章，裡面所展示技術令人折服
-2. 
