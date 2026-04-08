@@ -24,3 +24,27 @@ source ~/.zshrc      //   重新讀取設定檔
 ## 網路
 
 `ifreload -a` debian 設定網路重新載入設定
+`netstat -tunlp | grep 5432` 監聽Port 
+`crul - i 網址` 
+`nc -uv <IP> <Port> ` 
+
+\* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
+如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8
+## 查Log
+`tail -f /var/log/production.log
+
+## 資料夾
+`mkdir test1 && cd test1` 建立資料夾並進入位置
+
+## 切換使用者
+普通使用者輸入 `sudo -i` 切換su，在su模式輸入 exit 切回普通使用者
+
+
+## 寫入檔案
+sudo su -
+echo "192.168.8.58  kevin.bdx.dev" >> /etc/hosts
+exit
+
+## 服務
+systemctl  
+sysctl

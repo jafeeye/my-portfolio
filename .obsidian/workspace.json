@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/macOS 常用設定指令.md",
+                    "file": "content/post/linux 指令.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "macOS 常用設定指令"
+                  "title": "linux 指令"
                 }
               }
             ]
@@ -135,7 +135,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 215.5
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -245,12 +246,12 @@
   },
   "active": "0fac429c617b5910",
   "lastOpenFiles": [
+    "content/post/linux 指令.md",
     "content/post/macOS 常用設定指令.md",
     "content/post/immch 安裝教學.md",
     "content/post/企業共享設定.md",
     "content/post/企業常用備份軟體.md",
     "content/post/企業拓譜圖架設.md",
-    "content/post/linux 指令.md",
     "static/messageImage_1774745847725.jpg",
     "static/messageImage_1774745847725 1.jpg",
     "static/lab.svg.xml",
