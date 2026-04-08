@@ -10,7 +10,7 @@
           {
             "id": "043a406628e91729",
             "type": "tabs",
-            "dimension": 67.05632306057385,
+            "dimension": 73.11370882040382,
             "children": [
               {
                 "id": "1d27ec04b6941f88",
@@ -31,7 +31,7 @@
           {
             "id": "3a57b56a39a07a1c",
             "type": "tabs",
-            "dimension": 32.94367693942614,
+            "dimension": 26.88629117959617,
             "children": [
               {
                 "id": "0fac429c617b5910",
@@ -246,6 +246,7 @@
   "active": "0fac429c617b5910",
   "lastOpenFiles": [
     "content/post/macOS 常用設定指令.md",
+    "content/post/immch 安裝教學.md",
     "content/post/企業共享設定.md",
     "content/post/企業常用備份軟體.md",
     "content/post/企業拓譜圖架設.md",
@@ -266,7 +267,6 @@
     "content/post/企業遠端桌面方案.md",
     "content/post/企業系統選擇.md",
     "content/post/pichome.md",
-    "content/post/immch 安裝教學.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/Paperless-ngx架設.md",
     "content/post/2026 影音資料庫.md",
