@@ -4,52 +4,54 @@
     "type": "split",
     "children": [
       {
-        "id": "19e80543aeae8380",
+        "id": "d913a1c6d47048f2",
         "type": "split",
         "children": [
           {
-            "id": "607afdc406120674",
+            "id": "043a406628e91729",
             "type": "tabs",
-            "dimension": 81.09640831758034,
+            "dimension": 77.49469214437367,
             "children": [
               {
-                "id": "cb583e33fb4710ed",
+                "id": "1d27ec04b6941f88",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/macOS 常用設定指令.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "macOS 常用設定指令"
                 }
               }
             ]
           },
           {
-            "id": "75bad47c4255191f",
+            "id": "3a57b56a39a07a1c",
             "type": "tabs",
-            "dimension": 18.90359168241966,
+            "dimension": 22.505307855626327,
             "children": [
               {
-                "id": "9ecff68fee9fd216",
+                "id": "0fac429c617b5910",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -70,7 +72,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -99,7 +101,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -133,7 +135,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 252.5
+    "width": 215.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -219,18 +221,9 @@
               "icon": "lucide-list",
               "title": "index 的大綱"
             }
-          },
-          {
-            "id": "576029f3cfc8e1e4",
-            "type": "leaf",
-            "state": {
-              "type": "footnotes",
-              "state": {},
-              "icon": "lucide-file-signature",
-              "title": "註腳"
-            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -239,63 +232,64 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "bases:建立新的 base": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian-shellcommands:Shell commands: Custom variables": false,
       "terminal:Open terminal": false
     }
   },
-  "active": "9ecff68fee9fd216",
+  "active": "0fac429c617b5910",
   "lastOpenFiles": [
-    "content/post/2026 家用Sever架設指南.md",
-    "content/post/2026 影音資料庫.md",
+    "content/post/macOS 常用設定指令.md",
     "content/post/企業共享設定.md",
-    "content/post/企業遠端桌面方案.md",
-    "static/Pasted image 20241110163706.png",
     "content/post/企業常用備份軟體.md",
     "content/post/企業拓譜圖架設.md",
-    "content/post/企業系統選擇.md",
-    "content/post/備份流程.md",
-    "content/post/企業VPN架設.md",
-    "content/post/網路實務疑難-2.md",
     "content/post/linux 指令.md",
-    "content/post/immch 安裝教學.md",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/ESXi 安裝設定.md",
-    "content/post/CML 教學.md",
-    "content/post/Paperless-ngx架設.md",
-    "static/Pasted image 20260406175439.png",
-    "content/post/VMware Workstation 進階功能.md",
-    "content/post/hyper-v 進階功能.md",
-    "content/post/PVE安裝CML.md",
-    "content/post/PVE 企業進階設定.md",
-    "static/Pasted image 20260406170629.png",
-    "content/post/Windows 7 更新.md",
-    "content/post/Windows 好用工具.md",
-    "Pasted image 20260321174801.png",
+    "static/messageImage_1774745847725.jpg",
+    "static/messageImage_1774745847725 1.jpg",
+    "static/lab.svg.xml",
+    "static/lab.svg",
+    "static/homelab-diagram.svg.xml",
+    "static/homelab-diagram.svg",
     "static/Pasted-img-20260406144630.png",
     "static/Pasted-img-20260406143515.png",
     "static/Pasted-img-20260406143049.png",
     "static/Pasted-img-20260406142723.png",
     "static/Pasted-img-20260406142351.png",
     "static/Pasted-img-20260406142129.png",
-    "content/post/網路實務疑難-1.md",
     "content/post/盤點工具.md",
-    "content/post/LXC 容器.md",
-    "未命名.base",
-    "static/lab.svg.xml",
-    "static/lab.xml",
-    "static/Diagram.svg.xml",
-    "static/homelab-diagram.svg.xml",
-    "static/homelab-diagram-v1.drawio",
-    "public/pvesdn20260228.png - 捷徑.lnk",
-    "static/pvesdn20260228.png - 捷徑.lnk",
-    "public/p/企業vpn架設/index.html",
-    "public/p/企業vpn架設"
+    "content/post/企業遠端桌面方案.md",
+    "content/post/企業系統選擇.md",
+    "content/post/pichome.md",
+    "content/post/immch 安裝教學.md",
+    "content/post/VMware Workstation 進階功能.md",
+    "content/post/Paperless-ngx架設.md",
+    "content/post/2026 影音資料庫.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/NextCloud 架設.md",
+    "themes/hugo-theme-stack/theme.toml",
+    "themes/hugo-theme-stack/netlify.toml",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider/twitter.html",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider/base.html",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/provider",
+    "themes/hugo-theme-stack/layouts/partials/head/opengraph/include.html",
+    "themes/hugo-theme-stack/layouts/partials/footer/components/script.html",
+    "themes/hugo-theme-stack/layouts/partials/footer/components/custom-font.html",
+    "themes/hugo-theme-stack/exampleSite/content/page/about/index.zh-cn.md",
+    "themes/hugo-theme-stack/exampleSite/content/page/about/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/rich-content/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.ar.md",
+    "themes/hugo-theme-stack/exampleSite/content/categories/Test/_index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/math-typesetting/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-tw.md",
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md"
   ]
 }
