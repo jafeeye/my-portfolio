@@ -73,3 +73,6 @@ esxcli network nic tso set -n vmnic0 -e 0
 
 ESXI 7升8
 ![[Pasted image 20260321174801.png]]
+
+
+

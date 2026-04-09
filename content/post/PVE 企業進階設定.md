@@ -174,8 +174,55 @@ StarWind V2V
 
 
 
+
+## 顯卡直通
+
+1. 開啟主機板對應功能
+intel vt-d
+amd IOMMU SVM
+
+2.追加grub
+nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 `intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
+更新grub
+update-grub
+
+3.增加vfio
+
+
+屏蔽顯卡
+nano /etc/modprobe.d/pve-blacklist.conf
+```
+# nvidia
+blacklist nouveau
+blacklist nvidia
+blacklist nvidiafb
+# amd
+blacklist amdgpu
+blacklist radeon
+# intel
+blacklist snd_hda_codec_hdmi
+blacklist snd_hda_intel
+blacklist snd_hda_codec
+blacklist snd_hda_core
+```
+
+>無法正常關機Deadlock有時是開源驅動對顯卡的 **電源狀態切換 (D3 state)** 記得沒直通需求也要屏蔽nouveau
+
+
+針對nvidia 
+/etc/modprobe.d/kvm.conf
+```
+options kvm ignore_msrs=1 report_ignored_msrs=0
+```
+
+重新編譯內核
+update-initramfs -u -k all
+
+
+
+
 ## 參考資料
-1. [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
-2. [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
+- [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
+- [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
 
 
