@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nVirtIO Net 網路驅動\rEtherent 控制裝置：/NetKVM/OS類型\n更換 VirtIO SCSI 控制器\rVirtiofs\rSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq SDN Fabrics\r1 2 3 apt update apt install frr frr-pythontools systemctl enable frr.service 去虛擬化\rHA功能\rＯＣＩ功能\r參考資料\r1.\u3000BUBU 知識庫 &amp; 秉迅資訊.Studio\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nEtherent 控制裝置：/NetKVM/OS類型 : VirtIO Net 網路驅動 PCI 控制器裝置 、PCI\\VEN_1AF4&amp;DEV_1003：VirtIO Console Driver D:\\vioserial\\w10\\amd64 大型存放控制器、PCI\\VEN_1AF4&amp;DEV_105A：VirtIO Balloon Driver SCSI 控制器 Virtiofs\nSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq PVE主機是192.168.8.80 環境是使用192.168.8.0/24，要把VM 用SDN分配成 192.168.10.0/24，但又希望8.x網段可以連去10.x網段，要開啟路由表功能\n">
 <title>PVE 企業進階設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/pve-%E4%BC%81%E6%A5%AD%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="PVE 企業進階設定">
-<meta property='og:description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nVirtIO Net 網路驅動\rEtherent 控制裝置：/NetKVM/OS類型\n更換 VirtIO SCSI 控制器\rVirtiofs\rSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq SDN Fabrics\r1 2 3 apt update apt install frr frr-pythontools systemctl enable frr.service 去虛擬化\rHA功能\rＯＣＩ功能\r參考資料\r1.\u3000BUBU 知識庫 &amp; 秉迅資訊.Studio\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.251f3ec0f39ebd44d95dd207e9b0dcc836d6d90402c29976db4b9bb39f8143fb.css"><meta property='og:title' content="PVE 企業進階設定">
+<meta property='og:description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nEtherent 控制裝置：/NetKVM/OS類型 : VirtIO Net 網路驅動 PCI 控制器裝置 、PCI\\VEN_1AF4&amp;DEV_1003：VirtIO Console Driver D:\\vioserial\\w10\\amd64 大型存放控制器、PCI\\VEN_1AF4&amp;DEV_105A：VirtIO Balloon Driver SCSI 控制器 Virtiofs\nSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq PVE主機是192.168.8.80 環境是使用192.168.8.0/24，要把VM 用SDN分配成 192.168.10.0/24，但又希望8.x網段可以連去10.x網段，要開啟路由表功能\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/pve-%E4%BC%81%E6%A5%AD%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-28T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="PVE 企業進階設定">
-<meta name="twitter:description" content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nVirtIO Net 網路驅動\rEtherent 控制裝置：/NetKVM/OS類型\n更換 VirtIO SCSI 控制器\rVirtiofs\rSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq SDN Fabrics\r1 2 3 apt update apt install frr frr-pythontools systemctl enable frr.service 去虛擬化\rHA功能\rＯＣＩ功能\r參考資料\r1.\u3000BUBU 知識庫 &amp; 秉迅資訊.Studio\n">
+<meta name="twitter:description" content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n啟用NVME開機\r在VM中Hardware增加PCI Device，勾選ROM-Bar Options中把Boot Order加入hostpci 檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以) 1 2 cat /sys/module/kvm_intel/parameters/nested //檢查輸出為Y qm set &lt;vmid&gt; --cpu host 安裝驅動\r雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上\nEtherent 控制裝置：/NetKVM/OS類型 : VirtIO Net 網路驅動 PCI 控制器裝置 、PCI\\VEN_1AF4&amp;DEV_1003：VirtIO Console Driver D:\\vioserial\\w10\\amd64 大型存放控制器、PCI\\VEN_1AF4&amp;DEV_105A：VirtIO Balloon Driver SCSI 控制器 Virtiofs\nSDN 取得IP\r目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工 安裝dnsmasq才可在VM自動獲取IP\n1 2 3 4 5 apt install dnsmasq # disable default instance systemctl disable --now dnsmasq # 檢查dnsmasq是否啟用 ps aux | grep dnsmasq PVE主機是192.168.8.80 環境是使用192.168.8.0/24，要把VM 用SDN分配成 192.168.10.0/24，但又希望8.x網段可以連去10.x網段，要開啟路由表功能\n">
     </head>
     <body class="
     article-page
@@ -286,18 +286,28 @@
   <ol>
     <li><a href="#前言">前言</a></li>
     <li><a href="#啟用nvme開機">啟用NVME開機</a></li>
-    <li><a href="#安裝驅動">安裝驅動</a>
-      <ol>
-        <li><a href="#virtio-net-網路驅動">VirtIO Net 網路驅動</a></li>
-        <li><a href="#更換-virtio-scsi-控制器">更換 VirtIO SCSI 控制器</a></li>
-        <li><a href="#virtiofs">Virtiofs</a></li>
-      </ol>
-    </li>
+    <li><a href="#安裝驅動">安裝驅動</a></li>
     <li><a href="#sdn-取得ip">SDN 取得IP</a></li>
     <li><a href="#sdn-fabrics">SDN Fabrics</a></li>
     <li><a href="#去虛擬化">去虛擬化</a></li>
     <li><a href="#ha功能">HA功能</a></li>
-    <li><a href="#ｏｃｉ功能">ＯＣＩ功能</a></li>
+    <li><a href="#oci功能">OCI功能</a></li>
+    <li><a href="#ceph">ceph</a></li>
+    <li><a href="#netbox-api-整合">NetBox API 整合</a></li>
+    <li><a href="#powerdns-整合">PowerDNS 整合</a></li>
+    <li><a href="#編輯lxc容器檔案">編輯LXC容器檔案</a></li>
+    <li><a href="#olivetin-addons">Olivetin Addons</a>
+      <ol>
+        <li><a href="#修改硬碟大小">修改硬碟大小</a></li>
+        <li><a href="#啟用防火牆">啟用防火牆</a></li>
+        <li><a href="#增加本機額外儲存設備">增加本機額外儲存設備</a></li>
+      </ol>
+    </li>
+    <li><a href="#pve-tools-9">PVE Tools 9</a></li>
+    <li><a href="#從esxi-遷移">從ESXi 遷移</a></li>
+    <li><a href="#p2v">P2V</a></li>
+    <li><a href="#pve-使用vdsm掛載-iscsi">PVE 使用vDSM掛載 iSCSI</a></li>
+    <li><a href="#顯卡直通">顯卡直通</a></li>
     <li><a href="#參考資料">參考資料</a></li>
   </ol>
 </nav>
@@ -355,7 +365,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -390,11 +400,12 @@
 </div>
 </div><h2 id="安裝驅動">安裝驅動
 </h2><p>雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上</p>
-<h3 id="virtio-net-網路驅動">VirtIO Net 網路驅動
-</h3><p><code>Etherent</code> 控制裝置：<code>/NetKVM/OS類型</code></p>
-<h3 id="更換-virtio-scsi-控制器">更換 VirtIO SCSI 控制器
-</h3><h3 id="virtiofs">Virtiofs
-</h3><h2 id="sdn-取得ip">SDN 取得IP
+<p><code>Etherent</code> 控制裝置：<code>/NetKVM/OS類型</code> : VirtIO Net 網路驅動
+PCI 控制器裝置 、<code>PCI\VEN_1AF4&amp;DEV_1003</code>：<strong>VirtIO Console Driver</strong> <code>D:\vioserial\w10\amd64</code>
+大型存放控制器、PCI\VEN_1AF4&amp;DEV_105A：VirtIO Balloon Driver
+SCSI 控制器
+Virtiofs</p>
+<h2 id="sdn-取得ip">SDN 取得IP
 </h2><p>目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工
 <img src="/my-portfolio/pvesdn20260228.png"
 	
@@ -421,7 +432,30 @@
 </span></span><span class="line"><span class="cl">ps aux | grep dnsmasq
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="sdn-fabrics">SDN Fabrics
+</div><p>PVE主機是<code>192.168.8.80</code> 環境是使用<code>192.168.8.0/24</code>，要把VM 用SDN分配成 <code>192.168.10.0/24</code>，但又希望8.x網段可以連去10.x網段，要開啟路由表功能</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 檢查PVE封包轉發
+</span></span><span class="line"><span class="cl">cat /proc/sys/net/ipv4/ip_forward
+</span></span><span class="line"><span class="cl"># 開啟PVE封包轉發
+</span></span><span class="line"><span class="cl">sysctl -w net.ipv4.ip_forward=1
+</span></span><span class="line"><span class="cl"># 永久化
+</span></span><span class="line"><span class="cl">vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Windows 加入路由表 <code>route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.80</code></li>
+<li>路由器加入路由表</li>
+</ul>
+<h2 id="sdn-fabrics">SDN Fabrics
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -436,10 +470,247 @@
 </div>
 </div><h2 id="去虛擬化">去虛擬化
 </h2><h2 id="ha功能">HA功能
-</h2><h2 id="ｏｃｉ功能">ＯＣＩ功能
-</h2><h2 id="參考資料">參考資料
-</h2><p>1.　<a class="link" href="https://wiki.freedomstu.com/"  target="_blank" rel="noopener"
-    >BUBU 知識庫 &amp; 秉迅資訊.Studio</a></p>
+</h2><h2 id="oci功能">OCI功能
+</h2><h2 id="ceph">ceph
+</h2><h2 id="netbox-api-整合">NetBox API 整合
+</h2><p>整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)</p>
+<ol>
+<li>
+<p>打開NetBox，輸入token
+<img src="/my-portfolio/netbox01260301.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+<li>
+<p>因為API要使用SSL連線，必須把憑證匯入PVE信任憑證，</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl s_client -showcerts -connect 192.168.8.128:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt
+</span></span><span class="line"><span class="cl">#更新系統信任清單
+</span></span><span class="line"><span class="cl">update-ca-certificates
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>憑證匯入後加入API出現hotsname錯誤，代表PVE認可憑證，不過IP位置憑證內登記的名字（可能是 <code>netbox.example.com</code>）跟 IP 對不起來，直接在PVE查看 fingerprint
+<img src="/my-portfolio/netbox260301.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint -sha256
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>直接填入API位置 <code>https://192.168.8.x/api</code> ，並且填入FingerPrint跟token完成
+<img src="/my-portfolio/pvenetbox260301.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+</ol>
+<h2 id="powerdns-整合">PowerDNS 整合
+</h2><h2 id="編輯lxc容器檔案">編輯LXC容器檔案
+</h2><h2 id="olivetin-addons">Olivetin Addons
+</h2><p><code>find / -name &quot;*olivetin*&quot;</code>
+<code>systemctl start OliveTin.service</code>
+<code>sudo systemctl restart OliveTin.service</code>
+<code>nano /etc/OliveTin/config.yaml</code></p>
+<p>找到下面路徑</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">root</span><span class="err">@</span><span class="n">pve</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="o">~</span><span class="c1"># find / -name &#34;*olivetin*&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">olivetin</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">conffiles</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">md5sums</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">list</span>
+</span></span><span class="line"><span class="cl"><span class="n">find</span><span class="p">:</span> <span class="err">‘</span><span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">task</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">net</span><span class="err">’</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">argument</span>
+</span></span><span class="line"><span class="cl"><span class="n">find</span><span class="p">:</span> <span class="err">‘</span><span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">net</span><span class="err">’</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">argument</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>修改下面資料</p>
+<h3 id="修改硬碟大小">修改硬碟大小
+</h3><p>當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
+當要Shrink虛擬磁碟，需透過指令縮寫指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="n">resize</span> <span class="o">--</span><span class="n">shrink</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">148</span><span class="o">/</span><span class="n">vm</span><span class="o">-</span><span class="mi">148</span><span class="o">-</span><span class="n">disk</span><span class="o">-</span><span class="mf">0.</span><span class="n">qcow2</span> <span class="mi">50</span><span class="n">G</span>
+</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">rescan</span> <span class="o">--</span><span class="n">vmid</span> <span class="mi">148</span>  <span class="o">//</span><span class="err">重新偵測硬碟大小</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="啟用防火牆">啟用防火牆
+</h3><ol>
+<li><code>Datacenter/Firewall/Option</code> 選項Firewall切換成Yes</li>
+<li><code>Node/Firewall</code> 選項Firewall切換成Yes</li>
+<li>VM選項Firewall切換成Yes</li>
+</ol>
+<h3 id="增加本機額外儲存設備">增加本機額外儲存設備
+</h3><ol>
+<li><code>Node/Disks/Directory</code> 在Create Directory 可將空磁碟格式化成Ext4</li>
+<li><code>Datacenter/Storage</code> 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
+* ISO檔可以直接掛載NAS 存放區域節省本機空間</li>
+</ol>
+<h2 id="pve-tools-9">PVE Tools 9
+</h2><p>工具地址 <code>https://github.com/Mapleawaa/PVE-Tools-9</code></p>
+<h2 id="從esxi-遷移">從ESXi 遷移
+</h2><p>會有驅動問題，在Windows不能開機就選SATA
+<img src="/my-portfolio/260404-pve.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="p2v">P2V
+</h2><p>把目前開機的作業系統,使用對應軟體可直接熱轉換
+Disk2vhd
+StarWind V2V
+先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+<img src="/my-portfolio/260404-v2v.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="pve-使用vdsm掛載-iscsi">PVE 使用vDSM掛載 iSCSI
+</h2><ol>
+<li>
+<p>先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
+<img src="/my-portfolio/Pasted-img-20260406141556.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+<li>
+<p>建立儲存集區
+![[Pasted-img-20260406142129.png]]</p>
+</li>
+<li>
+<p>在DSM 硬碟格式化成儲存空間
+![[Pasted-img-20260406142351.png]]</p>
+</li>
+<li>
+<p>SAN Manager 建立LUN及Target
+![[Pasted-img-20260406142723.png]]</p>
+</li>
+<li>
+<p>Windows 掛載iSCSi，選探索入口輸入Synology IP 位置，按下進階，連線方式跟啟動IP絕對不要用預設值不然會導致逾時無法連線，本機介面卡選ISCSI Inititaor、啟動器IP選擇自己本機電腦位置(有出現多個IP是因為電腦本身有多個網路介面)，如果iSCSI有設定密碼要勾選CHAP登入
+![[Pasted-img-20260406143049.png]]</p>
+</li>
+<li>
+<p>都設定正確就會在目標自動出現target，按連線即可
+![[Pasted-img-20260406143515.png]]</p>
+</li>
+</ol>
+<h2 id="顯卡直通">顯卡直通
+</h2><ol>
+<li>開啟主機板對應功能
+intel vt-d
+amd IOMMU SVM</li>
+</ol>
+<p>2.追加grub
+nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet&rdquo; 後面打上 <code>intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream</code>
+更新grub
+update-grub</p>
+<p>3.增加vfio</p>
+<p>屏蔽顯卡
+nano /etc/modprobe.d/pve-blacklist.conf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># nvidia
+</span></span><span class="line"><span class="cl">blacklist nouveau
+</span></span><span class="line"><span class="cl">blacklist nvidia
+</span></span><span class="line"><span class="cl">blacklist nvidiafb
+</span></span><span class="line"><span class="cl"># amd
+</span></span><span class="line"><span class="cl">blacklist amdgpu
+</span></span><span class="line"><span class="cl">blacklist radeon
+</span></span><span class="line"><span class="cl"># intel
+</span></span><span class="line"><span class="cl">blacklist snd_hda_codec_hdmi
+</span></span><span class="line"><span class="cl">blacklist snd_hda_intel
+</span></span><span class="line"><span class="cl">blacklist snd_hda_codec
+</span></span><span class="line"><span class="cl">blacklist snd_hda_core
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>無法正常關機Deadlock有時是開源驅動對顯卡的 <strong>電源狀態切換 (D3 state)</strong> 記得沒直通需求也要屏蔽nouveau
+GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet intel_iommu=on pcie_aspm=off acpi=force&rdquo;</p>
+</blockquote>
+<p>針對nvidia
+/etc/modprobe.d/kvm.conf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">options kvm ignore_msrs=1 report_ignored_msrs=0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新編譯內核
+update-initramfs -u -k all</p>
+<h2 id="參考資料">參考資料
+</h2><ul>
+<li><a class="link" href="https://wiki.freedomstu.com/"  target="_blank" rel="noopener"
+    >BUBU 知識庫 &amp; 秉迅資訊.Studio</a></li>
+<li><a class="link" href="https://ithelp.ithome.com.tw/2020-12th-ironman"  target="_blank" rel="noopener"
+    >第 12 屆 iThome 鐵人賽 DevOps with Proxmox</a></li>
+</ul>
 
 </section>
 

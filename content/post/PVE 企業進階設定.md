@@ -207,6 +207,7 @@ blacklist snd_hda_core
 ```
 
 >無法正常關機Deadlock有時是開源驅動對顯卡的 **電源狀態切換 (D3 state)** 記得沒直通需求也要屏蔽nouveau
+>GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on pcie_aspm=off acpi=force"
 
 
 針對nvidia 

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n1 2 3 4 qm importdisk &lt;vmid&gt; &lt;path/xxxx.qcow2&gt; &lt;storage&gt; qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk002.qcow2 local rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成 ">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 EVE-NG\r最小大小為50G，但為擴充開機磁碟設定為100G Vitro SCSI Single\n先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 root/eve，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip 進入網頁後登入初始密碼 admin/eve，此時再進行帳號設定 Nutanix\r安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H RAM 要20G\n重啟登入帳號root密碼nutanix/4u GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n">
 <title>PVE 安裝CML ESXi</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="PVE 安裝CML ESXi">
-<meta property='og:description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n1 2 3 4 qm importdisk &lt;vmid&gt; &lt;path/xxxx.qcow2&gt; &lt;storage&gt; qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk002.qcow2 local rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成 ">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.251f3ec0f39ebd44d95dd207e9b0dcc836d6d90402c29976db4b9bb39f8143fb.css"><meta property='og:title' content="PVE 安裝CML ESXi">
+<meta property='og:description' content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 EVE-NG\r最小大小為50G，但為擴充開機磁碟設定為100G Vitro SCSI Single\n先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 root/eve，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip 進入網頁後登入初始密碼 admin/eve，此時再進行帳號設定 Nutanix\r安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H RAM 要20G\n重啟登入帳號root密碼nutanix/4u GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-17T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="PVE 安裝CML ESXi">
-<meta name="twitter:description" content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n1 2 3 4 qm importdisk &lt;vmid&gt; &lt;path/xxxx.qcow2&gt; &lt;storage&gt; qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk002.qcow2 local rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2 2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成 ">
+<meta name="twitter:description" content="CML\r簡介\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得\n.\nNested ESXi\r簡介\r安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面\n類型 設定 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 EVE-NG\r最小大小為50G，但為擴充開機磁碟設定為100G Vitro SCSI Single\n先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 root/eve，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip 進入網頁後登入初始密碼 admin/eve，此時再進行帳號設定 Nutanix\r安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H RAM 要20G\n重啟登入帳號root密碼nutanix/4u GNS3\r類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type VirtIO Disk Not add 1.在 Github 下載 GNS3.VM.KVM.3.x.x.zip，並使用scp把檔案上傳至/var/lib/vz/images，因為qcow2在proxmox無法直接使用，需匯入指令\n">
     </head>
     <body class="
     article-page
@@ -294,9 +294,17 @@
         <li><a href="#簡介-1">簡介</a></li>
       </ol>
     </li>
+    <li><a href="#eve-ng">EVE-NG</a></li>
+    <li><a href="#nutanix">Nutanix</a></li>
     <li><a href="#gns3">GNS3</a></li>
     <li><a href="#vyos">VyOS</a></li>
-    <li><a href="#windows-7">Windows 7</a></li>
+    <li><a href="#iventoy">iVentoy</a></li>
+    <li><a href="#gitlab-lxc-安裝">Gitlab LXC 安裝</a></li>
+    <li><a href="#windows-7">Windows 7</a>
+      <ol>
+        <li><a href="#vdsm">vDSM</a></li>
+      </ol>
+    </li>
     <li><a href="#參考資料">參考資料</a></li>
   </ol>
 </nav>
@@ -371,23 +379,20 @@
     
     <h2 id="cml">CML
 </h2><h3 id="簡介">簡介
-</h3><p>新版CML採用Ubuntu 24.10發行版製作，原理是開機先將<code>cml_2.9.1xx.iso</code>進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。</p>
+</h3><p>新版CML採用Ubuntu 24.10發行版製作，原理是開機先將<code>cml_2.9.1xx.iso</code>進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項</p>
 <p>BIOS：OVMF (UEFI)<br>
 硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native<br>
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)<br>
-CD/DVD (ide1)：refplat-20250616-fcs.iso</p>
-<p><img src="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217.png"
-	width="1560"
-	height="1201"
-	srcset="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_bd18de661c508ea4.png 480w, /my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_9aba0c1c799b27f3.png 1024w"
+CD/DVD (ide1)：refplat-20250616-fcs.iso<br>
+在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得</p>
+<p><img src="/my-portfolio/static/cml0217.png"
+	
+	
+	
 	loading="lazy"
 	
 		alt="CML"
 	
-	
-		class="gallery-image" 
-		data-flex-grow="129"
-		data-flex-basis="311px"
 	
 ><span style="display:none">.</span></p>
 <h2 id="nested-esxi">Nested ESXi
@@ -415,6 +420,41 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso</p>
       </tr>
   </tbody>
 </table></div>
+<h2 id="eve-ng">EVE-NG
+</h2><p>最小大小為50G，但為擴充開機磁碟設定為100G
+Vitro SCSI Single</p>
+<ol>
+<li>先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 <code>root/eve</code>，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip
+<img src="/my-portfolio/260308-eveng.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+<li>進入網頁後登入初始密碼 <code>admin/eve</code>，此時再進行帳號設定
+<img src="/my-portfolio/260308-evengui.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
+</ol>
+<h2 id="nutanix">Nutanix
+</h2><p>安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H
+RAM 要20G</p>
+<p>重啟登入帳號<code>root</code>密碼<code>nutanix/4u</code>
+<img src="/my-portfolio/260308-nutanix.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
 <h2 id="gns3">GNS3
 </h2><div class="table-wrapper"><table>
   <thead>
@@ -459,45 +499,113 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso</p>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成
-<img src="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217.png"
-	width="901"
-	height="465"
-	srcset="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_230dc590525151d9.png 480w, /my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_b393221e1a5e09ed.png 1024w"
+<img src="/my-portfolio/static/pvesct0217.png"
+	
+	
+	
 	loading="lazy"
 	
 		alt="pvesct0217.png"
 	
 	
-		class="gallery-image" 
-		data-flex-grow="193"
-		data-flex-basis="465px"
-	
 ></p>
 <p>3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
-<img src="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217.png"
-	width="955"
-	height="389"
-	srcset="/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_bd8cc8df23d256a7.png 480w, /my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_78c02687af75c02a.png 1024w"
+<img src="/my-portfolio/static/pvesr260217.png"
+	
+	
+	
 	loading="lazy"
 	
 		alt="pvesr260217.png"
 	
 	
-		class="gallery-image" 
-		data-flex-grow="245"
-		data-flex-basis="589px"
-	
 ></p>
 <h2 id="vyos">VyOS
 </h2><p>企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔</p>
+<h2 id="iventoy">iVentoy
+</h2><p>1.敲入參數</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bash -c &#34;$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.參考 <a class="link" href="https://www.youtube.com/watch?v=TNseK41A0DQ"  target="_blank" rel="noopener"
+    >YT影片</a>，使用Advanced 並且輸入<code>192.168.8.X/24</code> 自訂成以下參數
+<img src="/my-portfolio/iventoy260228.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+3.安裝後豋入SCP把ISO檔放進去就可以啟動服務
+<img src="/my-portfolio/iventoyscr260228.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="gitlab-lxc-安裝">Gitlab LXC 安裝
+</h2><p><img src="/my-portfolio/260308-gitlab.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
 <h2 id="windows-7">Windows 7
 </h2><ol>
 <li>因為版本或更新問題，實測在32位元 qemu agent 有相容性問題無法安裝，最後vxKex先裝上，再執行先qemu-agent.msi ，跳出priviledge fail到 <code>C:\Program Files\qemu-ga</code> 右鍵相容性成W10，再去msi按retry可成功安裝，再去Options啟用 Qemu Guest Agent，安裝完可在管理介面看到IP並控制開關機
-![[Pasted image 20260222114258.png]]</li>
+<img src="/my-portfolio/Pastedimage20260222114258.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
 <li>安裝spice-guest-tool，裝完可以畫面隨Chome視窗放大縮小</li>
 <li>啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
-![[Pasted image 20260222114008.png]]</li>
+<img src="/my-portfolio/Pastedimage20260222114008.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></li>
 </ol>
+<h3 id="vdsm">vDSM
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker run -it --rm -p 5000:5000 --cap-add NET_ADMIN --device-cgroup-rule=&#39;c *:* rwm&#39; --sysctl net.ipv4.ip_forward=1 --device /dev/net/tun --device /dev/kvm --device /dev/vhost-net --stop-timeout 60 -v /vdsm/storage1:/storage -v /vdsm/storage2:/storage2 -e CPU_CORES=2 -e RAM_SIZE=4096M -e DISK_SIZE=16G -e DISK2_SIZE=2T -e DISK_FMT=qcow2 -e ALLOCATE=N vdsm/virtual-dsm:latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Docker套娃，設定群暉Docker服務</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vi /var/packages/ContainerManager/etc/dockerd.json
+</span></span><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl">systemctl restart pkg-ContainerManager-dockerd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><a class="link" href="https://github.com/vdsm/virtual-dsm/issues/382"  target="_blank" rel="noopener"
+    >https://github.com/vdsm/virtual-dsm/issues/382</a></p>
 <h2 id="參考資料">參考資料
 </h2><ol>
 <li>安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818</li>

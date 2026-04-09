@@ -32,6 +32,8 @@ source ~/.zshrc      //   重新讀取設定檔
 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8
 ## 查Log
 `tail -f /var/log/production.log
+`journalctl -b -1 -r`
+
 
 ## 資料夾
 `mkdir test1 && cd test1` 建立資料夾並進入位置

@@ -1,0 +1,42 @@
+/* 覆蓋 Stack 主題強制寬屏的設定 */
+:root {
+    /* 直接修改主題的變數是最快的方法 (如果主題有支援) */
+    --card-margin: 0px;
+}
+
+.main-article {
+    /* 針對引言區塊 (blockquote) */
+    blockquote {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding: 1rem 1.5rem !important;
+        background-color: var(--code-background-color) !important; /* 跟隨主題色 */
+        border-left: 4px solid var(--accent-color) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 針對程式碼區塊 (highlight) */
+    .highlight {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        box-sizing: border-box !important;
+
+        /* 針對裡面實際的 pre 標籤 */
+        pre {
+            margin: 0 !important;
+        }
+    }
+}
+
+/* 額外檢查：有時候 Stack 會在外層用 .article-post 或 .content */
+.article-post blockquote, 
+.article-post .highlight,
+.content blockquote,
+.content .highlight {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+}

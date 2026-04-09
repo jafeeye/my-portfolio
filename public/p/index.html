@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\r通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致\n除錯顯示log指令\n1 journalctl --until &#34;2026-02-27 11:00:00&#34; -n 100 -r 在指令發現這條 Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow\n懷疑是驅動出現 Detected Hardware Unit Hang 關閉電源休眠可解決問題\n1 2 3 4 # 關閉卸載功能，這能避免 Hardware Unit Hang ethtool -K eno1 tso off gso off # 重新啟動網卡服務 systemctl restart networking Proxmox 重啟後 ethtool 的設定會消失，請編輯網路設定檔：\nnano /etc/network/interfaces 在 iface eno1 inet manual 下方增加一行： post-up /usr/sbin/ethtool -K eno1 tso off gso off ESXi\r1 esxcli network nic tso set -n vmnic0 -e 0 持久化設定 /etc/rc.local.d/local.sh 在exit0之前加入下面這條\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\r對於系統新舊而言，用最好的配置就是最好的系統\n系統要求\r系統平台 RAM Win7 x86 512MB ">
 <title></title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.b9e9128fec450ebccecc4ec9900157f32b85d0609bcd5ee3293968bcaa1235f2.css"><meta property='og:title' content="">
-<meta property='og:description' content="前言\r通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致\n除錯顯示log指令\n1 journalctl --until &#34;2026-02-27 11:00:00&#34; -n 100 -r 在指令發現這條 Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow\n懷疑是驅動出現 Detected Hardware Unit Hang 關閉電源休眠可解決問題\n1 2 3 4 # 關閉卸載功能，這能避免 Hardware Unit Hang ethtool -K eno1 tso off gso off # 重新啟動網卡服務 systemctl restart networking Proxmox 重啟後 ethtool 的設定會消失，請編輯網路設定檔：\nnano /etc/network/interfaces 在 iface eno1 inet manual 下方增加一行： post-up /usr/sbin/ethtool -K eno1 tso off gso off ESXi\r1 esxcli network nic tso set -n vmnic0 -e 0 持久化設定 /etc/rc.local.d/local.sh 在exit0之前加入下面這條\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.251f3ec0f39ebd44d95dd207e9b0dcc836d6d90402c29976db4b9bb39f8143fb.css"><meta property='og:title' content="">
+<meta property='og:description' content="前言\r對於系統新舊而言，用最好的配置就是最好的系統\n系統要求\r系統平台 RAM Win7 x86 512MB ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' />
 <meta name="twitter:title" content="">
-<meta name="twitter:description" content="前言\r通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致\n除錯顯示log指令\n1 journalctl --until &#34;2026-02-27 11:00:00&#34; -n 100 -r 在指令發現這條 Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow\n懷疑是驅動出現 Detected Hardware Unit Hang 關閉電源休眠可解決問題\n1 2 3 4 # 關閉卸載功能，這能避免 Hardware Unit Hang ethtool -K eno1 tso off gso off # 重新啟動網卡服務 systemctl restart networking Proxmox 重啟後 ethtool 的設定會消失，請編輯網路設定檔：\nnano /etc/network/interfaces 在 iface eno1 inet manual 下方增加一行： post-up /usr/sbin/ethtool -K eno1 tso off gso off ESXi\r1 esxcli network nic tso set -n vmnic0 -e 0 持久化設定 /etc/rc.local.d/local.sh 在exit0之前加入下面這條\n">
+<meta name="twitter:description" content="前言\r對於系統新舊而言，用最好的配置就是最好的系統\n系統要求\r系統平台 RAM Win7 x86 512MB ">
     </head>
     <body class="
     article-page
@@ -262,42 +262,7 @@
     </ol>
 </aside>
 
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#前言">前言</a>
-      <ol>
-        <li><a href="#系統要求">系統要求</a></li>
-      </ol>
-    </li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
+    
 
             <main class="main full-width">
     <article class="main-article">
@@ -347,24 +312,7 @@
     <section class="article-content">
     
     
-    <h2 id="前言">前言
-</h2><p>對於系統新舊而言，用最好的配置就是最好的系統</p>
-<h3 id="系統要求">系統要求
-</h3><div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>系統平台</th>
-          <th>RAM</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Win7 x86</td>
-          <td>512MB</td>
-      </tr>
-  </tbody>
-</table></div>
-
+    
 </section>
 
 

@@ -7,23 +7,1112 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Sat, 28 Feb 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>2026家用Sever架設指南</title>
-        <link>http://localhost:1313/my-portfolio/p/2026%E5%AE%B6%E7%94%A8sever%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/</link>
+        <lastBuildDate>Mon, 06 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>immich 安裝教學</title>
+        <link>http://localhost:1313/my-portfolio/p/immich-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/immich-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/</guid>
+        <description>&lt;h2 id=&#34;synology-dsm&#34;&gt;Synology DSM
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;下載docker-compose.yml及example.env&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Paperless-ngx 架設筆記</title>
+        <link>http://localhost:1313/my-portfolio/p/paperless-ngx-%E6%9E%B6%E8%A8%AD%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/paperless-ngx-%E6%9E%B6%E8%A8%AD%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020260406175439.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+docker exec -it &amp;ndash;user root 233 /bin/bash&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>pichome 安裝</title>
+        <link>http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/</guid>
+        <description>&lt;ol&gt;
+&lt;li&gt;到Pichome的Github找compse檔&lt;/li&gt;
+&lt;li&gt;因為最新3.0版有問題,所以到&lt;a class=&#34;link&#34; href=&#34;https://hub.docker.com/r/oaooa/pichome&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;docker hub&lt;/a&gt; 指定tag 為 2.2.0，到 &lt;a class=&#34;link&#34; href=&#34;https://github.com/zyx0814/FilePress/releases&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Github&lt;/a&gt; 使用2.2.0版下載&lt;code&gt;FilePress-2.2.0.zip&lt;/code&gt;放到資料夾中&lt;/li&gt;
+&lt;li&gt;編寫compose.yml&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;59
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;version&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;3.8&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;services&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mariadb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;10.7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transaction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;isolation&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;READ&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COMMITTED&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;binlog&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ROW&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3307&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3306&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./db:/var/lib/mysql&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;TZ=Asia/Shanghai&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_ROOT_PASSWORD=root@admin.0001&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_USER_FILE=/run/secrets/mysql_user&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;secrets&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_password&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_user&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;6.2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;alpine&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6379&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6379&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TZ&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Asia&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Shanghai&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;oaooa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pichome&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;2.2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8088&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;links&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./site:/var/www/html&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./ssl:/etc/nginx/ssl&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;/volume4/stock/eaglelib/stock.library:/mnt/libray&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_SERVER=db&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_USER_FILE=/run/secrets/mysql_user&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;secrets&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_password&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mysql_user&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;secrets&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;mysql_db&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./mysql_db.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;mysql_password&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./mysql_password.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;mysql_user&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;./mysql_user.txt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;docker 的寫法是外映射內
+maridb Port 3306(外):3306(內)
+secret 的txt內容指定帳號及密碼
+![[Pasted-img-20260406144630.png]]&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>VMware Workstation 進階功能</title>
+        <link>http://localhost:1313/my-portfolio/p/vmware-workstation-%E9%80%B2%E9%9A%8E%E5%8A%9F%E8%83%BD/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/vmware-workstation-%E9%80%B2%E9%9A%8E%E5%8A%9F%E8%83%BD/</guid>
+        <description>&lt;h3 id=&#34;vmware-命令列&#34;&gt;VMWare 命令列
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;在視窗右鍵選擇隱藏控件&lt;/strong&gt;
+&lt;code&gt;%APPDATA%\Roaming\VMware\preferences.ini&lt;/code&gt;寫入&lt;code&gt;pref.allowHideControls = &amp;quot;TRUE&amp;quot;&lt;/code&gt;
+&lt;strong&gt;捷徑內容&lt;/strong&gt;
+-n 開啟新視窗、-x 執行啟動虛擬機、 -X 啟動虛擬機完成後進入全螢幕、-f 執行全螢幕 -q 關閉虛擬機直接關閉視窗 -B 套用vmx預設設定
+&lt;code&gt;&amp;quot;C:\Program Files (x86)\VMware\VMware Workstation\vmware.exe&amp;quot; -x -B -n &amp;quot;C:\xxx\Workspace Ubuntu 64bit.vmx&amp;quot;&lt;/code&gt;
+&lt;code&gt;&amp;quot;C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe&amp;quot; &amp;quot;D:\VMWare\PC-Hyread\PC-Hyread.vmx&amp;quot;&lt;/code&gt;
+&lt;strong&gt;開機啟動&lt;/strong&gt;
+&lt;code&gt;&amp;quot;C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe&amp;quot; start &amp;quot;D:\VMWare\DEV\DEV.vmx&amp;quot; nogui&lt;/code&gt;
+&lt;strong&gt;VMWare-KVM 模式&lt;/strong&gt;
+&lt;code&gt;&amp;quot;C:\Program Files (x86)\VMware\VMware Workstation\vmware-kvm.exe&amp;quot; --preferences&lt;/code&gt;
+缺點：視窗縮小滑鼠會跳回去&lt;/p&gt;
+&lt;h3 id=&#34;啟用嵌套虛擬化&#34;&gt;啟用嵌套虛擬化
+&lt;/h3&gt;&lt;p&gt;在VMWare 跑Hyper-V或WSL或Windows Server 啟用Hyper-V&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hypervisor.cpuid.v0 = &amp;#34;FALSE&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mce.enable = &amp;#34;TRUE&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vhv.enable = &amp;#34;TRUE&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>企業共用設定</title>
+        <link>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/</guid>
+        <description>&lt;h3 id=&#34;mac共用桌面&#34;&gt;mac共用桌面
+&lt;/h3&gt;&lt;p&gt;1.桌面資料夾設定共用
+2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)
+&lt;img src=&#34;https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/17591386650005k7c6m.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;gh|330&#34;
+	
+	
+&gt;
+3.Win端登入
+帳號：mac主機名\帳號 &lt;code&gt;mini.local\PIN&lt;/code&gt;
+密碼：mac主機密碼
+關閉連線 &lt;code&gt;net use \\192.168.8.120 /delete&lt;/code&gt; IPC$&lt;/p&gt;
+&lt;h2 id=&#34;win10-掛載nfs&#34;&gt;Win10 掛載NFS
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;appwiz.cpl&lt;/code&gt;啟用&lt;code&gt;Service for NFS/Client for NFS&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Synology 調整相對應權限，在Windows使用掛載命令&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;showmount -e \\192.168.8.x
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mount \\192.168.8.x\目錄 z:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;unmount -f z:
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020260406170629.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;webdav&#34;&gt;WebDAV
+&lt;/h2&gt;&lt;p&gt;Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表
+&lt;code&gt;reg add &amp;quot;HKLM\SYSTEM\CurrentControlSet\Services\WebClient\Parameters&amp;quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;以webdav協議不用webdav:// 只要打上https://即可&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;airprint-印表機共享&#34;&gt;AirPrint 印表機共享
+&lt;/h2&gt;&lt;p&gt;安裝檔路徑： \\192.168.8.106\20-系統設定\普通印表機啟用 AirPrint\&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;安裝印表機驅動程式，開啟印表機共享&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安裝Bonjour&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安裝AirPrint installer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;點擊 Install AirPrint Service&lt;/li&gt;
+&lt;li&gt;設置 Sercvie Startup 為Auto，點Start&lt;/li&gt;
+&lt;li&gt;選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印
+&lt;img src=&#34;https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739971146000cs88gj.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;gh|300&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;導入AirPrint IOS 5 Fix.reg&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;實測一定要打上AirPrint IOS 5 Fix．否則將無法設定成功&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;成功畫面：
+&lt;img src=&#34;https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739627745000dm9z0d.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;gh|350&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Windows 共享
+如果無法共享在認證管理員儲存
+&lt;img src=&#34;https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1742819159000r3q28b.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;gh&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!Note] 實驗結果
+這個程式會導致macOS莫名無法儲存密碼列印，必須要每次輸入密碼才能原因不明，有可能是密碼多次儲存的關係&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;windows&#34;&gt;Windows
+&lt;/h3&gt;&lt;p&gt;掛載指令
+net share：顯示目前共用資料夾
+&lt;code&gt;net use Z:\\192.168.8.106\Software /user:PIN Yster86a /persistent:no&lt;/code&gt;
+persistent: 不會自動連線
+中斷網路磁碟機
+&lt;code&gt;net use /delete *&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在Windows中，Windows 檔案總管無法阻止它「自動嘗試連線」已掛載但尚未連線的 SMB 網路磁碟機(GPT)，&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;出現共享文件：目前的帳戶已被鎖定無法登陸
+&lt;code&gt;cmdkey /add:ip位置 /user:用戶名 /pass:密碼&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Win11 無法共享原因 (提高安全性，預設不能用伺服端的權限帳戶強制要設密碼)
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation\AllowInsecureGuestAuth =1 或 - 編輯「啟用不安全的來賓登入」原則，將其設定為「已啟用」。做gpudate
+發生延伸錯誤 &lt;code&gt;Set-Smb Client Configuration -RequireSecuritySignature $false&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;smb&#34;&gt;SMB
+&lt;/h3&gt;&lt;p&gt;我不知道大家有沒有用過window的net use這指令，他是一個可以自動連你的smb網路磁碟。最近我一直在玩他，但怕會忘記就來寫一下。
+這是如果你電腦沒有設定密碼(空密碼)情況可以下以下
+net use z: \IP-ADDRESS\share-folder /user:username \login
+有密碼:
+net use X: \server\share /user:user abc
+你們也可以這樣下，沒有login，他會跳出來要你打帳號密碼。沒密碼就按enter鍵如下
+net use z: \IP-ADDRESS\share-folder
+如果要清掉或取消連線可以用 \delete 如下:
+net use z: /delete
+列出所有網路磁碟: net use
+可以不用指定drive letter，用* 當做temp如下:
+net use * &amp;ldquo;\server\my media&amp;rdquo; /persistent:no&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>企業遠端桌面方案</title>
+        <link>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E6%96%B9%E6%A1%88/</link>
+        <pubDate>Mon, 06 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E6%96%B9%E6%A1%88/</guid>
+        <description>&lt;h3 id=&#34;遠端桌面方案-remoteapp&#34;&gt;遠端桌面方案 RemoteAPP
+&lt;/h3&gt;&lt;h5 id=&#34;解決多用戶登入問題&#34;&gt;解決多用戶登入問題
+&lt;/h5&gt;&lt;p&gt;先使用RDP Wrapper解決多用戶登入&lt;/p&gt;
+&lt;h5 id=&#34;使用remoteapptool&#34;&gt;使用RemoteAppTool
+&lt;/h5&gt;&lt;p&gt;提升遠端桌面連線設定&lt;/p&gt;
+&lt;h4 id=&#34;tsplus-remote-access-設定&#34;&gt;TSplus Remote Access 設定
+&lt;/h4&gt;&lt;p&gt;建立一個新的用戶方便登入．這邊新增一個APP使用者&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020241110163706.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;參考資料&#34;&gt;參考資料
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.vlinyu.com/archives/windows-remote-desktop-protocol-direct3d-opengl&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;【Windows使用】之&amp;ndash;远程桌面游戏优化提升显示帧率、显卡3D加速、OpenGL性能&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>企業常用備份軟體</title>
+        <link>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%B8%B8%E7%94%A8%E5%82%99%E4%BB%BD%E8%BB%9F%E9%AB%94/</link>
+        <pubDate>Fri, 03 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%B8%B8%E7%94%A8%E5%82%99%E4%BB%BD%E8%BB%9F%E9%AB%94/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;企業常用災難恢復軟體，有許多不同軟體&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VM Explorer 已停止生產&lt;/li&gt;
+&lt;li&gt;NAKIVO Backup &amp;amp; Replication 有每年免費一年版本 (Test v10.0.0.45526)&lt;/li&gt;
+&lt;li&gt;Iperius Backup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;iperius-backup&#34;&gt;Iperius Backup
+&lt;/h2&gt;&lt;h2 id=&#34;參考資料&#34;&gt;參考資料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;企業絕佳免費版 VMware ESXi 多機備份備援與防駭實作，https://www.osslab.com.tw/free-vmware-esxi-backup-guide/&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>macOS 常用設定指令</title>
+        <link>http://localhost:1313/my-portfolio/p/macos-%E5%B8%B8%E7%94%A8%E8%A8%AD%E5%AE%9A%E6%8C%87%E4%BB%A4/</link>
+        <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/macos-%E5%B8%B8%E7%94%A8%E8%A8%AD%E5%AE%9A%E6%8C%87%E4%BB%A4/</guid>
+        <description>&lt;p&gt;macOS 家目錄 &lt;code&gt;/user/使用者名稱&lt;/code&gt;&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;系統&lt;/th&gt;
+          &lt;th&gt;目錄&lt;/th&gt;
+          &lt;th&gt;用途說明&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;macOS&lt;/td&gt;
+          &lt;td&gt;/home&lt;/td&gt;
+          &lt;td&gt;純粹掛載目錄,如果Linux使用zfs格式也會當掛載點&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;常用快速鍵&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Option+Cmd+drag make alias&lt;/li&gt;
+&lt;li&gt;Cmd+Shift+. hide/show file&lt;/li&gt;
+&lt;li&gt;Cmd+Option+D hide dock&lt;/li&gt;
+&lt;li&gt;fn+control+方向 halve window&lt;/li&gt;
+&lt;li&gt;Shift+Cmd+4&lt;/li&gt;
+&lt;li&gt;Shift+Cmd+Ctrl+4 copy image&lt;/li&gt;
+&lt;li&gt;中文輸入法反引號 Option+~&lt;/li&gt;
+&lt;li&gt;勿擾模式 F6&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;移除macOS 的 Gatekeeper
+&lt;code&gt;xattr -d com.apple.quarantine /Applications/WindTerm.app&lt;/code&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>常用Linux指令</title>
+        <link>http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8linux%E6%8C%87%E4%BB%A4/</link>
+        <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8linux%E6%8C%87%E4%BB%A4/</guid>
+        <description>&lt;p&gt;macOS 要push之前驗證裝 &lt;code&gt;brew tap microsoft/git-credential-manager&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;啟用zsh&#34;&gt;啟用zsh
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nano ~/.zshrc        //   ~/代表家目錄
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;加入以下內容&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 初始化補齊系統 &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;autoload&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Uz&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;compinit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;compinit&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 開啟選單模式，按下 Tab 兩次後進入選單 &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;zstyle&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;:completion:*&amp;#39;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;menu&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;select&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;存檔&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;source ~/.zshrc      //   重新讀取設定檔
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;要快速顯示檔案輸入cd，tab兩次出現資料夾，再按tab做選擇&lt;/p&gt;
+&lt;h2 id=&#34;網路&#34;&gt;網路
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;ifreload -a&lt;/code&gt; debian 設定網路重新載入設定
+&lt;code&gt;netstat -tunlp | grep 5432&lt;/code&gt; 監聽Port
+&lt;code&gt;crul - i 網址&lt;/code&gt;
+&lt;code&gt;nc -uv &amp;lt;IP&amp;gt; &amp;lt;Port&amp;gt; &lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
+如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8&lt;/p&gt;
+&lt;h2 id=&#34;查log&#34;&gt;查Log
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;tail -f /var/log/production.log &lt;/code&gt;journalctl -b -1 -r`&lt;/p&gt;
+&lt;h2 id=&#34;資料夾&#34;&gt;資料夾
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;mkdir test1 &amp;amp;&amp;amp; cd test1&lt;/code&gt; 建立資料夾並進入位置&lt;/p&gt;
+&lt;h2 id=&#34;切換使用者&#34;&gt;切換使用者
+&lt;/h2&gt;&lt;p&gt;(切換使用者都建議加上-,以載入完整設定)
+普通使用者輸入 &lt;code&gt;sudo -i&lt;/code&gt; 切換su，在su模式輸入 exit 切回普通使用者 //sudo su 也可以
+切換特定使用者 &lt;code&gt;sudo -u &amp;lt;使用者帳號&amp;gt;&lt;/code&gt;
+沒裝sudo
+普通使用者 su - 切換su
+切換特定使用者 su - gss&lt;/p&gt;
+&lt;h2 id=&#34;寫入檔案&#34;&gt;寫入檔案
+&lt;/h2&gt;&lt;p&gt;sudo su -
+echo &amp;ldquo;192.168.8.58  kevin.bdx.dev&amp;rdquo; &amp;raquo; /etc/hosts
+exit&lt;/p&gt;
+&lt;h2 id=&#34;服務&#34;&gt;服務
+&lt;/h2&gt;&lt;p&gt;systemctl&lt;br&gt;
+sysctl&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>CML 教學</title>
+        <link>http://localhost:1313/my-portfolio/p/cml-%E6%95%99%E5%AD%B8/</link>
+        <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/cml-%E6%95%99%E5%AD%B8/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;h2 id=&#34;連線外網&#34;&gt;連線外網
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;在Add Node加入Extranal Coneector 並且連接 iosv-0&lt;/li&gt;
+&lt;li&gt;iosv-0跟extconn-0連接後,在線中間快按2下,在Link Statistics兩端都要啟動Running&lt;/li&gt;
+&lt;li&gt;extconn-0的Connector Selection選擇NAT
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260401-CML.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>NextCloud 架設</title>
+        <link>http://localhost:1313/my-portfolio/p/nextcloud-%E6%9E%B6%E8%A8%AD/</link>
+        <pubDate>Sat, 28 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/nextcloud-%E6%9E%B6%E8%A8%AD/</guid>
+        <description>&lt;h3 id=&#34;啟用外部儲存空間掛載&#34;&gt;啟用外部儲存空間掛載
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;創立資料夾&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it nextcloud bash
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; /var/www
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir file1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;在Container Manager映射正確資料夾，將Synology空間掛載至容器內file1，
+![[Pasted-img-20241031145738.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;登入NextCloud後，先按右上角/應用程式/已停用應用程式,啟用External storage support ，然後在右上角/個人設定/外部儲存空間,掛載 &lt;code&gt;/var/www/file1&lt;/code&gt; 資料夾&lt;br&gt;
+![[Pasted-img-20241031144701.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用下面指令可以掃描nextcloud所有檔案系統 docker exec &amp;ndash;user www-data nextcloud-app php occ files:scan -all ，不然會導致NC卡住&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[!Note] 重要
+為避免系統的權限和檔案保護問題，target目錄盡量不要是NAS的共享根目錄，並授於適當的權限&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;external-sites&#34;&gt;External sites
+&lt;/h3&gt;&lt;p&gt;certbot產生SSL證書&lt;/p&gt;
+&lt;h3 id=&#34;code-設定&#34;&gt;CODE 設定
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;59
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;60
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;61
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;62
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;63
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;64
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;65
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;66
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;67
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;68
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;69
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;70
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;services&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mariadb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;10.11&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transaction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;isolation&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;READ&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COMMITTED&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;binlog&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;format&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ROW&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;innodb&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pool&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;512&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;M&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;innodb&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;128&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;M&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;innodb&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;method&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O_DIRECT&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;innodb&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;flush&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;at&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;trx&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;commit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;max&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;connections&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;./&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mysql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25632&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25632&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_DATABASE&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_USER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;alpine&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;server&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;appendonly&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;yes&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;appendfsync&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;everysec&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxmemory&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;256&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mb&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;maxmemory&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;policy&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;allkeys&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lru&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;./&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;data&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8081&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;depends_on&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;./&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;www&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;volume4&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;data&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;www&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;file1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_PASSWORD&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;25632&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_DATABASE&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_USER&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MYSQL_HOST&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;REDIS_HOST&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;redis&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;collabora&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mietzen&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;synology&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;collabora&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;24.04&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;9.1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;collabora&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;app&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;always&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;9980&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9980&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;environment&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;extra_params&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;--o:security.seccomp=false --o:security.capabilities=false --o:ssl.enable=false --o:ssl.termination=false&amp;#34;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;DONT_GEN_SSL_CERT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;username&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;admin&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;n&#34;&gt;password&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;admin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# 群輝CODE會有seccomp權限問題，不僅要選擇適合docker容器，還要參數進行false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# 設定password 與username 為本可以進入CODE管理員面板，網址 http://NASIP:9980/browser/dist/admin/admin.html&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# ssl.enable 因為 ssl 放在 nginx 那邊所以要避免他嘗試著開啟 https 伺服器，而且下一行也會禁止他產生憑證，不關閉會錯誤&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# ssl.termination 因為前面關閉 https 但是我們前面實際上存取還是用 nginx 的 https, 所以要設定這項讓他不會擅自轉址成 http，而被混合內容政策擋掉&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# net.web_root 如果要把它塞在子路徑底下，路徑寫這邊&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# 這個是避免他產生自簽 ssl 憑證，搭配上述的 ssl.enable 可以完全關閉他的 ssl 功能&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;nextcloud&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;db&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;[!Note] 重要
+如果要用外部文件檔案WOPI，可以使用OnlyOffice，OXOOL不能在群暉Container Manager 使用會出錯
+無法播放MKV與MP4檔案，可能是瀏覽器不支援H.265編碼，Chrome目前支援&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;方法-2---使用pve-script&#34;&gt;方法 2 - 使用PVE Script
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;使用Nextcloud 腳本 (VM)&lt;/li&gt;
+&lt;li&gt;按照部分下一步
+&lt;img src=&#34;http://localhost:1313/my-portfolio/20260405-nc1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;按照步驟下一步
+&lt;img src=&#34;http://localhost:1313/my-portfolio/20260405-nc2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;按照步驟下一步
+&lt;img src=&#34;http://localhost:1313/my-portfolio/20260405-nc3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;按照步驟下一步
+&lt;img src=&#34;http://localhost:1313/my-portfolio/20260405-nc4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;參考資料&#34;&gt;參考資料
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;【TrueNAS 24.04】公网IPv6+OpenWrt+Nextcloud+Collabora+NPM实现Office在线协同编辑（HTTPS公网版）&lt;/li&gt;
+&lt;li&gt;【TrueNAS 24.04】Collabora Online 添加自定义字体（font）&lt;/li&gt;
+&lt;li&gt;架設Nextcloud個人雲端硬碟 ＋ 網頁版LibreOffice教學 (docker-compose + ZeroTier內網穿透),參考網址:https://ivonblog.com/posts/nextcloud-docker/&lt;/li&gt;
+&lt;li&gt;群晖Docker中的Nextcloud挂载任意本地存储,參考網址:https://zhaodsm.de/archives/382.html&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>2026影音資料庫架設</title>
+        <link>http://localhost:1313/my-portfolio/p/2026%E5%BD%B1%E9%9F%B3%E8%B3%87%E6%96%99%E5%BA%AB%E6%9E%B6%E8%A8%AD/</link>
+        <pubDate>Sat, 21 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/2026%E5%BD%B1%E9%9F%B3%E8%B3%87%E6%96%99%E5%BA%AB%E6%9E%B6%E8%A8%AD/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;因為自己的影片太多，於是就在NAS架設影音資料庫卻有一堆坑紀錄&lt;/p&gt;
+&lt;h2 id=&#34;方案1-embyinfuseplaylist&#34;&gt;方案1: emby+infuse+playlist
+&lt;/h2&gt;&lt;p&gt;缺：影片播放清單自己加 搜尋不直覺&lt;/p&gt;
+&lt;h2 id=&#34;方案2peertube&#34;&gt;方案2:PeerTube
+&lt;/h2&gt;&lt;p&gt;設定不同資料夾顯示方式；設定/emby/首頁螢幕/，顯示預設畫面為哪種&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>hyper-v 進階功能</title>
+        <link>http://localhost:1313/my-portfolio/p/hyper-v-%E9%80%B2%E9%9A%8E%E5%8A%9F%E8%83%BD/</link>
+        <pubDate>Sun, 08 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/hyper-v-%E9%80%B2%E9%9A%8E%E5%8A%9F%E8%83%BD/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;一些Hyper-V 的進階功能&lt;/p&gt;
+&lt;h2 id=&#34;二代強制使用舊式vhd&#34;&gt;二代強制使用舊式vhd
+&lt;/h2&gt;&lt;h2 id=&#34;開啟兼容whp&#34;&gt;開啟兼容WHP
+&lt;/h2&gt;&lt;p&gt;備註:要Windows Server 2022 才能開啟&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/260404-whp01.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/260404-whp02.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>LXC容器</title>
+        <link>http://localhost:1313/my-portfolio/p/lxc%E5%AE%B9%E5%99%A8/</link>
+        <pubDate>Mon, 02 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/lxc%E5%AE%B9%E5%99%A8/</guid>
+        <description>&lt;p&gt;Incus&lt;br&gt;
+CGManager&lt;br&gt;
+distrobuilder&lt;br&gt;
+LXCFS&lt;/p&gt;
+&lt;h2 id=&#34;參考資料&#34;&gt;參考資料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://linuxcontainers.cn/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://linuxcontainers.cn/&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Synology 系統安裝</title>
+        <link>http://localhost:1313/my-portfolio/p/synology-%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/</link>
+        <pubDate>Mon, 02 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/synology-%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/</guid>
+        <description>&lt;h2 id=&#34;olivetin&#34;&gt;OliveTin
+&lt;/h2&gt;&lt;h2 id=&#34;vaultwarden&#34;&gt;Vaultwarden
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;version&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;3&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;services&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;vaultwarden&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;vaultwarden/server:latest&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;vaultwarden&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;unless-stopped&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;- &lt;span class=&#34;m&#34;&gt;9445&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;80&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#map any custom port to use (replace 9445 not 80)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;./data:/data:rw&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#environment:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;#     - ROCKET_TLS={certs=&amp;#34;/ssl/certs/certs.pem&amp;#34;,key=&amp;#34;/ssl/private/key.pem&amp;#34;}  // Environment variable is specific to the Rocket web server&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- ADMIN_TOKEN=${ADMIN_TOKEN}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- WEBSOCKET_ENABLED=true&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SIGNUPS_ALLOWED=false&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_HOST=${SMTP_HOST}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_FROM=${SMTP_FROM}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_PORT=${SMTP_PORT}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_SSL=${SMTP_SSL}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_USERNAME=${SMTP_USERNAME}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- SMTP_PASSWORD=${SMTP_PASSWORD}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;c&#34;&gt;#- DOMAIN=${DOMAIN}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;glance&#34;&gt;glance
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nt&#34;&gt;services&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;glance&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;container_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;glance&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;network_mode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;bridge&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;glanceapp/glance&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;volumes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;./glance:/app/assets&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;./glance.yml:/app/glance.yml&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;/etc/TZ:/etc/timezone:ro&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;/etc/localtime:/etc/localtime:ro&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;ports&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;m&#34;&gt;2020&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;8080&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;restart&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;always&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;openspeedtest&#34;&gt;OpenSpeedtest
+&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;version: &amp;#39;3.3&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;services:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    speedtest:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        restart: unless-stopped
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        container_name: openspeedtest
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        network_mode: bridge
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        ports:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            - &amp;#39;1030:3000&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            - &amp;#39;1031:3001&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        image: openspeedtest/latest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>ESXi與PVE斷線除錯</title>
+        <link>http://localhost:1313/my-portfolio/p/esxi%E8%88%87pve%E6%96%B7%E7%B7%9A%E9%99%A4%E9%8C%AF/</link>
+        <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/esxi%E8%88%87pve%E6%96%B7%E7%B7%9A%E9%99%A4%E9%8C%AF/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
+除錯顯示log指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;journalctl --until &amp;#34;2026-02-27 11:00:00&amp;#34; -n 100 -r
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在指令發現這條
+&lt;code&gt;Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow&lt;/code&gt;
+懷疑是驅動出現 &lt;code&gt;Detected Hardware Unit Hang&lt;/code&gt; 關閉電源休眠可解決問題&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 關閉卸載功能Hardware Unit Hang，這能避免&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ethtool&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;K&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;enx00e01c680083&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ethtool&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;K&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;eno1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 重新啟動網卡服務 &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;systemctl&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;networking&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Proxmox 重啟後 &lt;code&gt;ethtool&lt;/code&gt; 的設定會消失，請編輯網路設定檔：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在 &lt;code&gt;iface eno1 inet manual&lt;/code&gt; 下方增加一行： &lt;code&gt;post-up /usr/sbin/ethtool -K eno1 tso off gso off&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;usb-網卡優化設定&#34;&gt;USB 網卡優化設定
+&lt;/h2&gt;&lt;p&gt;想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;auto&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;lo&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;inet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;loopback&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nic0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;inet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;manual&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;auto&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vmbr0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vmbr0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;inet&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;static&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;address&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;192.168&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;8.90&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;24&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;gateway&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;192.168&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;8.1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;bridge&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ports&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nic0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;enx00e01c680083&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;bridge&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;stp&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;bridge&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;post&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;up&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sbin&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ethtool&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;K&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;enx00e01c680083&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nic1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;inet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;manual&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;source&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;etc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;network&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;interfaces&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡&lt;/li&gt;
+&lt;li&gt;post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;esxi&#34;&gt;ESXi
+&lt;/h2&gt;&lt;p&gt;實際案例遇到i219v當拔除超過5分鐘後就無法再連線，根據排除因為i219v是消費級晶片,第一思路關閉自動協商調整成1000Mbps失效，第二關閉EEE省電模組寫死在驅動，雖然ESXi 可以使用但是社群版驅動&lt;code&gt;ne1000&lt;/code&gt; ，BIOS也找不到可以關閉EEE選項，只好直接放棄ESXi&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;esxcli network nic tso set -n vmnic0 -e 0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;持久化設定
+/etc/rc.local.d/local.sh 在exit0 之前加入下面這條&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;esxcli network nic tso set -n vmnic0 -e 0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;重開機生效&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/sbin/auto-backup.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;ESXI 7升8
+![[Pasted image 20260321174801.png]]&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>2026 家用Sever架設指南</title>
+        <link>http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8sever%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/</link>
         <pubDate>Sat, 28 Feb 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/2026%E5%AE%B6%E7%94%A8sever%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/</guid>
+        <guid>http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8sever%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/</guid>
         <description>&lt;h2 id=&#34;前言&#34;&gt;前言
 &lt;/h2&gt;&lt;p&gt;最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄&lt;/p&gt;
-&lt;p&gt;三層式架構? Data Plane、Control Plane
-列印VM：PaperMF、AirPrint、Windows 區網印表機
-備份VM：
-VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/homelab-diagram.svg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;三層式架構：Data Plane、Control Plane&lt;br&gt;
+列印VM：PaperMF、AirPrint、Windows 區網印表機&lt;br&gt;
+備份VM：WS2022-Recuse&lt;br&gt;
+VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce&lt;br&gt;
 Mointor VM：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/lab.svg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;參考資料&#34;&gt;參考資料
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;2026年-家庭/工作室/小企业免费的云桌面VDI方案&amp;ndash;VDI for PVE8/9，https://yangwenqing.com/archives/2473/。超有價值文章，裡面所展示技術令人折服&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
 &lt;/ol&gt;
 </description>
         </item>
@@ -53,11 +1142,12 @@ Mointor VM：&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;安裝驅動&#34;&gt;安裝驅動
 &lt;/h2&gt;&lt;p&gt;雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上&lt;/p&gt;
-&lt;h3 id=&#34;virtio-net-網路驅動&#34;&gt;VirtIO Net 網路驅動
-&lt;/h3&gt;&lt;p&gt;&lt;code&gt;Etherent&lt;/code&gt; 控制裝置：&lt;code&gt;/NetKVM/OS類型&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;更換-virtio-scsi-控制器&#34;&gt;更換 VirtIO SCSI 控制器
-&lt;/h3&gt;&lt;h3 id=&#34;virtiofs&#34;&gt;Virtiofs
-&lt;/h3&gt;&lt;h2 id=&#34;sdn-取得ip&#34;&gt;SDN 取得IP
+&lt;p&gt;&lt;code&gt;Etherent&lt;/code&gt; 控制裝置：&lt;code&gt;/NetKVM/OS類型&lt;/code&gt; : VirtIO Net 網路驅動
+PCI 控制器裝置 、&lt;code&gt;PCI\VEN_1AF4&amp;amp;DEV_1003&lt;/code&gt;：&lt;strong&gt;VirtIO Console Driver&lt;/strong&gt; &lt;code&gt;D:\vioserial\w10\amd64&lt;/code&gt;
+大型存放控制器、PCI\VEN_1AF4&amp;amp;DEV_105A：VirtIO Balloon Driver
+SCSI 控制器
+Virtiofs&lt;/p&gt;
+&lt;h2 id=&#34;sdn-取得ip&#34;&gt;SDN 取得IP
 &lt;/h2&gt;&lt;p&gt;目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工
 &lt;img src=&#34;http://localhost:1313/my-portfolio/pvesdn20260228.png&#34;
 	
@@ -84,7 +1174,30 @@ Mointor VM：&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ps aux | grep dnsmasq
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;sdn-fabrics&#34;&gt;SDN Fabrics
+&lt;/div&gt;&lt;p&gt;PVE主機是&lt;code&gt;192.168.8.80&lt;/code&gt; 環境是使用&lt;code&gt;192.168.8.0/24&lt;/code&gt;，要把VM 用SDN分配成 &lt;code&gt;192.168.10.0/24&lt;/code&gt;，但又希望8.x網段可以連去10.x網段，要開啟路由表功能&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 檢查PVE封包轉發
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /proc/sys/net/ipv4/ip_forward
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 開啟PVE封包轉發
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sysctl -w net.ipv4.ip_forward=1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 永久化
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Windows 加入路由表 &lt;code&gt;route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.80&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;路由器加入路由表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sdn-fabrics&#34;&gt;SDN Fabrics
 &lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -99,10 +1212,247 @@ Mointor VM：&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;去虛擬化&#34;&gt;去虛擬化
 &lt;/h2&gt;&lt;h2 id=&#34;ha功能&#34;&gt;HA功能
-&lt;/h2&gt;&lt;h2 id=&#34;ｏｃｉ功能&#34;&gt;ＯＣＩ功能
-&lt;/h2&gt;&lt;h2 id=&#34;參考資料&#34;&gt;參考資料
-&lt;/h2&gt;&lt;p&gt;1.　&lt;a class=&#34;link&#34; href=&#34;https://wiki.freedomstu.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;BUBU 知識庫 &amp;amp; 秉迅資訊.Studio&lt;/a&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;h2 id=&#34;oci功能&#34;&gt;OCI功能
+&lt;/h2&gt;&lt;h2 id=&#34;ceph&#34;&gt;ceph
+&lt;/h2&gt;&lt;h2 id=&#34;netbox-api-整合&#34;&gt;NetBox API 整合
+&lt;/h2&gt;&lt;p&gt;整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;打開NetBox，輸入token
+&lt;img src=&#34;http://localhost:1313/my-portfolio/netbox01260301.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;因為API要使用SSL連線，必須把憑證匯入PVE信任憑證，&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;openssl s_client -showcerts -connect 192.168.8.128:443 &amp;lt;/dev/null 2&amp;gt;/dev/null | openssl x509 -outform PEM &amp;gt; /usr/local/share/ca-certificates/netbox.crt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#更新系統信任清單
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;update-ca-certificates
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;憑證匯入後加入API出現hotsname錯誤，代表PVE認可憑證，不過IP位置憑證內登記的名字（可能是 &lt;code&gt;netbox.example.com&lt;/code&gt;）跟 IP 對不起來，直接在PVE查看 fingerprint
+&lt;img src=&#34;http://localhost:1313/my-portfolio/netbox260301.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint -sha256
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;直接填入API位置 &lt;code&gt;https://192.168.8.x/api&lt;/code&gt; ，並且填入FingerPrint跟token完成
+&lt;img src=&#34;http://localhost:1313/my-portfolio/pvenetbox260301.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;powerdns-整合&#34;&gt;PowerDNS 整合
+&lt;/h2&gt;&lt;h2 id=&#34;編輯lxc容器檔案&#34;&gt;編輯LXC容器檔案
+&lt;/h2&gt;&lt;h2 id=&#34;olivetin-addons&#34;&gt;Olivetin Addons
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;find / -name &amp;quot;*olivetin*&amp;quot;&lt;/code&gt;
+&lt;code&gt;systemctl start OliveTin.service&lt;/code&gt;
+&lt;code&gt;sudo systemctl restart OliveTin.service&lt;/code&gt;
+&lt;code&gt;nano /etc/OliveTin/config.yaml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;找到下面路徑&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pve&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;# find / -name &amp;#34;*olivetin*&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;www&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;olivetin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dpkg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;info&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;olivetin&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conffiles&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dpkg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;info&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;olivetin&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;md5sums&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dpkg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;info&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;olivetin&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;list&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;find&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;‘&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;proc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12645&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;task&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12645&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;net&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;’&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Invalid&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argument&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;find&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;‘&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;proc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12645&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;net&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;’&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Invalid&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argument&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;修改下面資料&lt;/p&gt;
+&lt;h3 id=&#34;修改硬碟大小&#34;&gt;修改硬碟大小
+&lt;/h3&gt;&lt;p&gt;當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
+當要Shrink虛擬磁碟，需透過指令縮寫指令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;qemu&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;img&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;resize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;shrink&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vz&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;images&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;148&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;148&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;disk&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;0.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;qcow2&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;G&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;qm&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;rescan&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vmid&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;148&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;重新偵測硬碟大小&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;啟用防火牆&#34;&gt;啟用防火牆
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;Datacenter/Firewall/Option&lt;/code&gt; 選項Firewall切換成Yes&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Node/Firewall&lt;/code&gt; 選項Firewall切換成Yes&lt;/li&gt;
+&lt;li&gt;VM選項Firewall切換成Yes&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;增加本機額外儲存設備&#34;&gt;增加本機額外儲存設備
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;Node/Disks/Directory&lt;/code&gt; 在Create Directory 可將空磁碟格式化成Ext4&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Datacenter/Storage&lt;/code&gt; 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
+* ISO檔可以直接掛載NAS 存放區域節省本機空間&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;pve-tools-9&#34;&gt;PVE Tools 9
+&lt;/h2&gt;&lt;p&gt;工具地址 &lt;code&gt;https://github.com/Mapleawaa/PVE-Tools-9&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;從esxi-遷移&#34;&gt;從ESXi 遷移
+&lt;/h2&gt;&lt;p&gt;會有驅動問題，在Windows不能開機就選SATA
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260404-pve.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;p2v&#34;&gt;P2V
+&lt;/h2&gt;&lt;p&gt;把目前開機的作業系統,使用對應軟體可直接熱轉換
+Disk2vhd
+StarWind V2V
+先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260404-v2v.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;pve-使用vdsm掛載-iscsi&#34;&gt;PVE 使用vDSM掛載 iSCSI
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
+&lt;img src=&#34;http://localhost:1313/my-portfolio/Pasted-img-20260406141556.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;建立儲存集區
+![[Pasted-img-20260406142129.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在DSM 硬碟格式化成儲存空間
+![[Pasted-img-20260406142351.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SAN Manager 建立LUN及Target
+![[Pasted-img-20260406142723.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Windows 掛載iSCSi，選探索入口輸入Synology IP 位置，按下進階，連線方式跟啟動IP絕對不要用預設值不然會導致逾時無法連線，本機介面卡選ISCSI Inititaor、啟動器IP選擇自己本機電腦位置(有出現多個IP是因為電腦本身有多個網路介面)，如果iSCSI有設定密碼要勾選CHAP登入
+![[Pasted-img-20260406143049.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;都設定正確就會在目標自動出現target，按連線即可
+![[Pasted-img-20260406143515.png]]&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;顯卡直通&#34;&gt;顯卡直通
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;開啟主機板對應功能
+intel vt-d
+amd IOMMU SVM&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;2.追加grub
+nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT=&amp;ldquo;quiet&amp;rdquo; 後面打上 &lt;code&gt;intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream&lt;/code&gt;
+更新grub
+update-grub&lt;/p&gt;
+&lt;p&gt;3.增加vfio&lt;/p&gt;
+&lt;p&gt;屏蔽顯卡
+nano /etc/modprobe.d/pve-blacklist.conf&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# nvidia
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist nouveau
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist nvidia
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist nvidiafb
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# amd
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist amdgpu
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist radeon
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# intel
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist snd_hda_codec_hdmi
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist snd_hda_intel
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist snd_hda_codec
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;blacklist snd_hda_core
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;無法正常關機Deadlock有時是開源驅動對顯卡的 &lt;strong&gt;電源狀態切換 (D3 state)&lt;/strong&gt; 記得沒直通需求也要屏蔽nouveau
+GRUB_CMDLINE_LINUX_DEFAULT=&amp;ldquo;quiet intel_iommu=on pcie_aspm=off acpi=force&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;針對nvidia
+/etc/modprobe.d/kvm.conf&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;options kvm ignore_msrs=1 report_ignored_msrs=0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;重新編譯內核
+update-initramfs -u -k all&lt;/p&gt;
+&lt;h2 id=&#34;參考資料&#34;&gt;參考資料
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://wiki.freedomstu.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;BUBU 知識庫 &amp;amp; 秉迅資訊.Studio&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://ithelp.ithome.com.tw/2020-12th-ironman&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;第 12 屆 iThome 鐵人賽 DevOps with Proxmox&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         <item>
@@ -112,7 +1462,9 @@ Mointor VM：&lt;/p&gt;
         
         <guid>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E6%8B%93%E8%AD%9C%E5%9C%96%E5%8F%83%E8%80%83/</guid>
         <description>&lt;h2 id=&#34;vmware-product&#34;&gt;VMware Product
-&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/VMware-Products.jpg&#34;
+&lt;/h2&gt;&lt;p&gt;vDS(vSphere Distributed Switch)
+NSX Controller&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/VMware-Products.jpg&#34;
 	
 	
 	
@@ -162,11 +1514,11 @@ Mointor VM：&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>Windows 好用指令、工具</title>
-        <link>http://localhost:1313/my-portfolio/p/windows-%E5%A5%BD%E7%94%A8%E6%8C%87%E4%BB%A4%E5%B7%A5%E5%85%B7/</link>
+        <title>Windows 好用工具及指令</title>
+        <link>http://localhost:1313/my-portfolio/p/windows-%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7%E5%8F%8A%E6%8C%87%E4%BB%A4/</link>
         <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/my-portfolio/p/windows-%E5%A5%BD%E7%94%A8%E6%8C%87%E4%BB%A4%E5%B7%A5%E5%85%B7/</guid>
+        <guid>http://localhost:1313/my-portfolio/p/windows-%E5%A5%BD%E7%94%A8%E5%B7%A5%E5%85%B7%E5%8F%8A%E6%8C%87%E4%BB%A4/</guid>
         <description>&lt;h2 id=&#34;前言&#34;&gt;前言
 &lt;/h2&gt;&lt;p&gt;Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除錯及呼叫相關功能&lt;/p&gt;
 &lt;ol&gt;
@@ -201,11 +1553,20 @@ Mointor VM：&lt;/p&gt;
 &lt;h3 id=&#34;systernails-tools&#34;&gt;Systernails Tools
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;psexec [\\\\computer[,computer2[,...] | @file]][-u user [-p psswd]][-n s][-r servicename][-h][-l][-s|-e][-x][-i [session]][-c [-f|-v]][-w directory][-d][-&amp;lt;priority&amp;gt;][-a n,n,...][-verbose] cmd [arguments]&lt;/code&gt;
 &lt;strong&gt;&lt;code&gt;BgInfo&lt;/code&gt;&lt;/strong&gt;
-&lt;strong&gt;&lt;code&gt;shellrunas /reg [/quiet]&lt;/code&gt;&lt;/strong&gt;
-RDCMan&lt;/p&gt;
+&lt;strong&gt;&lt;code&gt;shellrunas /reg [/quiet]&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RDCMan
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260328-rdcman.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;code&gt;Tools\Options\Experiences&lt;/code&gt; 可以調整連線穩定度，可調成boradband 比較穩定&lt;/p&gt;
 &lt;h4 id=&#34;windows-rsat&#34;&gt;Windows RSAT
 &lt;/h4&gt;&lt;h4 id=&#34;app-v&#34;&gt;APP-V
-&lt;/h4&gt;&lt;h3 id=&#34;windows-ternailms&#34;&gt;Windows Ternailms
+&lt;/h4&gt;&lt;h3 id=&#34;windows-terminal&#34;&gt;Windows Terminal
 &lt;/h3&gt;&lt;h3 id=&#34;windows-perforance-analyze&#34;&gt;Windows Perforance Analyze
 &lt;/h3&gt;</description>
         </item>
@@ -298,16 +1659,6 @@ RDCMan&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>VMware 架構</title>
-        <link>http://localhost:1313/my-portfolio/p/vmware-%E6%9E%B6%E6%A7%8B/</link>
-        <pubDate>Fri, 20 Feb 2026 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/my-portfolio/p/vmware-%E6%9E%B6%E6%A7%8B/</guid>
-        <description>&lt;p&gt;vDS(vSphere Distributed Switch)
-NSX Controller&lt;/p&gt;
-</description>
-        </item>
-        <item>
         <title>ESXi 安裝設定</title>
         <link>http://localhost:1313/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%A8%AD%E5%AE%9A/</link>
         <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
@@ -346,23 +1697,20 @@ NSX Controller&lt;/p&gt;
         <guid>http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/</guid>
         <description>&lt;h2 id=&#34;cml&#34;&gt;CML
 &lt;/h2&gt;&lt;h3 id=&#34;簡介&#34;&gt;簡介
-&lt;/h3&gt;&lt;p&gt;新版CML採用Ubuntu 24.10發行版製作，原理是開機先將&lt;code&gt;cml_2.9.1xx.iso&lt;/code&gt;進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;新版CML採用Ubuntu 24.10發行版製作，原理是開機先將&lt;code&gt;cml_2.9.1xx.iso&lt;/code&gt;進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項&lt;/p&gt;
 &lt;p&gt;BIOS：OVMF (UEFI)&lt;br&gt;
 硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native&lt;br&gt;
 CD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)&lt;br&gt;
-CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217.png&#34;
-	width=&#34;1560&#34;
-	height=&#34;1201&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_bd18de661c508ea4.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/cml0217_hu_9aba0c1c799b27f3.png 1024w&#34;
+CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;br&gt;
+在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/static/cml0217.png&#34;
+	
+	
+	
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CML&#34;
 	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;129&#34;
-		data-flex-basis=&#34;311px&#34;
 	
 &gt;&lt;span style=&#34;display:none&#34;&gt;.&lt;/span&gt;&lt;/p&gt;
 &lt;h2 id=&#34;nested-esxi&#34;&gt;Nested ESXi
@@ -390,6 +1738,41 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;h2 id=&#34;eve-ng&#34;&gt;EVE-NG
+&lt;/h2&gt;&lt;p&gt;最小大小為50G，但為擴充開機磁碟設定為100G
+Vitro SCSI Single&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 &lt;code&gt;root/eve&lt;/code&gt;，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260308-eveng.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;進入網頁後登入初始密碼 &lt;code&gt;admin/eve&lt;/code&gt;，此時再進行帳號設定
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260308-evengui.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;nutanix&#34;&gt;Nutanix
+&lt;/h2&gt;&lt;p&gt;安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H
+RAM 要20G&lt;/p&gt;
+&lt;p&gt;重啟登入帳號&lt;code&gt;root&lt;/code&gt;密碼&lt;code&gt;nutanix/4u&lt;/code&gt;
+&lt;img src=&#34;http://localhost:1313/my-portfolio/260308-nutanix.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;gns3&#34;&gt;GNS3
 &lt;/h2&gt;&lt;table&gt;
   &lt;thead&gt;
@@ -434,45 +1817,113 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;2.匯入成功後出現unused disk，按edit在BUS/Device選擇Virto Block，再按add完成
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217.png&#34;
-	width=&#34;901&#34;
-	height=&#34;465&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_230dc590525151d9.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesct0217_hu_b393221e1a5e09ed.png 1024w&#34;
+&lt;img src=&#34;http://localhost:1313/my-portfolio/static/pvesct0217.png&#34;
+	
+	
+	
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;pvesct0217.png&#34;
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;193&#34;
-		data-flex-basis=&#34;465px&#34;
-	
 &gt;&lt;/p&gt;
 &lt;p&gt;3.在Option把 Boot Order中把硬碟打勾並移動開機順序才能開機
-&lt;img src=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217.png&#34;
-	width=&#34;955&#34;
-	height=&#34;389&#34;
-	srcset=&#34;http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_bd8cc8df23d256a7.png 480w, http://localhost:1313/my-portfolio/p/pve-%E5%AE%89%E8%A3%9Dcml-esxi/pvesr260217_hu_78c02687af75c02a.png 1024w&#34;
+&lt;img src=&#34;http://localhost:1313/my-portfolio/static/pvesr260217.png&#34;
+	
+	
+	
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;pvesr260217.png&#34;
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;245&#34;
-		data-flex-basis=&#34;589px&#34;
-	
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;vyos&#34;&gt;VyOS
 &lt;/h2&gt;&lt;p&gt;企業用戶有提供各虛擬化平台安裝檔，不是企業用戶只提供一般安裝檔&lt;/p&gt;
+&lt;h2 id=&#34;iventoy&#34;&gt;iVentoy
+&lt;/h2&gt;&lt;p&gt;1.敲入參數&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash -c &amp;#34;$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;2.參考 &lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=TNseK41A0DQ&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;YT影片&lt;/a&gt;，使用Advanced 並且輸入&lt;code&gt;192.168.8.X/24&lt;/code&gt; 自訂成以下參數
+&lt;img src=&#34;http://localhost:1313/my-portfolio/iventoy260228.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+3.安裝後豋入SCP把ISO檔放進去就可以啟動服務
+&lt;img src=&#34;http://localhost:1313/my-portfolio/iventoyscr260228.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-lxc-安裝&#34;&gt;Gitlab LXC 安裝
+&lt;/h2&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/my-portfolio/260308-gitlab.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;windows-7&#34;&gt;Windows 7
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;因為版本或更新問題，實測在32位元 qemu agent 有相容性問題無法安裝，最後vxKex先裝上，再執行先qemu-agent.msi ，跳出priviledge fail到 &lt;code&gt;C:\Program Files\qemu-ga&lt;/code&gt; 右鍵相容性成W10，再去msi按retry可成功安裝，再去Options啟用 Qemu Guest Agent，安裝完可在管理介面看到IP並控制開關機
-![[Pasted image 20260222114258.png]]&lt;/li&gt;
+&lt;img src=&#34;http://localhost:1313/my-portfolio/Pastedimage20260222114258.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
 &lt;li&gt;安裝spice-guest-tool，裝完可以畫面隨Chome視窗放大縮小&lt;/li&gt;
 &lt;li&gt;啟用noVNC剪貼簿，編輯VM中Hardward/Display，在Clipboard選VNC即會出現對應功能
-![[Pasted image 20260222114008.png]]&lt;/li&gt;
+&lt;img src=&#34;http://localhost:1313/my-portfolio/Pastedimage20260222114008.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
 &lt;/ol&gt;
+&lt;h3 id=&#34;vdsm&#34;&gt;vDSM
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it --rm -p 5000:5000 --cap-add NET_ADMIN --device-cgroup-rule=&amp;#39;c *:* rwm&amp;#39; --sysctl net.ipv4.ip_forward=1 --device /dev/net/tun --device /dev/kvm --device /dev/vhost-net --stop-timeout 60 -v /vdsm/storage1:/storage -v /vdsm/storage2:/storage2 -e CPU_CORES=2 -e RAM_SIZE=4096M -e DISK_SIZE=16G -e DISK2_SIZE=2T -e DISK_FMT=qcow2 -e ALLOCATE=N vdsm/virtual-dsm:latest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Docker套娃，設定群暉Docker服務&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;vi /var/packages/ContainerManager/etc/dockerd.json
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl daemon-reload
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systemctl restart pkg-ContainerManager-dockerd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/vdsm/virtual-dsm/issues/382&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/vdsm/virtual-dsm/issues/382&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;參考資料&#34;&gt;參考資料
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818&lt;/li&gt;
@@ -1101,75 +2552,6 @@ Host IP 乙太網路：192.168.8.6
         
         <guid>http://localhost:1313/my-portfolio/p/</guid>
         <description>&lt;h2 id=&#34;前言&#34;&gt;前言
-&lt;/h2&gt;&lt;p&gt;通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致&lt;/p&gt;
-&lt;p&gt;除錯顯示log指令&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;journalctl --until &amp;#34;2026-02-27 11:00:00&amp;#34; -n 100 -r
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;在指令發現這條
-Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow&lt;/p&gt;
-&lt;p&gt;懷疑是驅動出現 &lt;code&gt;Detected Hardware Unit Hang&lt;/code&gt; 關閉電源休眠可解決問題&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 關閉卸載功能，這能避免 &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Hardware&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Unit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Hang&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ethtool&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;K&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;eno1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gso&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;off&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 重新啟動網卡服務 &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;systemctl&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;restart&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;networking&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Proxmox 重啟後 &lt;code&gt;ethtool&lt;/code&gt; 的設定會消失，請編輯網路設定檔：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;nano /etc/network/interfaces&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;在 &lt;code&gt;iface eno1 inet manual&lt;/code&gt; 下方增加一行： &lt;code&gt;post-up /usr/sbin/ethtool -K eno1 tso off gso off&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;esxi&#34;&gt;ESXi
-&lt;/h2&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;esxcli network nic tso set -n vmnic0 -e 0
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;持久化設定
-/etc/rc.local.d/local.sh 在exit0之前加入下面這條&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;esxcli network nic tso set -n vmnic0 -e 0
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>http://localhost:1313/my-portfolio/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/my-portfolio/p/</guid>
-        <description>&lt;p&gt;![[Diagram.svg]]&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title></title>
-        <link>http://localhost:1313/my-portfolio/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/my-portfolio/p/</guid>
-        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
 &lt;/h2&gt;&lt;p&gt;對於系統新舊而言，用最好的配置就是最好的系統&lt;/p&gt;
 &lt;h3 id=&#34;系統要求&#34;&gt;系統要求
 &lt;/h3&gt;&lt;table&gt;
@@ -1187,6 +2569,39 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
   &lt;/tbody&gt;
 &lt;/table&gt;
 </description>
+        </item>
+        <item>
+        <title></title>
+        <link>http://localhost:1313/my-portfolio/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言
+&lt;/h2&gt;&lt;p&gt;考過CCNA，但發現網路還有一些奇怪設定在此留下紀錄&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;DHCP 避讓 &lt;strong&gt;Static ARP (靜態 ARP)&lt;/strong&gt; 、&lt;strong&gt;DHCP 位址保留 (DHCP Reservation)&lt;/strong&gt;
+很多廠商（特別是中低階設備）是把 &lt;strong&gt;DHCP Server 模組&lt;/strong&gt;與 &lt;strong&gt;ARP Table 模組&lt;/strong&gt;分開寫的
+交換器端：手動設定固定 IP（例如 192.168.1.2），遮罩 255.255.255.0，閘道指向路由器 192.168.1.1。
+路由器端 (TP-Link)：進入 DHCP 設定，將發放範圍（Pool）修改為 .100 到 .254。
+結果：.2 到 .99 變成「手動保留區」，DHCP 永遠不會去動這區，自然不會有衝突。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;單臂路由設定&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ACL 設定&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title></title>
+        <link>http://localhost:1313/my-portfolio/p/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/</guid>
+        <description></description>
         </item>
         <item>
         <title>Archives</title>
@@ -1213,18 +2628,75 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
         <description></description>
         </item>
         <item>
+        <title>盤點工具</title>
+        <link>http://localhost:1313/my-portfolio/p/%E7%9B%A4%E9%BB%9E%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E7%9B%A4%E9%BB%9E%E5%B7%A5%E5%85%B7/</guid>
+        <description>&lt;p&gt;opmanager plus
+LanSweeper&lt;/p&gt;
+&lt;h2 id=&#34;librenms&#34;&gt;LibreNMS
+&lt;/h2&gt;&lt;p&gt;sudo -u librenms lnms user:add &amp;ndash;role=admin 或&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo su - librenms
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./lnms user:add --role=admin
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;再來依據操作設定帳號密碼即可&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>關於</title>
         <link>http://localhost:1313/my-portfolio/about/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/my-portfolio/about/</guid>
         <description>&lt;p&gt;繞了一大圈的工程師&lt;/p&gt;
+&lt;p&gt;技能
+&lt;img src=&#34;https://img.shields.io/badge/-KUbuntu-%230079C1?style=for-the-badge&amp;amp;logo=kubuntu&amp;amp;logoColor=white&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Kubuntu&#34;
+	
+	
+&gt;&lt;img src=&#34;https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&amp;amp;logo=docker&amp;amp;logoColor=white&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Docker&#34;
+	
+	
+&gt;&lt;img src=&#34;https://img.shields.io/badge/Red%20Hat-EE0000?style=for-the-badge&amp;amp;logo=redhat&amp;amp;logoColor=white&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Red Hat&#34;
+	
+	
+&gt;&lt;img src=&#34;https://img.shields.io/badge/cisco-%23049fd9.svg?style=for-the-badge&amp;amp;logo=cisco&amp;amp;logoColor=black&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;Cisco&#34;
+	
+	
+&gt;&lt;/p&gt;
 &lt;h2 id=&#34;證照&#34;&gt;證照
-&lt;/h2&gt;&lt;div class=&#34;cert-grid&#34;&gt;
-  
-
-&lt;div style=&#34;display:flex; gap:20px; flex-wrap:wrap; justify-content:center;&#34;&gt;
-
+&lt;/h2&gt;&lt;div style=&#34;display:flex; gap:20px; flex-wrap:wrap; justify-content:center;&#34;&gt;
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_ccna.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1236,7 +2708,6 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
   CCNA&lt;/div&gt;
   &lt;/div&gt;
-
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_az900.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1248,7 +2719,6 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
     AZ-900&lt;/div&gt;
   &lt;/div&gt;
-
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_ocia.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1260,7 +2730,6 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
     OCI Architect&lt;/div&gt;
   &lt;/div&gt;
-
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_ociai.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1270,9 +2739,8 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     letter-spacing:0.04em;
     color:#555;
     &#34;&gt;
-    OCI AI Foundations&lt;/div&gt;
+    OCI AI &lt;br/&gt;Foundations&lt;/div&gt;
   &lt;/div&gt;
-
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_ga4.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1284,7 +2752,6 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
     Google Analytics&lt;/div&gt;
   &lt;/div&gt;
-
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_mol_cmlc.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1296,14 +2763,64 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
     電腦硬體裝修丙級&lt;/div&gt;
   &lt;/div&gt;
-
 &lt;/div&gt;
-
-
-&lt;/div&gt;
-
 &lt;h2 id=&#34;其他證照&#34;&gt;其他證照
 &lt;/h2&gt;&lt;div style=&#34;display:flex; gap:20px; flex-wrap:wrap; justify-content:center;&#34;&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_k12.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+ Google AI in&lt;br/&gt; K12 Educators&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_GenerativeAI.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+ Google Generative &lt;br/&gt;AI for Educators&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_gemini.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+ Google Gemini &lt;br/&gt;Educator &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_level1.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+  Google Educator &lt;br /&gt;Level 1&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
+    &lt;img src=&#34;badge_level2.png&#34; width=&#34;80&#34; /&gt;
+      &lt;div style=&#34;
+    margin-top:6px;
+    font-size:1.3rem;
+    font-weight:500;
+    letter-spacing:0.04em;
+    color:#555;
+    &#34;&gt;
+  Google Educator &lt;br /&gt;Level 2&lt;/div&gt;
+  &lt;/div&gt;
   &lt;div style=&#34;display:flex; flex-direction:column; align-items:center; text-align:center;&#34;&gt;
     &lt;img src=&#34;badge_lvmh.png&#34; width=&#34;80&#34; /&gt;
       &lt;div style=&#34;
@@ -1337,6 +2854,13 @@ Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000
     &#34;&gt;
   WD-40 cert.&lt;/div&gt;
   &lt;/div&gt;
+  &lt;/div&gt;
+&lt;h2 id=&#34;聯絡我&#34;&gt;聯絡我
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.credly.com/users/jun-ping-ni/badges&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Credly 連結&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Linkedin&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         
