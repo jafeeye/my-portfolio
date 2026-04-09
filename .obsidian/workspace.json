@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/linux 指令.md",
+                    "file": "content/post/企業共享設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "linux 指令"
+                  "title": "企業共享設定"
                 }
               }
             ]
@@ -135,8 +135,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -246,10 +245,13 @@
   },
   "active": "0fac429c617b5910",
   "lastOpenFiles": [
+    "content/post/企業共享設定.md",
+    "content/post/CML 教學.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/2026 影音資料庫.md",
     "content/post/linux 指令.md",
     "content/post/macOS 常用設定指令.md",
     "content/post/immch 安裝教學.md",
-    "content/post/企業共享設定.md",
     "content/post/企業常用備份軟體.md",
     "content/post/企業拓譜圖架設.md",
     "static/messageImage_1774745847725.jpg",
@@ -270,8 +272,6 @@
     "content/post/pichome.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/Paperless-ngx架設.md",
-    "content/post/2026 影音資料庫.md",
-    "content/post/2026 家用Sever架設指南.md",
     "content/post/NextCloud 架設.md",
     "themes/hugo-theme-stack/theme.toml",
     "themes/hugo-theme-stack/netlify.toml",
@@ -290,7 +290,6 @@
     "themes/hugo-theme-stack/exampleSite/content/post/math-typesetting/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-tw.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md"
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-tw.md"
   ]
 }
