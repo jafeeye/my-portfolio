@@ -37,7 +37,12 @@ source ~/.zshrc      //   重新讀取設定檔
 `mkdir test1 && cd test1` 建立資料夾並進入位置
 
 ## 切換使用者
-普通使用者輸入 `sudo -i` 切換su，在su模式輸入 exit 切回普通使用者
+(切換使用者都建議加上-,以載入完整設定)
+普通使用者輸入 `sudo -i` 切換su，在su模式輸入 exit 切回普通使用者 //sudo su 也可以
+切換特定使用者 `sudo -u <使用者帳號>`
+沒裝sudo
+普通使用者 su - 切換su 
+切換特定使用者 su - gss
 
 
 ## 寫入檔案
