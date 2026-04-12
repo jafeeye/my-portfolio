@@ -220,6 +220,54 @@ options kvm ignore_msrs=1 report_ignored_msrs=0
 update-initramfs -u -k all
 
 
+## PVE 共享目錄
+
+![](PixPin_2026-04-05_22-57-21.png)
+
+
+顯卡直通：增加PCI裝置/**所有功能**、 **ROM-Bar** 、 **PCI-Express**、**主要GPU**
+
+> 主要GPU勾選會讓終端不顯示畫面，可以再安裝完驅動再勾
+
+#### Hyper-V 遷移至PVE
+1. 將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳
+2.  輸入以下指令
+```
+mkdir /var/lib/vz/hdd
+cd /var/lib/vz/hdd
+qemu-img convert -O qcow2 WIN10.vhdx vm-103-disk0.qcow2
+mv vm-103-disk0.qcow2 /var/lib/vz/images/103/
+qm rescan
+```
+3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
+4. 最後要安裝Vitro-win驅動
+
+### PVE 正確刪除節點
+#### 離開集群後刪除節點 (離線節點)
+```
+systemctl stop pve-cluster.service #停止叢集服務
+systemctl stop corosync.service #停止叢集服務
+pmxcfs -l #將集群系統設置為本地模式
+rm /etc/pve/corosync.conf
+rm -rf /etc/corosync/*
+killall pmxcfs
+systemctl start pve-cluster.service #重啟節點服務
+#重啟服務後,在資料中心並不會刪除,所以要再刪除節點
+cd /etc/pve/nodes
+ls
+rm -rf /etc/pve/nodes/***
+pvecm delnode
+```
+####  正常節點
+```
+cd /etc/pve/nodes
+rm -rf ***
+pvecm delnode ***
+```
+#### 叢集設定
+
+PVE HA兩個群集設定
+https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 
 
 ## 參考資料
