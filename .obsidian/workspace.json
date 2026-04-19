@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/proj/radius/index.md",
+                    "file": "content/post/2026 家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "index"
+                  "title": "2026 家用Sever架設指南"
                 }
               }
             ]
@@ -243,36 +243,39 @@
   },
   "active": "46c23ca27c16cf59",
   "lastOpenFiles": [
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/2026 影音資料庫.md",
+    "content/post/Windows 好用工具.md",
+    "content/post/Windows 7 更新.md",
+    "content/post/vCenter.svg",
+    "content/post/InDesign 排版.md",
+    "content/post/Synology.md",
+    "content/post/HTPC 調整.md",
+    "static/Pasted image 20241123114616.png",
+    "static/Pasted image 20241123113507.png",
+    "static/Pasted image 20241123113459.png",
+    "content/post/PeerTube 架設.md",
+    "content/post/企業共享設定.md",
+    "content/post/企業遠端桌面方案.md",
+    "content/post/企業虛擬化方案.md",
+    "content/post/企業常用備份軟體.md",
+    "content/post/企業拓譜圖架設.md",
+    "content/post/企業系統選擇.md",
     "content/post/proj/radius/index.md",
     "content/post/proj/MDT企業大量自動部屬.md",
-    "content/post/PeerTube 架設.md",
     "content/post/NextCloud 架設.md",
     "content/post/macOS 常用設定指令.md",
     "content/post/LXC 容器.md",
     "content/post/linux 指令.md",
     "content/post/KPM工具整合.md",
-    "content/post/InDesign 排版.md",
-    "content/post/企業常用備份軟體.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/2026 家用Sever架設指南.md",
-    "content/post/企業共享設定.md",
-    "content/post/2026 影音資料庫.md",
-    "content/post/vCenter.svg",
     "content/post/VMware Workstation 進階功能.md",
     "static/reddit網路架構圖.jpg",
     "static/vRealize.png",
-    "content/post/Synology.md",
     "content/post/pichome.md",
     "content/post/Nutanix.md",
     "content/post/immch 安裝教學.md",
     "content/post/PVE 企業進階設定.md",
-    "content/post/PVE安裝CML.md",
-    "content/post/企業虛擬化方案.md",
     "content/post/vCenter.svg.xml",
-    "content/post/期中專案.md",
-    "content/post/企業VPN架設.md",
-    "content/post/企業遠端桌面方案.md",
-    "content/post/企業系統選擇.md",
     "static/PixPin_2026-04-05_22-57-21.png",
     "static/Pasted image 20260321174801.png",
     "obsidian.ico",
@@ -285,9 +288,6 @@
     "public/p/常用linux指令/index.html",
     "public/p/常用linux指令",
     "public/p/esxi與pve斷線除錯/index.html",
-    "public/pvesr260217.png",
-    "public/pvesct0217.png",
-    "public/pvenetbox260301.png",
-    "public/Pastedimage20260222114258.png"
+    "public/pvesr260217.png"
   ]
 }
