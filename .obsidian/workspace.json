@@ -10,7 +10,7 @@
           {
             "id": "48e684907a15d404",
             "type": "tabs",
-            "dimension": 75,
+            "dimension": 69.15959907478796,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -31,7 +31,7 @@
           {
             "id": "9c3ee0896a8d5f5d",
             "type": "tabs",
-            "dimension": 25,
+            "dimension": 30.840400925212027,
             "children": [
               {
                 "id": "46c23ca27c16cf59",
@@ -244,6 +244,7 @@
   "active": "46c23ca27c16cf59",
   "lastOpenFiles": [
     "content/post/2026 家用Sever架設指南.md",
+    "content/post/企業共享設定.md",
     "content/post/2026 影音資料庫.md",
     "content/post/Windows 好用工具.md",
     "content/post/Windows 7 更新.md",
@@ -255,7 +256,6 @@
     "static/Pasted image 20241123113507.png",
     "static/Pasted image 20241123113459.png",
     "content/post/PeerTube 架設.md",
-    "content/post/企業共享設定.md",
     "content/post/企業遠端桌面方案.md",
     "content/post/企業虛擬化方案.md",
     "content/post/企業常用備份軟體.md",
