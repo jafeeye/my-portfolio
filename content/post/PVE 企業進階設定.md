@@ -178,15 +178,15 @@ StarWind V2V
 ## 顯卡直通
 
 1. 開啟主機板對應功能
-intel vt-d
-amd IOMMU SVM
+- intel vt-d
+- amd IOMMU SVM
 
-2.追加grub
+2. 追加grub
 nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 `intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
 更新grub
 update-grub
 
-3.增加vfio
+3. 增加vfio
 
 
 屏蔽顯卡
@@ -218,6 +218,8 @@ options kvm ignore_msrs=1 report_ignored_msrs=0
 
 重新編譯內核
 update-initramfs -u -k all
+
+如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
 
 
 ## PVE 共享目錄
@@ -255,7 +257,7 @@ systemctl start pve-cluster.service #重啟節點服務
 #重啟服務後,在資料中心並不會刪除,所以要再刪除節點
 cd /etc/pve/nodes
 ls
-rm -rf /etc/pve/nodes/***
+rm -rf /etc/pve/nodes/節點名稱
 pvecm delnode
 ```
 ####  正常節點
