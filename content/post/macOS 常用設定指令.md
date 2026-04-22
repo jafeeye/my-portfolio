@@ -22,6 +22,7 @@ macOS 家目錄 `/user/使用者名稱`
 - Shift+Cmd+Ctrl+4 copy image
 - 中文輸入法反引號 Option+~
 - 勿擾模式 F6
+- Ctrl+Cmd+Space emoji keyboard
 
 
 

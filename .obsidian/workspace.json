@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "31966319017ddbc9",
+        "id": "ac812538cfb04b09",
         "type": "split",
         "children": [
           {
             "id": "48e684907a15d404",
             "type": "tabs",
-            "dimension": 69.15959907478796,
+            "dimension": 77.1689497716895,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -18,38 +18,40 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/盤點工具.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "盤點工具"
                 }
               }
             ]
           },
           {
-            "id": "9c3ee0896a8d5f5d",
+            "id": "532ac5d1a1354416",
             "type": "tabs",
-            "dimension": 30.840400925212027,
+            "dimension": 22.831050228310502,
             "children": [
               {
-                "id": "46c23ca27c16cf59",
+                "id": "a2b01b345885ec59",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -70,7 +72,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -99,7 +101,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -133,7 +135,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 311.5
+    "width": 232.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -230,19 +232,21 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
       "terminal:Open terminal": false
     }
   },
-  "active": "46c23ca27c16cf59",
+  "active": "a2b01b345885ec59",
   "lastOpenFiles": [
+    "content/post/盤點工具.md",
+    "content/post/macOS 常用設定指令.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/企業共享設定.md",
     "content/post/2026 影音資料庫.md",
@@ -264,7 +268,6 @@
     "content/post/proj/radius/index.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/NextCloud 架設.md",
-    "content/post/macOS 常用設定指令.md",
     "content/post/LXC 容器.md",
     "content/post/linux 指令.md",
     "content/post/KPM工具整合.md",
@@ -274,7 +277,6 @@
     "content/post/pichome.md",
     "content/post/Nutanix.md",
     "content/post/immch 安裝教學.md",
-    "content/post/PVE 企業進階設定.md",
     "content/post/vCenter.svg.xml",
     "static/PixPin_2026-04-05_22-57-21.png",
     "static/Pasted image 20260321174801.png",
