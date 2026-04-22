@@ -1,3 +1,8 @@
+---
+title: Cloudflare 網站設定
+toc: true
+date: 2026-04-22
+---
 
 預設 Cloureflare 託管後即有加密SSL，還可以做另外設定
 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。
