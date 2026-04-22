@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/網路實務疑難-1.md",
+                    "file": "content/post/2026 家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "網路實務疑難-1"
+                  "title": "2026 家用Sever架設指南"
                 }
               }
             ]
@@ -245,8 +245,8 @@
   },
   "active": "a2b01b345885ec59",
   "lastOpenFiles": [
-    "content/post/網路實務疑難-1.md",
     "content/post/2026 家用Sever架設指南.md",
+    "content/post/網路實務疑難-1.md",
     "content/post/HTPC 調整.md",
     "content/post/Cloudflare 網站設定.md",
     "content/post/ESXi與PVE斷線除錯.md",
