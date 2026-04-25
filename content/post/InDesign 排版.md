@@ -1,3 +1,9 @@
+---
+title: InDesign 排版
+toc: true
+date: 2026-04-25
+---
+
 PDF 貼魔王：將多頁PDF快速貼入ID工具
 常用：
 底部壓個色塊（放在最後）

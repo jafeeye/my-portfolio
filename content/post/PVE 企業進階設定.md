@@ -221,6 +221,9 @@ update-initramfs -u -k all
 
 如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
 
+6. `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
+
+
 
 ## PVE 共享目錄
 
