@@ -10,7 +10,7 @@
           {
             "id": "48e684907a15d404",
             "type": "tabs",
-            "dimension": 80.60135790494665,
+            "dimension": 68.67119301648884,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Windows 好用工具.md",
+                    "file": "content/post/2026 家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Windows 好用工具"
+                  "title": "2026 家用Sever架設指南"
                 }
               }
             ]
@@ -31,12 +31,11 @@
           {
             "id": "9c3ee0896a8d5f5d",
             "type": "tabs",
-            "dimension": 19.398642095053344,
+            "dimension": 31.328806983511154,
             "children": [
               {
                 "id": "46c23ca27c16cf59",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
@@ -68,9 +67,8 @@
                       "serial": null
                     }
                   },
-                  "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -243,8 +241,13 @@
   },
   "active": "46c23ca27c16cf59",
   "lastOpenFiles": [
-    "content/post/Windows 好用工具.md",
-    "content/post/Windows 7 更新.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/正則表達式.md",
+    "content/post/KPM工具整合.md",
+    "content/post/InDesign 排版.md",
+    "content/post/檔案管理.md",
+    "content/post/immch 安裝教學.md",
+    "content/post/盤點工具.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/Synology.md",
     "content/post/PVE安裝CML.md",
@@ -254,21 +257,16 @@
     "content/post/Paperless-ngx架設.md",
     "content/post/Nutanix.md",
     "content/post/NextCloud 架設.md",
-    "content/post/macOS 常用設定指令.md",
     "content/post/LXC 容器.md",
-    "content/post/linux 指令.md",
-    "content/post/KPM工具整合.md",
-    "content/post/InDesign 排版.md",
-    "content/post/immch 安裝教學.md",
-    "content/post/hyper-v 進階功能.md",
-    "content/post/ESXi與PVE斷線除錯.md",
     "content/post/ESXi 安裝設定.md",
     "content/post/CML 教學.md",
-    "content/post/Cloudflare 網站設定.md",
-    "content/post/盤點工具.md",
-    "content/post/網路實務疑難-1.md",
     "content/post/企業VPN架設.md",
-    "content/post/企業遠端桌面方案.md",
+    "content/post/企業虛擬化方案.md",
+    "content/post/企業拓譜圖架設.md",
+    "content/post/企業共享設定.md",
+    "content/post/Windows 好用工具.md",
+    "content/post/Windows 7 更新.md",
+    "content/post/企業常用備份軟體.md",
     "static/vCenter.svg",
     "static/Pasted image 20241123114616.png",
     "static/Pasted image 20241123113507.png",

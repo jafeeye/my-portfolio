@@ -1,5 +1,5 @@
 ---
-title: InDesign 排版
+title: InDesign Affinity 排版
 toc: true
 date: 2026-04-25
 ---
@@ -25,7 +25,15 @@ Word VBA 製作參考線方法
 #列印模板 #模板 
 
 
+## Affinity
+![gh](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1753278034000mncu7k.png)
 
 
 
+## 列印模板
 
+模板下載
+[套印檔下載 證件/底紋邊框 - 鶴屋｜金鶴購](https://www.herwood.com.tw/download/category/visiting_cards_credentials)
+[刀模版型下載藍格印刷](https://ec.blueco.com.tw/Mold)
+建立刀模[立牌AI檔案](https://youtu.be/3zvJOj8D6G0?si=SxpSN5-C2YdRO_Ey)
+[建立文字外框](https://youtube.com/shorts/L4A4o4ZstQE?si=y7B-2MsadVEFcqrY)
