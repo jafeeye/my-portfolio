@@ -4,77 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "31966319017ddbc9",
-        "type": "split",
+        "id": "48e684907a15d404",
+        "type": "tabs",
         "children": [
           {
-            "id": "48e684907a15d404",
-            "type": "tabs",
-            "dimension": 68.67119301648884,
-            "children": [
-              {
-                "id": "12d7c06fb6f5e200",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
-                }
-              }
-            ]
-          },
-          {
-            "id": "9c3ee0896a8d5f5d",
-            "type": "tabs",
-            "dimension": 31.328806983511154,
-            "children": [
-              {
-                "id": "46c23ca27c16cf59",
-                "type": "leaf",
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "win32": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
-                }
-              }
-            ]
+            "id": "12d7c06fb6f5e200",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/lng/命令行.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "命令行"
+            }
           }
-        ],
-        "direction": "horizontal"
+        ]
       }
     ],
     "direction": "vertical"
@@ -239,8 +186,22 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "46c23ca27c16cf59",
+  "active": "ca51aa279fc78fde",
   "lastOpenFiles": [
+    "content/post/電子書製作.md",
+    "content/post/lng/命令行.md",
+    "content/post/lng/WPF.md",
+    "content/post/lng/Python.md",
+    "content/post/lng/Pasted image 20241119231923.png",
+    "content/post/lng/Pasted image 20241119231703.png",
+    "content/post/lng/C++ QT.md",
+    "content/post/lng/AHK.md",
+    "content/post/lng",
+    "content/post/中文化CAT及綠化.md",
+    "content/post/PDF 處理.md",
+    "content/post/CAD.md",
+    "content/post/CAT 補助翻譯.md",
+    "content/post/hyper-v 進階功能.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/正則表達式.md",
     "content/post/KPM工具整合.md",
@@ -256,17 +217,6 @@
     "content/post/PeerTube 架設.md",
     "content/post/Paperless-ngx架設.md",
     "content/post/Nutanix.md",
-    "content/post/NextCloud 架設.md",
-    "content/post/LXC 容器.md",
-    "content/post/ESXi 安裝設定.md",
-    "content/post/CML 教學.md",
-    "content/post/企業VPN架設.md",
-    "content/post/企業虛擬化方案.md",
-    "content/post/企業拓譜圖架設.md",
-    "content/post/企業共享設定.md",
-    "content/post/Windows 好用工具.md",
-    "content/post/Windows 7 更新.md",
-    "content/post/企業常用備份軟體.md",
     "static/vCenter.svg",
     "static/Pasted image 20241123114616.png",
     "static/Pasted image 20241123113507.png",
@@ -279,13 +229,10 @@
     "obsidian.ico",
     "iCloud.md.obsidian.ico",
     "desktop.ini",
-    "static/Pasted image 20260411101809.png",
     "public/scss/style.min.b23bd73711f33d8ec70b961447b7c1ae20ad7f830f24412cca4d88a1273b5ec9.css",
     "public/p/synology-系統安裝/index.html",
     "public/p/synology-系統安裝",
     "public/p/常用linux指令/index.html",
-    "public/p/常用linux指令",
-    "public/p/esxi與pve斷線除錯/index.html",
-    "public/pvesr260217.png"
+    "public/p/常用linux指令"
   ]
 }
