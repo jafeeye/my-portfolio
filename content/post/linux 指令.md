@@ -3,7 +3,7 @@ title: 常用Linux功能指令
 toc: true
 date: 2026-04-02
 ---
-macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
+macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager` 
 ## 啟用zsh
  1. 編輯組態檔
 ```
