@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/lng/命令行.md",
+                "file": "content/post/linux 指令.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "命令行"
+              "title": "linux 指令"
             }
           }
         ]
@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 311.5
+    "width": 246.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -175,21 +175,23 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
       "terminal:Open terminal": false
     }
   },
-  "active": "ca51aa279fc78fde",
+  "active": "12d7c06fb6f5e200",
   "lastOpenFiles": [
-    "content/post/電子書製作.md",
+    "content/post/網路實務疑難-1.md",
+    "content/post/linux 指令.md",
     "content/post/lng/命令行.md",
+    "content/post/電子書製作.md",
     "content/post/lng/WPF.md",
     "content/post/lng/Python.md",
     "content/post/lng/Pasted image 20241119231923.png",
@@ -215,8 +217,6 @@
     "content/post/PVE 企業進階設定.md",
     "content/post/pichome.md",
     "content/post/PeerTube 架設.md",
-    "content/post/Paperless-ngx架設.md",
-    "content/post/Nutanix.md",
     "static/vCenter.svg",
     "static/Pasted image 20241123114616.png",
     "static/Pasted image 20241123113507.png",
