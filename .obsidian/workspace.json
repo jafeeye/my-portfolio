@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/中文化CAT及綠化.md",
+                "file": "content/post/linux 指令.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "中文化CAT及綠化"
+              "title": "linux 指令"
             }
           }
         ]
@@ -188,6 +188,7 @@
   },
   "active": "12d7c06fb6f5e200",
   "lastOpenFiles": [
+    "content/post/中文化CAT及綠化.md",
     "content/post/linux 指令.md",
     "content/post/網路實務疑難-1.md",
     "content/post/lng/命令行.md",
@@ -199,7 +200,6 @@
     "content/post/lng/C++ QT.md",
     "content/post/lng/AHK.md",
     "content/post/lng",
-    "content/post/中文化CAT及綠化.md",
     "content/post/PDF 處理.md",
     "content/post/CAD.md",
     "content/post/CAT 補助翻譯.md",

@@ -29,16 +29,16 @@ source ~/.zshrc      //   重新讀取設定檔
 
 ## 網路
 
-debian 設定網路重新載入設定 `ifreload -a` 
-監聽Port `netstat -tunlp | grep 5432`  
-檢查網址有效 `crul - i 網址` 
-`nc -uv <IP> <Port> ` 
+debian 設定網路重新載入設定 `ifreload -a`  
+監聽Port `netstat -tunlp | grep 5432`   
+檢查網址有效 `crul - i 網址`  
+`nc -uv <IP> <Port> `  
 
 \* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8
 
 ## 查Log
-`tail -f /var/log/production.log
+`tail -f /var/log/production.log`  
 `journalctl -b -1 -r`
 
 
@@ -48,13 +48,13 @@ debian 設定網路重新載入設定 `ifreload -a`
 
 ## 切換使用者
 1. 有安裝sudo套件
-(切換使用者都建議加上-,以載入完整設定)
+(切換使用者都建議加上-,以載入完整設定)  
 普通使用者輸入 `sudo -i` 切換su，在su模式輸入 exit 切回普通使用者 //sudo su 也可以
-切換特定使用者 `sudo -u <使用者帳號>`
+切換特定使用者 `sudo -u <使用者帳號>`   
 
 2. 沒裝sudo套件
-普通使用者切換su  `su - `
-切換特定使用者 `su - gss`
+普通使用者切換su  `su -`    
+切換特定使用者 `su - gss`  
 
 
 ## 安裝
