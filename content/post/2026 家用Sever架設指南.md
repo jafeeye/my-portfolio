@@ -160,7 +160,7 @@ https://superuser.com/questions/1343290/disable-chrome-session-restore-popup
 
 
 ## 參考資料
-1. 2026年-家庭/工作室/小企业免费的云桌面VDI方案--VDI for PVE8/9，https://yangwenqing.com/archives/2473/。超有價值文章，裡面所展示技術令人折服
+1. 2026年-家庭/工作室/小企业免费的云桌面VDI方案--VDI for PVE8/9，https://yangwenqing.com/archives/2473/。超有價值文章。
 2. [歷經30年，為啥這個文件夾越來越沒存在感](https://youtu.be/QtHFbskDCtg?si=YtUSAHONgQbf2Lik)
 3. The Best Way to Organize Your Computer Files， [https://www.youtube.com/watch?v=bKjRKZxr-KY](https://www.youtube.com/watch?v=bKjRKZxr-KY)。
 4. Linux 快速列出(製作)樹狀目錄結構清單(tree)
