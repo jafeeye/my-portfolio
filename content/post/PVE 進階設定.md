@@ -302,7 +302,18 @@ https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 qm config 104 | grep disk
 # 假設目標是 VM 101，且你要掛載為 scsi1
 qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
+
 ```
+
+## 硬碟大小
+
+如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
+vmdk qcow 互轉
+cd /var/lib/vz/images/147/
+qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
+qemu-img resize --shrink vm-147-disk-0.qcow2 160G
+
+
 
 ## 參考資料
 - [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
