@@ -1,3 +1,10 @@
+---
+title: 中文化及綠化
+toc: true
+date: 2026-04-30
+---
+
+
 - 相關軟體
 - 中文化精靈 ChiWizard
 - 資源編輯 ResEdit
