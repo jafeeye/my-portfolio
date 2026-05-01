@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/lng/命令行.md",
+                "file": "content/post/PVE 進階設定.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "命令行"
+              "title": "PVE 進階設定"
             }
           }
         ]
@@ -186,10 +186,14 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "ca51aa279fc78fde",
+  "active": "12d7c06fb6f5e200",
   "lastOpenFiles": [
-    "content/post/電子書製作.md",
+    "content/post/PVE 安裝各系統.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/Synology.md",
+    "content/post/2026 家用Sever架設指南.md",
     "content/post/lng/命令行.md",
+    "content/post/電子書製作.md",
     "content/post/lng/WPF.md",
     "content/post/lng/Python.md",
     "content/post/lng/Pasted image 20241119231923.png",
@@ -202,7 +206,6 @@
     "content/post/CAD.md",
     "content/post/CAT 補助翻譯.md",
     "content/post/hyper-v 進階功能.md",
-    "content/post/2026 家用Sever架設指南.md",
     "content/post/正則表達式.md",
     "content/post/KPM工具整合.md",
     "content/post/InDesign 排版.md",
@@ -210,9 +213,6 @@
     "content/post/immch 安裝教學.md",
     "content/post/盤點工具.md",
     "content/post/VMware Workstation 進階功能.md",
-    "content/post/Synology.md",
-    "content/post/PVE安裝CML.md",
-    "content/post/PVE 企業進階設定.md",
     "content/post/pichome.md",
     "content/post/PeerTube 架設.md",
     "content/post/Paperless-ngx架設.md",

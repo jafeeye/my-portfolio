@@ -1,5 +1,5 @@
 ---
-title: PVE 企業進階設定
+title: PVE 進階設定
 date: 2026-02-28
 toc: true
 ---
@@ -265,7 +265,7 @@ pvecm delnode
 ```
 ####  正常節點
 ```
-cd /etc/pve/nodes
+cd /etc/pve/nodes/節點名稱
 rm -rf ***
 pvecm delnode ***
 ```
@@ -274,6 +274,24 @@ pvecm delnode ***
 PVE HA兩個群集設定
 https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 
+
+
+## 建立WS Server 範本
+1. 先建立VM,在安裝畫面去找Vitro 驅動使用Vitro iSCSi硬碟，並安裝完WS Server
+2. 調整時區以及安裝必要驅動及軟體或更新
+3. 執行Sysprep 後關機
+4. 轉換成範本
+
+
+
+## 把不同虛擬機下硬碟掛載到目前VM
+正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載
+
+```
+qm config 104 | grep disk
+# 假設目標是 VM 101，且你要掛載為 scsi1
+qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
+```
 
 ## 參考資料
 - [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)

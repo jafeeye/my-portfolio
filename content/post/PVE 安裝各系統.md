@@ -1,5 +1,5 @@
 ---
-title: PVE 安裝CML ESXi
+title: PVE 安裝各系統 ESXi CML ..
 date: 2026-02-17
 toc: true
 ---
