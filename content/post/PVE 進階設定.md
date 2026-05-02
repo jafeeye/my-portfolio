@@ -311,8 +311,23 @@ qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
 vmdk qcow 互轉
 cd /var/lib/vz/images/147/
 qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
-qemu-img resize --shrink vm-147-disk-0.qcow2 160G
 
+縮減磁碟
+使用GParted 開機移動磁區
+qemu-img resize --shrink vm-147-disk-0.qcow2 160G
+qemu-img info 可以檢查真實大小
+如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
+
+
+## 匯入硬碟
+```
+qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
+```
+搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
+硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
+
+## 轉換至ESXi
+![](PixPin_2026-05-02_00-17-16.png)
 
 
 ## 參考資料

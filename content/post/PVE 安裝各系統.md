@@ -22,11 +22,15 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 ### 簡介
 安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面
 
-| 類型              | 設定                       |
-| --------------- | ------------------------ |
-| Processors Type | **Host**、**Enable NUMA** |
-| BIOS Type       | **SeaBIOS**              |
-| Network Type    | **VMware vmxnet3**       |
+| 類型                  | 設定                       | 說明                                                                      |
+| ------------------- | ------------------------ | ----------------------------------------------------------------------- |
+| Processors Type     | **Host**、**Enable NUMA** |                                                                         |
+| BIOS Type           | **SeaBIOS**              |                                                                         |
+| Network Type        | **VMware vmxnet3**       |                                                                         |
+| **Guest OS**        | Linux,6.x - 2.6 Kernel   |                                                                         |
+| **SCSI Controller** | VMware PVSCSI            |                                                                         |
+| **Bus/Device**      | SATA                     | - Ensure you’re using SATA controller for the disk (not SCSI or VirtIO) |
+| **Discard**         | Checked                  |                                                                         |
 
 
 ## EVE-NG
@@ -59,8 +63,13 @@ RAM 要20G
 | Network Type    | VirtIO      |
 | Disk            | Not add     |
 
-1.在 [Github](https://github.com/GNS3/gns3-gui/releases/) 下載 `GNS3.VM.KVM.3.x.x.zip`，並使用scp把檔案上傳至`/var/lib/vz/images`，因為qcow2在proxmox無法直接使用，需匯入指令
+1.在 [Github](https://github.com/GNS3/gns3-gui/releases/) 下載 `GNS3.VM.KVM.3.x.x.zip` 用scp把檔案上傳至`/var/lib/vz/images/<vmid>`，可以使用qm scan 直接掃出檔案或qm importdisk (會重新轉檔)匯入
+qm scan
+```
+qm rescan --vmid <vmid>
+```
 
+qm importdisk
 ```
 qm importdisk <vmid> <path/xxxx.qcow2> <storage>
 qm importdisk 134 /var/lib/vz/images/GNS3_VM-disk001.qcow2 local
