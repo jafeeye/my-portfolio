@@ -71,3 +71,6 @@ exit
 ## 服務
 systemctl  
 sysctl
+top：表格式工作管理員
+htop
+free-h : 查詢記憶體用量

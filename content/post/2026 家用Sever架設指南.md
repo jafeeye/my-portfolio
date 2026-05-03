@@ -19,6 +19,11 @@ Mointor VM：
 ![](lab.svg)
 
 
+## 虛擬桌面
+Horizon Client 無法安裝,因為host檔是唯讀
+Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGISTRATION=1
+
+
 
 ## 命名問題
 有些程式路徑不能包含空格，Windows除了`\/：*？''｜` 都是支持，不能用空格是因為一些軟體的功能都是調用命令行執行，命令行程序傳輸參數就是用空白格來分割 ，要解決這問題就是路徑及代稱路徑參數一定要前後加單引號
@@ -45,13 +50,14 @@ Mointor VM：
 
 ## 影音資料庫
 
-### 方案1: emby+infuse+playlist
+### 方案1: emby/jellyfin+infuse+playlist
 
+目前jellyfin跟emby搜尋功能都很難用,還要按一個框還要按下一頁,而且搜尋出來的結果都是左右不能向下捲,kodi為客戶端也沒解決搜尋方便問題
 缺：影片播放清單自己加 搜尋不直覺
 
 
 ### 方案2:PeerTube
-
+缺點需要在維護一個資料庫跟影片
 
 
 
@@ -160,7 +166,7 @@ https://superuser.com/questions/1343290/disable-chrome-session-restore-popup
 
 
 ## 參考資料
-1. 2026年-家庭/工作室/小企业免费的云桌面VDI方案--VDI for PVE8/9，https://yangwenqing.com/archives/2473/。超有價值文章。
+1. [2026年-家庭/工作室/小企业免费的云桌面VDI方案--VDI for PVE8/9](https://yangwenqing.com/archives/2473/)，超有價值文章。
 2. [歷經30年，為啥這個文件夾越來越沒存在感](https://youtu.be/QtHFbskDCtg?si=YtUSAHONgQbf2Lik)
 3. The Best Way to Organize Your Computer Files， [https://www.youtube.com/watch?v=bKjRKZxr-KY](https://www.youtube.com/watch?v=bKjRKZxr-KY)。
 4. Linux 快速列出(製作)樹狀目錄結構清單(tree)
