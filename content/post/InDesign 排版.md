@@ -37,3 +37,7 @@ Word VBA 製作參考線方法
 [刀模版型下載藍格印刷](https://ec.blueco.com.tw/Mold)
 建立刀模[立牌AI檔案](https://youtu.be/3zvJOj8D6G0?si=SxpSN5-C2YdRO_Ey)
 [建立文字外框](https://youtube.com/shorts/L4A4o4ZstQE?si=y7B-2MsadVEFcqrY)
+
+
+Inkscape 繪圖
+[inkscape科研绘图大神之路-基础教程50讲](https://b23.tv/j02yuEG)
