@@ -3,6 +3,13 @@ title: 常用Linux功能指令
 toc: true
 date: 2026-04-02
 ---
+## 常用設定
+```
+export LANG=en_US.UTF-8 //避免安裝軟體語系不符
+date -s "2026-05-05 11:00:00"  //手動校時避免dnf無法安裝
+```
+
+
 macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager` 
 ## 啟用zsh
  1. 編輯組態檔
@@ -57,10 +64,27 @@ debian 設定網路重新載入設定 `ifreload -a`
 切換特定使用者 `su - gss`  
 
 
-## 安裝
-yum RHEL7之前
-dnf RHEL8之後
+## 安裝套件
+yum RHEL7之前,dnf RHEL8之後
 dnf 要跳過gpg檢查 dnf -no gpgcheck
+
+因有時候內建repo會把gpgcheck取消,以下為確保在無連網環境能透過dnf+gpgkey 安裝
+
+```
+1.vi illumio.key 後貼上begin跟end後存檔
+
+2.匯入gpg key
+sudo rpm --import /home/gss/illumio.key
+
+3.用rpm -K 可檢查是否成功匯入key,正確會顯示digests signatures OK
+rpm -K illumio-pce-25.2.40-141.el9.x86_64.rpm
+
+4.強制做gpg檢查安裝,是否能安裝成功
+dnf install illumio-pce-25.2.40-141.el9.x86_64.rpm --setopt=localpkg_gpgcheck=1
+```
+
+
+
 
 
 ## 寫入檔案
@@ -79,3 +103,4 @@ free-h : 查詢記憶體用量
 
 ## 位置
 opt : 存放第3方軟體地方
+
