@@ -1,5 +1,5 @@
 ---
-title: hyper-v 進階功能
+title: hyper-v 進階功能 WSLg,GPU-PV
 date: 2026-03-08
 toc: true
 ---

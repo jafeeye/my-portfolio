@@ -46,8 +46,8 @@ Vitro SCSI Single
 
 ## Nutanix
 
-安裝單節點要有3顆硬碟分別200gC、V，還有一顆50G H
-RAM 要20G
+安裝單節點要有3顆硬碟,分別200G指派C、V，還有一顆50G指派H
+RAM 要20G,不然到最後會安裝失敗
 
 重啟登入帳號`root`密碼`nutanix/4u`
 ![](260308-nutanix.png)
