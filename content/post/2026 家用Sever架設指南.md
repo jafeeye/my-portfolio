@@ -12,11 +12,15 @@ toc: true
 
 三層式架構：Data Plane、Control Plane  
 列印VM：PaperMF、AirPrint、Windows 區網印表機  
-備份VM：WS2022-Recuse  
+備份VM：ws2022-fix  
 VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce  
 Mointor VM：
 
 ![](lab.svg)
+
+
+## 機型
+瘦客戶端以及耐用度可以考慮 Dell Wyse、HP Prodesk
 
 
 ## 虛擬桌面
@@ -25,7 +29,7 @@ Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGI
 
 
 
-## 命名問題
+## 存放命名規則
 有些程式路徑不能包含空格，Windows除了`\/：*？''｜` 都是支持，不能用空格是因為一些軟體的功能都是調用命令行執行，命令行程序傳輸參數就是用空白格來分割 ，要解決這問題就是路徑及代稱路徑參數一定要前後加單引號
 
 常見命名規則
@@ -40,12 +44,20 @@ Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGI
 ![](Pasted%20image%2020241123114616.png)
 
 
-## 系統選擇
+## OS選擇
 對於系統新舊而言，用最好的配置就是最好的系統
 
 | 系統平台     | RAM   |
 | -------- | ----- |
 | Win7 x86 | 512MB |
+## 軟體
+JRiver Media Center
+PowerDVD
+## 模擬器
+DockStation
+Redream
+Pegasus gameos
+Heimdall
 
 
 ## 影音資料庫
@@ -127,20 +139,9 @@ Firefox 裝上 h264ify-ehanced 可以硬解H.264
 [1] Android TV 雖然稱為 SmartTV，但它笨重、反應遲鈍、速度慢、無法多應用切換，
 Youtube TV：可使用Chrome 外掛加上 Kiosk Mode
 
-## 機型
-Dell Wyse
-HP Prodesk
+
 ## 設備
-Logitech K400 Plus 鍵盤 (非必要)
-手把收納架
-## 軟體
-JRiver Media Center
-PowerDVD
-## 模擬器
-DockStation
-Redream
-Pegasus gameos
-Heimdall
+Logitech K400 Plus 鍵盤 (非必要)、手把收納架
 
 ## 作法
 PowerDVD 播放YouTube 
