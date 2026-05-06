@@ -7,6 +7,20 @@ toc: true
 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整...
 
 
+## 直通技術
+SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術
+
+ACS Patch
+Iommu group
+Gvt-g
+Io-pathrough
+ASUS BIOS 可開啟項目
+Iommu group
+SR-IOV
+VT-d
+進階/VMX
+Advanced/System Agent(SA)/VT-d
+PCH-FW Configuration/PTT，PTT Enable
 
 ## 使用NVME開機
 1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
@@ -182,6 +196,10 @@ StarWind V2V
 ![[Pasted-img-20260406143049.png]]
  6. 都設定正確就會在目標自動出現target，按連線即可
 ![[Pasted-img-20260406143515.png]]
+
+
+
+
 
 
 

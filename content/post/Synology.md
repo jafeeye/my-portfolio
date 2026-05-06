@@ -3,6 +3,51 @@ title: Synology 系統安裝
 date: 2026-03-02
 toc: true
 ---
+
+## DSM 家目錄不同磁碟
+![](Pasted%20image%2020260506223910.png)
+
+
+![](Pasted%20image%2020260506223918.png)
+
+
+## scrutiny
+先用SSH連線以fdisk -l查看硬碟代號，例硬碟在sde則寫為 - /dev/sde:/dev/sde
+`
+```yaml
+services:
+  scrutiny:
+    container_name: scrutiny
+    image: ghcr.io/analogj/scrutiny:master-omnibus
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    ports:
+      - 6090:8080/tcp # webapp
+      - 8086:8086/tcp # influxDB admin
+    volumes:
+      - /run/udev:/run/udev:ro
+      - /volume1/docker/scrutiny:/opt/scrutiny/config
+      - /volume1/docker/scrutiny/influxdb:/opt/scrutiny/influxdb
+    devices:
+      - /dev/nvme0n1:/dev/nvme0n1
+      - /dev/nvme1n1:/dev/nvme1n1
+      - /dev/sata1:/dev/sata1
+      - /dev/sde:/dev/sde
+    environment:
+      - SCRUTINY_WEB_INFLUXDB_TOKEN=ANYLONGSTRING
+      - SCRUTINY_WEB_INFLUXDB_INIT_USERNAME=A-USERNAME
+      - SCRUTINY_WEB_INFLUXDB_INIT_PASSWORD=A-PASSWORD
+      - COLLECTOR_CRON_SCHEDULE=0 23 * * *
+    network_mode: synobridge
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+```
+
+
+
+
 ## OliveTin
 
 
