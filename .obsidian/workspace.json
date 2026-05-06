@@ -4,12 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "d6a1ea2ebce666e9",
+        "id": "54db8acff33a8ea2",
         "type": "split",
         "children": [
           {
             "id": "66690d30257fe1c7",
             "type": "tabs",
+            "dimension": 76.84859154929578,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -17,22 +18,23 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/可觀測性.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "可觀測性"
                 }
               }
             ]
           },
           {
-            "id": "244f4967a0408ed4",
+            "id": "a13fe77dc5b0be90",
             "type": "tabs",
+            "dimension": 23.151408450704224,
             "children": [
               {
-                "id": "4056fe1a69e34273",
+                "id": "b7643583b5b88a33",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -239,13 +241,17 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4056fe1a69e34273",
+  "active": "b7643583b5b88a33",
   "lastOpenFiles": [
+    "content/post/可觀測性.md",
+    "content/post/防火牆.md",
     "content/post/2026 家用Sever架設指南.md",
+    "content/post/Acrobat SDK.md",
+    "content/post/linux 指令.md",
+    "static/Pasted image 20260506214419.png",
+    "content/post/LXC 容器.md",
     "content/post/中文化CAT及綠化.md",
     "content/post/正則表達式.md",
-    "content/post/可觀測性.md",
-    "content/post/linux 指令.md",
     "content/post/PVE 安裝各系統.md",
     "content/post/ESXi 安裝設定.md",
     "content/post/ESXi與PVE斷線除錯.md",
@@ -253,7 +259,6 @@
     "content/post/hyper-v 進階功能.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/InDesign 排版.md",
-    "content/post/Acrobat SDK.md",
     "content/post/OlivTin Docker安裝.md",
     "static/Diagram.svg.xml",
     "static/Diagram.svg",
@@ -266,10 +271,8 @@
     "content/post/企業拓譜圖架設.md",
     "content/post/企業共享設定.md",
     "content/post/NextCloud 架設.md",
-    "content/post/LXC 容器.md",
     "content/post/Windows 7 更新.md",
     "content/post/盤點工具.md",
-    "content/post/Windows 好用工具.md",
     "content/post/lng/Pasted image 20241119231923.png",
     "content/post/lng/Pasted image 20241119231703.png",
     "content/post/lng",
@@ -278,7 +281,6 @@
     "static/Pasted image 20241123113507.png",
     "static/Pasted image 20241123113459.png",
     "static/reddit網路架構圖.jpg",
-    "static/vRealize.png",
     "static/vCenter.svg.xml",
     "obsidian.ico",
     "iCloud.md.obsidian.ico",
