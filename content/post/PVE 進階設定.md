@@ -21,6 +21,9 @@ VT-d
 進階/VMX
 Advanced/System Agent(SA)/VT-d
 PCH-FW Configuration/PTT，PTT Enable
+AMD RESET BUG
+
+使用SPICE 虛擬視窗+noVNC不偏移安裝方法[https://pvecli.xuan2host.com/spice-novnc/](https://pvecli.xuan2host.com/spice-novnc/)
 
 ## 使用NVME開機
 1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
@@ -212,7 +215,12 @@ StarWind V2V
 
 2. 追加grub
 nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 `intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
-更新grub
+
+- intel_iommu 和 amd_iommu=on 為開啟IOMMU
+- video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）
+- pcie_acs_override=downstream 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）
+
+2. 更新grub
 update-grub
 
 3. 增加vfio

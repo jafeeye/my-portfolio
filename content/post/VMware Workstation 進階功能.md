@@ -12,14 +12,15 @@ date: 2026-04-06
 "C:\Program Files (x86)\VMware\VMware Workstation\vmware.exe" -x -B -n "C:\xxx\Workspace Ubuntu 64bit.vmx"`
 "C:\Program Files (x86)\VMware\VMware Workstation\vmplayer.exe" "D:\VMWare\PC-Hyread\PC-Hyread.vmx"`
 ```
-**開機啟動**
+**開機背景啟動**
 ```
 "C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe" start "D:\VMWare\DEV\DEV.vmx" nogui
 ```
 
 **VMWare-KVM 模式**
 `"C:\Program Files (x86)\VMware\VMware Workstation\vmware-kvm.exe" --preferences`
-缺點：視窗縮小滑鼠會跳回去
+`"C:\Program Files (x86)\VMware\VMware Workstation\vmware-kvm.exe" "D:\WinXP SP3\WinXP SP3.vmx"`
+缺點：這個模式有一個BUG，當實體機縮小視窗時，游標會移至虛擬機
 ### 啟用嵌套虛擬化
 在VMWare 跑Hyper-V或WSL或Windows Server 啟用Hyper-V
 ```
