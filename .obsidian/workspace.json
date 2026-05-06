@@ -10,7 +10,7 @@
           {
             "id": "66690d30257fe1c7",
             "type": "tabs",
-            "dimension": 76.84859154929578,
+            "dimension": 70.05988023952096,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/可觀測性.md",
+                    "file": "content/post/2026 家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "可觀測性"
+                  "title": "2026 家用Sever架設指南"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "a13fe77dc5b0be90",
             "type": "tabs",
-            "dimension": 23.151408450704224,
+            "dimension": 29.940119760479043,
             "children": [
               {
                 "id": "b7643583b5b88a33",
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -243,14 +243,14 @@
   },
   "active": "b7643583b5b88a33",
   "lastOpenFiles": [
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/中文化CAT及綠化.md",
     "content/post/可觀測性.md",
     "content/post/防火牆.md",
-    "content/post/2026 家用Sever架設指南.md",
     "content/post/Acrobat SDK.md",
     "content/post/linux 指令.md",
     "static/Pasted image 20260506214419.png",
     "content/post/LXC 容器.md",
-    "content/post/中文化CAT及綠化.md",
     "content/post/正則表達式.md",
     "content/post/PVE 安裝各系統.md",
     "content/post/ESXi 安裝設定.md",
