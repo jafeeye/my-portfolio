@@ -24,9 +24,10 @@ Mointor VM：
 
 
 ## 虛擬桌面
-Horizon Client 無法安裝,因為host檔是唯讀
+Horizon Client 無法安裝,將host檔唯讀取消即可
 Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGISTRATION=1
 
+https://github.com/VirtualDrivers/Virtual-Display-Driver
 
 
 ## 檔案命名規則

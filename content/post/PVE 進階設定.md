@@ -262,6 +262,11 @@ update-initramfs -u -k all
 
 
 
+
+
+
+
+
 ## PVE 共享目錄
 
 ![](PixPin_2026-04-05_22-57-21.png)

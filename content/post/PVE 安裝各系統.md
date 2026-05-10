@@ -20,7 +20,14 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 
 ## Nested ESXi
 ### 簡介
-安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面
+先確認PVE系統設定檔
+```
+cat /etc/modprobe.d/kvm-intel.conf
+options kvm-intel nested=Y  //Intel開啟嵌套虛擬化
+options kvm ignore_msrs=y  //Intel開啟嵌套虛擬化
+options kvm-amd nested=Y ept=Y //amd開啟嵌套虛擬化
+```
+安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面  
 
 | 類型                  | 設定                       | 說明                                                                      |
 | ------------------- | ------------------------ | ----------------------------------------------------------------------- |
@@ -44,16 +51,79 @@ Vitro SCSI Single
 
 
 
+## Harvester
+| Option                   | Required Value   |
+| ------------------------ | ---------------- |
+| OS Type                  | `Other OS Types` |
+| CPU Type                 | `Host`           |
+| Network Type (Harvester) | `e1000`          |
+
+
 ## Nutanix
+| 類型              | 設定          |
+| --------------- | ----------- |
+| Processors Type | **Host**    |
+| BIOS Type       | **SeaBIOS** |
+| Network Type    | e1000       |
+|                 | VirtIO SCSI |
 
-安裝單節點要有3顆硬碟,分別200G指派C、V，還有一顆50G指派H
-RAM 要20G,不然到最後會安裝失敗
 
-重啟登入帳號`root`密碼`nutanix/4u`
-![](260308-nutanix.png)
+1. 安裝單節點要有3顆硬碟,分別200G指派C (CVM boot)、D(data)，還有一顆50G指派H(Hypervisor boot)，RAM 要26G,不然到最後會安裝失敗,再來會到hypervisor installation in progress 會比較久需要等一下
+![](Pasted%20image%2020260509142345.png)
+2. 進到這個畫面代表安裝完成
+![](Pasted%20image%2020260509162455.png)
+3. 安裝完後在重開機,進入登入畫面,帳號`root`密碼`nutanix/4u`
+![](Pasted%20image%2020260509142535.png)
+4. 然後等10幾分鐘元件在背景安裝完成後,使用ssh 登入192.168.8.71 ,帳號nutanix 密碼`nutanix/4u` ,輸入以下指令
+```
+cluster status 
+cluster -s 192.168.8.71 --redundancy_factor=1 create
+```
+![](Pasted%20image%2020260509142822.png)
+6. 出現success代表安裝成功
+![](Pasted%20image%2020260509170115.png)
+7. 設定叢集名稱及IP
+```
+ncli cluster edit-params new-name=CENUC
+ncli cluster set-external-ip-address external-ip-address=192.168.8.72
+ncli cluster get-name-servers
+ncli cluster get-ntp-servers
+```
+
+![](Pasted%20image%2020260509170959.png)
+
+8. 登入畫面  `https://192.168.8.71:9440/` 預設帳號及密碼`admin`、 `nutanix/4u`
+![](Pasted%20image%2020260509165853.png)
 
 
+## Xen Orchestra
 
+
+## Rancher
+
+
+## OpenShift
+
+官網詳細SNO安裝文件 https://docs.okd.io/4.20/installing/installing_sno/install-sno-installing-sno.html
+1.先加3筆DNS 的A紀錄,然後在linux反查是不是正確
+```
+dig +short api.okd.tutoriallabcluster.lan
+dig +short api-int.okd.tutoriallabcluster.lan
+dig +short console-openshift-console.apps.okd.tutoriallabcluster.lan
+```
+2.安裝podman
+3.執行下面指令
+
+```
+$ OKD_VERSION=<okd_version>
+$ export ARCH=<architecture>
+$ export HOST_ARCH=$(uname -m)
+$ curl -L https://github.com/okd-project/okd/releases/download/$OKD_VERSION/openshift-client-linux-$OKD_VERSION.tar.gz -o oc.tar.gz
+$ tar zxf oc.tar.gz
+$ chmod +x oc
+```
+
+[How to deploy SNO OKD / Openshift ](https://www.youtube.com/watch?v=TcN6EJVduwk)
 
 ## GNS3
 | 類型              | 設定          |
