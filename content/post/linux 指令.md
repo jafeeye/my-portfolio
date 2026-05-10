@@ -60,8 +60,15 @@ debian 設定網路重新載入設定 `ifreload -a`
 切換特定使用者 `sudo -u <使用者帳號>`   
 
 2. 沒裝sudo套件
+切換root   `su`
 普通使用者切換su  `su -`    
 切換特定使用者 `su - gss`  
+
+
+權限設定
+使用者加入sudo `usermod -aG wheel <username>`
+
+
 
 
 ## 安裝套件

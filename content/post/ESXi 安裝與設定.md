@@ -1,5 +1,5 @@
 ---
-title: ESXi 安裝設定
+title: ESXi 安裝與設定
 date: 2026-02-19
 toc: true
 tags:
