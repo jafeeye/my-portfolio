@@ -122,3 +122,12 @@ ipfstat -io
 - synaptic：sudo apt-get install synaptic
 - gdebi：sudo apt install gdebi
 - gparted 
+
+
+## Rocky linux 常用軟體
+
+
+## openSUSE
+
+
+## Kail Linux 
