@@ -125,8 +125,12 @@ ipfstat -io
 
 
 ## Rocky linux 常用軟體
-
-
+- dnf install epel-release
+-  dnf install chrony
+- dnf install net-tools
+- dnf bind-utils
+- nmon
+- htop
 ## openSUSE
 
 

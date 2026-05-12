@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ]
