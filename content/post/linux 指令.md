@@ -115,3 +115,9 @@ opt : 存放第3方軟體地方
 
 ## AIX
 ipfstat -io
+
+
+## Ubuntu 常用軟體
+- Nemo：sudo apt-get install nemo
+- synaptic：sudo apt-get install synaptic
+- gdebi：sudo apt install gdebi
