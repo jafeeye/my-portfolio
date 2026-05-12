@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -288,4 +288,6 @@
     "public/scss/style.min.b23bd73711f33d8ec70b961447b7c1ae20ad7f830f24412cca4d88a1273b5ec9.css",
     "public/p/synology-系統安裝/index.html",
     "public/p/synology-系統安裝",
-    "
+    "public/p/常用linux指令/index.html"
+  ]
+}

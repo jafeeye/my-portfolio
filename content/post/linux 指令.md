@@ -121,3 +121,4 @@ ipfstat -io
 - Nemo：sudo apt-get install nemo
 - synaptic：sudo apt-get install synaptic
 - gdebi：sudo apt install gdebi
+- gparted 
