@@ -1,5 +1,5 @@
 ---
-title: Windows 好用工具及指令
+title: Windows 常用指令工具
 date: 2026-02-22
 toc: true
 ---
@@ -13,7 +13,7 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 5. 重啟進程 `taskkill /f /im explorer.exe && start explorer.exe`
 6. 啟動資料夾 `start .`
 7. 憑證儲存檢視 `cmdkey /list` `cmdkey /add:192.168.1.100 /user:帳號 /pass:密碼`
-8. 刪除smb連線 `net use * /delete /y` `net use \\\\192.168.1.100\\share /delete` `net use \\\\192.168.1.100\\share /user:newuser newpassword`
+8. 刪除smb連線 `net use * /delete /y`、`net use \\\\192.168.1.100\\share /delete` 、`net use \\\\192.168.1.100\\share /user:newuser newpassword`
 9. 游標無法移動、桌面異常 `Win+Ctrl+Shift+B`
 10. 換使用者權限 `runas /user:pin cmd` `runas /user:administrator cmd`
 11. 查詢地址 `nslookup www.google.com.tw`
@@ -53,3 +53,10 @@ RDCMan
 ### Windows Terminal
 
 ### Windows Perforance Analyze
+
+
+## Microsoft Network Monitor
+
+
+## 快速鍵
+Win+Shift+S 快速存成圖片檔

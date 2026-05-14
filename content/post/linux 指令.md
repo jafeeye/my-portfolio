@@ -71,6 +71,10 @@ debian 設定網路重新載入設定 `ifreload -a`
 
 
 
+## 環境變數
+
+
+
 ## 安裝套件
 yum RHEL7之前,dnf RHEL8之後
 dnf 要跳過gpg檢查 dnf -no gpgcheck
