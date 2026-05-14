@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/快速啟動工具.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "快速啟動工具"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -244,8 +244,10 @@
   },
   "active": "bc77b91326d7d509",
   "lastOpenFiles": [
-    "content/post/常用指令linux.md",
+    "content/post/快速啟動工具.md",
+    "content/post/常用指令macOS.md",
     "content/post/常用指令Windows.md",
+    "content/post/常用指令linux.md",
     "content/post/PVE 進階設定.md",
     "content/post/LXC 容器.md",
     "static/Pasted image 20260514224035.png",
@@ -277,8 +279,6 @@
     "static/Pasted image 20260509142535.png",
     "static/Pasted image 20260509142345.png",
     "content/post/中文化CAT及綠化.md",
-    "content/post/可觀測性.md",
-    "content/post/CAD.md",
     "static/Pasted image 20260506231922.png",
     "static/Diagram.svg.xml",
     "content/post/lng",

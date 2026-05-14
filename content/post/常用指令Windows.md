@@ -60,3 +60,5 @@ RDCMan
 
 ## 快速鍵
 Win+Shift+S 快速存成圖片檔
+Ctrl+Shift+Esc 工作管理員
+Ctrl+Win+Shift+B 軟重啟
