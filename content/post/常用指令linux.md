@@ -7,6 +7,7 @@ date: 2026-04-02
 ```
 export LANG=en_US.UTF-8 //避免安裝軟體語系不符
 date -s "2026-05-05 11:00:00"  //手動校時避免dnf無法安裝
+開啟自動登入：系統設定/登入視窗/使用者，打上使用者名稱 (預設可登入root環境)
 ```
 
 
@@ -68,6 +69,26 @@ debian 設定網路重新載入設定 `ifreload -a`
 權限設定
 使用者加入sudo `usermod -aG wheel <username>`
 
+
+
+## 路徑
+```
+/var/log
+    /tmp
+    /lock
+/tmp
+/sbin
+/lib
+/home
+/usr/share
+	/local
+	/lib
+	/man
+	/bin
+/etc
+/dev
+/bin
+```
 
 
 

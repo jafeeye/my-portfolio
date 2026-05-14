@@ -361,6 +361,27 @@ qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
 ![](PixPin_2026-05-02_00-17-16.png)
 
 
+## LXC 安裝cockit開啟共享
+
+```
+#安裝Cockpit
+apt install cockpit -y
+#安裝File Sharing之前需要的東西
+apt install samba make curl unzip -y
+#下載 
+curl -LO https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.0/cockpit-file-sharing_3.2.0_generic.zip
+#解壓縮
+unzip cockpit-file-sharing_3.2.0_generic.zip
+#進入資料夾
+cd cockpit-file-sharing_3.2.0_generic
+#安裝
+make install
+#停用root登入
+/etc/cockpit/disallowed-users
+# 選用安裝cockpit-identities
+https://github.com/45drives/cockpit-identities
+```
+![](Pasted%20image%2020260514224035.png)
 ## 參考資料
 - [BUBU 知識庫 & 秉迅資訊.Studio](https://wiki.freedomstu.com/)
 - [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)

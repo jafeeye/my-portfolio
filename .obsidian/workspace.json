@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "af6885c7d48f3ee9",
+        "id": "fa4d8e679caf77b3",
         "type": "split",
         "children": [
           {
             "id": "66690d30257fe1c7",
             "type": "tabs",
-            "dimension": 58.9041095890411,
+            "dimension": 75.93320235756386,
             "children": [
               {
                 "id": "12d7c06fb6f5e200",
@@ -18,40 +18,38 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/hyper-v 進階功能.md",
+                    "file": "content/post/常用指令linux.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "hyper-v 進階功能"
+                  "title": "常用指令linux"
                 }
               }
             ]
           },
           {
-            "id": "8f6f891ca8bbb15f",
+            "id": "9f9fa9586b1ed702",
             "type": "tabs",
-            "dimension": 41.0958904109589,
+            "dimension": 24.06679764243615,
             "children": [
               {
-                "id": "7ade34b5c8b059cc",
+                "id": "bc77b91326d7d509",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
+                        "args": [],
+                        "executable": "C:\\Windows\\System32\\cmd.exe",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "darwin": true
+                          "win32": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -72,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -101,7 +99,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -232,28 +230,36 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "terminal:Open terminal": false
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "terminal:Open terminal": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false
     }
   },
-  "active": "7ade34b5c8b059cc",
+  "active": "bc77b91326d7d509",
   "lastOpenFiles": [
+    "content/post/常用指令linux.md",
+    "content/post/常用指令Windows.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/LXC 容器.md",
+    "static/Pasted image 20260514224035.png",
+    "content/post/PVE 安裝各系統.md",
+    "content/post/PeerTube 架設.md",
+    "content/post/PDF 處理.md",
+    "content/post/Paperless-ngx架設.md",
+    "content/post/KPM寫作工具整合.md",
+    "content/post/KPM 寫作方法.md",
     "content/post/hyper-v 進階功能.md",
     "content/post/immch 安裝教學.md",
     "content/post/Nutanix.md",
-    "content/post/常用指令Windows.md",
-    "content/post/常用指令linux.md",
     "content/post/ESXi 安裝與設定.md",
     "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/PVE 安裝各系統.md",
-    "content/post/PVE 進階設定.md",
     "content/post/企業VPN架設.md",
     "content/post/防火牆.md",
     "static/Pasted image 20260510210903.png",
@@ -273,14 +279,7 @@
     "content/post/中文化CAT及綠化.md",
     "content/post/可觀測性.md",
     "content/post/CAD.md",
-    "content/post/VMware Workstation 進階功能.md",
-    "content/post/企業共享設定.md",
     "static/Pasted image 20260506231922.png",
-    "content/post/Synology.md",
-    "static/Pasted image 20260506223918.png",
-    "content/post/macOS 常用設定指令.md",
-    "content/post/企業備份軟體.md",
-    "content/post/網路實務疑難-1.md",
     "static/Diagram.svg.xml",
     "content/post/lng",
     "static/vCenter.svg.xml",
