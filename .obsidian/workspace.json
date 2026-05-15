@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/proj/MDT企業大量自動部屬.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "MDT企業大量自動部屬"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: cmd"
+                  "title": "終端：選取 C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ]
@@ -99,7 +99,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -133,8 +133,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 220.5,
-    "collapsed": true
+    "width": 220.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -231,55 +230,55 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "terminal:Open terminal": false
     }
   },
-  "active": "12d7c06fb6f5e200",
+  "active": "bc77b91326d7d509",
   "lastOpenFiles": [
-    "content/post/快速啟動工具.md",
-    "content/post/常用指令macOS.md",
-    "content/post/常用指令Windows.md",
+    "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/常用指令linux.md",
-    "content/post/PVE 進階設定.md",
-    "content/post/LXC 容器.md",
-    "static/Pasted image 20260514224035.png",
-    "content/post/PVE 安裝各系統.md",
-    "content/post/PeerTube 架設.md",
-    "content/post/PDF 處理.md",
-    "content/post/Paperless-ngx架設.md",
-    "content/post/KPM寫作工具整合.md",
-    "content/post/KPM 寫作方法.md",
-    "content/post/hyper-v 進階功能.md",
-    "content/post/immch 安裝教學.md",
-    "content/post/Nutanix.md",
-    "content/post/ESXi 安裝與設定.md",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "content/post/企業VPN架設.md",
+    "content/post/常用指令Windows.md",
+    "content/post/常用指令macOS.md",
+    "content/post/各式生產力工具整理.md",
+    "content/post/快速啟動工具.md",
     "content/post/防火牆.md",
-    "static/Pasted image 20260510210903.png",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/Windows 7 更新.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/PVE 安裝各系統.md",
+    "content/post/pichome.md",
+    "content/post/PeerTube 架設.md",
+    "content/post/Paperless-ngx架設.md",
+    "content/post/NextCloud 架設.md",
+    "content/post/LXC 容器.md",
+    "content/post/CAT 補助翻譯.md",
+    "content/post/CAD.md",
     "content/post/企業遠端桌面方案.md",
     "content/post/企業虛擬化方案.md",
-    "content/post/NextCloud 架設.md",
     "content/post/企業大量自動部屬.md",
-    "content/post/2026 家用Sever架設指南.md",
+    "content/post/正則表達式.md",
+    "content/post/Nutanix.md",
+    "content/post/網路實務疑難-1.md",
+    "static/Pasted image 20260514224035.png",
+    "content/post/PDF 處理.md",
+    "content/post/KPM寫作工具整合.md",
+    "static/Pasted image 20260510210903.png",
     "static/Pasted image 20260509170959.png",
     "static/Pasted image 20260509170115.png",
     "static/Pasted image 20260509165853.png",
     "static/Pasted image 20260509162455.png",
-    "content/post/pichome.md",
     "static/Pasted image 20260509142822.png",
     "static/Pasted image 20260509142535.png",
     "static/Pasted image 20260509142345.png",
-    "content/post/中文化CAT及綠化.md",
     "static/Pasted image 20260506231922.png",
     "static/Diagram.svg.xml",
     "content/post/lng",
@@ -290,6 +289,4 @@
     "public/scss/style.min.b23bd73711f33d8ec70b961447b7c1ae20ad7f830f24412cca4d88a1273b5ec9.css",
     "public/p/synology-系統安裝/index.html",
     "public/p/synology-系統安裝",
-    "public/p/常用linux指令/index.html"
-  ]
-}
+    "public/p/常用linux指令/inde

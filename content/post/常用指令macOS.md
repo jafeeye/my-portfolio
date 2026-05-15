@@ -42,3 +42,8 @@ macOS 家目錄 `/user/使用者名稱`
 
 移除macOS 的 Gatekeeper
 `xattr -d com.apple.quarantine /Applications/WindTerm.app`
+
+
+## Command line
+`open -a 應用名.app` 開啟應用程式
+`open .`  開啟當前目錄
