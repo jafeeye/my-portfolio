@@ -40,9 +40,32 @@ macOS 家目錄 `/user/使用者名稱`
 
 
 
+
+
+修復損毀應用程式
+sudo spctl --master-disable
+
 移除macOS 的 Gatekeeper
 `xattr -d com.apple.quarantine /Applications/WindTerm.app`
 
+
+
+## 輸入法
+macOS鍵盤與Win鍵盤頓號位置不一樣
+頓號（、）：直接按鍵盤的頓號鈕
+句號（。）：Shift + ㄡ
+逗號（，）：Shift + ㄝ
+問號（？）：Shift + ㄥ
+注音輸入法下中文模式冒號為大寫 (Shift+:)
+英文輸入法只能打出半形
+中文輸入法只能打出全形，包括全形英文、標點符號
+＊如果要打出鍵盤一個按鈕的不同符號，可以打了之後再按空白就可選擇其他
+![gh|500](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1738763534000azokno.png)
+打方向鍵符號，使用使用者辭典功能
+![gh|400](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1738757970000qujvvy.png)
+設定關閉SIP
+M2：按住開機鍵直到出現選項，在「復原」App 中，選擇「工具程式」>「開機安全性工具程式」
+![gh|350](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/17415223560007xzd2f.png)
 
 ## Command line
 `open -a 應用名.app` 開啟應用程式
