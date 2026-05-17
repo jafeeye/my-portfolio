@@ -387,3 +387,45 @@ https://github.com/45drives/cockpit-identities
 - [第 12 屆 iThome 鐵人賽 DevOps with Proxmox](https://ithelp.ithome.com.tw/2020-12th-ironman)
 
 
+lspci -vv | grep BAR
+
+
+## 網路
+在banner會放上IP位置是從檔案去改的 nano /etc/issue
+修改主機ip
+1. nano /etc/network/interfaces
+2. nano /etc/hosts
+
+
+
+## 救援PVE
+如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
+1. 使用Paragon Disk Manager或類似軟體把隨身碟格式化成EXT4
+2. 插入PVE掛載
+```
+lsblk   //偵測掛載區(這邊是偵測到,但掛載還要下指令)
+mount -t ext4 /dev/sdb1 /run  //把隨身碟掛載到run上
+// 救援檔案
+cp /etc/pve/qemu-server/*.conf /run/
+cp /etc/pve/lxc/*.conf /run/
+
+umount /run
+
+```
+3. 重新匯入,匯入`/var/lib/vz/images/` 的相關LXC跟VM硬碟檔,最後再匯入conf檔即可出現虛擬機
+```
+cp -r /run/images  /var/lib/vz/
+cp *.conf /etc/pve/nodes/hp-pve/lxc/
+root@hp-pve:/# cp *.conf /etc/pve/nodes/hp-pve/qemu-server/
+```
+
+4. 如果出現錯誤修復硬碟(lxc118為例)
+```
+lxc-start -n 118 -F -lDEBUG -o /tmp/lxc-118-debug.log
+tail -n 50 /tmp/lxc-118-debug.log
+pct stop 118
+losetup -fP /var/lib/vz/images/118/vm-118-disk-0.raw
+losetup -a
+fsck -y /dev/loop0
+losetup -d /dev/loop0
+```
