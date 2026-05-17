@@ -147,6 +147,7 @@ find: ‘/proc/12645/net’: Invalid argument
 ```
 修改下面資料
 
+無法登入可能是Datacenter的防火牆打開,LXC預設沒通過防火牆規則
 
 
 

@@ -39,7 +39,7 @@ source ~/.zshrc      //   重新讀取設定檔
 ## 網路
 
 debian 設定網路重新載入設定 `ifreload -a`  
-監聽Port `netstat -tunlp | grep 5432`  、 ss -tunlp | grep 80
+監聽Port `netstat -tunlp | grep 5432`  、 `ss -tunlp | grep 80`
 檢查網址有效 `crul - i 網址`  
 `nc -uv <IP> <Port> `  
 
