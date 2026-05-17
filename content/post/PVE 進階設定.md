@@ -402,6 +402,11 @@ lspci -vv | grep BAR
 如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
 1. 使用Paragon Disk Manager或類似軟體把隨身碟格式化成EXT4
 2. 插入PVE掛載
+- 重要路徑
+	- /var/lib/vz/template/
+	- /var/lib/vz/images/
+	- /etc/pve/qemu-server/
+	- /etc/pve/lxc/
 ```
 lsblk   //偵測掛載區(這邊是偵測到,但掛載還要下指令)
 mount -t ext4 /dev/sdb1 /run  //把隨身碟掛載到run上
@@ -429,3 +434,4 @@ losetup -a
 fsck -y /dev/loop0
 losetup -d /dev/loop0
 ```
+
