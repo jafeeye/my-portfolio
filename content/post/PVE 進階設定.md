@@ -117,8 +117,83 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 
 ## PowerDNS 整合
 
+```/etc/powerdns/pdns.conf
+################################# 
+# launch Which backends to launch and order to query them in 
+launch=gsqlite3 
+gsqlite3-database=/var/lib/powerdns/pdns.sqlite3
+################################# 
+# api Enable/disable the REST API (including HTTP listener) 
+api=yes 
+################################# 
+# api-key Static pre-shared authentication key for access to the REST API 
+api-key=arandomgeneratedstring
+################################# 
+# webserver Start a webserver for monitoring (api=yes also enables the HTTP listener) 
+webserver=yes 
+################################# 
+# webserver-address IP Address of webserver/API to listen on 
+webserver-address=192.168.240.13 
+################################# 
+# webserver-allow-from Webserver/API access is only allowed from these subnets 
+webserver-allow-from=127.0.0.1,::1,192.168.0.0/16
+```
+
+```
+sudo systemctl restart pdns
+sudo systemctl status pdns
+```
+
+寫入Zone
+```
+sudo pdnsutil create-zone pve.box2.kmc.gr.jp
+```
+確認是否寫入在sqlite3
+```
+SQLite version 3.37.2 2022-01-06 13:25:41 
+Enter ".help" for usage hints. 
+sqlite> select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.server.invalid hostmaster.pve.box2.kmc.gr.jp 0 10800 3600 604800 3600|3600|0|0||1
+```
 
 
+DNS註冊
+`Datacenter > SDN > Options > DNS`
+`URI` `http://192.168.240.13:8081/api/v1/servers/localhost`
+`API Key`
+
+![](Pasted%20image%2020260518225755.png)
+
+![](Pasted%20image%2020260518225748.png)
+
+`重新寫入DNS必須要重新創立虛擬機才有`
+
+
+`dig eve.pve.box2.kmc.gr.jp @192.168.240.13`
+
+## IPAM+cloud-init
+
+1. 編輯 `nano /etc/pve/sdn/subnets.cfg`
+```
+subnet: local-192.168.10.0-24 
+        vnet vnet0 
+        dhcp-range start-address=192.168.10.150,end-address=192.168.10.250 
+        gateway 192.168.10.1 
+        snat 1
+        dhcp-dns-server 192.168.10.123 
+        reversednszone 10.168.192.in-addr.arpa.
+```
+
+2. 重啟SDN服務 `pvesh set /cluster/sdn`
+
+
+
+
+
+https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90
+
+
+
+## netboot.xyz
 
 ## 編輯LXC容器檔案
 
