@@ -42,6 +42,10 @@ debian 設定網路重新載入設定 `ifreload -a`
 監聽Port `netstat -tunlp | grep 5432`  、 `ss -tunlp | grep 80`
 檢查網址有效 `crul - i 網址`  
 `nc -uv <IP> <Port> `  
+網路重新取得IP `ifdown eth0 --force && ifup eth0`  
+查看DNS `cat /etc/resolv.conf`
+
+
 
 \* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8

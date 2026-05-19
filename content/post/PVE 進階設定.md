@@ -511,3 +511,16 @@ fsck -y /dev/loop0
 losetup -d /dev/loop0
 ```
 
+
+
+
+
+
+## 產生LXC容器
+1. 這邊使用PromCenter 示範
+![](Pasted%20image%2020260519205443.png)
+2. apt update && apt install -y curl
+3. apt update && apt install -y sudo
+4. curl -fsSL https://proxcenter.io/install/community | bash
+5. 加入 API,Privilege Separation打勾取消
+ ![](Pasted%20image%2020260519210337.png)
