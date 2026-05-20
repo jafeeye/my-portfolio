@@ -92,6 +92,16 @@ systemctl enable frr.service
 ## HA功能
 
 ## OCI功能
+目前功能還是有缺陷
+- **映像相容性**：非完整 OS 映像無法產生系統容器，需自行包裝或選擇更完整的映像 (Proxmox 官方說明)。
+- **init 系統缺失**：應用容器無 init，若需使用 systemd 等服務管理，必須手動安裝或改用系統容器。
+- **網路與存儲設定**：OCI 映像不包含 Proxmox 的網路或存儲設定，必須在容器建立後手動調整。
+- **安全設定**：在 9.1 版本中，OCI 容器仍缺少完整的 AppArmor 或 SELinux 支援，容器內部的安全策略需自行配置。
+- **性能差異**：LXC 直接使用 OCI 映像時，若映像體積過大，容器啟動時間可能延長；此外，某些映像使用的壓縮格式不受 LXC 支援，導致解壓失敗。
+```
+# 下載並安裝最新 pveam pveam update # 直接拉取 OCI 映像 pveam add lxc --from-oci docker.io/library/redis:7.2 # 建立容器實例 pct create 100 /var/lib/vz/template/cache/lxc/redis-7.2.tar.gz --rootfs local-lvm:10 --net0 name=eth0,bridge=vmbr0,ip=dhcp
+
+```
 
 ## ceph
 

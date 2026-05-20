@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/homeassisant.md",
+                    "file": "content/post/PVE 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "homeassisant"
+                  "title": "PVE 進階設定"
                 }
               }
             ]
@@ -211,13 +211,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/homeassisant.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "homeassisant 的大綱"
+              "title": "大綱"
             }
           }
         ],
@@ -242,14 +241,19 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "d651447cd03ff7af",
+  "active": "84c682e3a0c214fc",
   "lastOpenFiles": [
-    "content/post/PVE 各系統安裝.md",
     "content/post/PVE 進階設定.md",
-    "content/post/企業大量自動部屬.md",
+    "content/post/PVE 各系統安裝.md",
     "content/post/Synology.md",
     "content/post/pichome.md",
+    "content/post/OpenWRT.md",
+    "content/post/NextCloud 架設.md",
     "content/post/LXC 容器.md",
+    "content/post/KPM寫作工具整合.md",
+    "content/post/hyper-v 進階功能.md",
+    "content/post/homeassisant.md",
+    "content/post/企業大量自動部屬.md",
     "content/post/企業共享設定.md",
     "content/post/正則表達式.md",
     "content/post/可觀測性.md",
@@ -257,12 +261,10 @@
     "content/post/中文化CAT及綠化.md",
     "content/post/PeerTube 架設.md",
     "content/post/PDF 處理.md",
-    "content/post/OpenWRT.md",
     "content/post/Paperless-ngx架設.md",
     "content/post/Nutanix.md",
     "content/post/常用指令linux.md",
     "content/post/網路實務疑難-1.md",
-    "content/post/homeassisant.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "content/post/雲端設定.md",
@@ -273,9 +275,6 @@
     "content/post/OlivTin Docker安裝.md",
     "content/post/ESXi與PVE斷線除錯.md",
     "content/post/程式語言/命令行.md",
-    "content/post/程式語言/AppsMgr.md",
-    "content/post/程式語言/C++ QT.md",
-    "content/post/程式語言/XiaoChao.md",
     "content/post/程式語言/Pasted image 20241119231923.png",
     "content/post/my-scripts/wsever_opti.ps1",
     "content/post/my-scripts/Navidrome Auto Login-2025-05-24.user.js",
