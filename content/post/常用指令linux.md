@@ -62,7 +62,7 @@ debian 設定網路重新載入設定 `ifreload -a`
 ～/.表示用戶目錄下隱藏資料夾 EX:～/.資料夾
 
 
-## 切換使用者
+## 使用者
 1. 有安裝sudo套件
 (切換使用者都建議加上-,以載入完整設定)  
 普通使用者輸入 `sudo -i` 切換su，在su模式輸入 exit 切回普通使用者 //sudo su 也可以
@@ -73,12 +73,12 @@ debian 設定網路重新載入設定 `ifreload -a`
 普通使用者切換su  `su -`    
 切換特定使用者 `su - gss`  
 
-
-權限設定
-使用者加入sudo `usermod -aG wheel <username>`
 chmod
 chown
-
+建立使用者
+useradd kevin
+passwd kevin
+權限設定 使用者加入sudo `usermod -aG wheel <username>`
 
 ## 路徑
 ```
@@ -213,3 +213,6 @@ ipfstat -io
 
 
 ## Kail Linux 
+
+
+
