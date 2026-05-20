@@ -3,8 +3,8 @@ title: homeassisant 安裝
 toc: true
 date: 2026-05-19
 ---
-預設用PVE Script 安裝完VM,結束後用 `homeassisant.local:8123`
-HACS 現在 OS/Core 都可以安裝 `https://hacs.xyz/docs/use/download/download/`
+預設用PVE Script 安裝完VM,結束後用 `homeassisant.local:8123`  
+HACS 現在 OS/Core 都可以安裝 `https://hacs.xyz/docs/use/download/download/`  
 
 
 同場加映，如果你的 HA 一樣是用 docker 裝 container 或 core 版本，那麼，也是宣告了你沒有 Add-ons 可以用，你就沒辦法使用 File Editor。

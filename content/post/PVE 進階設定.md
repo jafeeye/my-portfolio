@@ -193,7 +193,7 @@ https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%9
 
 
 
-## netboot.xyz
+
 
 ## 編輯LXC容器檔案
 
@@ -226,7 +226,7 @@ find: ‘/proc/12645/net’: Invalid argument
 
 
 
-### 修改硬碟大小
+## 修改硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
 當要Shrink虛擬磁碟，需透過指令縮寫指令
 ```
@@ -235,12 +235,12 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 ```
 
 
-### 啟用防火牆
+## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
 2. `Node/Firewall` 選項Firewall切換成Yes
 3. VM選項Firewall切換成Yes
  
-### 增加本機額外儲存設備
+## 增加本機額外儲存設備
 1. `Node/Disks/Directory` 在Create Directory 可將空磁碟格式化成Ext4 
 2. `Datacenter/Storage` 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
 \* ISO檔可以直接掛載NAS 存放區域節省本機空間
@@ -516,7 +516,7 @@ losetup -d /dev/loop0
 
 
 
-## 產生LXC容器
+## 建立LXC容器
 1. 這邊使用PromCenter 示範
 ![](Pasted%20image%2020260519205443.png)
 2. apt update && apt install -y curl
@@ -524,3 +524,25 @@ losetup -d /dev/loop0
 4. curl -fsSL https://proxcenter.io/install/community | bash
 5. 加入 API,Privilege Separation打勾取消
  ![](Pasted%20image%2020260519210337.png)
+
+
+
+## 修改LXC設定
+nano /etc/pve/lxc
+```
+lxc.cgroup2.devices.allow: c 10:232 rwm
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file 0 0
+lxc.mount.entry: /dev/kvm dev/kvm none bind,create=file 0 0
+lxc.cgroup.devices.allow: c 10:200 rwm # for compatibility
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/vhost-net dev/vhost-net none bind,create=file 0 0
+lxc.apparmor.profile: unconfined
+lxc.cap.drop:
+------如果要加入共享核顯要加以下代碼--------
+lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.cgroup2.devices.allow: c 29:0 rwm
+lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
+lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
+```
+
