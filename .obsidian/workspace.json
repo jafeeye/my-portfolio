@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/CAD.md",
+                    "file": "content/post/PVE 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "CAD"
+                  "title": "PVE 進階設定"
                 }
               }
             ]
@@ -149,12 +149,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/post/PVE 進階設定.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "PVE 進階設定 的大綱"
             }
           },
           {
@@ -240,10 +241,14 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "84c682e3a0c214fc",
+  "active": "d651447cd03ff7af",
   "lastOpenFiles": [
-    "content/post/CAD.md",
     "content/post/Synology.md",
+    "content/post/OlivTin Docker安裝.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/中文化CAT及綠化.md",
+    "content/post/可觀測性.md",
+    "content/post/CAD.md",
     "content/post/Windows 7 更新.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/PVE 各系統安裝.md",
@@ -258,9 +263,6 @@
     "content/post/企業大量自動部屬.md",
     "content/post/企業共享設定.md",
     "content/post/正則表達式.md",
-    "content/post/可觀測性.md",
-    "content/post/2026 家用Sever架設指南.md",
-    "content/post/中文化CAT及綠化.md",
     "content/post/PeerTube 架設.md",
     "content/post/PDF 處理.md",
     "content/post/Paperless-ngx架設.md",
@@ -269,7 +271,6 @@
     "content/post/網路實務疑難-1.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
-    "content/post/雲端設定.md",
     "static/Pasted image 20260519101901.png",
     "static/Pasted image 20260519101752.png",
     "static/Pasted image 20260518225755.png",
