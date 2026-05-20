@@ -196,6 +196,30 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
   `apt update && apt install -y curl sudo`
   `curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh 
 - Run virtual-dsm in docker using the mount points created: `docker run -it --rm -p 5000:5000 --cap-add NET_ADMIN --device-cgroup-rule='c *:* rwm' --sysctl net.ipv4.ip_forward=1 --device /dev/net/tun --device /dev/kvm --device /dev/vhost-net --device /dev/dri --stop-timeout 60 -v /vdsm/storage1:/storage -v /vdsm/storage2:/storage2 -e CPU_CORES=2 -e RAM_SIZE=4096M -e DISK_SIZE=16G -e DISK2_SIZE=2T -e DISK_FMT=qcow2 -e ALLOCATE=N -e GPU=Y vdsm/virtual-dsm:latest`
+3. AI 改的
+```
+docker run -d \
+  --name vdsm \
+  --restart always \
+  -p 5000:5000 \
+  --cap-add NET_ADMIN \
+  --device-cgroup-rule='c *:* rwm' \
+  --sysctl net.ipv4.ip_forward=1 \
+  --device /dev/net/tun \
+  --device /dev/kvm \
+  --device /dev/vhost-net \
+  --stop-timeout 60 \
+  -v /vdsm/storage1:/storage \
+  -v /vdsm/storage2:/storage2 \
+  -e CPU_CORES=2 \
+  -e RAM_SIZE=4096M \
+  -e DISK_SIZE=16G \
+  -e DISK2_SIZE=2T \
+  -e DISK_FMT=qcow2 \
+  -e ALLOCATE=N \
+  -e GPU=N \
+  vdsm/virtual-dsm:latest
+```
 ### Edits
 - Replaced `-e ALLOCATE=N` with new disk feature `-e DISK_FMT=qcow2`.
 - Re-added `-e ALLOCATE=N` to be used in combination with qcow2.
