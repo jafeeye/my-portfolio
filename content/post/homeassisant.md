@@ -15,7 +15,9 @@ Cloudflared
 
 
 
-雖然可以用 Terminal 進去修改 HA 裡的 configuration.yaml，但此時想要加入 HACS 就變得麻煩，因為在之前文章裡，安裝 HACS 是用 File Editor，如果你沒有 File Editor，wget -q -O - https://install.hacs.xyz | bash - 這行指令就不知道要在哪裡輸入。
+雖然可以用 Terminal 進去修改 HA 裡的 configuration.yaml，但此時想要加入 HACS 就變得麻煩，因為在之前文章裡，
+
+安裝 HACS 是用 File Editor，如果你沒有 File Editor，wget -q -O - https://install.hacs.xyz | bash - 這行指令就不知道要在哪裡輸入。
 
 其實跟 Terminal 段落一樣，我們一樣要先進到 Ubuntu，但此時不是進到 HA 的資料夾裡，而是鍵入 docker exec -it homeassistant bash 這行指令，會得到如下結果：
 
