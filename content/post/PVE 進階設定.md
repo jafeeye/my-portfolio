@@ -92,6 +92,7 @@ systemctl enable frr.service
 ## HA功能
 
 ## OCI功能
+![](Pasted%20image%2020260524123542.png)
 目前功能還是有缺陷
 - **映像相容性**：非完整 OS 映像無法產生系統容器，需自行包裝或選擇更完整的映像 (Proxmox 官方說明)。
 - **init 系統缺失**：應用容器無 init，若需使用 systemd 等服務管理，必須手動安裝或改用系統容器。
@@ -556,3 +557,35 @@ lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
 lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
 ```
 
+## LVM 擴容
+
+
+## OPNSense + Vlan
+1. Node/System/Network 在橋接網口開啟vlan aware
+2. 建立VM那邊vlan填上設定的數值
+
+
+
+## PVE多網口設定
+在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
+預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
+nano /etc/network/interfaces
+```
+auto lo iface lo inet loopback 
+iface enp1s0 inet manual 
+iface enp2s0 inet manual 
+iface enp3s0 inet manual 
+auto vmbr0 
+iface vmbr0 inet static 
+address 192.168.1.100/24 
+gateway 192.168.1.1 
+bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
+bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
+bridge-fd 2
+```
+
+關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
+![](Pasted%20image%2020260524123306.png)
+
+修改 hosts
+![](Pasted%20image%2020260524125131.png)
