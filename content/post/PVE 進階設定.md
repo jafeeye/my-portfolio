@@ -583,6 +583,9 @@ bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來
 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
 bridge-fd 2
 ```
+也可以指定不同vmbr 其他Ip 這樣就是雙管理口
+
+
 
 關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
 ![](Pasted%20image%2020260524123306.png)
