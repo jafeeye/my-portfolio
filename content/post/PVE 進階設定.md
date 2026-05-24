@@ -559,6 +559,8 @@ lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,creat
 
 ## LVM 擴容
 
+Vda：ioblock 
+
 
 ## OPNSense + Vlan
 1. Node/System/Network 在橋接網口開啟vlan aware
@@ -585,10 +587,45 @@ bridge-fd 2
 ```
 也可以指定不同vmbr 其他Ip 這樣就是雙管理口
 
+```
+auto lo
+iface lo inet loopback
 
+auto nic0
+iface nic0 inet manual
+auto nic1
+iface nic1 inet manual
+auto nic2
+iface nic2 inet manual
+auto nic3
+iface nic3 inet manual
+iface wlp4s0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.1.5/24
+        gateway 192.168.1.1
+        bridge-ports nic2
+        bridge-stp on
+
+auto vmbr1
+iface vmbr1 inet manual
+        address 192.168.8.49/24
+        gateway 192.168.8.1
+        bridge-ports nic1
+        bridge-stp off
+        bridge-fd 0
+
+source /etc/network/interfaces.d/*
+```
 
 關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
 ![](Pasted%20image%2020260524123306.png)
 
 修改 hosts
 ![](Pasted%20image%2020260524125131.png)
+
+
+## BOND
+
+## ospf

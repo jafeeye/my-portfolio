@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "577212283c10042e",
+        "id": "c8ac2b384d5b5877",
         "type": "split",
         "children": [
           {
             "id": "9f9fa9586b1ed702",
             "type": "tabs",
-            "dimension": 84.35054773082942,
             "children": [
               {
                 "id": "d651447cd03ff7af",
@@ -18,40 +17,37 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
+                    "file": "content/post/PVE 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "index"
+                  "title": "PVE 進階設定"
                 }
               }
             ]
           },
           {
-            "id": "4c1fcae33690b7dd",
+            "id": "ed9deb438bd5c238",
             "type": "tabs",
-            "dimension": 15.64945226917058,
             "children": [
               {
-                "id": "4aad17727eb4452d",
+                "id": "525eb080fc320b95",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
+                        "args": [],
+                        "executable": "C:\\Windows\\System32\\cmd.exe",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "darwin": true
+                          "win32": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -72,7 +68,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -101,7 +97,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -156,7 +152,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "大綱"
             }
           },
           {
@@ -229,31 +225,32 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "4aad17727eb4452d",
+  "active": "525eb080fc320b95",
   "lastOpenFiles": [
+    "content/post/PVE 進階設定.md",
+    "content/post/網路實務疑難-1.md",
+    "content/post/常用指令macOS.md",
     "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md",
-    "content/post/常用指令macOS.md",
     "content/post/常用指令linux.md",
     "content/post/企業大量自動部屬.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/中文化CAT及綠化.md",
     "content/post/K8S.md",
-    "content/post/PVE 進階設定.md",
     "content/post/2026 家用Sever架設指南.md",
     "static/Pasted image 20260524125131.png",
     "static/Pasted image 20260524123542.png",
@@ -267,7 +264,6 @@
     "content/post/NextCloud 架設.md",
     "content/post/Nutanix.md",
     "content/post/PeerTube 架設.md",
-    "content/post/網路實務疑難-1.md",
     "content/post/homeassisant.md",
     "content/post/OlivTin Docker安裝.md",
     "content/post/Synology.md",
