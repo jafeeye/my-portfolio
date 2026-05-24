@@ -124,6 +124,13 @@ Ctrl PageDown : 屏幕输出向下翻页
 ```
 
 
+nano
+Option+X (Alt+X) 隱藏選單
+
+
+`
+
+
 ## 環境變數
 
 
@@ -155,6 +162,13 @@ dnf install illumio-pce-25.2.40-141.el9.x86_64.rpm --setopt=localpkg_gpgcheck=1
 sudo su -
 echo "192.168.8.58  kevin.bdx.dev" >> /etc/hosts
 exit
+複製檔案要記得本身創的使用者有沒有權限複製
+上傳 sudo -r scp /test root@192.168.8.5:~ 
+-r 複製整個目錄,沒加只把路徑當檔案,複製資料夾直接複製就好不用在本地創一個相同名字資料夾
+下載
+變更權限 chmod 770 <資料夾>
+變更權限為其他使用者 chown -R <使用者名稱> <資料夾>
+
 
 ## 服務
 systemctl  

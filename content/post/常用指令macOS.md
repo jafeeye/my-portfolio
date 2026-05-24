@@ -12,8 +12,9 @@ macOS 家目錄 `/user/使用者名稱`
 
 
 
-| 擷取整個螢幕儲存至桌面       | Shift + Cmd + 3         |
+| 功能                | 快速鍵                     |
 | ----------------- | ----------------------- |
+| 擷取整個螢幕儲存至桌面       | Shift + Cmd + 3         |
 | 截圖選擇區域儲存至桌面       | Shift + Cmd + 4         |
 | 截圖選擇區域儲存至剪貼簿      | Shift + Cmd + 4，再按下Ctrl |
 | 顯示隱藏檔案            | Shift + Cmd + .         |
@@ -37,6 +38,7 @@ macOS 家目錄 `/user/使用者名稱`
 - 中文輸入法反引號 Option+~
 - 勿擾模式 F6
 - Ctrl+Cmd+Space emoji keyboard
+- Option`+`Command`+`Esc` 關閉程式
 
 
 
