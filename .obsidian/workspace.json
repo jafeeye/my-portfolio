@@ -4,7 +4,7 @@
     "type": "split",
     "children": [
       {
-        "id": "c8ac2b384d5b5877",
+        "id": "3ac9133c7f913e8a",
         "type": "split",
         "children": [
           {
@@ -17,37 +17,72 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PVE 進階設定.md",
-                    "mode": "source",
+                    "file": "content/post/K8S.md",
+                    "mode": "preview",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PVE 進階設定"
+                  "title": "K8S"
                 }
               }
             ]
           },
           {
-            "id": "ed9deb438bd5c238",
+            "id": "9b0d9d74a8dfb189",
             "type": "tabs",
             "children": [
               {
-                "id": "525eb080fc320b95",
+                "id": "219546267b516259",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "followTheme": true,
+                        "name": "",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "developerConsole"
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: Developer console"
+                }
+              },
+              {
+                "id": "edcf846c7a7fec89",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -68,10 +103,11 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "Terminal: zsh"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           }
         ],
         "direction": "horizontal"
@@ -97,7 +133,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -131,7 +167,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 236.5
+    "width": 236.5,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -152,7 +189,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "Outline"
             }
           },
           {
@@ -221,25 +258,27 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 217.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "525eb080fc320b95",
+  "active": "edcf846c7a7fec89",
   "lastOpenFiles": [
+    "content/post/K8S.md",
     "content/post/PVE 進階設定.md",
     "content/post/網路實務疑難-1.md",
     "content/post/常用指令macOS.md",
@@ -250,7 +289,6 @@
     "content/post/企業大量自動部屬.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/中文化CAT及綠化.md",
-    "content/post/K8S.md",
     "content/post/2026 家用Sever架設指南.md",
     "static/Pasted image 20260524125131.png",
     "static/Pasted image 20260524123542.png",

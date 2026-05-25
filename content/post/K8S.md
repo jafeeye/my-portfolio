@@ -295,6 +295,15 @@ kubectl create namespace illumio-system --dry-run=client -o yaml | kubectl apply
 kubectl -n illumio-system create configmap root-ca-config --from-file=/tmp/illumio_ca.pem
 ```
 
+憑證改檔名
+
+```
+kubectl create configmap root-ca-config -n illumio-system \ --from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \ --from-file=server.crt=/tmp/illumio_ca.pem \ --dry-run=client -o yaml | kubectl apply -f -
+```
+
+
+
+
 連線需要解析hostname,K8s預設用CoreDNS,在設定檔更改,改 vi /etc/hosts沒用
 ```
 kubectl edit cm coredns -n kube-system
@@ -320,15 +329,54 @@ helm安裝
 helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --namespace illumio-system --create-namespace
 ```
 
+
+查log
+```
+kubectl logs illumio-ven-fvd8p -n illumio-system --previous
+```
+
+
+
 檢查illumio pods 狀態
 ```
 kubectl get pods -n illumio-system -w
 kubectl scale deployment/illumio-kubelink --replicas=0 -n illumio-system
 kubectl scale deployment/illumio-kubelink --replicas=1 -n illumio-system
+curl -4 -v https://illumio-kevin.bd1.dev:8443
+```
+
+重啟pod
+```
+kubectl rollout restart deployment illumio-kubelink -n illumio-system
 ```
 
 
+
+
+
+重新配對
+```
+kubectl delete ds --all -n illumio-system
+kubectl delete deployment --all -n illumio-system
+kubectl get pods -n illumio-system -w
+systemctl stop illumio-ven 2>/dev/null
+rm -rf /opt/illumio_ven_data/* 
+rm -rf /var/log/illumio/*
+helm uninstall illumio -n illumio-system
+helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --namespace illumio-system --create-namespace
+kubectl rollout restart ds -n illumio-system
+
+```
+
+
+
 Felix configuration 用於iptable
+
+
+
+
+
+
 
 
 ## 拉取映像
