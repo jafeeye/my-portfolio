@@ -12,6 +12,10 @@ toc: true
 | **IPsec / IKEv2** | ✔ 安全性高<br>✔ 延遲低<br>✔ 效能高            | ✖ 設定較複雜<br>✖ 穿透性弱（NAT/防火牆）  | • **strongSwan**<br>• **LibreSwan**<br>• **Cisco AnyConnect** (IPsec/IKEv2 選項)<br>• iOS/Android 原生 IKEv2 支援<br>• **Shrew Soft VPN** |
 
 ## 實作
+
+
+![[static/Diagram 1.svg]]
+
 在下面實例將使用不同VPN技術，解決安全性及泛用性問題，假設公司分別台北及高雄分公司
 
 |角色|WAN|LAN|

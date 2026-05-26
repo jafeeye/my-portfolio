@@ -18,6 +18,10 @@ Rancher
 ArgoCD
 [headlamp](https://github.com/kubernetes-sigs/headlamp)
 
+
+![[static/Diagram 2.svg]]
+
+
 ## 安裝Master,Worker1,Worker2
 安裝前確認是否是大量複製VM範本,先修改hostname及machine-id
 ```
@@ -249,7 +253,13 @@ kubectl get svc -n cattle-system rancher
 ```
 
 ## 安裝illumio
-1. 新增一個`illumio-values.yaml` 
+
+注意事項
+- 本機的 /etc/hosts 一定都要寫入pce的FQDN,不然會找不到
+- CoreDNS 也要寫入對應pce的FQDN
+- 憑證記得對應
+
+2. 新增一個`illumio-values.yaml` 
 ```
 # PCE URL&port, example.com:8443
 pce_url: <URL_PORT> 
@@ -308,9 +318,8 @@ kubectl create configmap root-ca-config -n illumio-system \ --from-file=ilo_root
 ```
 kubectl edit cm coredns -n kube-system
 ```
-修改檔案為以下,在Corefile後的ready段加入hostname解析
+修改檔案為以下,在Corefile後的ready段加入hosts {} 裡面解析
 ```
-data:
   Corefile: |
     .:53 {
         errors

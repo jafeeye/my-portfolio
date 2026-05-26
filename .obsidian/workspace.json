@@ -4,12 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "3ac9133c7f913e8a",
+        "id": "d067821576d8c6fd",
         "type": "split",
         "children": [
           {
-            "id": "9f9fa9586b1ed702",
+            "id": "7cbf86a68e0eee4f",
             "type": "tabs",
+            "dimension": 82.42530755711776,
             "children": [
               {
                 "id": "d651447cd03ff7af",
@@ -18,7 +19,7 @@
                   "type": "markdown",
                   "state": {
                     "file": "content/post/K8S.md",
-                    "mode": "preview",
+                    "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
@@ -28,61 +29,27 @@
             ]
           },
           {
-            "id": "9b0d9d74a8dfb189",
+            "id": "d7e5dcaf485f0fa4",
             "type": "tabs",
+            "dimension": 17.57469244288225,
             "children": [
               {
-                "id": "219546267b516259",
+                "id": "75822b65c8a72367",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
                       "focus": false,
                       "profile": {
-                        "followTheme": true,
-                        "name": "",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "developerConsole"
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: Developer console"
-                }
-              },
-              {
-                "id": "edcf846c7a7fec89",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
+                        "args": [],
+                        "executable": "C:\\Windows\\System32\\cmd.exe",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "darwin": true
+                          "win32": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -103,11 +70,10 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：cmd"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "horizontal"
@@ -133,7 +99,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -167,8 +133,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 236.5,
-    "collapsed": true
+    "width": 236.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -263,22 +228,35 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "edcf846c7a7fec89",
+  "active": "75822b65c8a72367",
   "lastOpenFiles": [
     "content/post/K8S.md",
+    "static/Diagram 2.svg.xml",
+    "static/Diagram 2.svg",
+    "content/post/PVE 各系統安裝.md",
+    "Excalidraw/Drawing 2026-05-26 21.01.10.excalidraw.md",
+    "Excalidraw",
+    "content/post/InDesign 排版.md",
+    "content/post/企業遠端桌面方案.md",
+    "static/1_fT0MdXJu7nc7od_jXXamSw.png",
+    "static/1_E8y0uByE0Hh5DR1xWxN5TA.png",
+    "content/post/企業VPN架設.md",
+    "static/Diagram 1.svg.xml",
+    "static/Diagram 1.svg",
+    "content/post/可觀測性.md",
     "content/post/PVE 進階設定.md",
     "content/post/網路實務疑難-1.md",
     "content/post/常用指令macOS.md",
@@ -300,29 +278,15 @@
     "content/post/LXC 容器.md",
     "content/post/OpenShift 教學.md",
     "content/post/NextCloud 架設.md",
-    "content/post/Nutanix.md",
-    "content/post/PeerTube 架設.md",
-    "content/post/homeassisant.md",
-    "content/post/OlivTin Docker安裝.md",
-    "content/post/Synology.md",
-    "content/post/可觀測性.md",
-    "content/post/CAD.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "static/Pasted image 20260519101901.png",
-    "static/Pasted image 20260519101752.png",
-    "static/Pasted image 20260518225755.png",
-    "static/Pasted image 20260518225748.png",
-    "content/post/程式語言/Pasted image 20241119231923.png",
     "content/post/my-scripts/wsever_opti.ps1",
     "content/post/my-scripts/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/my-scripts/RunAny_PinObj.ahk",
     "content/post/my-scripts/heidmall.yaml",
     "content/post/my-scripts/build.func",
     "content/post/my-scripts/iventoy.sh",
-    "content/post/my-scripts/moredoc.yaml",
-    "content/post/my-scripts",
-    "static/Diagram.svg.xml",
-    "content/post/程式語言"
+    "content/post/my-scripts/moredoc.yaml"
   ]
 }
