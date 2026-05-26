@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "d067821576d8c6fd",
+        "id": "056ebfa91fc1d415",
         "type": "split",
         "children": [
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 82.42530755711776,
             "children": [
               {
                 "id": "d651447cd03ff7af",
@@ -18,23 +17,22 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/K8S.md",
+                    "file": "content/post/企業虛擬化方案.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "K8S"
+                  "title": "企業虛擬化方案"
                 }
               }
             ]
           },
           {
-            "id": "d7e5dcaf485f0fa4",
+            "id": "47b83e8ea271b04b",
             "type": "tabs",
-            "dimension": 17.57469244288225,
             "children": [
               {
-                "id": "75822b65c8a72367",
+                "id": "6b9bb6ca50d59269",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -241,8 +239,11 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "75822b65c8a72367",
+  "active": "6b9bb6ca50d59269",
   "lastOpenFiles": [
+    "content/post/企業虛擬化方案.md",
+    "content/post/Cookpit.md",
+    "content/post/AIX.md",
     "content/post/K8S.md",
     "static/Diagram 2.svg.xml",
     "static/Diagram 2.svg",
@@ -276,8 +277,6 @@
     "content/page/archives/index.md",
     "content/web/index.md",
     "content/post/LXC 容器.md",
-    "content/post/OpenShift 教學.md",
-    "content/post/NextCloud 架設.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "static/Pasted image 20260519101901.png",
