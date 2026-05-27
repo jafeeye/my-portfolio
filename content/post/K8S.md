@@ -151,6 +151,12 @@ cilium hubble ui
 kubectl port-forward -n kube-system svc/hubble-ui 12000:80 --address 0.0.0.0
 ```
 
+重啟
+```
+kubectl rollout restart deployment hubble-ui -n kube-system
+```
+
+
 ## 額外套件
 
 ### Helm (K8s套件管理器)
@@ -164,6 +170,17 @@ helm completion bash > /etc/bash_completion.d/helm ;
 : '刷新當前終端機環境' 
 source /etc/bash_completion.d/helm ;
 ```
+
+例：用helm安裝Nginx套件(OCI方式),並開好對外Port
+```
+# 安裝nginx
+helm install my-nginx oci://registry-1.docker.io/bitnamicharts/nginx \ -n web-system \ --create-namespace \ --insecure-skip-tls-verify
+# 查看services 知道對外Port,看到80:32760代表內:外為32760
+kubectl get services -n web-system
+# 去改type:,把他變成NodePort
+kubectl edit svc my-nginx -n web-system
+```
+
 
 ### Krew (kubectl外掛套件管理器)
 ```
