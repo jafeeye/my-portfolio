@@ -19,7 +19,7 @@ ArgoCD
 [headlamp](https://github.com/kubernetes-sigs/headlamp)
 
 
-![[static/Diagram 2.svg]]
+![](Diagram2.svg)
 
 
 ## 安裝Master,Worker1,Worker2
@@ -390,14 +390,14 @@ Felix configuration 用於iptable
 
 ## 拉取映像
 映像檔：https://artifacthub.io/packages/ 
-現在主流是bitnami倉庫
+現在主流是bitnami倉庫，但是現在被Broadcom收購，映像檔只能拉latest
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami 
 helm repo update
 ```
 
 ```
-helm search hub wordpress
+helm search hub wordpres
 helm install my-wordpress bitnami/wordpress
 helm install bitnami/wordpress --generate-name
 helm list
