@@ -4,12 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "056ebfa91fc1d415",
+        "id": "877f49aa4bc43819",
         "type": "split",
         "children": [
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
+            "dimension": 78.02197802197803,
             "children": [
               {
                 "id": "d651447cd03ff7af",
@@ -17,37 +18,40 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/企業虛擬化方案.md",
+                    "file": "content/post/K8S.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "企業虛擬化方案"
+                  "title": "K8S"
                 }
               }
             ]
           },
           {
-            "id": "47b83e8ea271b04b",
+            "id": "3a52390e6e0edd66",
             "type": "tabs",
+            "dimension": 21.978021978021978,
             "children": [
               {
-                "id": "6b9bb6ca50d59269",
+                "id": "1707a0cf21f8eb4a",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -68,7 +72,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -97,7 +101,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -226,25 +230,26 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "6b9bb6ca50d59269",
+  "active": "1707a0cf21f8eb4a",
   "lastOpenFiles": [
+    "content/post/K8S.md",
+    "content/post/KPM寫作工具整合.md",
     "content/post/企業虛擬化方案.md",
     "content/post/Cookpit.md",
     "content/post/AIX.md",
-    "content/post/K8S.md",
     "static/Diagram 2.svg.xml",
     "static/Diagram 2.svg",
     "content/post/PVE 各系統安裝.md",
@@ -276,7 +281,6 @@
     "content/page/search/index.md",
     "content/page/archives/index.md",
     "content/web/index.md",
-    "content/post/LXC 容器.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "static/Pasted image 20260519101901.png",

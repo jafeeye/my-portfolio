@@ -111,7 +111,7 @@ sudo systemctl enable --now kubelet
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=192.168.8.83
 
 #Cilium 預設的Pod CIDR 10.244.0.0/16
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.8.83
+sudo kubeadm init --pod-network-cidr=P --apiserver-advertise-address=192.168.8.83
 ```
 
 8. Master Node 設定kubeconfig 權限,並加入其他2台Worker主機
