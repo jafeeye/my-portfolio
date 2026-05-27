@@ -10,18 +10,20 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 63.96396396396397,
+            "dimension": 46.61582459485224,
             "children": [
               {
                 "id": "d651447cd03ff7af",
                 "type": "leaf",
                 "state": {
-                  "type": "image",
+                  "type": "markdown",
                   "state": {
-                    "file": "static/Diagram2.svg"
+                    "file": "content/post/K8S.md",
+                    "mode": "source",
+                    "source": false
                   },
-                  "icon": "lucide-image",
-                  "title": "Diagram2"
+                  "icon": "lucide-file",
+                  "title": "K8S"
                 }
               }
             ]
@@ -29,7 +31,7 @@
           {
             "id": "3a52390e6e0edd66",
             "type": "tabs",
-            "dimension": 36.03603603603604,
+            "dimension": 53.38417540514776,
             "children": [
               {
                 "id": "1707a0cf21f8eb4a",
@@ -243,8 +245,8 @@
   },
   "active": "1707a0cf21f8eb4a",
   "lastOpenFiles": [
-    "static/Diagram2.svg",
     "content/post/K8S.md",
+    "static/Diagram2.svg",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/KPM寫作工具整合.md",
     "content/post/企業虛擬化方案.md",

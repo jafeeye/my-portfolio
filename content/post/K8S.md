@@ -8,15 +8,15 @@ K8S
 有對應多個runtime engine：containerd、crio、k3s_containerd
 
 **[kubevirt-manager](https://github.com/kubevirt-manager/kubevirt-manager)**
-Cert-manager
-Forecastle 實戰：以 annotation 自動發現的 Kubernetes 應用入口面板
-Harbor 建立私有helm倉庫及ArgoCD拉取設定
-KubeClipper (CNCF)
-9Router
-Dashboard
-Rancher
-ArgoCD
-[headlamp](https://github.com/kubernetes-sigs/headlamp)
+Cert-manager  
+Forecastle 實戰：以 annotation 自動發現的 Kubernetes 應用入口面板  
+Harbor 建立私有helm倉庫及ArgoCD拉取設定  
+KubeClipper (CNCF)  
+9Router  
+Dashboard  
+Rancher  
+ArgoCD  
+[headlamp](https://github.com/kubernetes-sigs/headlamp)  
 
 
 ![](Diagram2.svg)
