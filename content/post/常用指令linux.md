@@ -75,10 +75,9 @@ debian 設定網路重新載入設定 `ifreload -a`
 
 chmod
 chown
-建立使用者
-useradd kevin
-passwd kevin
-權限設定 使用者加入sudo `usermod -aG wheel <username>`
+建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
+使用者加入sudo `usermod -aG wheel <username>`
+列出本機所有帳戶 `cat /etc/passwd`
 
 ## 路徑
 ```
@@ -197,11 +196,12 @@ ipfstat -io
 
 ## Rocky linux 常用軟體
 - dnf install epel-release
--  dnf install chrony
+- dnf install chrony
 - dnf install net-tools
 - dnf bind-utils
 - nmon
 - htop
+- 
 ## openSUSE
 
 
@@ -209,3 +209,38 @@ ipfstat -io
 
 
 
+
+
+## RHEL
+無訂閱啟用RockyLinux鏡像源
+```
+vi /etc/yum.repos.d/rocky.repo
+
+##如果有Fortclient擋住,關掉ssl
+[rocky-baseos]
+name=Rocky Linux 9 - BaseOS
+baseurl=https://dl.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+gpgcheck=1
+gpgkey=https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
+enabled=1
+sslverify=0
+
+[rocky-appstream]
+name=Rocky Linux 9 - AppStream
+baseurl=https://dl.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
+gpgcheck=1
+gpgkey=https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
+enabled=1
+sslverify=0
+
+#修改後記得清除暫存
+dnf clean all
+```
+
+
+
+## SSL握手失敗原因
+```
+date
+dnf upgrade ca-certificates
+```

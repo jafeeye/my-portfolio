@@ -157,6 +157,18 @@ kubectl rollout restart deployment hubble-ui -n kube-system
 ```
 
 
+Calico 安裝方法
+```
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+kubectl get pods -n kube-system -l k8s-app=calico-node
+## 如果安裝成功,nodes會變成ready狀態
+kubectl get nodes
+```
+
+
+
+
+
 ## 額外套件
 
 ### Helm (K8s套件管理器)

@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 80.93422306959009,
+            "dimension": 76.41509433962264,
             "children": [
               {
                 "id": "d651447cd03ff7af",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/K8S.md",
-                    "mode": "source",
+                    "file": "content/post/常用指令linux.md",
+                    "mode": "preview",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "K8S"
+                  "title": "常用指令linux"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "3a52390e6e0edd66",
             "type": "tabs",
-            "dimension": 19.065776930409914,
+            "dimension": 23.58490566037736,
             "children": [
               {
                 "id": "1707a0cf21f8eb4a",
@@ -245,12 +245,16 @@
   },
   "active": "1707a0cf21f8eb4a",
   "lastOpenFiles": [
+    "content/post/常用指令linux.md",
     "content/post/K8S.md",
+    "content/post/虛擬化環境多網路設定.md",
+    "content/web/index.md",
+    "content/about/index.md",
+    "content/post/Cookpit.md",
     "static/Diagram2.svg",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/KPM寫作工具整合.md",
     "content/post/企業虛擬化方案.md",
-    "content/post/Cookpit.md",
     "content/post/AIX.md",
     "static/Diagram2.svg.xml",
     "content/post/PVE 各系統安裝.md",
@@ -270,7 +274,6 @@
     "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md",
-    "content/post/常用指令linux.md",
     "content/post/企業大量自動部屬.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/中文化CAT及綠化.md",
@@ -278,8 +281,6 @@
     "static/Pasted image 20260524123542.png",
     "static/Pasted image 20260524123306.png",
     "content/post/常用指令Windows.md",
-    "content/page/search/index.md",
-    "content/page/archives/index.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "static/Pasted image 20260519101901.png",
