@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
-                    "mode": "preview",
+                    "file": "content/post/Cookpit.md",
+                    "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "Cookpit"
                 }
               }
             ]
@@ -72,7 +72,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：zsh"
                 }
               }
             ]
@@ -101,7 +101,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -230,27 +230,35 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "1707a0cf21f8eb4a",
+  "active": "d651447cd03ff7af",
   "lastOpenFiles": [
-    "content/post/常用指令linux.md",
+    "content/post/incus.md",
     "content/post/K8S.md",
+    "content/post/Rclone.md",
+    "content/post/Cookpit.md",
+    "content/post/常用指令linux.md",
+    "content/post/可觀測性.md",
+    "content/post/Acrobat SDK.md",
     "content/post/虛擬化環境多網路設定.md",
+    "content/post/雲端設定.md",
+    "content/post/防火牆.md",
+    "content/post/快速啟動工具.md",
+    "content/post/各式生產力工具整理.md",
     "content/web/index.md",
     "content/about/index.md",
-    "content/post/Cookpit.md",
     "static/Diagram2.svg",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/KPM寫作工具整合.md",
@@ -267,20 +275,12 @@
     "content/post/企業VPN架設.md",
     "static/Diagram 1.svg.xml",
     "static/Diagram 1.svg",
-    "content/post/可觀測性.md",
     "content/post/PVE 進階設定.md",
     "content/post/網路實務疑難-1.md",
     "content/post/常用指令macOS.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md",
-    "content/post/企業大量自動部屬.md",
-    "content/post/proj/MDT企業大量自動部屬.md",
-    "content/post/中文化CAT及綠化.md",
     "static/Pasted image 20260524125131.png",
     "static/Pasted image 20260524123542.png",
     "static/Pasted image 20260524123306.png",
-    "content/post/常用指令Windows.md",
     "static/Pasted image 20260519210337.png",
     "static/Pasted image 20260519205443.png",
     "static/Pasted image 20260519101901.png",
