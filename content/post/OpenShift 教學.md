@@ -7,7 +7,11 @@ date: 2026-05-23
 2. 自建**免費叢集** -> 社群版 [OKD](https://github.com/okd-project/okd)。
 3. 自建**試用叢集** -> 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。
 
-現在安裝方法除了麻煩的離線安裝,也可以到RedHat網站直接生成OKD映像直接安裝
+
+
+SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk
+
+
 ### 1. 下載 OpenShift 核心安裝工具
 
 ```
@@ -1060,3 +1064,157 @@ spec:
     
     > NetworkPolicy 就是在上述的最後一段，判斷要不要放行。  
     > 解得出 Service Name 不代表有被允許連線喔！！
+    
+
+
+要在 VMware vSphere 上使用 **IPI（Installer-Provisioned Infrastructure，自動化安裝）** 來部署 **SNO（Single Node OpenShift，單節點 OKD）**，情況會變得有點微妙。
+
+這裡有一個關鍵的架構限制必須先讓你知道：
+
+> ⚠️ **紅帽官方在 vSphere 平台上的 IPI 安裝程式，預設「不支援」直接長出單節點 (SNO)。**
+> 
+> 官方的 vSphere IPI 設計初衷是為了企業的高可用性（HA），所以它的安裝程式硬性規定底層**至少要生出 3 台 Master 節點**。如果你直接執行常規的 IPI 指令，它是沒辦法只蓋 1 台 VM 的。
+
+不過，身為維運工程師，我們有兩種變通的解決招式可以達成你的目標（單機、VMware、自動化）：
+
+### 招式一：使用 Agent-based Installer（目前社群最推的單機 VMware 玩法）
+
+這是最符合你想要「單機部署在 VMware」又想要「自動化」的官方推薦解法。它結合了 IPI 的自動化（幫你配置好所有內建設定）與 SNO 的輕量化。
+
+#### 1. 準備 `openshift-install` 工具
+
+到 OKD 官網或 GitHub 下載最新版的 `openshift-install` 與 `oc` 工具。
+
+#### 2. 建立 `agent-config.yaml`（設定網路與 vSphere 節點）
+
+在本地資料夾內建立這個檔案，用來指定你要把這台單機裝在 VMware 的哪個位置：
+
+YAML
+
+```
+apiVersion: v1
+alpha: true
+metadata:
+  name: okd-sno
+rendezvousIP: 192.168.1.100 # 你預留給這台 SNO 的固定 IP
+hosts:
+  - hostname: sno-node
+    interfaces:
+      - name: eth0
+        macAddress: "00:50:56:xx:xx:xx" # 預先在 VMware 幫這台 VM 產生的 MAC 位址
+    networkConfig:
+      interfaces:
+        - name: eth0
+          type: ethernet
+          state: up
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.168.1.100
+                prefixLength: 24
+      dns-resolver:
+        config:
+          server:
+            - 192.168.1.1 # 你的 DNS 伺服器
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-interface: eth0
+            next-hop-address: 192.168.1.254 # 你的 Gateway
+```
+
+#### 3. 建立 `install-config.yaml`（指定 vSphere 整合）
+
+YAML
+
+```
+apiVersion: v1
+baseDomain: yourdomain.com
+compute:
+- name: worker
+  replicas: 0 # 單機部署，Worker 設為 0
+controlPlane:
+  name: master
+  replicas: 1 # 單機部署，Master 設為 1
+metadata:
+  name: okd-sno
+platform:
+  vsphere:
+    vCenter: vcenter.yourdomain.com
+    username: administrator@vsphere.local
+    password: YourPassword
+    datacenter: MyDatacenter
+    defaultDatastore: vsanDatastore
+    cluster: MyCluster
+    network: "VM Network"
+pullSecret: '{"auths":{"fake":{"auth":"aWQ6cGFzcwo="}}}'
+sshKey: 'ssh-ed25519 AAAA...'
+```
+
+#### 4. 產生 ISO 並丟進 VMware 開機
+
+在資料夾下執行指令，讓它把上述兩個設定檔結合成一個專屬的「特製引導 ISO」：
+
+Bash
+
+```
+./openshift-install agent create image --dir=./my-cluster
+```
+
+這時會產生一個 `agent.iso`。 你只需要去 vSphere **手動建一台 VM**（規格符合剛才指定的 MAC Address，至少 4 vCPU / 16GB RAM），掛載這個 ISO 開機。開機後，它會自動對接 vSphere 的 API，自己把所有儲存（CSI）和單節點 OKD 灌好。
+
+### 招式二：硬用 IPI 偽裝（修改 Manifests 檔案）
+
+如果你堅持連「手動在 vSphere 建立 1 台 VM」都不想做，希望完全由 `openshift-install` 去 vCenter 幫你長出那台單機，那你必須在中間「攔截」安裝程式的設定：
+
+#### 1. 建立標準的 `install-config.yaml`
+
+內容與招式一的 `install-config.yaml` 相同，確保 `replicas` 數量設定為：
+
+- **controlPlane.replicas: 1**
+    
+- **compute.replicas: 0**
+    
+
+#### 2. 先不要安裝，只產生 Manifests 檔案
+
+在終端機執行：
+
+Bash
+
+```
+./openshift-install create manifests --dir=./my-cluster
+```
+
+這時候安裝程式不會去 vCenter 蓋虛擬機，而是會在 `./my-cluster/manifests/` 資料夾下長出一堆 K8s 的 YAML 設定檔。
+
+#### 3. 手動修正 Scheduler 設定（關鍵步驟）
+
+因為單節點（SNO）上只有一台 Master，預設情況下，OpenShift 是不允許把一般應用程式（Pod）派送到 Master 上的。我們必須修改設定，允許 Pod 可以在 Master 上執行。
+
+打開 `manifests/cluster-scheduler-02-config.yml`，將 `mastersSchedulable` 的值從 `false` 改為 `true`：
+
+YAML
+
+```
+spec:
+  mastersSchedulable: true
+```
+
+#### 4. 真正啟動 vSphere IPI 安裝
+
+修正完 Manifest 後，執行以下指令：
+
+Bash
+
+```
+./openshift-install create cluster --dir=./my-cluster
+```
+
+這時，IPI 安裝程式就會讀取你修改後的設定，連線到你的 vCenter，自動幫你只開**正好 1 台 Master VM**，並且把整個 OKD 塞進去。
+
+### 💡 總結建議
+
+- 如果你希望**最省事、成功率最高**，推薦用 **招式一 (Agent-based)**。雖然你要自己去 vSphere 點一下「建立虛擬機」，但網路和節點配置非常穩定，這也是紅帽目前推行地端單機部署的主流方式。
+    
+- 如果你希望**完全自動化、連 VM 都不想手動點**，那就用 **招式二 (IPI 修改 Manifests)**，用欺騙安裝程式的方式強行讓 vSphere IPI 只生出一台主機。
