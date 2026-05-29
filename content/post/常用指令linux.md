@@ -19,13 +19,6 @@ debian 設定網路重新載入設定 `ifreload -a`
 `tail -f /var/log/production.log`  
 `journalctl -b -1 -r`
 
-## 資料夾
-建立資料夾並進入位置 `mkdir test1 && cd test1` 
-查看資料夾大小 `du -sh <illumio-pce>`
-~表示為用戶目錄 EX:/home/PIN
-～/.表示用戶目錄下隱藏資料夾 EX:～/.資料夾
-ls -l
-
 ## 使用者
 1. 借權限(向root借權，但密碼是打目前使用者登入密碼)
 - 借權限成sudo `sudo -i`，在su模式輸入 exit 
@@ -40,7 +33,8 @@ ls -l
 - 建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
 - 使用者加入sudo `usermod -aG wheel <username>`
 - 列出本機所有帳戶 `cat /etc/passwd`
-## 檔案
+
+## 檔案資料夾
 - 決定檔案執行權限 chmod 770 <資料夾>
 - 決定檔案擁有者是誰 chown -R <使用者名稱> <資料夾>
 2. scp 傳輸檔案
@@ -56,6 +50,14 @@ if=/dd
 
 4. 寫入檔案
 echo "192.168.8.58  kevin.bdx.dev" >> /etc/hosts
+
+建立資料夾並進入位置 `mkdir test1 && cd test1` 
+查看資料夾大小 `du -sh <illumio-pce>`
+~表示為用戶目錄 EX:/home/PIN
+～/.表示用戶目錄下隱藏資料夾 EX:～/.資料夾
+ls -l
+lsblk
+
 
 ## 路徑
 ```
@@ -139,7 +141,6 @@ source ~/.zshrc      //   重新讀取設定檔
 ## 安裝套件
 yum RHEL7之前,dnf RHEL8之後
 dnf 要跳過gpg檢查 dnf -no gpgcheck
-
 因有時候內建repo會把gpgcheck取消,以下為確保在無連網環境能透過dnf+gpgkey 安裝
 
 ```
@@ -163,8 +164,8 @@ htop
 free-h : 查詢記憶體用量
 
 ## Ubuntu 常用軟體
-- Nemo：sudo apt-get install nemo
-- synaptic：sudo apt-get install synaptic
+- Nemo：sudo apt install nemo
+- synaptic：sudo apt install synaptic
 - gdebi：sudo apt install gdebi
 - gparted 
 ## Rocky linux 常用軟體
@@ -210,8 +211,6 @@ dnf clean all
 date
 dnf upgrade ca-certificates
 ```
-
-
 ## 常用設定
 ```
 export LANG=en_US.UTF-8 //避免安裝軟體語系不符
