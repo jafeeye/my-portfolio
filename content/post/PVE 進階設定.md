@@ -436,7 +436,8 @@ qemu-img resize --shrink vm-147-disk-0.qcow2 160G
 qemu-img info 可以檢查真實大小
 如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
 
-
+WEBGUI/Move disk 可以做轉換格式動作
+![](Pasted%20image%2020260530180758.png)
 ## 匯入硬碟
 ```
 qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
@@ -483,7 +484,7 @@ lspci -vv | grep BAR
 1. nano /etc/network/interfaces
 2. nano /etc/hosts
 
-
+如果硬碟拔去新機器，無法進入畫面去檢查 `/etc/network/interfaces` ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可
 
 ## 救援PVE
 如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
@@ -522,9 +523,19 @@ fsck -y /dev/loop0
 losetup -d /dev/loop0
 ```
 
+5. Migration會因為LXC容器預設會放去local-lvm，搬移的時候要去選
+因此要手動scp把檔案般回原位即可，LXC硬碟的rootfs檔又會有指派問題，直接去改 `nano /etc/pve/lxc/118.conf` 比較快
 
+![](Pasted%20image%2020260530172644.png)
 
-
+開機磁區被GRUB改名字 (initramfs：發生兩塊硬碟都安裝PVE情形)
+- **`Found volume group "pve-OLD-3001C008" ... 2 logical volume(s) now active`** （系統成功抓到了 LVM 磁碟群組，但它的名字叫 `pve-OLD-3001C008`）
+- **`ALERT! /dev/mapper/pve-root does not exist. Dropping to a shell!`** （系統崩潰大喊：我找不到當初寫死在引導設定檔裡的 `/dev/mapper/pve-root`！）
+```
+lvm vgrename pve-OLD-3001C008 pve
+lvm vgchange -ay pve
+exit
+```
 
 
 ## 建立LXC容器
@@ -561,6 +572,22 @@ lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,creat
 
 Vda：ioblock 
 
+
+
+## LVM處理
+![](Pasted%20image%2020260530181126.png)
+
+預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區
+- **`local` (Directory 檔案系統)：** 專門用來放 ISO 鏡像、LXC 範本、備份檔（Backup），它的實體路徑在 Debian 的 `/var/lib/vz`。
+- **`local-lvm` (LVM-Thin 區塊儲存)：** 專門用來分配給虛擬機或容器當作硬碟（也就是你剛才砍掉的那個空間）。
+但其實有小技巧可以將兩個空間合併，這樣local才可以取回原本local-Lvm的容量
+```
+vgs
+## 將自由空間「全數塞給」根目錄（pve-root）
+lvextend -l +100%FREE /dev/pve/root
+## 重整檔案系統
+resize2fs /dev/pve/root
+```
 
 ## OPNSense + Vlan
 1. Node/System/Network 在橋接網口開啟vlan aware
@@ -633,3 +660,9 @@ source /etc/network/interfaces.d/*
 
 ## Migrate
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
+
+
+
+## PVE 跑非x86
+https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/
+https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/

@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/2026 家用Sever架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "2026 家用Sever架設指南"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -242,13 +242,26 @@
   },
   "active": "9bfa5001e1d11417",
   "lastOpenFiles": [
-    "content/post/常用指令linux.md",
-    "content/post/各式發行版整理.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/中文化CAT及綠化.md",
     "content/post/企業大量自動部屬.md",
+    "content/post/企業共享設定.md",
+    "content/post/快速啟動工具.md",
+    "content/post/各式發行版整理.md",
+    "content/post/企業VPN架設.md",
+    "content/post/企業遠端桌面方案.md",
     "content/post/企業虛擬化方案.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/K8s 整理.md",
+    "content/post/常用指令linux.md",
+    "content/post/常用指令AIX.md",
+    "content/post/正則表達式.md",
+    "static/Pasted image 20260530181126.png",
+    "static/Pasted image 20260530180758.png",
+    "static/Pasted image 20260530172644.png",
+    "content/post/企業拓譜圖架設.md",
     "content/post/Clonezilla.md",
     "static/Pasted image 20260530143911.png",
-    "content/post/PVE 進階設定.md",
     "content/post/Hyper-V 進階設定.md",
     "content/post/紅藍隊技術.md",
     "content/post/Wireshark.md",
@@ -257,30 +270,18 @@
     "static/Pasted image 20260530095112.png",
     "static/Pasted image 20260530095031.png",
     "content/post/RDP 連線實作.md",
-    "content/post/企業遠端桌面方案.md",
-    "content/post/企業VPN架設.md",
     "content/post/可觀測性.md",
-    "content/post/2026 家用Sever架設指南.md",
     "content/post/虛擬化環境多網路設定.md",
-    "content/post/正則表達式.md",
     "content/post/Windows 7 更新.md",
     "content/post/Cookpit.md",
-    "content/post/常用指令AIX.md",
     "content/post/常用指令macOS.md",
     "content/post/常用指令Windows.md",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/ONTAP.md",
-    "ONTAP.md",
-    "AIX.md",
     "Untitled",
     "static/Diagram2.svg",
     "static/Diagram2.svg.xml",
     "Excalidraw",
     "static/1_fT0MdXJu7nc7od_jXXamSw.png",
-    "static/1_E8y0uByE0Hh5DR1xWxN5TA.png",
     "static/Diagram 1.svg.xml",
-    "static/Diagram 1.svg",
-    "static/Pasted image 20260524125131.png",
     "content/post/my-scripts/wsever_opti.ps1",
     "content/post/my-scripts/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/my-scripts/RunAny_PinObj.ahk",
