@@ -9,13 +9,14 @@ date: 2026-05-26
 ## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸
 dnf update -y
 ## 安裝虛擬化套件
-dnf install cockpit-machines libvirt qemu-kvm virt-install virt-viewer
+dnf install -y cockpit-machines libvirt qemu-kvm virt-install virt-viewer
 dnf install -y wget lrzsz net-tools
 ```
 啟動服務
 ```
 ## 啟用服務
 systemctl enable --now libvirtd
+systemctl enable --now cockpit.socket
 ## 確認服務是否正常運作
 systemctl status libvirtd
 systemctl status cockpit.socket

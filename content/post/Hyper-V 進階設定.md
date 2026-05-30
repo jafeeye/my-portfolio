@@ -7,19 +7,21 @@ toc: true
 一些Hyper-V 的進階功能
 
 
-## 二代強制使用舊式vhd
+## WSL+WSLg
+
+在Win10上啟用Windows 子系統Linux版、Hyper-V
+WSL1：使用Linux轉譯內核，不需開WHP，可與VMware 第一層共存 (性能不減)
+WSL2：使用WHP轉譯層強制開啟虛擬化型安全性，Hyper-V強制升為第一層，其他虛擬化軟體都跑WHP虛擬化引擎，性能會下降很多
+
+>Win11 24H2 預設開啟VBS虛擬化，檢查方式： msinfo32.exe 虛擬化型安全性為執行中，關閉`bcdedit /set hypervisorlaunchtype off`
 
 
-## 開啟兼容WHP
+### 開啟WHP兼容
 備註:要Windows Server 2022 才能開啟
 
 ![](260404-whp01.png)
 
 ![](260404-whp02.png)
-
-### RDP
- webclient
-
 
 ### WSLg
 
@@ -43,14 +45,20 @@ export DISPLAY=:1
 dbus-run-session startxfce4
 ```
 
-### 並存方案
-當開啟WSL2後會開啟虛擬化型安全性，VMWare性能大幅下降，WSL1並不是內核也無法做顯卡直通
-- NoHyperV+WSL+VMWare
-- HyperV+WSL2+VMWare (性能下降)
-Win11 24H2 預設開啟VBS虛擬化，檢查方式： msinfo32.exe 虛擬化型安全性為執行中，關閉`bcdedit /set hypervisorlaunchtype off`
+
+## 二代強制用舊式vhd
 
 
-### 參考資料
+
+
+
+
+
+
+
+
+
+## 參考資料
 
 1. https://yulun.me/2014/vmware-shortcut-startup-fullscreen/  "快速啟動虛擬機 (建立捷徑 Windows/VMware)"
 2. Windows 11 WSL2跑Linux桌面環境與圖形程式的方法，使用WSLg XWayland https://ivonblog.com/posts/run-linux-desktop-on-wsl/

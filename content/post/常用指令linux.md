@@ -28,7 +28,7 @@ debian 設定網路重新載入設定 `ifreload -a`
 - 切root帳號登入，環境變數在root使用者 `su -`    
 - 切特定使用者，環境變數在特定使用者  `su - gss`  
 3. 看目前登入使用者
-- who ,who -H ,w
+- who ,who -H ,w,id
 4. 管理帳戶
 - 建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
 - 使用者加入sudo `usermod -aG wheel <username>`
@@ -162,23 +162,29 @@ sysctl
 top：表格式工作管理員
 htop
 free-h : 查詢記憶體用量
+pkill：踢掉服務
 
-## Ubuntu 常用軟體
-- Nemo：sudo apt install nemo
-- synaptic：sudo apt install synaptic
-- gdebi：sudo apt install gdebi
+
+## 補充-自行取用
+### Ubuntu 常用軟體
+sudo apt install nemo synaptic gdebi gparted freerdp2-x11
+- Nemo：
+- synaptic
+- gdebi：
 - gparted 
-## Rocky linux 常用軟體
-- dnf install epel-release
-- dnf install chrony
-- dnf install net-tools
-- dnf bind-utils
+- xfreerdp：`xfreerdp /size:90% /v:192.168.170.200` //遠端到 192.168.170.200 
+### Rocky linux 常用軟體
+dnf install epel-release chrony net-tools bind-utils nmon htop
+- epel-release
+- chrony
+- net-tools
+- bind-utils
 - nmon
 - htop
-## openSUSE
+### openSUSE 常用軟體
 
 
-## Kail Linux 
+### Kail Linux 常用軟體
 
 ## RHEL
 無訂閱啟用RockyLinux鏡像源

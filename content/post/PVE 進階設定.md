@@ -629,3 +629,7 @@ source /etc/network/interfaces.d/*
 ## BOND
 
 ## ospf
+
+
+## Migrate
+如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
