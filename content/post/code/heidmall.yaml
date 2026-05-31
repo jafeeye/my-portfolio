@@ -1,0 +1,16 @@
+version: "2.1"
+services:
+  heimdall:
+    image: linuxserver/heimdall
+    container_name: heimdall
+    network_mode: bridge
+    volumes:
+      - ./config:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Taipei
+    ports:
+      - 1410:80
+      - 1420:443
+    restart: always

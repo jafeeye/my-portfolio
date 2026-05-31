@@ -1,0 +1,39 @@
+version: '3'
+
+networks: 
+  moredoc-network:
+    # driver: bridge
+    external: false
+
+services: 
+  moredoc-mysql:
+    image: mysql:8.0.36
+    container_name: moredoc-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=moredoc
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf
+    networks: 
+      - moredoc-network
+    restart: always
+    # 如果需要外部访问数据库，则开放端口
+    # ports:
+    #   - "127.0.0.1:3306:3306"
+  moredoc-server:
+    build: .
+    container_name: moredoc-server
+    environment:
+      - MOREDOC_DATABASE_DSN=root:moredoc@tcp(moredoc-mysql:3306)/moredoc?charset=utf8mb4&loc=Local&parseTime=true
+      # 【改】请务必更换为自己的JWT_SECRET，建议使用随机字符串
+      - MOREDOC_JWT_SECRET="moredoc"
+    depends_on: 
+      - moredoc-mysql
+    networks: 
+      - moredoc-network
+    ports:
+      - "8880:8880"
+    volumes:
+      - ./server:/home/moredoc
+    restart: always
