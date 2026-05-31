@@ -10,20 +10,18 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 69.79062811565304,
+            "dimension": 80.05982053838484,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
                 "type": "leaf",
                 "state": {
-                  "type": "markdown",
+                  "type": "vscode-editor",
                   "state": {
-                    "file": "content/post/各式發行版整理.md",
-                    "mode": "source",
-                    "source": false
+                    "file": "content/post/code/Navidrome Auto Login-2025-05-24.user.js"
                   },
                   "icon": "lucide-file",
-                  "title": "各式發行版整理"
+                  "title": "Navidrome Auto Login-2025-05-24.user"
                 }
               }
             ]
@@ -31,7 +29,7 @@
           {
             "id": "10aa0266e4670321",
             "type": "tabs",
-            "dimension": 30.209371884346957,
+            "dimension": 19.940179461615156,
             "children": [
               {
                 "id": "87e331522729fa36",
@@ -237,11 +235,13 @@
       "bases:建立新的 base": false,
       "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "terminal:Open terminal": false,
-      "omnisearch:Omnisearch": false
+      "omnisearch:Omnisearch": false,
+      "vscode-editor:新建程式碼檔案": false
     }
   },
   "active": "87e331522729fa36",
   "lastOpenFiles": [
+    "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/各式發行版整理.md",
     "content/post/程式語言/各發行版區別.md",
     "content/post/PVE跑AIX.md",
@@ -278,7 +278,6 @@
     "content/post/企業共享設定.md",
     "content/post/快速啟動工具.md",
     "content/post/企業VPN架設.md",
-    "content/post/企業遠端桌面方案.md",
     "static/Pasted image 20260530181126.png",
     "static/Pasted image 20260530180758.png",
     "Untitled",
