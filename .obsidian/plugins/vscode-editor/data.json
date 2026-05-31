@@ -12,7 +12,8 @@
     "lua",
     "php",
     "cs",
-    "ps1"
+    "ps1",
+    "yaml"
   ],
   "folding": true,
   "lineNumbers": true,
