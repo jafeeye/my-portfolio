@@ -22,12 +22,17 @@ while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; d
 
 
 快速鍵
+set -o emacs
 Ctrl+H 對應到Backspace
 Ctrl+B/F 游標往前 / 往後
 `Ctrl` + `A` ：游標直接**到最前面（開頭）**。
 `Ctrl` + `E` ：游標直接到最後面（結尾）**。
 `Ctrl` + `K`
 Ctrl+P/N 上一條/下一條指令
+
+
+一直跳出系統日誌
+`stty eof ^D`
 
 
 
@@ -110,9 +115,11 @@ lsdev -Cc if
 smit tcpip
 smit mtcpip
 
+
 快速方法
 lsdev  -Cc if
 ifconfig en0 192.168.8.65 up
+ifconfig -a 查看網卡IP
 netstat -rn 看路由表
 
 
@@ -164,3 +171,19 @@ chfs -a size=+2G /tmp
 
 ## 安裝軟體
 出現db4 error：rpm --rebuilddb
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 參考資料
+- [bilibili-Window下安装运行AIX系统详解完整版|Muonsol](https://www.bilibili.com/video/BV1AZqvYrEar/)
+- [IBM-Run your AIX VM on x86 using KVM and QEMU](https://community.ibm.com/community/user/blogs/hugo-b/2024/01/17/aix-virtualization-x86-kvm-qemu#ItemCommentPanel)

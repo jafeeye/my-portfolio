@@ -177,6 +177,10 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
 ![](iventoyscr260228.png)
 
 
+
+
+
+
 ## Gitlab LXC
 
 ![](260308-gitlab.png)

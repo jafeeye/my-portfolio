@@ -1218,3 +1218,10 @@ Bash
 - 如果你希望**最省事、成功率最高**，推薦用 **招式一 (Agent-based)**。雖然你要自己去 vSphere 點一下「建立虛擬機」，但網路和節點配置非常穩定，這也是紅帽目前推行地端單機部署的主流方式。
     
 - 如果你希望**完全自動化、連 VM 都不想手動點**，那就用 **招式二 (IPI 修改 Manifests)**，用欺騙安裝程式的方式強行讓 vSphere IPI 只生出一台主機。
+
+
+
+
+## 參考資料
+- [OpenShift 容器平台社区版 OKD 4.10.0部署](https://blog.csdn.net/networken/article/details/123953256)
+- [OpenShift — 部署 OKD 4.5](https://blog.51cto.com/u_15301988/3127858)
