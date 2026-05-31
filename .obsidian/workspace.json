@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 82.45614035087719,
+            "dimension": 73.50993377483442,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/Hyper-V 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "Hyper-V 進階設定"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "10aa0266e4670321",
             "type": "tabs",
-            "dimension": 17.543859649122805,
+            "dimension": 26.490066225165567,
             "children": [
               {
                 "id": "9bfa5001e1d11417",
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -149,12 +149,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/post/Hyper-V 進階設定.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "Hyper-V 進階設定 的大綱"
             }
           },
           {
@@ -240,10 +241,16 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "9bfa5001e1d11417",
+  "active": "01a63e3fdae48f92",
   "lastOpenFiles": [
+    "content/post/code/RunAny_PinObj.ahk",
+    "content/post/code",
+    "content/post/新增資料夾",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/中文化CAT及綠化.md",
+    "content/post/常用指令AIX.md",
+    "content/post/常用指令linux.md",
+    "content/post/常用指令macOS.md",
     "content/post/企業大量自動部屬.md",
     "content/post/企業共享設定.md",
     "content/post/快速啟動工具.md",
@@ -253,8 +260,6 @@
     "content/post/企業虛擬化方案.md",
     "content/post/PVE 進階設定.md",
     "content/post/K8s 整理.md",
-    "content/post/常用指令linux.md",
-    "content/post/常用指令AIX.md",
     "content/post/正則表達式.md",
     "static/Pasted image 20260530181126.png",
     "static/Pasted image 20260530180758.png",
@@ -274,8 +279,6 @@
     "content/post/虛擬化環境多網路設定.md",
     "content/post/Windows 7 更新.md",
     "content/post/Cookpit.md",
-    "content/post/常用指令macOS.md",
-    "content/post/常用指令Windows.md",
     "Untitled",
     "static/Diagram2.svg",
     "static/Diagram2.svg.xml",
@@ -285,8 +288,6 @@
     "content/post/my-scripts/wsever_opti.ps1",
     "content/post/my-scripts/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/my-scripts/RunAny_PinObj.ahk",
-    "content/post/my-scripts/heidmall.yaml",
-    "content/post/my-scripts/build.func",
-    "content/post/my-scripts/iventoy.sh"
+    "content/post/my-scripts/heidmall.yaml"
   ]
 }

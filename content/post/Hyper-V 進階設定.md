@@ -6,6 +6,10 @@ toc: true
 ## 前言
 一些Hyper-V 的進階功能
 
+EXHyperV
+WSLDashboard
+
+
 
 ## WSL+WSLg
 

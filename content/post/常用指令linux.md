@@ -46,7 +46,7 @@ sudo scp `-r` test/ `root@192.168.8.5:~`
 >複製檔案要記得本身創的使用者有沒有權限複製
 
 3. 建立大空檔
-if=/dd
+dd if=/dev/zero of=testimage.raw bs=1G count=8
 
 4. 寫入檔案
 echo "192.168.8.58  kevin.bdx.dev" >> /etc/hosts
