@@ -29,3 +29,14 @@ mce.enable = "TRUE"
 vhv.enable = "TRUE"
 ```
 
+
+|功能|最主要目的|
+|---|---|
+|Debugging info|收集錯誤資料給工程師排錯|
+|Disable page trimming|讓 VM 記憶體更穩定（不還給主機）|
+|Progress log|更詳細的 VM 啟動/執行紀錄|
+|Template mode|把 VM 當模板大量複製|
+|USB debug|解析 USB passthrough 問題|
+|Clean up disks|自動壓縮 VMDK 節省空間|
+|Disable side-channel mitigations|**讓 VMware 在 Hyper-V 開啟時比較順、不會超慢**|
+|Side-channel warning|提醒效能會下降|

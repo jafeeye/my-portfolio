@@ -5,6 +5,14 @@ toc: true
 tags:
   - vmware
 ---
+## 常用指令
+```
+esxcfg-nics -l   //檢查所有網孔
+```
+
+
+
+
 ### 取消ESXi 虛擬內存
 開機後按`Shift+o` 在cdromBoot runweasel 後面加入`autoPartitionOSDataSize = 4096`  
 
@@ -16,7 +24,7 @@ If Your homelab ESX have not sufficient RAM (8 GB for 6.0 and 10 GB for 6.5) is 
 vCenter 6.0 – run: installer.exe "SKIP_HARDWARE_CHECKS=1"
 vCenter 6.5 – edit file:
 vcsa-ui-installer\win32\resources\app\resources\layout.json
-
+```
 set:
    "tiny": {
         "cpu": 2,
@@ -24,6 +32,7 @@ set:
         "host-count": 10,
         "vm-count": 100,
         "disk-swap": "25GB",
+```
 
 ---
 

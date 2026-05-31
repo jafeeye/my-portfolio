@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 73.50993377483442,
+            "dimension": 78.83597883597884,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
@@ -31,10 +31,10 @@
           {
             "id": "10aa0266e4670321",
             "type": "tabs",
-            "dimension": 26.490066225165567,
+            "dimension": 21.164021164021165,
             "children": [
               {
-                "id": "9bfa5001e1d11417",
+                "id": "87e331522729fa36",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -149,13 +149,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/Hyper-V 進階設定.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Hyper-V 進階設定 的大綱"
+              "title": "大綱"
             }
           },
           {
@@ -241,23 +240,37 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "01a63e3fdae48f92",
+  "active": "87e331522729fa36",
   "lastOpenFiles": [
+    "content/post/Hyper-V 進階設定.md",
+    "content/post/VMware Workstation 進階功能.md",
+    "static/Pasted image 20260531144500.png",
+    "content/post/homeassisant.md",
+    "content/post/illumio 2x2 DR.md",
+    "content/post/企業虛擬化方案.md",
+    "content/post/Windows多網路設定.md",
+    "static/Pasted image 20260531143804.png",
+    "static/Pasted image 20260531143627.png",
+    "content/post/常用指令AIX.md",
+    "content/post/ESXi 安裝與設定.md",
+    "static/Pasted image 20260531135722.png",
+    "static/Pasted image 20260531135413.png",
+    "static/Pasted image 20260531134742.png",
+    "content/post/紅藍隊技術.md",
+    "static/Pasted image 20260531132927.png",
+    "content/post/常用指令linux.md",
+    "content/post/常用指令macOS.md",
     "content/post/code/RunAny_PinObj.ahk",
     "content/post/code",
     "content/post/新增資料夾",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/中文化CAT及綠化.md",
-    "content/post/常用指令AIX.md",
-    "content/post/常用指令linux.md",
-    "content/post/常用指令macOS.md",
     "content/post/企業大量自動部屬.md",
     "content/post/企業共享設定.md",
     "content/post/快速啟動工具.md",
     "content/post/各式發行版整理.md",
     "content/post/企業VPN架設.md",
     "content/post/企業遠端桌面方案.md",
-    "content/post/企業虛擬化方案.md",
     "content/post/PVE 進階設定.md",
     "content/post/K8s 整理.md",
     "content/post/正則表達式.md",
@@ -266,28 +279,14 @@
     "static/Pasted image 20260530172644.png",
     "content/post/企業拓譜圖架設.md",
     "content/post/Clonezilla.md",
-    "static/Pasted image 20260530143911.png",
-    "content/post/Hyper-V 進階設定.md",
-    "content/post/紅藍隊技術.md",
     "content/post/Wireshark.md",
-    "static/Pasted image 20260530095202.png",
-    "static/Pasted image 20260530095119.png",
-    "static/Pasted image 20260530095112.png",
-    "static/Pasted image 20260530095031.png",
     "content/post/RDP 連線實作.md",
-    "content/post/可觀測性.md",
-    "content/post/虛擬化環境多網路設定.md",
-    "content/post/Windows 7 更新.md",
-    "content/post/Cookpit.md",
     "Untitled",
-    "static/Diagram2.svg",
     "static/Diagram2.svg.xml",
     "Excalidraw",
-    "static/1_fT0MdXJu7nc7od_jXXamSw.png",
     "static/Diagram 1.svg.xml",
     "content/post/my-scripts/wsever_opti.ps1",
     "content/post/my-scripts/Navidrome Auto Login-2025-05-24.user.js",
-    "content/post/my-scripts/RunAny_PinObj.ahk",
-    "content/post/my-scripts/heidmall.yaml"
+    "content/post/my-scripts/RunAny_PinObj.ahk"
   ]
 }
