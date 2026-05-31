@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PVE跑AIX.md",
+                    "file": "content/post/各式發行版整理.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PVE跑AIX"
+                  "title": "各式發行版整理"
                 }
               }
             ]
@@ -242,7 +242,10 @@
   },
   "active": "87e331522729fa36",
   "lastOpenFiles": [
+    "content/post/各式發行版整理.md",
+    "content/post/程式語言/各發行版區別.md",
     "content/post/PVE跑AIX.md",
+    "content/post/RDP 連線實作.md",
     "content/post/常用指令AIX.md",
     "content/post/PVE 進階設定.md",
     "content/post/Windows多網路設定.md",
@@ -274,10 +277,8 @@
     "content/post/企業大量自動部屬.md",
     "content/post/企業共享設定.md",
     "content/post/快速啟動工具.md",
-    "content/post/各式發行版整理.md",
     "content/post/企業VPN架設.md",
     "content/post/企業遠端桌面方案.md",
-    "content/post/K8s 整理.md",
     "static/Pasted image 20260530181126.png",
     "static/Pasted image 20260530180758.png",
     "Untitled",
