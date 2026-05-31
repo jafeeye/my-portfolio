@@ -33,6 +33,11 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 25. 開啟磁碟計數功能 `diskperf -y`
 
 
+
+## 網路
+查目前開的Port netstat -nao 
+
+
 ### Systernails Tools
 
 `psexec [\\\\computer[,computer2[,...] | @file]][-u user [-p psswd]][-n s][-r servicename][-h][-l][-s|-e][-x][-i [session]][-c [-f|-v]][-w directory][-d][-<priority>][-a n,n,...][-verbose] cmd [arguments]`

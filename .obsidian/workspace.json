@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "7c62b85ad3689c5b",
+        "id": "ed13c46d768889c8",
         "type": "split",
         "children": [
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 65.74642126789367,
+            "dimension": 74.74437627811861,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
@@ -18,23 +18,38 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Sever架設指南.md",
+                    "file": "content/post/PVE 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Sever架設指南"
+                  "title": "PVE 進階設定"
+                }
+              },
+              {
+                "id": "c2d4781e8a7c372e",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/常用指令Windows.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "常用指令Windows"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
-            "id": "0872e5104012ed89",
+            "id": "bdf4659f7aa7cec6",
             "type": "tabs",
-            "dimension": 34.25357873210634,
+            "dimension": 25.255623721881392,
             "children": [
               {
-                "id": "88c0496e02a5f829",
+                "id": "3d3082ee9a5eca6c",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -70,7 +85,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ]
@@ -241,8 +256,11 @@
       "vscode-editor:新建程式碼檔案": false
     }
   },
-  "active": "88c0496e02a5f829",
+  "active": "3d3082ee9a5eca6c",
   "lastOpenFiles": [
+    "content/post/常用指令Windows.md",
+    "DOS.md",
+    "content/post/PVE 進階設定.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/code/moredoc.yaml",
     "content/post/企業拓譜圖架設.md",
@@ -253,7 +271,6 @@
     "content/post/PVE跑AIX.md",
     "content/post/RDP 連線實作.md",
     "content/post/常用指令AIX.md",
-    "content/post/PVE 進階設定.md",
     "content/post/Windows多網路設定.md",
     "static/Pasted image 20260531191753.png",
     "content/post/OpenShift 教學.md",
@@ -280,7 +297,6 @@
     "content/post/新增資料夾",
     "content/post/中文化CAT及綠化.md",
     "content/post/企業大量自動部屬.md",
-    "content/post/企業共享設定.md",
     "static/Pasted image 20260530181126.png",
     "static/Pasted image 20260530180758.png",
     "Untitled",
