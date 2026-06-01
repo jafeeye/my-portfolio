@@ -5,6 +5,8 @@ toc: true
 tags:
   - vmware
 ---
+RVTools：好用Windows管理ESXi虛擬機軟體
+
 ## 常用指令
 ```
 esxcfg-nics -l   //檢查所有網孔
