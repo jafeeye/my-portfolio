@@ -371,6 +371,7 @@ helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --name
 查log
 ```
 kubectl logs illumio-ven-fvd8p -n illumio-system --previous
+
 ```
 
 

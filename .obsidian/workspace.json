@@ -10,17 +10,20 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
+            "dimension": 78.47147470398278,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
                 "type": "leaf",
                 "state": {
-                  "type": "vscode-editor",
+                  "type": "markdown",
                   "state": {
-                    "file": "content/post/code/wsever_opti.ps1"
+                    "file": "content/post/K8s 整理.md",
+                    "mode": "source",
+                    "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "wsever_opti"
+                  "title": "K8s 整理"
                 }
               }
             ]
@@ -28,6 +31,7 @@
           {
             "id": "8514d90fbc802234",
             "type": "tabs",
+            "dimension": 21.52852529601722,
             "children": [
               {
                 "id": "3329fe9b1202c63e",
@@ -131,7 +135,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 236.5
+    "width": 236.5,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -221,7 +226,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 217.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -241,6 +247,15 @@
   },
   "active": "3329fe9b1202c63e",
   "lastOpenFiles": [
+    "content/post/K8s 整理.md",
+    "static/Pasted image 20260602171514.png",
+    "content/post/K8S.md",
+    "content/post/DOS.md",
+    "content/post/illumio K8S.md",
+    "content/post/Session TMOUT.md",
+    "hugo.yaml",
+    "Clippings/AIX - 來張 AIX 證照吧  最終回 - iT 邦幫忙一起幫忙解決難題，拯救 IT 人的一天.md",
+    "Clippings",
     "content/post/code/wsever_opti.ps1",
     "content/post/常用指令Windows.md",
     "content/post/ESXi 安裝與設定.md",
@@ -254,7 +269,6 @@
     "content/post/紅藍隊技術.md",
     "content/post/常用指令macOS.md",
     "content/post/PVE跑AIX.md",
-    "DOS.md",
     "content/post/PVE 進階設定.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/企業拓譜圖架設.md",
@@ -266,11 +280,7 @@
     "content/post/OpenShift 教學.md",
     "().md",
     "content/post/PVE 各系統安裝.md",
-    "content/post/Hyper-V 進階設定.md",
     "static/Pasted image 20260531144500.png",
-    "content/post/homeassisant.md",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/企業虛擬化方案.md",
     "static/Pasted image 20260531143804.png",
     "static/Pasted image 20260531143627.png",
     "static/Pasted image 20260531135722.png",
@@ -280,11 +290,7 @@
     "content/post/code/RunAny_PinObj.ahk",
     "content/post/code",
     "content/post/新增資料夾",
-    "content/post/中文化CAT及綠化.md",
     "static/Pasted image 20260530181126.png",
-    "static/Pasted image 20260530180758.png",
-    "Untitled",
-    "static/Diagram2.svg.xml",
-    "Excalidraw"
+    "Untitled"
   ]
 }
