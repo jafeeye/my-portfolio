@@ -17,3 +17,13 @@ while true; do echo -n "\010"; sleep 240; done &
 # 每240秒印出系統效能數據
 vmstat 240
 ```
+
+
+sshd_config 會出現inactive，防火牆設定問題
+
+TMOUT視窗是直接關閉
+
+
+阻止putty變inactive，Putty視窗右鍵，Change Settings/Connection，在`Secondsbetweenkeepalives (O to turn off)` 改成30
+
+

@@ -70,6 +70,7 @@ psexec
 `psexec [\\\\computer[,computer2[,...] | @file]][-u user [-p psswd]][-n s][-r servicename][-h][-l][-s|-e][-x][-i [session]][-c [-f|-v]][-w directory][-d][-<priority>][-a n,n,...][-verbose] cmd [arguments]`
 **`BgInfo`**
 **`shellrunas /reg [/quiet]`**
+SDelete
 
 RDCMan
 ![](260328-rdcman.png)

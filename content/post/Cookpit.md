@@ -3,6 +3,9 @@ title: cookpti
 toc: true
 date: 2026-05-26
 ---
+## RockyLinux
+官方預設把ppc64鎖死
+
 
 更新系统并安装组件
 ```
@@ -31,6 +34,10 @@ echo "#root" | tee /etc/cockpit/disallowed-users
 > firewall-cmd --add-port=9090/tcp --permanent
 > 
 > firewall-cmd --reload
+
+
+
+
 
 
 

@@ -666,3 +666,12 @@ source /etc/network/interfaces.d/*
 ## PVE 跑非x86
 https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/
 https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/
+
+
+
+## PVE 使用xterm.js
+- CT容器預設開箱即用，不用特別做設定
+VM做法 [官網說明文件](https://pve.proxmox.com/wiki/Serial_Terminal)
+1. qm set 101 -serial0 socket
+2. 編輯grub，加入下面這串，做`update-grub` 或`grub2-mkconfig --output=/boot/grub2/grub.cfg`
+`GRUB_CMDLINE_LINUX="quiet console=tty0 console=ttyS0,115200"`
