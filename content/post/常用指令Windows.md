@@ -57,7 +57,7 @@ telnet
 
 
 ## 第三方
-iperf3
+iperf3. 
 tshark
 ncat -zv 192.168.1.AIX_IP 22
 tcpvcon

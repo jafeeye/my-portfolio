@@ -4,7 +4,7 @@
     "type": "split",
     "children": [
       {
-        "id": "8c2ed0a1a19c26cd",
+        "id": "98a7da7990d55a21",
         "type": "split",
         "children": [
           {
@@ -15,39 +15,39 @@
                 "id": "01a63e3fdae48f92",
                 "type": "leaf",
                 "state": {
-                  "type": "markdown",
+                  "type": "vscode-editor",
                   "state": {
-                    "file": "content/post/常用指令Windows.md",
-                    "mode": "source",
-                    "source": false
+                    "file": "content/post/code/wsever_opti.ps1"
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令Windows"
+                  "title": "wsever_opti"
                 }
               }
             ]
           },
           {
-            "id": "c2a844cc7e954b37",
+            "id": "8514d90fbc802234",
             "type": "tabs",
             "children": [
               {
-                "id": "4cde01f1c5ed1659",
+                "id": "3329fe9b1202c63e",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -68,7 +68,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -97,7 +97,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -152,7 +152,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "Outline"
             }
           },
           {
@@ -225,28 +225,28 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "vscode-editor:Create Code File": false,
       "terminal:Open terminal": false,
-      "omnisearch:Omnisearch": false,
-      "vscode-editor:新建程式碼檔案": false
+      "omnisearch:Omnisearch": false
     }
   },
-  "active": "4cde01f1c5ed1659",
+  "active": "3329fe9b1202c63e",
   "lastOpenFiles": [
+    "content/post/code/wsever_opti.ps1",
     "content/post/常用指令Windows.md",
     "content/post/ESXi 安裝與設定.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/各式發行版整理.md",
     "content/post/code/heidmall.yaml",
-    "content/post/code/wsever_opti.ps1",
     "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/code/moredoc.yaml",
     "content/post/常用指令AIX.md",
