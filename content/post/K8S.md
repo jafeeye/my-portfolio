@@ -338,9 +338,12 @@ kubectl -n illumio-system create configmap root-ca-config --from-file=/tmp/illum
 
 ```
 kubectl create configmap root-ca-config -n illumio-system \ --from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \ --from-file=server.crt=/tmp/illumio_ca.pem \ --dry-run=client -o yaml | kubectl apply -f -
+
+kubectl create configmap root-ca-config -n illumio-system \
+--from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \
+--from-file=server.crt=/tmp/illumio_ca.pem \
+--dry-run=client -o yaml | kubectl apply -f -
 ```
-
-
 
 
 連線需要解析hostname,K8s預設用CoreDNS,在設定檔更改,改 vi /etc/hosts沒用
@@ -388,9 +391,6 @@ curl -4 -v https://illumio-kevin.bd1.dev:8443
 ```
 kubectl rollout restart deployment illumio-kubelink -n illumio-system
 ```
-
-
-
 
 
 重新配對
@@ -477,3 +477,6 @@ rm -rf /etc/kubernetes/pki/
 ```
 rm -rf $HOME/.kube/
 ```
+
+
+
