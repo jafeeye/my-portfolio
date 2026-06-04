@@ -337,8 +337,6 @@ kubectl -n illumio-system create configmap root-ca-config --from-file=/tmp/illum
 憑證改檔名
 
 ```
-kubectl create configmap root-ca-config -n illumio-system \ --from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \ --from-file=server.crt=/tmp/illumio_ca.pem \ --dry-run=client -o yaml | kubectl apply -f -
-
 kubectl create configmap root-ca-config -n illumio-system \
 --from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \
 --from-file=server.crt=/tmp/illumio_ca.pem \
