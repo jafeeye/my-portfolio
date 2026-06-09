@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 67.88617886178862,
+            "dimension": 79.67479674796748,
             "children": [
               {
                 "id": "01a63e3fdae48f92",
@@ -32,12 +32,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Session TMOUT.md",
+                    "file": "content/post/Cookpit.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Session TMOUT"
+                  "title": "Cookpit"
                 }
               }
             ],
@@ -46,50 +46,8 @@
           {
             "id": "8514d90fbc802234",
             "type": "tabs",
-            "dimension": 32.113821138211385,
+            "dimension": 20.32520325203252,
             "children": [
-              {
-                "id": "3329fe9b1202c63e",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "終端：zsh"
-                }
-              },
               {
                 "id": "3936f619bf0ccfa2",
                 "type": "leaf",
@@ -130,8 +88,7 @@
                   "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "horizontal"
@@ -302,27 +259,31 @@
   },
   "active": "3936f619bf0ccfa2",
   "lastOpenFiles": [
+    "content/post/Cookpit.md",
+    "content/post/incus.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/LXC 容器.md",
+    "content/post/RDP 連線實作.md",
+    "content/post/PVE跑AIX.md",
+    "content/post/CML 教學.md",
+    "content/post/CAT 補助翻譯.md",
+    "content/post/常用指令linux.md",
+    "content/post/常用指令AIX.md",
+    "content/post/企業虛擬化方案.md",
     "content/post/Session TMOUT.md",
     "content/post/K8S.md",
     "content/post/K8s 整理.md",
-    "content/post/常用指令linux.md",
     "static/Pasted image 20260609210153.png",
     "static/Pasted image 20260609205719.png",
     "static/Pasted image 20260609205359.png",
     "static/Pasted image 20260609205205.png",
-    "content/post/常用指令AIX.md",
     "content/post/2026 家用Sever架設指南.md",
     "static/Pasted image 20260603092433.png",
-    "content/post/Cookpit.md",
-    "content/post/PVE跑AIX.md",
-    "content/post/RDP 連線實作.md",
     "content/post/常用指令Windows.md",
     "content/post/企業大量自動部屬.md",
-    "content/post/PVE 進階設定.md",
     "content/post/PVE 各系統安裝.md",
     "content/post/常用指令DOS.md",
     "content/post/企業拓譜圖架設.md",
-    "content/post/企業虛擬化方案.md",
     "static/Pasted image 20260602171514.png",
     "content/post/illumio K8S.md",
     "hugo.yaml",
@@ -336,9 +297,6 @@
     "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/code/moredoc.yaml",
     "content/post/紅藍隊技術.md",
-    "content/post/常用指令macOS.md",
-    "content/post/可觀測性.md",
-    "content/post/程式語言/各發行版區別.md",
     "static/Pasted image 20260531191753.png",
     "static/Pasted image 20260531144500.png",
     "static/Pasted image 20260531143804.png",
