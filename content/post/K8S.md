@@ -29,6 +29,9 @@ rm -f /etc/machine-id ;
 rm -f /var/lib/dbus/machine-id ;
 systemd-machine-id-setup ;
 ```
+修改3台hostname
+
+
 
 1. 關閉swap
 ```
@@ -111,7 +114,7 @@ sudo systemctl enable --now kubelet
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=192.168.8.83
 
 #Cilium 預設的Pod CIDR 10.244.0.0/16
-sudo kubeadm init --pod-network-cidr=P --apiserver-advertise-address=192.168.8.83
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=172.16.7.199
 ```
 
 8. Master Node 設定kubeconfig 權限,並加入其他2台Worker主機
@@ -369,20 +372,24 @@ helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --name
 ```
 
 
-查log
-```
-kubectl logs illumio-ven-fvd8p -n illumio-system --previous
-
-```
-
-
-
-檢查illumio pods 狀態
+檢查illumio 狀態
 ```
 kubectl get pods -n illumio-system -w
+
+
+## 進去k8s的bash檢查狀態，確認agent ven platform都在
+kubectl exec -it illumio-ven-9z7nv -n illumio-system -- /bin/bash
+ps -ef | grep -E "agent|ven|platform"
+
+## 查illumio log
+kubectl logs illumio-ven-fvd8p -n illumio-system --previous
+
 kubectl scale deployment/illumio-kubelink --replicas=0 -n illumio-system
 kubectl scale deployment/illumio-kubelink --replicas=1 -n illumio-system
 curl -4 -v https://illumio-kevin.bd1.dev:8443
+
+
+
 ```
 
 重啟pod
@@ -405,9 +412,71 @@ kubectl rollout restart ds -n illumio-system
 
 ```
 
-
-
 Felix configuration 用於iptable
+
+
+## ingress controller
+
+**外部 Client** $\rightarrow$ **Ingress Controller Service** $\rightarrow$ **Ingress 路由規則** $\rightarrow$ **應用程式 Service** $\rightarrow$ **應用程式 Pod**
+
+具體關聯如下：
+1. **入口層（`my-nginx-controller.yaml`）**：
+    - 它是一個 `type: LoadBalancer` 的 Service（在沒有雲端負載均衡器的地端環境，會退化成透過 `nodePort` 30184 和 32394 監聽）。
+    - **關聯**：它的 `selector` 指向了 Nginx Ingress Controller 的 Pod，作為整個叢集接收 HTTP (80) / HTTPS (443) 流量的唯一總閘門。
+2. **路由層（`my-ingress.yaml`）**：
+    - 這是路由大腦。它定義了當有人從外部訪問 `myapp.example.com` 且路徑為 `/` 時，該把流量帶去哪裡。
+    - **關聯**：
+        - 透過 `ingressClassName: nginx` 告訴上述的 Nginx Ingress Controller 來認領並執行這條規則。
+        - 透過 `backend.service.name: my-web-service` 連結到您的後端應用程式。
+3. **應用層（`test-app.yaml`）**：
+    - **`Service (my-web-service)`**：名稱剛好對應 Ingress 寫的後端名稱，它負責把來自 Ingress Controller 的流量，分發給後端的 Pod。
+    - **`Deployment (my-web-deployment)`**：實際運行 `nginx:alpine` 網頁程式的 Pod（Label 為 `app: my-web-app`）。
+
+my-nginx-controller.yaml
+```
+
+
+
+
+
+
+
+```
+
+
+
+
+
+my-ingress.yaml
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  namespace: default
+  annotations:
+    # 指定使用 nginx 作為 ingress controller
+    kubernetes.io/ingress.class: "nginx"
+    # 選填：開啟 SSL 強制重新導向
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: myapp.example.com  # 你的網域
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-web-service # 後端服務名稱
+            port:
+              number: 80         # 後端服務連接埠
+```
+
+
+
+
 
 
 

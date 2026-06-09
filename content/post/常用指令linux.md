@@ -57,6 +57,7 @@ echo "192.168.8.58  kevin.bdx.dev" >> /etc/hosts
 ～/.表示用戶目錄下隱藏資料夾 EX:～/.資料夾
 ls -l
 lsblk
+cp -r . /var/tmp/ ：複製當前資料夾到tmp
 
 
 ## 路徑
@@ -111,13 +112,21 @@ nano
 Option+X (Alt+X) 隱藏選單
 ```
 
+
+`^[](200~` 貼上夾帶模式 `bind 'set enable-bracketed-paste off'`
+
+
 ### Vi
 顯示行數 `set nu`
 
 
 cd wewe/
-`
 
+
+## 亂數
+```
+openssl rand -base64 16
+```
 
 ## 環境變數
 ### 啟用zsh
