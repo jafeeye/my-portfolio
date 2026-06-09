@@ -21,37 +21,29 @@ ArgoCD
 
 ![](Diagram2.svg)
 
-
 ## 安裝Master,Worker1,Worker2
-安裝前確認是否是大量複製VM範本,先修改hostname及machine-id
+先修改3台hostname
 ```
+# 0.初始化machineid
 rm -f /etc/machine-id ;
 rm -f /var/lib/dbus/machine-id ;
 systemd-machine-id-setup ;
-```
-修改3台hostname
 
-
-
-1. 關閉swap
-```
+# 1. 關閉swap
 sudo swapoff -a 
-# 永久關閉：編輯 /etc/fstab，將有 swap 的那一行用 # 註解掉 
+## 永久關閉：編輯 /etc/fstab，將有 swap 的那一行用 # 註解掉 
 sudo sed -i '/swap/d' /etc/fstab
-```
-2. 調整 SELinux 與 防火牆
-```
-# 將 SELinux 調整為 Permissive (寬容模式)
+
+# 2. 調整 SELinux 與 防火牆
+## 將 SELinux 調整為 Permissive (寬容模式)
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-
-# 處理防火牆 (為了測試順利，先關閉 firewalld；生產環境則需逐一放行 Port)
+## 處理防火牆 (為了測試順利，先關閉 firewalld；生產環境則需逐一放行 Port)
 sudo systemctl stop firewalld
 sudo systemctl disable firewalld
-```
-3. 啟用 Linux 核心網路模組與轉發
-```
-# 載入模組
+
+# 3. 啟用 Linux 核心網路模組與轉發
+## 載入模組
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -59,38 +51,34 @@ EOF
 
 sudo modprobe overlay
 sudo modprobe br_netfilter
-
-# 設定核心參數
+## 設定核心參數
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
-
-# 套用參數
+## 套用參數
 sudo sysctl --system
-```
-4. 安裝 Containerd (Docker 官方源)
-```
-# 新增 Docker CE 軟體源
+
+# 4. 安裝 Containerd (Docker 官方源)
+## 新增 Docker CE 軟體源
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-# 安裝 containerd
+## 安裝 containerd
 sudo dnf install -y containerd.io
 
-# 產生並修正設定檔 (啟用 SystemdCgroup)
+## 產生並修正設定檔 (啟用 SystemdCgroup)
 sudo mkdir -p /etc/containerd
 containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 
-# 啟動並設定開機自啟
+## 啟動並設定開機自啟
 sudo systemctl daemon-reload
 sudo systemctl restart containerd
 sudo systemctl enable containerd
-```
-5. 安裝主要元件 kubeadm, kubelet, kubectl
-```
-# 新增 K8S YUM 軟體源 (以 v1.30 為例)
+
+# 5. 安裝主要元件 kubeadm, kubelet, kubectl
+## 新增 K8S YUM 軟體源 (以 v1.30 為例)
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -101,11 +89,12 @@ gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
 exclude=kubelet kubeadm kubectl
 EOF
 
-# 安裝套件 (使用 --disableexcludes 允許安裝被排除在外的主程式)
+## 安裝套件 (使用 --disableexcludes 允許安裝被排除在外的主程式)
 sudo dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
-# 啟動 kubelet 開機自啟 (此時它會不斷重啟是正常的，直到 kubeadm init 完成)
+## 啟動 kubelet 開機自啟 (此時它會不斷重啟是正常的，直到 kubeadm init 完成)
 sudo systemctl enable --now kubelet
+
 ```
 
 7. 初始化Master Node,注意後面網路元件會影響起始CIDR,因為這邊是用Cilium就用那條,此時會產生kubeadm join -- token 這個就是在網路元件安裝完在貼去另外兩台Worker
@@ -387,8 +376,6 @@ kubectl logs illumio-ven-fvd8p -n illumio-system --previous
 kubectl scale deployment/illumio-kubelink --replicas=0 -n illumio-system
 kubectl scale deployment/illumio-kubelink --replicas=1 -n illumio-system
 curl -4 -v https://illumio-kevin.bd1.dev:8443
-
-
 
 ```
 
