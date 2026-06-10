@@ -84,7 +84,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -177,7 +177,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/radius/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -187,7 +186,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "index 的反向連結"
+              "title": "反向連結"
             }
           },
           {
@@ -196,12 +195,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/post/radius/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "index 的對外連結"
+              "title": "對外連結"
             }
           },
           {
@@ -233,7 +231,8 @@
               "title": "所有屬性"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
