@@ -111,3 +111,40 @@ kubectl edit cm cilium-config -n kube-system
 kubectl rollout restart deployment cilium-operator -n kube-system kubectl rollout restart daemonset cilium -n kube-system
 
 ```
+
+
+System Pods 系統組件
+
+|**元件名稱 (System Pod)**|**預設角色與架構定位**|
+|---|---|
+|**`kube-apiserver`**|K8s 的唯一入口。所有指令（包含你的 `kubectl`、Illumio 的 Kubelink）都要跟它通訊。|
+|**`etcd`**|K8s 的資料庫。存放整個叢集所有的狀態與密碼（預設是明文未加密的 key-value 儲存）。|
+|**`kube-scheduler`**|負責看哪台 Worker 節點還有空位，把新 Pod 塞過去。|
+|**`kube-controller-manager`**|負責維持叢集狀態（例如發現 Pod 死掉，立刻在別處拉起一隻新的）。|
+|**`coredns`**|叢集內部的 DNS 伺服器。負責幫 Pod 解析服務名稱（例如 `my-db.default.svc.cluster.local`）。|
+|**`kube-proxy`**|負責維護每台 Node 上的 iptables 規則。當流量要找某個 K8s Service 時，由它負責把流量均分導向後端的 Pod。|
+
+Default Namespace
+```
+kubectl delete --all deployment 
+kubectl delete --all service 
+kubectl delete --all serviceaccount 
+kubectl delete --all virtualservice 
+kubectl delete --all gateway 
+kubectl delete --all destinationrule
+```
+
+
+## 架構
+![](Pasted%20image%2020260610102631.png)
+
+### Service Mesh 架構 (MicroServices)
+Cilium+Isito
+- **Cilium 做底層網路（Layer 3/4）：** Cilium 利用 Linux 核心的 **eBPF 技術**，讓 Pod 與 Pod 之間的 IP 互連速度達到極致（因為它強行跳過了傳統 Linux 複雜的 iptables 協議棧）。它負責管好基本連線，以及基於 IP/Port 的簡單防火牆規則。
+- **Istio 做上層治理（Layer 7）：** 當流量需要做進階處理（例如：HTTP 路由、金絲雀部署、檢查 API 路徑、雙向 mTLS 加密）時，Cilium 就把流量交給 Istio 塞在 Pod 裡面的 **Sidecar Proxy (Envoy)** 去處理。
+
+### Containerized Monolith 架構
+
+istio 現在新版有ztunnel 做 L4（Ambient），在 Pod 之間跑 **mTLS 強制加密**
+![](Pasted%20image%2020260610172202.png)
+

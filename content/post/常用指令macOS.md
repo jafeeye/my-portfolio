@@ -28,6 +28,7 @@ macOS 家目錄 `/user/使用者名稱`
 | Finder到指定資料夾      | Cmd + Shift + G         |
 
 
+
 常用快速鍵  
 - Option+Cmd+drag make alias
 - Cmd+Shift+. hide/show file

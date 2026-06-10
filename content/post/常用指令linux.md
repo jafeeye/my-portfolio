@@ -28,8 +28,12 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 - who ,who -H ,w,id
 4. 管理帳戶
 - 建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
-- 使用者加入sudo `usermod -aG wheel <username>`
 - 列出本機所有帳戶 `cat /etc/passwd`
+
+方法1 sudo visudo
+方法2 加入sudoers : sudo visudo -f /etc/sudoers.d/jack jack ALL=(ALL:ALL) ALL (sudoers.d個別設定檔)
+方法3 使用者加入sudo `usermod -aG wheel <username>` (RedHat)
+
 ## 檔案資料夾
 1. 檔案權限
 - 決定檔案執行權限 chmod 770 <資料夾>
@@ -69,6 +73,7 @@ ls -l
 /var/log
     /tmp
     /lock
+    /liｂ        var系統變動資料
 /tmp
 /sbin
 /lib
