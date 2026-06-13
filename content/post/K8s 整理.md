@@ -148,3 +148,52 @@ Cilium+Isito
 istio 現在新版有ztunnel 做 L4（Ambient），在 Pod 之間跑 **mTLS 強制加密**
 ![](Pasted%20image%2020260610172202.png)
 
+## DS nginx
+nano test1-nginx.yaml
+```
+apiVersion: apps/v1        #【修正】DaemonSet 的標準 apiVersion 是 apps/v1
+kind: DaemonSet            #【修改】從 Deployment 改為 DaemonSet
+metadata:
+  name: test1-web
+  namespace: default
+  labels:
+    app: test              # 用於管理這個 DaemonSet 物件本體的標籤
+spec:
+  selector:
+    matchLabels:
+      app: test            # 精準咬住下方 template.metadata.labels 中的 app 標籤
+  template:
+    metadata:
+      labels:
+        app: test          # 用於與下面的 Service 聯動
+        role: front-end    # 讓 Kubelink 抓取並對應到 Illumio 身份標籤
+      annotations:
+        # Cilium 指派靜態 IP 設定（如需啟用可將前方的 # 號拿掉）
+        # cni.cilium.io/ipam-static-ip: "10.244.1.5"
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+---
+# 下面保持原本的 NodePort Service 設定，確保完美咬住 DaemonSet 產生的每一個 Pod
+apiVersion: v1
+kind: Service
+metadata:
+  name: test1-service
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: test          # 精準對齊上面 Pod 模板中的 labels.app
+  ports:
+  - port: 80           # Service 內部監聽的連接埠
+    targetPort: 80     # 轉發給 Pod 的連接埠
+    nodePort: 31002    # 強制指定對外實體節點的連接埠為 31002
+```
+
+移除服務 `kubectl delete -f test1-nginx.yaml`
+編輯服務 ` kubectl edit ds test1-web -n default`
+
+查看特定pod `kubectl get po test-web -o wide`

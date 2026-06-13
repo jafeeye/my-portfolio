@@ -29,10 +29,10 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 4. 管理帳戶
 - 建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
 - 列出本機所有帳戶 `cat /etc/passwd`
-
 方法1 sudo visudo
 方法2 加入sudoers : sudo visudo -f /etc/sudoers.d/jack jack ALL=(ALL:ALL) ALL (sudoers.d個別設定檔)
 方法3 使用者加入sudo `usermod -aG wheel <username>` (RedHat)
+5. 強制登出 `loginctl terminate-user bruce`
 
 ## 檔案資料夾
 1. 檔案權限
@@ -86,8 +86,9 @@ ls -l
 /etc
 /dev
 /bin ：系統執行檔
-/opt : 存放第3方軟體地方
-/proc
+/opt : 存放第3方軟體
+/proc : 類似像硬體資訊參數
+/mnt
 ```
 
 ## 終端機
@@ -156,6 +157,20 @@ zstyle ':completion:*' menu select
 source ~/.zshrc      //   重新讀取設定檔
 ```
 4. 要快速顯示檔案輸入cd，tab兩次出現資料夾，再按tab做選擇
+
+### 改Chrome 啟動鑰匙圈
+
+```
+sudo bash -c 'echo "export CHROMIUM_USER_FLAGS=\"--password-store=basic\"" > /etc/profile.d/chromium-custom.sh'
+```
+或是
+```
+#建立.sh 
+sudo vi /etc/profile.d/chromium-custom.sh
+# 寫入以下內容存檔
+export CHROMIUM_USER_FLAGS="--password-store=basic"
+```
+
 
 ## 安裝套件
 yum RHEL7之前,dnf RHEL8之後
