@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 80,
+            "dimension": 73.6318407960199,
             "children": [
               {
                 "id": "0cb091eb8598bc8a",
@@ -40,12 +40,13 @@
                   "title": "illumio 除錯"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
             "id": "8514d90fbc802234",
             "type": "tabs",
-            "dimension": 20,
+            "dimension": 26.368159203980102,
             "children": [
               {
                 "id": "3936f619bf0ccfa2",
@@ -297,9 +298,9 @@
   },
   "active": "3936f619bf0ccfa2",
   "lastOpenFiles": [
+    "content/post/illumio 除錯.md",
     "content/post/常用指令AIX.md",
     "content/post/AIX 安裝.md",
-    "content/post/illumio 除錯.md",
     "content/post/常用指令DOS.md",
     "content/post/常用指令Windows.md",
     "content/post/Cockpit.md",
