@@ -3,58 +3,33 @@ title: 常用指令-AIX
 toc: true
 date: 2026-05-26
 ---
-Ctrl+H 往後刪除文字
-
-AIX Toolbox for Linux Applications
 cd -
 ls -l
 ipfstat -io
 
-- 舊版 AIX（如 AIX 7.1 / 7.2 早期）支援 **`yum`**。
-- 新版 AIX（如 AIX 7.2 晚期、AIX 7.3）全面改用 **`dnf`**（背後跑的是 Python 3 體系）。
-
-AIX Toolbox for Linux Applications
-
-
 顯示目前任務(迴圈)
 while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; done
 方法2：nmon -C <程式名稱>，進入畫面再按t
-
-
-快速鍵
-set -o emacs
-Ctrl+H 對應到Backspace
-Ctrl+B/F 游標往前 / 往後
-`Ctrl` + `A` ：游標直接**到最前面（開頭）**。
-`Ctrl` + `E` ：游標直接到最後面（結尾）**。
-`Ctrl` + `K`
-Ctrl+P/N 上一條/下一條指令
-
-
-一直跳出系統日誌
-`stty eof ^D`
-
-
-
-
-
+## 快速鍵
 set -o emacs 模式
 
-|**動作**|**現代鍵盤按鍵**|**Emacs 模式標準按鍵 (完全不會噴亂碼)**|**記憶口訣**|
-|---|---|---|---|
-|**往回刪除一格**|`Backspace`|**`Ctrl + H`**|取代傳統退格鍵|
-|**游標往左移一格**|`←` (左方向鍵)|**`Ctrl + B`**|**B**ackward (後退)|
-|**游標往右移一格**|`→` (右方向鍵)|**`Ctrl + F`**|**F**orward (前進)|
-|**移到指令最前面**|`Home`|**`Ctrl + A`**|**A**head (最前)|
-|**移到指令最後面**|`End`|**`Ctrl + E`**|**E**nd (最後)|
-|**清除游標後整行**|_無_|**`Ctrl + K`**|**K**ill (殺掉後半段)|
-|**往後刪除一整個字**|_無_|**`Esc` 放開再按 `Backspace`**|批次刪除|
-歷史指令搜尋（取代上、下方向鍵）
-
+| **動作**       | **現代鍵盤按鍵**  | **Emacs 模式標準按鍵 (完全不會噴亂碼)** | **記憶口訣**          |
+| ------------ | ----------- | -------------------------- | ----------------- |
+| **往回刪除一格**   | `Backspace` | **`Ctrl + H`**             | 取代傳統退格鍵           |
+| **游標往左移一格**  | `←` (左方向鍵)  | **`Ctrl + B`**             | **B**ackward (後退) |
+| **游標往右移一格**  | `→` (右方向鍵)  | **`Ctrl + F`**             | **F**orward (前進)  |
+| **移到指令最前面**  | `Home`      | **`Ctrl + A`**             | **A**head (最前)    |
+| **移到指令最後面**  | `End`       | **`Ctrl + E`**             | **E**nd (最後)      |
+| **清除游標後整行**  | _無_         | **`Ctrl + K`**             | **K**ill (殺掉後半段)  |
+| **往後刪除一整個字** | _無_         | **`Esc` 放開再按 `Backspace`** | 批次刪除              |
 在 AIX 的 Emacs 模式下，想找上一條敲過的指令，按「上方向鍵 `↑`」一定會噴亂碼（通常會噴 `^[OA` 這種怪字）。請改用這個極致優雅的盲操按法：
 - **找上一條指令（Up）：** 按 **`Ctrl + P`**（**P**revious，上一條）
 - **找下一條指令（Down）：** 按 **`Ctrl + N`**（**N**ext，下一條）
 - **關鍵字搜尋歷史（Reverse Search）：** 按 **`Ctrl + R`**，然後直接輸入你記得的指令關鍵字（例如輸入 `ifconfig`）
+
+
+`stty eof ^D` 一直跳出系統日誌
+歷史指令搜尋（取代上、下方向鍵）
 
 ## 設定
 nmon 等待時間很長,輸入oslevel -s
@@ -64,8 +39,6 @@ stty erase 或使用set -o vi
 安裝OpenSSH (預設無安裝)
 lslpp -l|grep open
 smit install 
-
-
 
 驗證
 ssh 127.0.0.1
@@ -118,7 +91,6 @@ dd if=/dev/urandom of=/tmp/test.raw bs=1M count=2048
 
 列出資料夾下面檔案：在打路徑打到一半時，接著按`Esc`+`=` 
 ![](Pasted%20image%2020260531135413.png)
-
 ## LVM
 ```
 #查看vg大小，從FreePPs可以知道LVM剩多少空間
@@ -130,17 +102,10 @@ chfs -a size=+2G /tmp
 ![](Pasted%20image%2020260531135722.png)
 ## 安裝軟體
 出現db4 error：rpm --rebuilddb
+AIX Toolbox for Linux Applications
 
-
-
-
-
-
-
-
-
-
-
+- 舊版 AIX（如 AIX 7.1 / 7.2 早期）支援 **`yum`**。
+- 新版 AIX（如 AIX 7.2 晚期、AIX 7.3）全面改用 **`dnf`**（背後跑的是 Python 3 體系）。
 
 
 ## 參考資料
