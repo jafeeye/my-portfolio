@@ -18,8 +18,6 @@ hostname做restart 就會同步過去
 
 
 
-
-
 ## Rocky Linux
 使用Rocky Linux 9 LXC 安裝
 ```
@@ -80,8 +78,6 @@ systemctl enable rc-local.service
 systemctl start rc-local.service
 ```
 
-
-
 ## 查看nft
 ```
 # 看有多少個清單
@@ -93,8 +89,6 @@ nft delete table inet ILO-FILTER-X
 
 ```
  
-
-
 
 ## nc 模擬流量
 ```
