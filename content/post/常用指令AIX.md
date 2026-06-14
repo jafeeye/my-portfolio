@@ -56,65 +56,6 @@ set -o emacs 模式
 - **找下一條指令（Down）：** 按 **`Ctrl + N`**（**N**ext，下一條）
 - **關鍵字搜尋歷史（Reverse Search）：** 按 **`Ctrl + R`**，然後直接輸入你記得的指令關鍵字（例如輸入 `ifconfig`）
 
-## 安裝AIX
-
-AIX 7.1 qemu Power7-10
-AIX 7.2 qemu Power7,Power8
-AIX 7.3
-```
-## windows 增加環境變數
-qemu-img.exe create -f qcow2 D:\vm\aix71\hdisk0.qcow2 20G
-qemu-img.exe create -f qcow2 D:\vm\aix71\hdisk1.qcow2 20G
-
-## qemu 安裝
-qemu-system-ppc64.exe `
--cpu POWER7 `
--machine pseries `
--smp 2 `
--m 3g `
--serial mon:stdio `
--nographic `
--drive file=D:\vm\aix71\hdisk0.qcow2,if=none,id=drive-virtio-disk0 `
--device scsi-hd,drive=drive-virtio-disk0 `
--drive file=D:\vm\aix71\hdisk1.qcow2,if=none,id=drive-virtio-disk1 `
--device scsi-hd,drive=drive-virtio-disk1 `
--cdrom D:\aix_7200-04-02-2027_1of2_072020.iso `
--prom-env "boot-command=boot cdrom:" `
--prom-env "input-device=/vdevice/vty@71000000" `
--prom-env "output-device=/vdevice/vty@71000000"
-
-```
-
-
-0c50 qemu磁碟大小也不會變化
-
-安裝完後，要移除iso檔案從硬碟啟動
-```powershell
-qemu-system-ppc64.exe `
--cpu POWER7 `
--machine pseries `
--smp 2 `
--m 3g `
--serial mon:stdio `
--nographic `
--drive file=D:\vm\aix71\hdisk0.qcow2,if=none,id=drive-virtio-disk0 `
--device scsi-hd,drive=drive-virtio-disk0 `
--drive file=D:\vm\aix71\hdisk1.qcow2,if=none,id=drive-virtio-disk1 `
--device scsi-hd,drive=drive-virtio-disk1 `
--cdrom D:\aix_7200-04-02-2027_1of2_072020.iso `
--prom-env "boot-command=boot disk:" `
--prom-env "input-device=/vdevice/vty@71000000" `
--prom-env "output-device=/vdevice/vty@71000000"
-```
-
-打通虛擬機跟主機連線，先在Windows安裝OpenVPN執行檔選項的tap網卡，並把tap網卡改成tap0，啟動腳本下面加上這串
-```
--nic tap,ifname=tap0
-```
-
-
-
-
 ## 設定
 nmon 等待時間很長,輸入oslevel -s
 stty erase 或使用set -o vi
@@ -138,7 +79,7 @@ smit mtcpip
 
 快速方法
 lsdev  -Cc if
-ifconfig en0 192.168.8.65 up
+ifconfig en0 192.168.8.75 up
 ifconfig -a 查看網卡IP
 netstat -rn 看路由表
 
@@ -187,9 +128,6 @@ lsvg rootvg
 chfs -a size=+2G /tmp
 ```
 ![](Pasted%20image%2020260531135722.png)
-
-
-
 ## 安裝軟體
 出現db4 error：rpm --rebuilddb
 

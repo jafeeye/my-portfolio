@@ -14,6 +14,7 @@ while($true) {
 ```
 
 Linux 防遠端登出
+ClientAliveInterval 代表主動權在Server身上
 export TMOUT=0，效果是時間到Putty直接關閉視窗
 sshd_config 設定逾時登出或防火牆設定問題，Putty會出現inactive，
 
@@ -29,7 +30,6 @@ vmstat 240
 ```
 
 
-ClientAliveInterval 代表主動權在Server身上
 
 
 

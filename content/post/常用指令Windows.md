@@ -6,17 +6,16 @@ toc: true
 ## 前言
 Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除錯及呼叫相關功能  
 
-1. `msiexec /i xxxx.msi /l*v install.log` 在安裝msi在執行目錄產生log檔除錯
-2. `gpupdate /force /target:computer /wait:0` 套本機原則
-3. `rsop.msc` 顯示本機原則結果
-4. 產生原則網頁 `gpresult /h result.html && start .\\result.html`
-5. 憑證儲存檢視 `cmdkey /list` `cmdkey /add:192.168.1.100 /user:帳號 /pass:密碼`
-6. 顯示訊息小視窗 `msg * 我是訊息` `msg /server:127.0.0.1 * 訊息`
-7. 換顏色 `color a`
-8. 產生網址QRCode `curl [qrenco.de/https://www.google.com.tw](<http://qrenco.de/https://www.google.com.tw>)`
-9. 出現歷史指令 `F7`
-10. 暫時alias `doskey ps=powershell,再輸入ps`
-11. 開啟磁碟計數功能 `diskperf -y`
+1. `gpupdate /force /target:computer /wait:0` 套本機原則
+2. `rsop.msc` 顯示本機原則結果
+3. 產生原則網頁 `gpresult /h result.html && start .\\result.html`
+4. 憑證儲存檢視 `cmdkey /list` `cmdkey /add:192.168.1.100 /user:帳號 /pass:密碼`
+5. 顯示訊息小視窗 `msg * 我是訊息` `msg /server:127.0.0.1 * 訊息`
+6. 換顏色 `color a`
+7. 產生網址QRCode `curl [qrenco.de/https://www.google.com.tw](<http://qrenco.de/https://www.google.com.tw>)`
+8. 出現歷史指令 `F7`
+9. 暫時alias `doskey ps=powershell,再輸入ps`
+10. 開啟磁碟計數功能 `diskperf -y`
 
 ## 系統元件
 - 安全移除裝置 `control hotplug.dll`
@@ -39,9 +38,37 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 - winget install Microsoft.Coreutils
 - choco
 - 換使用者權限 `runas /user:pin cmd` `runas /user:administrator cmd`
+- `msiexec /i xxxx.msi /l*v install.log` 在安裝msi在執行目錄產生log檔除錯
 ## WS相關
 - sconfig
 - `Add-WindowsCapability -Online -Name "ServerCore.AppCompatibility~~~~0.0.1.0"`
+- 安裝 OpenSSH Server
+```
+# 1. 安裝 OpenSSH Server 服務
+Add-WindowsCapability -Online -Name "OpenSSH.Server~~~~0.0.1.0"
+# 2. 將 OpenSSH 服務設定為「開機自動啟動」並立刻執行
+Set-Service -Name sshd -StartupType 'Automatic'
+Start-Service -Name sshd
+# 3. 確保 Windows 防火牆已自動放行 TCP Port 22
+Get-NetFirewallRule -Name *ssh*
+```
+- 寫入檔案
+```
+# 跟linux不一樣不能有雙引號
+echo 192.168.1.1 test.dev >> c:\windows\system32\drivers\etc\hosts 
+```
+- 改hostname
+```
+Rename-Computer -NewName "My-WinServer" -Force
+查電腦名稱
+hostname
+```
+- 資料夾加入環境變數
+```
+# 1. 抓取目前的 Path，並直接在後面用分號「+」上你的新路徑 
+$env:Path += ";C:\Your\Tool\Path" 
+# 2. 把這個疊加過後的結果，直接一巴掌拍進系統登錄表（永久生效） [Environment]::SetEnvironmentVariable("Path", $env:Path, "Machine")
+```
 
 ## 檔案資料夾
 - 改檔名：ren <檔案路徑+檔名><新檔名>

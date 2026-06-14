@@ -10,57 +10,57 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 75.97911227154047,
+            "dimension": 80,
             "children": [
-              {
-                "id": "a1d910d57aa4872d",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/常用指令linux.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "常用指令linux"
-                }
-              },
               {
                 "id": "1e5acf2231a877ca",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/K8S.md",
-                    "mode": "source",
+                    "file": "content/post/AIX 安裝.md",
+                    "mode": "preview",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "K8S"
+                  "title": "AIX 安裝"
                 }
               },
               {
-                "id": "75540346351e5a1d",
+                "id": "0cb091eb8598bc8a",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/K8s 整理.md",
+                    "file": "content/post/常用指令AIX.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "K8s 整理"
+                  "title": "常用指令AIX"
+                }
+              },
+              {
+                "id": "93a420257f94f63e",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/illumio 除錯.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "illumio 除錯"
                 }
               }
             ],
-            "currentTab": 1
+            "currentTab": 2
           },
           {
             "id": "8514d90fbc802234",
             "type": "tabs",
-            "dimension": 24.02088772845953,
+            "dimension": 20,
             "children": [
               {
                 "id": "3936f619bf0ccfa2",
@@ -99,84 +99,10 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: cmd"
-                }
-              },
-              {
-                "id": "af53f540dbdf9834",
-                "type": "leaf",
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "followTheme": true,
-                        "name": "",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "developerConsole"
-                      },
-                      "serial": null
-                    }
-                  },
-                  "icon": "terminal",
-                  "title": "Terminal: Developer console"
-                }
-              },
-              {
-                "id": "bdde83ecc8d4bd73",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
-            ],
-            "currentTab": 2
+            ]
           }
         ],
         "direction": "horizontal"
@@ -202,7 +128,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -236,8 +162,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 307.5110321044922,
-    "collapsed": true
+    "width": 223.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -253,13 +178,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/K8S.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of K8S"
+              "title": "大綱"
             }
           },
           {
@@ -333,59 +257,98 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "vscode-editor:Create Code File": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "vscode-editor:新建程式碼檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "1e5acf2231a877ca",
+  "floating": {
+    "id": "725e0956e1e27ad8",
+    "type": "floating",
+    "children": [
+      {
+        "id": "e2ca750680a7f814",
+        "type": "window",
+        "children": [
+          {
+            "id": "38f130c1df6f34a3",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "392b285d8cb46fcf",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/AIX 安裝.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "AIX 安裝"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 1470,
+        "y": 454,
+        "width": 1024,
+        "height": 800,
+        "maximize": false,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "3936f619bf0ccfa2",
   "lastOpenFiles": [
-    "content/post/K8s 整理.md",
-    "content/post/K8S.md",
-    "content/post/常用指令linux.md",
-    "K8s Policy.md",
-    "content/post/RDP 連線實作.md",
-    "static/Pasted image 20260610172202.png",
-    "content/post/illumio 2x2 DR.md",
-    "static/Pasted image 20260610102631.png",
-    "content/post/常用指令macOS.md",
-    "content/post/Cookpit.md",
-    "content/post/incus.md",
-    "content/post/PVE 進階設定.md",
-    "content/post/LXC 容器.md",
-    "content/post/PVE跑AIX.md",
-    "content/post/CML 教學.md",
-    "content/post/CAT 補助翻譯.md",
+    "content/post/illumio 除錯.md",
     "content/post/常用指令AIX.md",
-    "content/post/企業虛擬化方案.md",
+    "content/post/AIX 安裝.md",
+    "content/post/常用指令DOS.md",
+    "content/post/常用指令Windows.md",
+    "content/post/Cockpit.md",
+    "content/post/常用指令macOS.md",
+    "content/post/常用指令linux.md",
+    "content/post/illumio 2x2 DR.md",
+    "content/post/immch 安裝教學.md",
+    "Clippings/AIX - 來張 AIX 證照吧  最終回 - iT 邦幫忙一起幫忙解決難題，拯救 IT 人的一天.md",
+    "content/post/illumio K8S.md",
+    "content/post/incus.md",
+    "content/post/OpenNebula.md",
+    "content/post/Hyper-V 進階設定.md",
+    "content/post/Rclone.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/PVE 各系統安裝.md",
+    "content/post/CML 教學.md",
+    "content/post/CAD.md",
+    "content/post/CAT 補助翻譯.md",
     "content/post/Session TMOUT.md",
+    "content/post/K8s 整理.md",
+    "content/post/InDesign 排版.md",
+    "content/post/K8S.md",
+    "content/post/企業大量自動部屬.md",
+    "static/Pasted image 20260610172202.png",
+    "static/Pasted image 20260610102631.png",
     "static/Pasted image 20260609210153.png",
     "static/Pasted image 20260609205719.png",
     "static/Pasted image 20260609205359.png",
     "static/Pasted image 20260609205205.png",
-    "content/post/2026 家用Sever架設指南.md",
     "static/Pasted image 20260603092433.png",
-    "content/post/常用指令Windows.md",
-    "content/post/企業大量自動部屬.md",
-    "content/post/PVE 各系統安裝.md",
-    "content/post/常用指令DOS.md",
-    "content/post/企業拓譜圖架設.md",
     "static/Pasted image 20260602171514.png",
-    "content/post/illumio K8S.md",
     "hugo.yaml",
-    "Clippings/AIX - 來張 AIX 證照吧  最終回 - iT 邦幫忙一起幫忙解決難題，拯救 IT 人的一天.md",
     "Clippings",
     "content/post/code/wsever_opti.ps1",
-    "content/post/ESXi 安裝與設定.md",
     "content/post/code/heidmall.yaml",
     "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/code/moredoc.yaml",
