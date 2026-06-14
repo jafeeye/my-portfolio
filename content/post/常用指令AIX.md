@@ -8,7 +8,7 @@ ls -l
 ipfstat -io
 
 顯示目前任務(迴圈)
-while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; done
+方法1：while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; done
 方法2：nmon -C <程式名稱>，進入畫面再按t
 ## 快速鍵
 set -o emacs 模式
@@ -26,7 +26,6 @@ set -o emacs 模式
 - **找上一條指令（Up）：** 按 **`Ctrl + P`**（**P**revious，上一條）
 - **找下一條指令（Down）：** 按 **`Ctrl + N`**（**N**ext，下一條）
 - **關鍵字搜尋歷史（Reverse Search）：** 按 **`Ctrl + R`**，然後直接輸入你記得的指令關鍵字（例如輸入 `ifconfig`）
-
 
 `stty eof ^D` 一直跳出系統日誌
 歷史指令搜尋（取代上、下方向鍵）
@@ -49,13 +48,11 @@ lsdev -Cc if
 smit tcpip
 smit mtcpip
 
-
 快速方法
 lsdev  -Cc if
 ifconfig en0 192.168.8.75 up
 ifconfig -a 查看網卡IP
 netstat -rn 看路由表
-
 
 關機
 shutdown -F
@@ -75,7 +72,6 @@ prtconf
 看根目錄/資料夾大小 `df -g <資料夾>`
 ![](Pasted%20image%2020260531134742.png)
 看目錄分配多少空間 du -g <資料夾>
-
 
 填充空檔 
 ```

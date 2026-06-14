@@ -187,7 +187,7 @@ bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/
 
 
 
-## VDSM LXC
+## vDSM LXC
 1. 執行LXC腳本,設定容器權限
 - bash -c "$(wget -qLO - https://raw.githubusercontent.com/databreach/virtual-dsm-lxc/main/virtual-dsm-lxc-gpu.sh)"
 - Enter the LXC Container ID of the container created above (e.g. `101`).

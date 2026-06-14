@@ -14,3 +14,11 @@ incus list
 
 
 ## Incus Server GUI Install
+Incus  
+CGManager  
+distrobuilder  
+LXCFS  
+
+
+## 參考資料
+1. https://linuxcontainers.cn/
