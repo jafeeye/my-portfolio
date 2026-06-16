@@ -1,3 +1,9 @@
+---
+title: illumio LXC ncat
+date: 2026-06-16
+toc: true
+---
+
 
 使用Debian 13 LXC 安裝
 ```
