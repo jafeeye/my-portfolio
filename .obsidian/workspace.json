@@ -84,7 +84,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：cmd"
                 }
               }
             ]
@@ -296,8 +296,8 @@
   },
   "active": "d8f07dd5ae2a1f5e",
   "lastOpenFiles": [
-    "content/post/常用指令AIX.md",
     "content/post/AIX 安裝.md",
+    "content/post/常用指令AIX.md",
     "content/post/Cockpit.md",
     "static/Pasted image 20260616230441.png",
     "static/Pasted image 20260616230051.png",
