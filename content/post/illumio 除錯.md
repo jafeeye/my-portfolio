@@ -3,8 +3,32 @@ title: illumio LXC ncat
 date: 2026-06-16
 toc: true
 ---
+## 前置作業
 
+避免hosts被覆蓋
+```
+touch /etc/.pve-ignore.hosts
+echo "192.168.8.8 illumio-kevin.dev" >> /etc/hosts
+```
 
+安裝 openssh server
+```
+# 如果沒反應，代表沒裝或沒開，直接物理安裝： 
+dnf install -y openssh-server 
+# 啟動並設定開機自動執行 
+systemctl enable --now sshd
+vi /etc/ssh/sshd_config
+PermitRootLogin yes
+systemctl restart sshd
+apt update && apt install openssh-server
+systemctl enable --now ssh
+```
+## Ubuntu LXC
+使用非特權容器 22.04 LTS，裝完curl後直接執行 `illumio-ven-ctl` 無任何問題
+```
+apt install curl
+```
+## Debian LXC
 使用Debian 13 LXC 安裝
 ```
 apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
@@ -13,16 +37,7 @@ apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffuti
 看安裝錯誤訊息
 /var/log/illumio_install.log
 
-
-避免hosts被覆蓋
-```
-touch /etc/.pve-ignore.hosts
-echo "192.168.8.8 illumio-kevin.dev" >> /etc/hosts
-```
-
 hostname做restart 就會同步過去
-
-
 
 ## Rocky Linux
 使用Rocky Linux 9 LXC 安裝
@@ -94,8 +109,6 @@ nft list ruleset
 nft delete table inet ILO-FILTER-X
 
 ```
- 
-
 ## nc 模擬流量
 ```
 dnf install -y nmap-ncat
@@ -107,15 +120,14 @@ nc -lvp 8444
 nc -v 192.168.8.8 8444
 ```
 
-安裝 openssh server
+發起多個Port
 ```
-# 如果沒反應，代表沒裝或沒開，直接物理安裝： 
-dnf install -y openssh-server 
-# 啟動並設定開機自動執行 
-systemctl enable --now sshd
-vi /etc/ssh/sshd_config
-PermitRootLogin yes
-systemctl restart sshd
-apt update && apt install openssh-server
-systemctl enable --now ssh
+for port in 3000 4000 5000 6000; do nc 192.168.1.100 $port & done
+## 接收方
+for port in 3000 4000 5000 6000; do nc --recv-only 172.16.8.104 $port & done
+for port in 3000 4000 5000 6000; do nc 172.16.8.104 $port < /dev/null & done
 ```
+驗證是否在背景 `jobs`
+查詢執行程式 ps aux | grep nc
+![](Pasted%20image%2020260616150724.png)
+結束程式 `killall -9 nc`
