@@ -16,12 +16,8 @@ date: 2026-05-29
 | **7**  | **Deepin (DDE)** | **約 950 MB**          | ❌ 笨重   | 特效極其華麗，嚴重依賴 GPU，千萬別用於 xrdp。      |
 | **8**  | **GNOME**        | **約 1.0 GB ~ 1.2 GB** | ❌ 笨重   | 多數發行版預設，但對 xrdp 多人連線是資源災難。       |
 
-
 ## FreeRDP
 官網連結：https://www.freerdp.com/
-
-
-
 ## XRDP
 教學示範在Rocky Linux 9實作
 ### 前置安裝
@@ -44,6 +40,7 @@ UserWindowManager=startwm.sh
 DefaultWindowManager=startwm-bash.sh
 ```
 
+全域腳本
 因為也不知道startwm.sh放在哪，先用find指令尋找檔案位置，最後在startwm.sh修改並加入環境變數中文輸入法即可
 ```
 ## 找設定檔放在哪
@@ -61,6 +58,15 @@ export XMODIFIERS=@im=ibus
 # 檢查如果目前使用者還沒啟動 ibus，就幫他啟動一個獨立的背景進程 
 pgrep -u $USER ibus-daemon > /dev/null || /usr/bin/ibus-daemon -rxd
 
+```
+> 2>/dev/null 在linux有三種數據流，`0` (STDIN / 標準輸入)：接收你的鍵盤輸入、`1` (STDOUT / 標準輸出)、`2` (STDERR / 標準錯誤)，意思是把權限不足的輸入都濾掉
+
+個人使用者腳本
+啟用桌面預設使用mate
+```
+echo "mate-session" > ~/.Xclients 
+chmod +x ~/.Xclients
+sudo systemctl restart xrdp
 ```
 
 ### 無法擷取鍵盤

@@ -113,6 +113,21 @@ kubectl rollout restart deployment cilium-operator -n kube-system kubectl rollou
 ```
 
 
+進入容器
+```
+kubectl exec -it illumio-ven-hp9t9 -n illumio-system -- /bin/bash
+```
+
+
+
+
+
+
+
+
+
+
+
 System Pods 系統組件
 
 |**元件名稱 (System Pod)**|**預設角色與架構定位**|
