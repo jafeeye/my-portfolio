@@ -36,19 +36,32 @@ stty erase 或使用set -o vi
 
 安裝軟體
 安裝OpenSSH (預設無安裝)
+
+
+
+
 lslpp -l|grep open
 smit install 
 
 驗證
 ssh 127.0.0.1
 
-設定網路
+### 設定網路
+
+![[static/Diagram 2.svg]]
+smit mktcpip //引導網路設定 (設定IP、Gateway、mask)，設定完ping區網是否會通
+![](Pasted%20image%2020260616230051.png)
+查看目前IP `ifconfig -a`
+![](Pasted%20image%2020260616230441.png)
+
+
 lsdev -Cc adapter
 lsdev -Cc if
 smit tcpip
-smit mtcpip
+netstat -rn
 
-快速方法
+
+快速設定網路方法
 lsdev  -Cc if
 ifconfig en0 192.168.8.75 up
 ifconfig -a 查看網卡IP
@@ -94,7 +107,6 @@ chfs -a size=+2G /tmp
 ## 安裝軟體
 出現db4 error：rpm --rebuilddb
 AIX Toolbox for Linux Applications
-
 - 舊版 AIX（如 AIX 7.1 / 7.2 早期）支援 **`yum`**。
 - 新版 AIX（如 AIX 7.2 晚期、AIX 7.3）全面改用 **`dnf`**（背後跑的是 Python 3 體系）。
 
