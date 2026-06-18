@@ -31,6 +31,20 @@ set -o emacs 模式
 歷史指令搜尋（取代上、下方向鍵）
 
 ## 設定
+
+選單快速鍵
+
+| 動作       | 快速鍵    |
+| -------- | ------ |
+| 切換yes或no | F4或tab |
+| 多選       | esc+7  |
+|          | esc+4  |
+
+
+
+
+
+
 nmon 等待時間很長,輸入oslevel -s
 stty erase 或使用set -o vi
 

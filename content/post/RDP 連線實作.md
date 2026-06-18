@@ -33,6 +33,15 @@ sudo systemctl enable --now xrdp
 sudo firewall-cmd --zone=public --add-port=3389/tcp --permanent
 sudo firewall-cmd --reload
 ```
+
+## Ubunut LXC on XRDP
+```
+
+## chromium只能用snap，偏偏lxc不支援snap安全機制
+google-chrome --no-sandbox --disable-gpu
+```
+
+
 ### 啟動腳本
 無法打中文是因為使用者無法去執行ibus權限，指派成root就可以或是在一般使用者載入ibus環境，去`/etc/xrdp/sesman.ini` 去找UserWindowManager、DefaultWindowManager，看這設定檔放在哪，代表設定檔是放在startwm.sh
 ```

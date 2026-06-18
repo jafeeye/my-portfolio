@@ -8,7 +8,8 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 ## 網路
 - Debian 設定網路重新載入設定 `ifreload -a`  
 - 監聽Port `netstat -tunlp | grep 5432`  、 `ss -tunlp | grep 80`
-- 檢查網址有效 `crul - i 網址`   `nc -uv <IP> <Port>`  
+- 檢查網址有效 `crul - i 網址`   `nc -uv <IP> <Port>` 
+	- curl -k 略過憑證 
 - 網路重新取得IP `ifdown eth0 --force && ifup eth0`  
 - 查看DNS `cat /etc/resolv.conf`
 >\* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
@@ -28,6 +29,7 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 - who ,who -H ,w,id
 4. 管理帳戶
 - 建立使用者跟加密碼 `useradd kevin` / `passwd kevin`
+	- 用ubuntu最好用adduser 會自動建立家目錄,在gnome防呆沒關係,但xfce不會建立家目錄直接進不去桌面
 - 列出本機所有帳戶 `cat /etc/passwd`
 方法1 sudo visudo
 方法2 加入sudoers : sudo visudo -f /etc/sudoers.d/jack jack ALL=(ALL:ALL) ALL (sudoers.d個別設定檔)

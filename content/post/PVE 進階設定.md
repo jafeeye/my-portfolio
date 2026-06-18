@@ -675,3 +675,19 @@ VM做法 [官網說明文件](https://pve.proxmox.com/wiki/Serial_Terminal)
 1. qm set 101 -serial0 socket
 2. 編輯grub，加入下面這串，做`update-grub` 或`grub2-mkconfig --output=/boot/grub2/grub.cfg`
 `GRUB_CMDLINE_LINUX="quiet console=tty0 console=ttyS0,115200"`
+
+
+## PVE 調整Swap
+預設PVE沒調整狀態下為60
+```
+## 強制清除目前所有高swap
+swapoff -a && swapon -a
+## 查看目前swap狀態,預設沒調整為60
+cat /proc/sys/vm/swappiness
+## 臨時關閉swap為0
+sysctl vm.swappiness=0
+## 永久調整,swap都為0
+nano /etc/sysctl.conf >> vm.swappiness=0
+```
+
+- [排障笔记-解决PVE中节点SWAP占用过高问题&一些关于PVE宿主硬盘的题外话](https://blog.welain.com/articles/2023/notes-about-pve/)

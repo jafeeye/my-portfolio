@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "0f9a36744eb4992e",
+        "id": "b1402c96e80f2be0",
         "type": "split",
         "children": [
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 66.83250414593698,
+            "dimension": 70.36679536679536,
             "children": [
               {
                 "id": "0cb091eb8598bc8a",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令AIX.md",
+                    "file": "content/post/常用指令linux.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令AIX"
+                  "title": "常用指令linux"
                 }
               },
               {
@@ -39,31 +39,47 @@
                   "icon": "lucide-file",
                   "title": "AIX 安裝"
                 }
+              },
+              {
+                "id": "ba564809c0533d30",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/K8S.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "K8S"
+                }
               }
             ]
           },
           {
-            "id": "e022e657e900be33",
+            "id": "8e7dae321074a4bb",
             "type": "tabs",
-            "dimension": 33.16749585406302,
+            "dimension": 29.633204633204635,
             "children": [
               {
-                "id": "d8f07dd5ae2a1f5e",
+                "id": "3b7796ec6d64cd76",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -84,7 +100,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -113,7 +129,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -168,7 +184,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "Outline"
             }
           },
           {
@@ -241,92 +257,55 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
-      "vscode-editor:新建程式碼檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "vscode-editor:Create Code File": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "floating": {
-    "id": "725e0956e1e27ad8",
-    "type": "floating",
-    "children": [
-      {
-        "id": "e2ca750680a7f814",
-        "type": "window",
-        "children": [
-          {
-            "id": "38f130c1df6f34a3",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "392b285d8cb46fcf",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/AIX 安裝.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "AIX 安裝"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 1162,
-        "y": 542,
-        "width": 1024,
-        "height": 800,
-        "maximize": false,
-        "zoom": 0
-      }
-    ]
-  },
-  "active": "d8f07dd5ae2a1f5e",
+  "active": "3b7796ec6d64cd76",
   "lastOpenFiles": [
+    "content/post/常用指令linux.md",
     "content/post/AIX 安裝.md",
+    "content/post/K8S.md",
+    "content/post/RDP 連線實作.md",
+    "content/post/PVE 進階設定.md",
+    "null",
+    "dev",
+    "content/post/illumio 除錯.md",
+    "content/post/illumio K8S.md",
+    "content/post/incus.md",
     "content/post/常用指令AIX.md",
     "content/post/Cockpit.md",
     "static/Pasted image 20260616230441.png",
     "static/Pasted image 20260616230051.png",
     "static/Diagram 2.svg.xml",
     "static/Diagram 2.svg",
-    "content/post/illumio 除錯.md",
     "hugo.yaml",
     "K8s Policy.md",
     "content/post/OpenNebula.md",
     "content/post/PVE 各系統安裝.md",
-    "content/post/PVE 進階設定.md",
     "content/post/企業共享設定.md",
     "content/post/企業大量自動部屬.md",
     "content/post/常用指令Windows.md",
     "content/post/常用指令macOS.md",
-    "content/post/常用指令linux.md",
     "content/post/常用指令DOS.md",
-    "content/post/incus.md",
     "content/post/LXC 容器.md",
     "content/post/KPM寫作工具整合.md",
     "content/post/K8s 整理.md",
-    "content/post/K8S.md",
     "content/post/InDesign 排版.md",
     "content/post/Hyper-V 進階設定.md",
     "content/post/企業備份軟體.md",
     "content/post/2026 家用Sever架設指南.md",
     "content/post/Google Security.md",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/illumio K8S.md",
     "static/Pasted image 20260610172202.png",
     "static/Pasted image 20260610102631.png",
     "static/Pasted image 20260609210153.png",
@@ -339,8 +318,6 @@
     "content/post/code/heidmall.yaml",
     "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
     "content/post/code/moredoc.yaml",
-    "content/post/code/RunAny_PinObj.ahk",
-    "content/post/code",
-    "content/post/新增資料夾"
+    "content/post/code/RunAny_PinObj.ahk"
   ]
 }
