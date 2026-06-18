@@ -3,21 +3,34 @@ title: k8s整理
 toc: true
 date: 2026-05-30
 ---
-| Feature/發行版                  | Kubernetes | **MicroK8s**         | **k0s**              | **k3s**                  | **KubeSolo**       |
-| ---------------------------- | ---------- | -------------------- | -------------------- | ------------------------ | ------------------ |
-| shell                        | Kubeadm    |                      |                      |                          |                    |
-| Architecture                 |            | Multi-node capable   | Multi-node capable   | Multi-node capable       | Single-node only   |
-| Resource Usage               |            | 600MB+ RAM           | around 300–400MB RAM | around 500MB+ RAM        | **==<200MB RAM==** |
-| etcd                         |            | Embedded Dqlite/etcd | Embedded etcd        | Optionally embedded etcd | No etcd            |
-| Cluster Support              |            | Yes                  | Yes                  | Yes                      | No                 |
-| Helm/CRD Support             |            | Yes                  | Yes                  | Yes                      | Yes                |
-| Designed for Edge            |            | Yes                  | Yes                  | Yes                      | Yes                |
-| System Requirements          |            | Moderate             | Moderate             | Moderate                 | Ultra-low          |
-| Read-only Filesystem Support |            | No                   | Partial              | Partial                  | Yes                |
+| Feature<br>/發行版              | Kubernetes | **MicroK8s**         | **k0s**              | **k3s**                  | **KubeSolo**       | Minikube |
+| ---------------------------- | ---------- | -------------------- | -------------------- | ------------------------ | ------------------ | -------- |
+| shell                        | Kubeadm    |                      |                      |                          |                    |          |
+| Architecture                 |            | Multi-node capable   | Multi-node capable   | Multi-node capable       | Single-node only   |          |
+| Resource Usage               |            | 600MB+ RAM           | around 300–400MB RAM | around 500MB+ RAM        | **==<200MB RAM==** |          |
+| etcd                         |            | Embedded Dqlite/etcd | Embedded etcd        | Optionally embedded etcd | No etcd            |          |
+| Cluster Support              |            | Yes                  | Yes                  | Yes                      | No                 |          |
+| Helm/CRD Support             |            | Yes                  | Yes                  | Yes                      | Yes                |          |
+| Designed for Edge            |            | Yes                  | Yes                  | Yes                      | Yes                |          |
+| System Requirements          |            | Moderate             | Moderate             | Moderate                 | Ultra-low          |          |
+| Read-only Filesystem Support |            | No                   | Partial              | Partial                  | Yes                |          |
+
+
+有對應多個runtime engine：containerd、crio、k3s_containerd
+
+**[kubevirt-manager](https://github.com/kubevirt-manager/kubevirt-manager)**
+Cert-manager  
+Forecastle 實戰：以 annotation 自動發現的 Kubernetes 應用入口面板  
+Harbor 建立私有helm倉庫及ArgoCD拉取設定  
+KubeClipper (CNCF)  
+9Router  
+Dashboard  
+Rancher  
+ArgoCD  
+[headlamp](https://github.com/kubernetes-sigs/headlamp)  
+
 Talos Omni On-Prem
-
 minikube：一個打包安裝工具，直接裝好魔改linux跟K8S
-
 Kind 或 kubeadm差別是
 
 
@@ -212,3 +225,119 @@ spec:
 編輯服務 ` kubectl edit ds test1-web -n default`
 
 查看特定pod `kubectl get po test-web -o wide`
+
+
+![](Diagram2.svg)
+
+
+
+## 額外套件
+
+### Helm (K8s套件管理器)
+```
+: '安裝helm' 
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash ;
+
+: '加入 helm tab自動補字' 
+helm completion bash > /etc/bash_completion.d/helm ;
+
+: '刷新當前終端機環境' 
+source /etc/bash_completion.d/helm ;
+```
+
+例：用helm安裝Nginx套件(OCI方式),並開好對外Port
+```
+# 安裝nginx
+helm install my-nginx oci://registry-1.docker.io/bitnamicharts/nginx \ -n web-system \ --create-namespace \ --insecure-skip-tls-verify
+# 查看services 知道對外Port,看到80:32760代表內:外為32760
+kubectl get services -n web-system
+# 去改type:,把他變成NodePort
+kubectl edit svc my-nginx -n web-system
+```
+
+
+### Krew (kubectl外掛套件管理器)
+```
+: 'Kubectl Krew 外掛安裝確保系統有安裝 git 與 tar (Krew 下載套件必備)'
+dnf install -y git tar ;
+
+: '進入臨時目錄，下載並解壓 Krew 最新版本'
+cd /tmp && \
+curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz" && \
+tar -zxvf krew-linux_amd64.tar.gz ;
+
+:'執行 Krew 原生安裝程序'
+./krew-linux_amd64 install krew ;
+
+:'將 Krew 寫入環境變數 (讓 kubectl 能隔空呼叫它)'
+# 寫入 root 的 .bashrc 設定檔中
+echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc ;
+
+# 立刻刷新當前 Shell 環境變數，免重新登入
+source ~/.bashrc
+```
+
+插件：ktop
+```
+kubectl krew install ktop
+kubectl ktop
+```
+
+### KubeVirt 安裝
+```
+#取得最新版號
+export VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases/latest | grep tag_name | cut -d '"' -f 4)
+export CDI_VERSION=$(curl -s https://api.github.com/repos/kubevirt/containerized-data-importer/releases/latest | grep tag_name | cut -d '"' -f 4)
+
+#部署 KubeVirt 的 Operator 與 CRD 核心
+kubectl create -f "https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/kubevirt-operator.yaml"
+kubectl create -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-cr.yaml"
+
+#取得kubevirt
+kubectl get pods -n kubevirt
+```
+安裝KubeVirt-Manager
+```
+kubectl apply -f https://github.com/kubevirt-manager/kubevirt-manager/releases/download/v1.5.4/bundled-v1.5.4.yaml
+kubectl get pods -n kubevirt-manager -o wide
+```
+編輯KubeVirt-Manager WebUI
+```
+[root@k8s1 ~]# kubectl get pods -n kubevirt-manager -o wide
+NAME                                READY   STATUS    RESTARTS   AGE   IP         NODE   NOMINATED NODE   READINESS GATES
+kubevirt-manager-66d9875ccf-djw5n   1/1     Running   0          48s   10.0.2.209   k8s3   <none>           <none>
+```
+編輯檔案,把`type:` 改成 `type: NodePort`
+```
+kubectl edit svc kubevirt-manager -n kubevirt-manager
+```
+驗證
+```
+kubectl get pods -n cdi
+```
+
+### Rancher 安裝
+```
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+## 安裝cert-manager
+helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --set installCRDs=true
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm repo update
+
+kubectl create namespace cattle-system
+
+helm install rancher rancher-stable/rancher   
+  --namespace cattle-system   
+  --set hostname=192.168.8.83  
+  --set replicas=1   
+  --set bootstrapPassword=admin
+
+kubectl rollout status deployment/rancher -n cattle-system
+
+## 進去去把type改成NodePort
+kubectl edit svc rancher -n cattle-system
+
+## 驗證
+kubectl get svc -n cattle-system rancher

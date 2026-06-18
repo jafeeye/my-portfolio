@@ -3,24 +3,6 @@ title: K8s
 toc: true
 date: 2026-05-22
 ---
-K8S 
-有多種版本架設方式：kubeadm、K3s、Minikube
-有對應多個runtime engine：containerd、crio、k3s_containerd
-
-**[kubevirt-manager](https://github.com/kubevirt-manager/kubevirt-manager)**
-Cert-manager  
-Forecastle 實戰：以 annotation 自動發現的 Kubernetes 應用入口面板  
-Harbor 建立私有helm倉庫及ArgoCD拉取設定  
-KubeClipper (CNCF)  
-9Router  
-Dashboard  
-Rancher  
-ArgoCD  
-[headlamp](https://github.com/kubernetes-sigs/headlamp)  
-
-
-![](Diagram2.svg)
-
 ## 安裝Master,Worker1,Worker2
 先修改3台hostname
 ```
@@ -141,13 +123,11 @@ cilium hubble ui
 
 :'預設不給外部連線,要加上--address 0.0.0.0 允許所有連線'
 kubectl port-forward -n kube-system svc/hubble-ui 12000:80 --address 0.0.0.0
-```
 
-重啟
-```
+:'重啟'
 kubectl rollout restart deployment hubble-ui -n kube-system
-```
 
+```
 
 Calico 安裝方法
 ```
@@ -155,122 +135,6 @@ kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/
 kubectl get pods -n kube-system -l k8s-app=calico-node
 ## 如果安裝成功,nodes會變成ready狀態
 kubectl get nodes
-```
-
-
-
-
-
-## 額外套件
-
-### Helm (K8s套件管理器)
-```
-: '安裝helm' 
-curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash ;
-
-: '加入 helm tab自動補字' 
-helm completion bash > /etc/bash_completion.d/helm ;
-
-: '刷新當前終端機環境' 
-source /etc/bash_completion.d/helm ;
-```
-
-例：用helm安裝Nginx套件(OCI方式),並開好對外Port
-```
-# 安裝nginx
-helm install my-nginx oci://registry-1.docker.io/bitnamicharts/nginx \ -n web-system \ --create-namespace \ --insecure-skip-tls-verify
-# 查看services 知道對外Port,看到80:32760代表內:外為32760
-kubectl get services -n web-system
-# 去改type:,把他變成NodePort
-kubectl edit svc my-nginx -n web-system
-```
-
-
-### Krew (kubectl外掛套件管理器)
-```
-: 'Kubectl Krew 外掛安裝確保系統有安裝 git 與 tar (Krew 下載套件必備)'
-dnf install -y git tar ;
-
-: '進入臨時目錄，下載並解壓 Krew 最新版本'
-cd /tmp && \
-curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz" && \
-tar -zxvf krew-linux_amd64.tar.gz ;
-
-:'執行 Krew 原生安裝程序'
-./krew-linux_amd64 install krew ;
-
-:'將 Krew 寫入環境變數 (讓 kubectl 能隔空呼叫它)'
-# 寫入 root 的 .bashrc 設定檔中
-echo 'export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"' >> ~/.bashrc ;
-
-# 立刻刷新當前 Shell 環境變數，免重新登入
-source ~/.bashrc
-```
-
-插件：ktop
-```
-kubectl krew install ktop
-kubectl ktop
-```
-
-### KubeVirt 安裝
-```
-#取得最新版號
-export VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases/latest | grep tag_name | cut -d '"' -f 4)
-export CDI_VERSION=$(curl -s https://api.github.com/repos/kubevirt/containerized-data-importer/releases/latest | grep tag_name | cut -d '"' -f 4)
-
-#部署 KubeVirt 的 Operator 與 CRD 核心
-kubectl create -f "https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/kubevirt-operator.yaml"
-kubectl create -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-cr.yaml"
-
-#取得kubevirt
-kubectl get pods -n kubevirt
-```
-安裝KubeVirt-Manager
-```
-kubectl apply -f https://github.com/kubevirt-manager/kubevirt-manager/releases/download/v1.5.4/bundled-v1.5.4.yaml
-kubectl get pods -n kubevirt-manager -o wide
-```
-編輯KubeVirt-Manager WebUI
-```
-[root@k8s1 ~]# kubectl get pods -n kubevirt-manager -o wide
-NAME                                READY   STATUS    RESTARTS   AGE   IP         NODE   NOMINATED NODE   READINESS GATES
-kubevirt-manager-66d9875ccf-djw5n   1/1     Running   0          48s   10.0.2.209   k8s3   <none>           <none>
-```
-編輯檔案,把`type:` 改成 `type: NodePort`
-```
-kubectl edit svc kubevirt-manager -n kubevirt-manager
-```
-驗證
-```
-kubectl get pods -n cdi
-```
-
-### Rancher 安裝
-```
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-## 安裝cert-manager
-helm install cert-manager jetstack/cert-manager   --namespace cert-manager   --create-namespace   --set installCRDs=true
-
-helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-helm repo update
-
-kubectl create namespace cattle-system
-
-helm install rancher rancher-stable/rancher   
-  --namespace cattle-system   
-  --set hostname=192.168.8.83  
-  --set replicas=1   
-  --set bootstrapPassword=admin
-
-kubectl rollout status deployment/rancher -n cattle-system
-
-## 進去去把type改成NodePort
-kubectl edit svc rancher -n cattle-system
-
-## 驗證
-kubectl get svc -n cattle-system rancher
 ```
 
 ## 安裝illumio
@@ -313,8 +177,6 @@ extraVolumes:
 SSL 憑證的世界裡，有分兩種憑證：
 **Server 憑證（身分證）：** 證明「我是 PCE 伺服器」。
 **CA 根憑證（內政部印章）：** 專門用來簽發各個 Server 憑證的源頭。
-
-
 ```
 #方法1,http抓取法
 openssl s_client -showcerts -connect pce.example.com:8443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /tmp/illumio-pce-ca.crt
@@ -327,14 +189,12 @@ kubectl -n illumio-system create configmap root-ca-config --from-file=/tmp/illum
 ```
 
 憑證改檔名
-
 ```
 kubectl create configmap root-ca-config -n illumio-system \
 --from-file=ilo_root_ca.crt=/tmp/illumio_ca.pem \
 --from-file=server.crt=/tmp/illumio_ca.pem \
 --dry-run=client -o yaml | kubectl apply -f -
 ```
-
 
 連線需要解析hostname,K8s預設用CoreDNS,在設定檔更改,改 vi /etc/hosts沒用
 ```
@@ -360,11 +220,10 @@ helm安裝
 helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --namespace illumio-system --create-namespace
 ```
 
-
-檢查illumio 狀態
+illumio 容器狀態相關指令
 ```
+## 查illumio-system pods
 kubectl get pods -n illumio-system -w
-
 
 ## 進去k8s的bash檢查狀態，確認agent ven platform都在
 kubectl exec -it illumio-ven-9z7nv -n illumio-system -- /bin/bash
@@ -377,13 +236,9 @@ kubectl scale deployment/illumio-kubelink --replicas=0 -n illumio-system
 kubectl scale deployment/illumio-kubelink --replicas=1 -n illumio-system
 curl -4 -v https://illumio-kevin.bd1.dev:8443
 
-```
-
-重啟pod
-```
+## 重啟illumio 全部 pod
 kubectl rollout restart deployment illumio-kubelink -n illumio-system
 ```
-
 
 重新配對
 ```
@@ -396,11 +251,9 @@ rm -rf /var/log/illumio/*
 helm uninstall illumio -n illumio-system
 helm install illumio -f illumio-values.yaml oci://quay.io/illumio/illumio --namespace illumio-system --create-namespace
 kubectl rollout restart ds -n illumio-system
-
 ```
 
 Felix configuration 用於iptable
-
 
 ## ingress controller
 
@@ -461,17 +314,6 @@ spec:
               number: 80         # 後端服務連接埠
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ## 拉取映像
 映像檔：https://artifacthub.io/packages/ 
 現在主流是bitnami倉庫，但是現在被Broadcom收購，映像檔只能拉latest
@@ -492,9 +334,6 @@ helm list
 
 
 
-
-
-
 ## 常用指令
 ```
 ## 建立pod
@@ -509,7 +348,6 @@ kubectl port-forward kubernetes-demo-pod 3000:3000
 ## kustomize
 kustomize build k8s | kubectl apply -f -
 ```
-
 清空Master Node Cluster
 ```
 sudo kubeadm reset -f ;
@@ -540,3 +378,20 @@ rm -rf $HOME/.kube/
 
 
 
+## 清掉K8S
+```
+kubeadm reset -f 
+rm $HOME/.kube/config 
+systemctl stop kubelet 
+systemctl stop docker 
+rm -rf /var/lib/cni/ 
+rm -rf /var/lib/kubelet/* 
+rm -rf /etc/cni/ 
+ifconfig cni0 down 
+ifconfig flannel.1 down 
+ifconfig docker0 down 
+ip link delete cni0 
+ip link delete flannel.1 
+systemctl restart kubelet 
+systemctl restart docker
+```
