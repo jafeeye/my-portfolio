@@ -54,7 +54,8 @@
                   "title": "K8S"
                 }
               }
-            ]
+            ],
+            "currentTab": 2
           },
           {
             "id": "8e7dae321074a4bb",
@@ -273,10 +274,10 @@
   },
   "active": "3b7796ec6d64cd76",
   "lastOpenFiles": [
+    "content/post/K8S.md",
+    "content/post/AIX 安裝.md",
     "null",
     "content/post/常用指令linux.md",
-    "content/post/AIX 安裝.md",
-    "content/post/K8S.md",
     "content/post/RDP 連線實作.md",
     "content/post/PVE 進階設定.md",
     "dev",
