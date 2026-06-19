@@ -10,7 +10,7 @@
           {
             "id": "7cbf86a68e0eee4f",
             "type": "tabs",
-            "dimension": 73.69047619047619,
+            "dimension": 76.16209773539929,
             "children": [
               {
                 "id": "0cb091eb8598bc8a",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/RDP 連線實作.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "RDP 連線實作"
                 }
               },
               {
@@ -40,13 +40,12 @@
                   "title": "K8S"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 26.30952380952381,
+            "dimension": 23.837902264600714,
             "children": [
               {
                 "id": "3871af01a1eca43b",
@@ -241,7 +240,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 217.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -300,13 +300,13 @@
   },
   "active": "3871af01a1eca43b",
   "lastOpenFiles": [
+    "content/post/RDP 連線實作.md",
     "content/post/K8S.md",
-    "content/post/AIX 安裝.md",
     "content/post/常用指令linux.md",
+    "content/post/AIX 安裝.md",
     "content/post/K8s 整理.md",
     "content/post/程式語言/git.md",
     "null",
-    "content/post/RDP 連線實作.md",
     "content/post/PVE 進階設定.md",
     "dev",
     "content/post/illumio 除錯.md",

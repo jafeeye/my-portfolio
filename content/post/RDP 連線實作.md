@@ -36,11 +36,41 @@ sudo firewall-cmd --reload
 
 ## Ubunut LXC on XRDP
 ```
+## 安裝xfce
+apt update && apt install xfce4 xfce4-goodies -y 
+# 3. 安裝 xrdp 
+apt install xrdp -y 
+# 4. 將 xrdp 加入 ssl-cert 群組，解決憑證讀取權限問題 
+adduser xrdp ssl-cert
+
+
+## 允許root登入
+apt update && apt install openssh-server -y
+nano /etc/ssh/sshd_config
+PermitRootLogin yes
+systemctl enable ssh && systemctl restart ssh
+
+
+## 進去 startwm.sh 修改
+
+# 把原本這兩行註解掉（前面加#），不讓它跑預設的 Xsession 
+# test -x /etc/X11/Xsession && exec /etc/X11/Xsession 
+# exec /bin/sh /etc/X11/Xsession 
+# 強制指定啟動 XFCE 桌面 
+startxfce4
+
+
+# 1. 下載 Google 官方最新 Chrome 穩定版（純 .deb，不含 Snap） 
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb 
+# 2. 用 apt 直接灌進去 
+apt install ./google-chrome-stable_current_amd64.deb -y 
+# 3. 砍掉暫存包 
+rm google-chrome-stable_current_amd64.deb
+
 
 ## chromium只能用snap，偏偏lxc不支援snap安全機制
 google-chrome --no-sandbox --disable-gpu
 ```
-
 
 ### 啟動腳本
 無法打中文是因為使用者無法去執行ibus權限，指派成root就可以或是在一般使用者載入ibus環境，去`/etc/xrdp/sesman.ini` 去找UserWindowManager、DefaultWindowManager，看這設定檔放在哪，代表設定檔是放在startwm.sh
@@ -81,6 +111,21 @@ sudo systemctl restart xrdp
 ### 無法擷取鍵盤
 在Rocky Linux用Win+Space或Ctrl+Space無法切換輸入法，代表快速鍵沒有被攔截進去rdp，需要遠端桌面更改設定。
 開啟mstsc，本機資源/鍵盤/套用Windows按鍵組合，選擇`在遠端電腦上` 
+
+## Gnome鎖定畫面卡住輸入密碼
+```
+sudo nano /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+[Allow Colord all Users] 
+Identity=unix-user:* 
+Action=org.freedesktop.color-manager.*;org.freedesktop.packagekit.*;org.freedesktop.policykit.*;org.gnome.gcontrol.* 
+ResultAny=yes 
+ResultInactive=yes 
+ResultActive=yes
+```
+
+
+
+
 ## 結語
 原本Rocky Linux 9之後預設都只裝Wayland環境，但為什麼裝了xrdp可以用是因為他把x.org桌面安裝後隱藏了，所以登入就不會出現X.org桌面環境可選，至於GNOME最新版有整合wayland 的rdp版本，但因為他的技術原理是用螢幕鏡像原理，不能支援多使用者登入，要穩定性還是選用Xrdp吧。
 
