@@ -3,6 +3,35 @@ title: git
 toc: true
 date: 2026-06-18
 ---
+
+## 建立hugo
+```
+## 安裝hugo
+choco install hugo-extended
+## 建立新網站
+hugo new site my-blog 
+cd my-blog
+## 創立新主題
+git init
+git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish
+設定blowfish
+xcopy /E /I themes\blowfish\config config
+
+config/_default/hugo.toml >> theme = "blowfish"
+## 建立新文章
+hugo new posts/my-first-post.md
+
+
+## 文章列表加入網頁選單
+config/_default/menus.toml
+[[main]]
+  name = "全部文章" 
+  pageRef = "posts" 
+  weight = 10
+
+```
+
+
 很多公司對於一個人不可以隨意創造分支(通常只有一個),不然會太亂，雲端由管理管專案分支
 
 如果不小心放入300MB大檔案,檔名稱為null,不小心提交要排除
