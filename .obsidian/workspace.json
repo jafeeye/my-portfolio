@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/CAT 補助翻譯.md",
+                    "file": "content/post/列印技術.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "CAT 補助翻譯"
+                  "title": "列印技術"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -133,8 +133,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -245,6 +244,8 @@
   },
   "active": "7f68827d939eeb68",
   "lastOpenFiles": [
+    "content/post/列印技術.md",
+    "static/Pasted image 20260621231930.png",
     "content/post/CAT 補助翻譯.md",
     "static/Pasted image 20260621225356.png",
     "static/Pasted image 20260621225328.png",
@@ -273,13 +274,11 @@
     "static/Pasted image 20260621201719.png",
     "static/Pasted image 20260621201707.png",
     "static/Pasted image 20260621201628.png",
-    "static/Pasted image 20260621201611.png",
     "content/post/x11.md",
     "content/post/K8s Policy.md",
     "content/post/DualBoot 多重開機.md",
     "content/post/Docker.md",
     "content/post/Cockpit.md",
-    "content/post/Cloudflare 網站設定.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",
