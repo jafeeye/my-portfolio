@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令Windows.md",
+                    "file": "content/post/CAT 補助翻譯.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令Windows"
+                  "title": "CAT 補助翻譯"
                 }
               }
             ]
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ]
@@ -133,7 +133,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -244,6 +245,14 @@
   },
   "active": "7f68827d939eeb68",
   "lastOpenFiles": [
+    "content/post/CAT 補助翻譯.md",
+    "static/Pasted image 20260621225356.png",
+    "static/Pasted image 20260621225328.png",
+    "static/Pasted image 20260621225225.png",
+    "content/post/各式生產力工具整理.md",
+    "content/post/中文化及綠化.md",
+    "content/post/防火牆.md",
+    "content/post/Excel.md",
     "content/post/常用指令Windows.md",
     "content/post/常用指令macOS.md",
     "content/post/常用指令linux.md",
@@ -265,21 +274,12 @@
     "static/Pasted image 20260621201707.png",
     "static/Pasted image 20260621201628.png",
     "static/Pasted image 20260621201611.png",
-    "static/Pasted image 20260621193530.png",
-    "static/Pasted image 20260621193523.png",
-    "static/Pasted image 20260621193508.png",
     "content/post/x11.md",
     "content/post/K8s Policy.md",
-    "content/post/Excel.md",
     "content/post/DualBoot 多重開機.md",
     "content/post/Docker.md",
     "content/post/Cockpit.md",
-    "content/post/CAT 補助翻譯.md",
     "content/post/Cloudflare 網站設定.md",
-    "content/post/Clonezilla.md",
-    "content/post/pichome.md",
-    "content/post/檔案管理.md",
-    "content/post/RDP 連線實作.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",

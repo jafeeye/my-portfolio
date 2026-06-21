@@ -1,3 +1,31 @@
+---
+title: CAT 補助翻譯
+toc: true
+date: 2026-06-21
+---
+## 網頁格式化進Word翻譯
+PrintFriendly或Print WE
+![](Pasted%20image%2020260621225225.png)
+
+1. 去CNN網站複製文章，並用純文字方式貼上Word並清除一些殘留文字
+2. 使用取代功能^p^p取代^p，刪除多餘段落
+3. 使用文字轉表格，將每一段轉換為表格，將文字左右對齊
+![](Pasted%20image%2020260621225328.png)
+4. 在表格右邊按下+，新增右欄
+![](Pasted%20image%2020260621225356.png)
+
+5. 取消段落文字對齊段落並設定後段0.5行統一格式，並貼上翻譯的譯文達成左右對齊
+
+## 使用Trados做雙文件對齊
+
+## abbyy aligner純文字對齊
+
+## 中英對照PDF製作
+
+## MultiTerm使用操作
+
+
+
 Reverso
 https://github.com/OwO-Network/DeepLX
 SDL Trados步驟:
