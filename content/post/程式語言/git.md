@@ -16,11 +16,10 @@ git init
 git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish
 設定blowfish
 xcopy /E /I themes\blowfish\config config
-
 config/_default/hugo.toml >> theme = "blowfish"
+
 ## 建立新文章
 hugo new posts/my-first-post.md
-
 
 ## 文章列表加入網頁選單
 config/_default/menus.toml
@@ -28,6 +27,12 @@ config/_default/menus.toml
   name = "全部文章" 
   pageRef = "posts" 
   weight = 10
+
+## git 
+git add . 
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/你的帳號/你的專案名稱.git
 
 ```
 

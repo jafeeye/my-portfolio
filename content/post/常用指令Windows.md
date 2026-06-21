@@ -115,4 +115,16 @@ Win+Shift+S 快速存成圖片檔
 Ctrl+Shift+Esc 工作管理員
 Ctrl+Win+Shift+B 軟重啟
 
+| 功能          | 快速鍵           |
+| ----------- | ------------- |
+| 純文字貼上       | Ctrl+Shift+V  |
+| 啟動FancyZone | Shift+拖曳      |
+| 打開表情庫       | Win+。         |
+| 切換App不同螢幕   | Win+Shift+←/→ |
+| Spotlight   | Alt+Space     |
+| 快速預覽        | Win+Space     |
+| 量測螢幕大小      | Win+Shift+M   |
+| OCR         | Win+Shift+T   |
+| 顯示顏色取色器     | Win+Shift+C   |
+| 螢幕錄影/停止     | Win+Alt+R     |
 

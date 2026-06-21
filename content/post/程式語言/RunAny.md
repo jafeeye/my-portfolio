@@ -19,6 +19,12 @@ crow translate Cli
 exe選單開啟指定DPI縮放 ![[02-軟體清單#^1ca5bc]]
 Ctrl+Shift+V 純文字貼上
 
+
+
+
+
+
+
 **RunAny**
 - Alt+H 切換視窗大小
 - Alt+T
