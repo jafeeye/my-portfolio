@@ -10,7 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 70.27777777777777,
+            "dimension": 81.48148148148148,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/02-軟體清單.md",
+                    "file": "content/post/常用指令Windows.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "02-軟體清單"
+                  "title": "常用指令Windows"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "e4df24be1ef9cbfb",
             "type": "tabs",
-            "dimension": 29.72222222222222,
+            "dimension": 18.51851851851852,
             "children": [
               {
                 "id": "7f68827d939eeb68",
@@ -244,9 +244,16 @@
   },
   "active": "7f68827d939eeb68",
   "lastOpenFiles": [
+    "content/post/常用指令Windows.md",
+    "content/post/常用指令macOS.md",
+    "content/post/常用指令linux.md",
+    "content/post/常用指令DSM.md",
+    "content/post/常用指令DOS.md",
+    "content/post/常用指令AIX.md",
+    "content/post/Rclone.md",
+    "content/post/Google Security.md",
     "content/post/02-軟體清單.md",
     "content/post/程式語言/js.md",
-    "content/post/常用指令Windows.md",
     "content/post/程式語言/RunAny.md",
     "content/post/程式語言/Python.md",
     "content/post/程式語言/git.md",
@@ -264,7 +271,6 @@
     "content/post/x11.md",
     "content/post/K8s Policy.md",
     "content/post/Excel.md",
-    "content/post/常用指令macOS.md",
     "content/post/DualBoot 多重開機.md",
     "content/post/Docker.md",
     "content/post/Cockpit.md",
@@ -273,13 +279,7 @@
     "content/post/Clonezilla.md",
     "content/post/pichome.md",
     "content/post/檔案管理.md",
-    "content/post/常用指令AIX.md",
     "content/post/RDP 連線實作.md",
-    "content/post/VCE 題庫製作.md",
-    "content/post/K8s 整理.md",
-    "content/post/程式語言/XiaoChao.md",
-    "content/post/程式語言/C++ QT.md",
-    "content/post/程式語言/命令行.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",

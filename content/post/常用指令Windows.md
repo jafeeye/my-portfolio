@@ -6,19 +6,19 @@ toc: true
 ## 前言
 Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除錯及呼叫相關功能  
 
-1. `gpupdate /force /target:computer /wait:0` 套本機原則
-2. `rsop.msc` 顯示本機原則結果
-3. 產生原則網頁 `gpresult /h result.html && start .\\result.html`
-4. 憑證儲存檢視 `cmdkey /list` `cmdkey /add:192.168.1.100 /user:帳號 /pass:密碼`
-5. 顯示訊息小視窗 `msg * 我是訊息` `msg /server:127.0.0.1 * 訊息`
-6. 換顏色 `color a`
-7. 產生網址QRCode `curl [qrenco.de/https://www.google.com.tw](<http://qrenco.de/https://www.google.com.tw>)`
-8. 出現歷史指令 `F7`
-9. 暫時alias `doskey ps=powershell,再輸入ps`
-10. 開啟磁碟計數功能 `diskperf -y`
+1. 產生原則網頁 `gpresult /h result.html && start .\\result.html`
+2. 憑證儲存檢視 `cmdkey /list` `cmdkey /add:192.168.1.100 /user:帳號 /pass:密碼`
+3. 顯示訊息小視窗 `msg * 我是訊息` `msg /server:127.0.0.1 * 訊息`
+4. 換顏色 `color a`
+5. 產生網址QRCode `curl [qrenco.de/https://www.google.com.tw](<http://qrenco.de/https://www.google.com.tw>)`
+6. 出現歷史指令 `F7`
+7. 暫時alias `doskey ps=powershell,再輸入ps`
+8. 開啟磁碟計數功能 `diskperf -y`
 
 ## 系統元件
 - 安全移除裝置 `control hotplug.dll`
+- `gpupdate /force /target:computer /wait:0` 套本機原則
+- `rsop.msc` 顯示本機原則結果
 
 ## 網路
 - 查開的Port `netstat -nao`
