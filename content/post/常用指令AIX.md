@@ -40,25 +40,15 @@ set -o emacs 模式
 | 多選       | esc+7  |
 |          | esc+4  |
 
-
-
-
-
-
 nmon 等待時間很長,輸入oslevel -s
 stty erase 或使用set -o vi
 
-安裝軟體
-安裝OpenSSH (預設無安裝)
+## 安裝軟體
+安裝OpenSSH (預設無安裝)，驗證 ssh IP位置
+smit install 進入安裝畫面
+![](Pasted%20image%2020260621111926.png)
 
-
-
-
-lslpp -l|grep open
-smit install 
-
-驗證
-ssh 127.0.0.1
+`lslpp -l|grep open` 檢查目前安裝套件有無open開頭
 
 ### 設定網路
 

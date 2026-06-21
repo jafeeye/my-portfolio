@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令DSM.md",
+                    "file": "content/post/常用指令AIX.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令DSM"
+                  "title": "常用指令AIX"
                 }
               }
             ]
@@ -283,22 +283,26 @@
   },
   "active": "bf6bcf812461d896",
   "lastOpenFiles": [
+    "content/post/常用指令AIX.md",
+    "static/Pasted image 20260621111926.png",
+    "content/post/AIX 安裝.md",
+    "content/post/程式語言/git.md",
+    "content/post/proj/DualBoot 多重開機.md",
+    "content/post/K8s 整理.md",
+    "static/Pasted image 20260621104023.png",
+    "static/Pasted image 20260621103339.png",
     "content/post/常用指令DSM.md",
     "content/post/OpenShift 教學.md",
     "content/post/企業VPN架設.md",
-    "content/post/K8s 整理.md",
-    "content/post/程式語言/git.md",
     "content/post/常用指令linux.md",
     "content/post/K8S.md",
     "content/post/RDP 連線實作.md",
-    "content/post/AIX 安裝.md",
     "null",
     "content/post/PVE 進階設定.md",
     "dev",
     "content/post/illumio 除錯.md",
     "content/post/illumio K8S.md",
     "content/post/incus.md",
-    "content/post/常用指令AIX.md",
     "content/post/Cockpit.md",
     "static/Pasted image 20260616230441.png",
     "static/Pasted image 20260616230051.png",
@@ -314,15 +318,10 @@
     "content/post/常用指令macOS.md",
     "content/post/常用指令DOS.md",
     "content/post/LXC 容器.md",
-    "content/post/KPM寫作工具整合.md",
-    "content/post/InDesign 排版.md",
     "static/Pasted image 20260610172202.png",
     "static/Pasted image 20260610102631.png",
     "static/Pasted image 20260609210153.png",
     "static/Pasted image 20260609205719.png",
-    "static/Pasted image 20260609205359.png",
-    "static/Pasted image 20260609205205.png",
-    "static/Pasted image 20260603092433.png",
     "Clippings",
     "content/post/code/wsever_opti.ps1",
     "content/post/code/heidmall.yaml",
