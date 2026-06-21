@@ -178,6 +178,7 @@ export CHROMIUM_USER_FLAGS="--password-store=basic"
 yum RHEL7之前,dnf RHEL8之後
 dnf 要跳過gpg檢查 dnf -no gpgcheck
 因有時候內建repo會把gpgcheck取消,以下為確保在無連網環境能透過dnf+gpgkey 安裝
+AppImage 沒有權限記得chmod +x
 
 ```
 1.vi illumio.key 後貼上begin跟end後存檔
@@ -259,3 +260,31 @@ date -s "2026-05-05 11:00:00"  //手動校時避免dnf無法安裝
 export Path=$PATH:/usr/bin  //將路徑加入程式環境變數
 開啟自動登入：系統設定/登入視窗/使用者，打上使用者名稱 (預設可登入root環境)
 ```
+
+
+
+## 快速鍵
+
+| **快速鍵**          | **功能**                       |
+| ---------------- | ---------------------------- |
+| Super+A          | Show Applications            |
+| Alt+R            | 執行視窗                         |
+| Ctrl+Alt+T       | 執行終端機                        |
+| PrtSc            | 獲取整個螢幕的截圖並儲存到 Pictures 目錄    |
+| Shift+PrtSc      | 獲取螢幕的某個區域截圖並儲存到 Pictures 目錄。 |
+| Alt+PrtSc        | 獲取當前視窗的截圖並儲存到 Pictures 目錄。   |
+| Ctrl+PrtSc       | 獲取整個螢幕的截圖並存放到剪貼簿。            |
+| Shift+Ctrl+PrtSc | 獲取螢幕的某個區域截圖並存放到剪貼簿。          |
+| Ctrl+Alt+PrtSc   | 獲取當前視窗的 截圖並存放到剪貼簿。           |
+
+## 輸入法
+ibus/fctrix/RIME/HIME(類似於新注音的輸入法)
+
+## 環境組態
+bash 尋找順序
+
+| **組態檔名稱**             | **觸發時機**                                             | **適合放什麼內容**                                 | 系統     |
+| --------------------- | ---------------------------------------------------- | ------------------------------------------- | ------ |
+| **`~/.profile`**      | **登入系統時**執行（Login Shell）<br>_※ Bourne shell 家族的通用設定_ | 全域環境變數（例如 `PATH`）、不依賴特定 Shell 的設定。          | Ubuntu |
+| **`~/.bash_profile`** | **登入系統時**執行（Login Shell）<br>_※ 專屬 Bash Shell 的設定_    | 效果同上，但只有使用 Bash 登入時才會讀取。                    | rocky  |
+| **`~/.bashrc`**       | **打開新終端機視窗時**執行<br>（Non-login Interactive Shell）     | 命令別名（`alias`）、終端機提示字元顏色（`PS1`）、特定 Shell 函數。 |        |

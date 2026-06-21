@@ -224,6 +224,8 @@ docker run -d \
   -e GPU=N \
   vdsm/virtual-dsm:latest
 ```
+
+
 ### Edits
 - Replaced `-e ALLOCATE=N` with new disk feature `-e DISK_FMT=qcow2`.
 - Re-added `-e ALLOCATE=N` to be used in combination with qcow2.
@@ -236,12 +238,8 @@ systemctl daemon-reload
 systemctl restart pkg-ContainerManager-dockerd
 ```
 
-
 https://github.com/vdsm/virtual-dsm/issues/382
 參考影片：https://www.youtube.com/watch?v=LKZKsyZULYM
-
-
-
 
 ## 參考資料
 1. 安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818

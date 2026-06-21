@@ -72,6 +72,12 @@ rm google-chrome-stable_current_amd64.deb
 google-chrome --no-sandbox --disable-gpu
 ```
 
+### 安裝中文語言
+sudo apt-get install language-pack-zh*sudo apt-get install -y chinese*
+### 補裝中文常用font
+sudo apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core
+
+
 ### 啟動腳本
 無法打中文是因為使用者無法去執行ibus權限，指派成root就可以或是在一般使用者載入ibus環境，去`/etc/xrdp/sesman.ini` 去找UserWindowManager、DefaultWindowManager，看這設定檔放在哪，代表設定檔是放在startwm.sh
 ```

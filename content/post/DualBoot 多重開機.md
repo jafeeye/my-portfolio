@@ -20,3 +20,21 @@ date: 2026-06-21
 | /dev/sda5 |      | /         | Ext4  |          | Fedora根目錄     |
 
 ![](Pasted%20image%2020260621104023.png)
+
+
+
+移除雙重開機中的Linux
+
+1.掛載EFI 磁區(Windows可用diskpart掛載)
+2.刪除EFI磁區中的資料，直接刪除整個ubuntu資料夾(GRUB)
+(不同發行版GRUB存放位置也不同，Manjaro則是放在 Manjaro資料夾)
+(因Windows Explorer權限無法讀寫，使用第三方Explorer++並以系統管理員讀寫)
+(在Ubuntu在安裝畫面中有 Install Ubuntu alongside Windows Boot Manager選項即為可將GRUB 與Windows Boot Manager 裝在同一個 EFI 磁區裡面 )
+3.移除root磁區(ext4)，並將磁碟延伸回去原本硬碟
+NTFS磁碟權限/非正常移除讀寫： sudo ntfsfix /dev/sde1
+
+
+## Boot Menu
+
+開機選單按e→進入啟動設定，打完指令按下F10以此指令開機
+禁用Nvidia驅動→ nouveau.modeset=0
