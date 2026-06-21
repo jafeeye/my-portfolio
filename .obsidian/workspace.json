@@ -10,7 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 72.33201581027669,
+            "dimension": 65.41501976284584,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Docker.md",
+                    "file": "content/post/常用指令DSM.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Docker"
+                  "title": "常用指令DSM"
                 }
               },
               {
@@ -32,20 +32,21 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/VCE 題庫製作.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "VCE 題庫製作"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
             "id": "e4df24be1ef9cbfb",
             "type": "tabs",
-            "dimension": 27.66798418972332,
+            "dimension": 34.58498023715415,
             "children": [
               {
                 "id": "bf6bcf812461d896",
@@ -297,8 +298,25 @@
   },
   "active": "bf6bcf812461d896",
   "lastOpenFiles": [
-    "content/post/Docker.md",
+    "content/post/VCE 題庫製作.md",
+    "static/image 3.png",
+    "static/image 2.png",
+    "static/image 1.png",
+    "static/image.png",
+    "content/post/程式語言/js.md",
+    "content/post/程式語言/XiaoChao.md",
+    "content/post/程式語言/RunAny.md",
+    "content/post/程式語言/Python.md",
+    "content/post/程式語言/Pasted image 20241119231923.png",
+    "content/post/程式語言/Pasted image 20241119231703.png",
+    "content/post/程式語言/git.md",
+    "content/post/程式語言/C++ QT.md",
+    "content/post/程式語言/命令行.md",
     "content/post/常用指令linux.md",
+    "content/post/常用指令DSM.md",
+    "content/post/常用指令AIX.md",
+    "content/post/常用指令DOS.md",
+    "content/post/Docker.md",
     "content/post/RDP 連線實作.md",
     "content/post/企業共享設定.md",
     "content/post/PVE 各系統安裝.md",
@@ -308,35 +326,17 @@
     "content/post/Google Security.md",
     "content/post/常用指令macOS.md",
     "content/post/常用指令Windows.md",
-    "content/post/常用指令AIX.md",
-    "content/post/常用指令DOS.md",
-    "content/post/常用指令DSM.md",
     "content/post/Synology.md",
     "static/Pasted image 20260621115753.png",
     "static/Pasted image 20260621115719.png",
     "x11.md",
     "static/Pasted image 20260621111926.png",
     "content/post/AIX 安裝.md",
-    "content/post/程式語言/git.md",
-    "content/post/K8s 整理.md",
     "static/Pasted image 20260621104023.png",
-    "static/Pasted image 20260621103339.png",
-    "content/post/OpenShift 教學.md",
-    "content/post/企業VPN架設.md",
-    "content/post/K8S.md",
     "null",
     "dev",
-    "content/post/illumio 除錯.md",
-    "content/post/illumio K8S.md",
-    "content/post/incus.md",
-    "static/Pasted image 20260616230441.png",
-    "static/Pasted image 20260616230051.png",
     "static/Diagram 2.svg.xml",
-    "static/Diagram 2.svg",
     "hugo.yaml",
-    "K8s Policy.md",
-    "static/Pasted image 20260610172202.png",
-    "static/Pasted image 20260610102631.png",
     "Clippings",
     "content/post/code/wsever_opti.ps1",
     "content/post/code/heidmall.yaml",
