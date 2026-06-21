@@ -10,7 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 65.41501976284584,
+            "dimension": 59.18972332015811,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,35 +18,20 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令DSM.md",
+                    "file": "content/post/x11.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令DSM"
-                }
-              },
-              {
-                "id": "689721735e9599c7",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/VCE 題庫製作.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "VCE 題庫製作"
+                  "title": "x11"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
             "id": "e4df24be1ef9cbfb",
             "type": "tabs",
-            "dimension": 34.58498023715415,
+            "dimension": 40.81027667984189,
             "children": [
               {
                 "id": "bf6bcf812461d896",
@@ -257,48 +242,25 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "floating": {
-    "id": "725e0956e1e27ad8",
-    "type": "floating",
-    "children": [
-      {
-        "id": "946a2cb862aa4a4f",
-        "type": "window",
-        "children": [
-          {
-            "id": "5e565f3224853034",
-            "type": "tabs",
-            "children": [
-              {
-                "id": "a0714b0d7d366e00",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/K8s 整理.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "K8s 整理"
-                }
-              }
-            ]
-          }
-        ],
-        "direction": "vertical",
-        "x": 638,
-        "y": 254,
-        "width": 1024,
-        "height": 800,
-        "maximize": false,
-        "zoom": -0.5
-      }
-    ]
-  },
   "active": "bf6bcf812461d896",
   "lastOpenFiles": [
+    "content/post/x11.md",
+    "content/post/K8s Policy.md",
+    "content/post/Excel.md",
+    "content/post/InDesign 排版.md",
+    "content/post/常用指令macOS.md",
+    "content/post/DualBoot 多重開機.md",
+    "content/post/Docker.md",
+    "content/post/Cockpit.md",
+    "content/post/CAT 補助翻譯.md",
+    "content/post/Cloudflare 網站設定.md",
+    "content/post/Clonezilla.md",
+    "content/post/pichome.md",
+    "content/post/檔案管理.md",
+    "content/post/常用指令AIX.md",
+    "content/post/RDP 連線實作.md",
     "content/post/VCE 題庫製作.md",
+    "content/post/K8s 整理.md",
     "static/image 3.png",
     "static/image 2.png",
     "static/image 1.png",
@@ -314,24 +276,9 @@
     "content/post/程式語言/命令行.md",
     "content/post/常用指令linux.md",
     "content/post/常用指令DSM.md",
-    "content/post/常用指令AIX.md",
-    "content/post/常用指令DOS.md",
-    "content/post/Docker.md",
-    "content/post/RDP 連線實作.md",
-    "content/post/企業共享設定.md",
-    "content/post/PVE 各系統安裝.md",
-    "content/post/PVE 進階設定.md",
-    "content/post/DualBoot 多重開機.md",
-    "content/post/Cockpit.md",
-    "content/post/Google Security.md",
-    "content/post/常用指令macOS.md",
-    "content/post/常用指令Windows.md",
-    "content/post/Synology.md",
     "static/Pasted image 20260621115753.png",
     "static/Pasted image 20260621115719.png",
-    "x11.md",
     "static/Pasted image 20260621111926.png",
-    "content/post/AIX 安裝.md",
     "static/Pasted image 20260621104023.png",
     "null",
     "dev",
