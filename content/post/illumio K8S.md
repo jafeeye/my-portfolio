@@ -3,6 +3,31 @@ title: illumio K8S
 toc: true
 date: 2026-06-02
 ---
+
+illumio 5.10 kube-proxy-replacement=true,enforcement在NodePort跟LoadBalancer 不能做流量控管
+- Kubelink可以看到VirtualServices，但是負責C-VEN的Policy無法工作
+- 流量被擋下也是CNI，ilumio的log檔完全看不到規則生效
+- 解釋是Enforcement到Namespace，而不是Pod 
+
+Pod 一定屬於某個 Namespace，沒指定就Default
+```
+[ Namespace: dev ]
+  ├── [ Service: my-web-svc ] ──── (負責把流量導向符合標籤的 Pod)
+  │                                      │
+  └── [ Deployment: my-web-deploy ]      │
+        └── (控管、產生)                 │
+              ├── [ Pod: my-web-xyz1 ] ◄─┤
+              ├── [ Pod: my-web-xyz2 ] ◄─┤
+              └── [ Pod: my-web-xyz3 ] ◄─┘
+```
+
+![](Pasted%20image%2020260622141849.png)
+基本上是透過Egress允許LoadBlacnce IP，但是LoadblanceIP流量跑去哪裡IP位置未知，沒有一個L3產品能做到這件事，除非要達成要使用illumio以外的Multicluster Mesh或是Services Mesh 使用tunnel方式
+
+
+
+
+
 NodePort 會對應到 VirtualService
 Extra-Scope,
 
