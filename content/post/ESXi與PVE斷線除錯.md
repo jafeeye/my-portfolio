@@ -6,17 +6,18 @@ toc: true
 ## 前言
 
 通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
-除錯顯示log指令
+除錯顯示log
+
 ```
+journalctl -b -1 -e 
 journalctl --until "2026-02-27 11:00:00" -n 100 -r
 ```
-在指令發現這條
-`Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
-懷疑是驅動出現 `Detected Hardware Unit Hang` 關閉電源休眠可解決問題
 
+發現這條，懷疑是驅動出現 `Detected Hardware Unit Hang` 關閉電源休眠可解決問題
+`Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
 
 ```
-# 關閉卸載功能Hardware Unit Hang，這能避免
+# 關閉卸載功能 Hardware Unit Hang
 ethtool -K enx00e01c680083 tso off gso off 
 ethtool -K eno1 tso off gso off 
 # 重新啟動網卡服務 
@@ -69,7 +70,6 @@ esxcli network nic tso set -n vmnic0 -e 0
 ```
 /sbin/auto-backup.sh
 ```
-
 
 ESXI 7升8
 ![[Pasted image 20260321174801.png]]

@@ -10,6 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
+            "dimension": 80.31496062992126,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -17,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/illumio K8S.md",
+                    "file": "content/post/ESXi與PVE斷線除錯.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "illumio K8S"
+                  "title": "ESXi與PVE斷線除錯"
                 }
               }
             ]
@@ -30,6 +31,7 @@
           {
             "id": "33a4326b3daf678f",
             "type": "tabs",
+            "dimension": 19.68503937007874,
             "children": [
               {
                 "id": "1ed2d537b13755f0",
@@ -133,7 +135,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 244.5110321044922,
+    "width": 293.5024719238281,
     "collapsed": true
   },
   "right": {
@@ -224,8 +226,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5,
-    "collapsed": true
+    "width": 217.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -245,7 +246,20 @@
   },
   "active": "1ed2d537b13755f0",
   "lastOpenFiles": [
+    "content/post/ESXi與PVE斷線除錯.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/illumio 2x2 DR.md",
     "content/post/illumio K8S.md",
+    "content/post/RDP 連線實作.md",
+    "content/post/常用指令macOS.md",
+    "content/post/常用指令linux.md",
+    "content/post/K8S.md",
+    "content/post/K8s Policy.md",
+    "content/post/K8s 整理.md",
+    "content/post/immch 安裝教學.md",
+    "content/post/illumio 除錯.md",
+    "content/post/各式OS整理.md",
+    "content/post/VCE 題庫製作.md",
     "static/Pasted image 20260622141849.png",
     "content/post/列印技術.md",
     "static/Pasted image 20260621231930.png",
@@ -258,29 +272,16 @@
     "content/post/防火牆.md",
     "content/post/Excel.md",
     "content/post/常用指令Windows.md",
-    "content/post/常用指令macOS.md",
-    "content/post/常用指令linux.md",
     "content/post/常用指令DSM.md",
     "content/post/常用指令DOS.md",
     "content/post/常用指令AIX.md",
     "content/post/Rclone.md",
     "content/post/Google Security.md",
-    "content/post/02-軟體清單.md",
-    "content/post/程式語言/js.md",
-    "content/post/程式語言/RunAny.md",
-    "content/post/程式語言/Python.md",
-    "content/post/程式語言/git.md",
-    "content/post/InDesign 排版.md",
     "static/Pasted image 20260621201851.png",
     "static/Pasted image 20260621201825.png",
     "static/Pasted image 20260621201805.png",
     "static/Pasted image 20260621201719.png",
     "static/Pasted image 20260621201707.png",
-    "content/post/x11.md",
-    "content/post/K8s Policy.md",
-    "content/post/DualBoot 多重開機.md",
-    "content/post/Docker.md",
-    "content/post/Cockpit.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",
