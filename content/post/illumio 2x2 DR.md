@@ -7,11 +7,11 @@ date: 2026-05-29
 重置illumio `sudo -u ilo-pce illumio-pce-ctl reset`
 hosts
 ```
-172.16.7.165 illumio-core0.bd1.dev 
-172.16.7.165 illumio2x2.bd1.dev
-172.16.7.161 illumio-core1.bd1.dev
-172.16.7.159 illumio-data0.bd1.dev
-172.16.7.115 illumio-data1.bd1.dev
+172.16.7.106 illumio-core0.bd1.dev 
+172.16.7.106 illumio2x2.bd1.dev
+172.16.8.85 illumio-core1.bd1.dev
+172.16.8.112 illumio-data0.bd1.dev
+172.16.8.124 illumio-data1.bd1.dev
 ```
 
 /etc/illumio-pce/runtime-env.yml
@@ -40,6 +40,30 @@ smtp_relay_address: ms1.gss.com.tw:25
 active_standby_replication:
   active_pce_fqdn: illumio2x2.bd1.dev
 ```
+
+要複製key跟crt 同時過去才可以
+scp 複製過去會有root 權限修改為檔案擁有者,所以會沒辦法讀
+```
+chown root:ilo-pce /etc/illumio-pce/runtime_env.yml
+chmod 640 /etc/illumio-pce/runtime_env.yml
+```
+改憑證資料夾權限
+```
+# 1. 把整個憑證資料夾的擁有者改為 root，群組改為 ilo-pce
+chown -R root:ilo-pce /var/lib/illumio-pce/cert
+# 2. 設定資料夾權限，讓 ilo-pce 群組可以進得去
+chmod 750 /var/lib/illumio-pce/cert
+# 3. 設定憑證權限 (root可讀寫，ilo-pce可讀)
+chmod 640 /var/lib/illumio-pce/cert/server.crt
+# 4. 設定私鑰權限 (極度機密：root可讀寫，ilo-pce可讀，其他人完全不能看)
+chmod 640 /var/lib/illumio-pce/cert/server.key
+```
+
+
+
+
+```
+
 
 
 重新改FQDN，去刪除原本cert跟key `rm -rf /var/lib/illumio-pce/cert/server*`

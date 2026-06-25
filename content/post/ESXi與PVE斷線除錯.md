@@ -13,7 +13,7 @@ journalctl -b -1 -e
 journalctl --until "2026-02-27 11:00:00" -n 100 -r
 ```
 
-發現這條，懷疑是驅動出現 `Detected Hardware Unit Hang` 關閉電源休眠可解決問題
+發現這條，懷疑是驅動出現 `Detected Hardware Unit Hang`，關閉電源休眠可解決問題
 `Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
 
 ```
