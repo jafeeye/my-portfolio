@@ -87,3 +87,24 @@ DR端：有四台機器(core,core,data0,data1)四台寫入hosts  `<IP> dr.hcc.co
 
 正常 illumio.gss.com.tw
 DR 
+
+
+
+
+/var/lib/illumio-pce 跟 /var/lib/illumio-pvr/cert 下的擁有者都是root
+```
+# 1. 把 illumio-pce 目錄（不包含底下所有子檔案）的 Owner 改為 root
+sudo chown root:ilo-pce /var/lib/illumio-pce
+
+# 2. 把 cert 目錄的 Owner 改為 root
+sudo chown root:ilo-pce /var/lib/illumio-pce/cert
+```
+
+重新執行腳本出現 `Error: Unable to verify certificate chain.` 要把
+```
+trusted_ca_bundle: "/var/lib/illumio-pce/certs/server.crt"
+```
+憑證檢查
+```
+illumio-pce-env setup --test 5 --list
+```
