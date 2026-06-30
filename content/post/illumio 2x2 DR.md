@@ -3,16 +3,20 @@ title: illumio 2x2 DR
 toc: true
 date: 2026-05-29
 ---
+## 重裝illumio 
+1. 重置資料庫重新設定
+`sudo -u ilo-pce illumio-pce-ctl reset`
 
-重置illumio `sudo -u ilo-pce illumio-pce-ctl reset`
-hosts
+2. 4台電腦分別寫入 hosts,給主要那台core FQDN別名 (hosts可用scp複製)
 ```
-172.16.7.106 illumio-core0.bd1.dev 
+172.16.7.106 illumio-core0.bd1.dev
 172.16.7.106 illumio2x2.bd1.dev
 172.16.8.85 illumio-core1.bd1.dev
 172.16.8.112 illumio-data0.bd1.dev
 172.16.8.124 illumio-data1.bd1.dev
 ```
+
+
 
 /etc/illumio-pce/runtime-env.yml
 ```
@@ -102,9 +106,43 @@ sudo chown root:ilo-pce /var/lib/illumio-pce/cert
 
 重新執行腳本出現 `Error: Unable to verify certificate chain.` 要把
 ```
-trusted_ca_bundle: "/var/lib/illumio-pce/certs/server.crt"
+
+trusted_ca_bundle: "/var/lib/illumio-pce/cert/server.crt"
 ```
 憑證檢查
 ```
 illumio-pce-env setup --test 5 --list
 ```
+
+
+## 移除illumio
+In order to completely uninstall and remove the PCE for your system, perform the following steps:
+1. Remove the PCE UI package:
+    `rpm -e illumio-pce-ui`
+2. Remove the main PCE package:
+    `rpm -e illumio-pce`
+3. Manually delete these directories:
+```
+/var/lib/illumio-pce
+/var/log/illumio-pce
+/etc/illumio-pce
+```
+
+
+## 憑證重新識別
+用 `/opt/illumio-pce/illumio-pce-env setup --generate-cert` 重產憑證容易出現問題，因為會沒把憑證放入bundle-CA
+
+```
+## 移除 server.crt，並更新
+rm -f /etc/pki/ca-trust/source/anchors/server.crt
+update-ca-trust extract
+## 查詢憑證鏈,確認在CA bundle有沒有刪除illumio自簽CA
+trust list
+# 用setup -generate-cert產出新憑證在更新一次
+update-ca-trust extract
+```
+
+Linux 的憑證管理分為兩條路線：
+1. **檔案派（File-based）：** 把檔案丟進 `/etc/pki/ca-trust/source/anchors/`，再跑 `update-ca-trust`。
+2. **資料庫派（Database-based）：** 使用 `trust anchor --store` / `--remove`。
+因為 **Illumio 官方文件建議的做法是標準的「檔案派」**（直接在 `pce_runtime.yml` 指定純文字的 `ca-bundle.crt` 路徑），所以你只需要用 `rm` 檔案 + `update-ca-trust extract` 就能完美控管。如果你用資料庫派的 `--remove` 去砍系統內建的官方憑證（就會出現 read-only 錯誤）
