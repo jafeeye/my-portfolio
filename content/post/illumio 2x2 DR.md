@@ -64,12 +64,6 @@ chmod 640 /var/lib/illumio-pce/cert/server.key
 ```
 
 
-
-
-
-
-
-
 重新改FQDN，去刪除原本cert跟key `rm -rf /var/lib/illumio-pce/cert/server*`
 基本上在執行sudo  illumio-pce-ctl setup --generate-cert ,最主要會產出server.key 跟server.key,並且腳本會產出ilo-pce這個使用者,並且把這兩個檔案擁有者權限改成ilo-pce
 
@@ -78,12 +72,6 @@ chmod 640 /var/lib/illumio-pce/cert/server.key
 illumio-pce-env setup --test 5 --list
 ```
 
-
-
-
-
-
-
 運作端：有四台機器
 DR端：有四台機器(core,core,data0,data1)四台寫入hosts  `<IP> dr.hcc.com.tw`
 
@@ -91,8 +79,6 @@ DR端：有四台機器(core,core,data0,data1)四台寫入hosts  `<IP> dr.hcc.co
 
 正常 illumio.gss.com.tw
 DR 
-
-
 
 
 /var/lib/illumio-pce 跟 /var/lib/illumio-pvr/cert 下的擁有者都是root
@@ -128,8 +114,12 @@ In order to completely uninstall and remove the PCE for your system, perform the
 /etc/illumio-pce
 ```
 
-
 ## 憑證重新識別
+
+update-ca-trust 原理是把/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem做更新，而且tls-ca-bundle.pem會軟連結到 /etc/ssl/certs/ca-bundle.crt ，所以update-ca-trust 如果還是沒有更新成功就是軟連結掉了
+`ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-bundle.crt`
+
+
 用 `/opt/illumio-pce/illumio-pce-env setup --generate-cert` 重產憑證容易出現問題，因為會沒把憑證放入bundle-CA
 
 ```
@@ -145,4 +135,10 @@ update-ca-trust extract
 Linux 的憑證管理分為兩條路線：
 1. **檔案派（File-based）：** 把檔案丟進 `/etc/pki/ca-trust/source/anchors/`，再跑 `update-ca-trust`。
 2. **資料庫派（Database-based）：** 使用 `trust anchor --store` / `--remove`。
-因為 **Illumio 官方文件建議的做法是標準的「檔案派」**（直接在 `pce_runtime.yml` 指定純文字的 `ca-bundle.crt` 路徑），所以你只需要用 `rm` 檔案 + `update-ca-trust extract` 就能完美控管。如果你用資料庫派的 `--remove` 去砍系統內建的官方憑證（就會出現 read-only 錯誤）
+此方法會變成信任把檔案憑證複製到 `/etc/pki/ca-trust/source/illumio2x2.bd1.dev.p11-kit`
+移除先用 trust list 查塞入的憑證 `pcs11:id=.....;type=cer`然後 `trust anchor --remove pcs11:id=.....;type=cer`
+
+方法1 要把複製crt到anchors＋update-ca-trust;憑證維持crt,   trust list 可以看到憑證
+方法2 trust anchor --store <憑證路徑> ;憑證在/source/illumio.p11-kit , 
+
+
