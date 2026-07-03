@@ -102,7 +102,7 @@ systemctl start rc-local.service
 ## 查看nft
 ```
 # 看有多少個清單
-nft list table
+nft list tables
 # 顯示防火牆規則
 nft list ruleset
 # 刪除清單
