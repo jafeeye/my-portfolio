@@ -77,6 +77,7 @@ $env:Path += ";C:\Your\Tool\Path"
 - 寫入檔案：echo erwer > config.txt
 - 建立1gb空檔 fsutil file createnew test_1gb.txt 1073741824
 - 切家目錄 `cd %homepath%\\desktop` `cd %USERPROFILE%\\desktop` (給C槽之外用)
+- 建立空檔 `fsutil file createnew test_5g.dat 5368709120`
 ## 開關機
 - 到bios介面 `shutdown /r /fw /f /t 0` `shutdown /r /o /t 0`
 ## 終端機

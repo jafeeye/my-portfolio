@@ -117,7 +117,21 @@ In order to completely uninstall and remove the PCE for your system, perform the
 ## 憑證重新識別
 
 update-ca-trust 原理是把/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem做更新，而且tls-ca-bundle.pem會軟連結到 /etc/ssl/certs/ca-bundle.crt ，所以update-ca-trust 如果還是沒有更新成功就是軟連結掉了
-`ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-bundle.crt`
+
+重新補連結
+```
+ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-bundle.crt
+```
+確認憑證是否加入CA Bundle，兩處都有確認憑證
+```
+## 檢查開頭有沒有自簽憑證
+trust list
+## 檢查開頭有沒有自簽憑證
+cat /etc/ssl/certs/ca-bundle.crt
+```
+
+
+
 
 
 用 `/opt/illumio-pce/illumio-pce-env setup --generate-cert` 重產憑證容易出現問題，因為會沒把憑證放入bundle-CA
