@@ -225,8 +225,7 @@ docker run -d \
   vdsm/virtual-dsm:latest
 ```
 
-
-### Edits
+### 其他參數
 - Replaced `-e ALLOCATE=N` with new disk feature `-e DISK_FMT=qcow2`.
 - Re-added `-e ALLOCATE=N` to be used in combination with qcow2.
 - Removed obsolete `DEV=N` parameter.

@@ -127,7 +127,13 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 ![](pvenetbox260301.png)
 
 ## PowerDNS 整合
-
+1. 先安裝完PowerDNS，修改組態檔
+- api=yes  ;啟用api功能
+- api-keys=<自訂一串字母>
+- webserver=yes
+- webserver-address=0.0.0.0
+- webserver-allow-from= ;全放是0.0.0.0/0, ::/0
+- webserver-port=8081
 ```/etc/powerdns/pdns.conf
 ################################# 
 # launch Which backends to launch and order to query them in 
@@ -149,15 +155,14 @@ webserver-address=192.168.240.13
 # webserver-allow-from Webserver/API access is only allowed from these subnets 
 webserver-allow-from=127.0.0.1,::1,192.168.0.0/16
 ```
-
+2. 重啟PowerDNS
 ```
 sudo systemctl restart pdns
 sudo systemctl status pdns
 ```
-
-寫入Zone
+3. 測試PowerDNS透過 `pdnsutil` 寫入Zone
 ```
-sudo pdnsutil create-zone pve.box2.kmc.gr.jp
+sudo pdnsutil create-zone internal
 ```
 確認是否寫入在sqlite3
 ```
@@ -165,21 +170,21 @@ SQLite version 3.37.2 2022-01-06 13:25:41
 Enter ".help" for usage hints. 
 sqlite> select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.server.invalid hostmaster.pve.box2.kmc.gr.jp 0 10800 3600 604800 3600|3600|0|0||1
 ```
-
-
-DNS註冊
+4. 在PVE啟動SDN的DNS功能
 `Datacenter > SDN > Options > DNS`
-`URI` `http://192.168.240.13:8081/api/v1/servers/localhost`
-`API Key`
-
+`URI` 填入 `http://192.168.240.13:8081/api/v1/servers/localhost`
+`API Key`= <自訂一串字母> ; 與前面/etc/powerdns/pdns.conf裡面API 一致
 ![](Pasted%20image%2020260518225755.png)
+5. 編輯Zones，填入剛剛創立正向 internal 網域
+![](Pasted%20image%2020260703223039.png)
 
-![](Pasted%20image%2020260518225748.png)
-
-`重新寫入DNS必須要重新創立虛擬機才有`
-
-
+>重新寫入DNS必須要重新創立虛擬機才有
 `dig eve.pve.box2.kmc.gr.jp @192.168.240.13`
+
+
+
+
+
 
 ## IPAM+cloud-init
 
