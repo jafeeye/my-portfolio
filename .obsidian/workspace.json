@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/AD.md",
+                    "file": "content/post/PowerDNS.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "AD"
+                  "title": "PowerDNS"
                 }
               }
             ]
@@ -34,7 +34,7 @@
             "dimension": 20.79002079002079,
             "children": [
               {
-                "id": "82081d122cf50142",
+                "id": "53179944703360a1",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -241,8 +241,10 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "82081d122cf50142",
+  "active": "53179944703360a1",
   "lastOpenFiles": [
+    "content/post/PowerDNS.md",
+    "static/Pasted image 20260705144248.png",
     "content/post/AD.md",
     "static/Pasted image 20260704124233.png",
     "content/post/企業大量自動部屬.md",
@@ -276,9 +278,7 @@
     "static/Pasted image 20260703150721.png",
     "static/Pasted image 20260703150409.png",
     "static/Pasted image 20260703150337.png",
-    "static/Pasted image 20260703145928.png",
     "content/post/常用指令Windows.md",
-    "content/post/ESXi與PVE斷線除錯.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",
