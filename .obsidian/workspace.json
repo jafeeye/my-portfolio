@@ -10,7 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 79.20997920997921,
+            "dimension": 81.98198198198197,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PowerDNS.md",
+                    "file": "content/post/寄信.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PowerDNS"
+                  "title": "寄信"
                 }
               }
             ]
@@ -31,7 +31,7 @@
           {
             "id": "c08065857a1b732c",
             "type": "tabs",
-            "dimension": 20.79002079002079,
+            "dimension": 18.01801801801802,
             "children": [
               {
                 "id": "53179944703360a1",
@@ -70,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -149,12 +149,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/post/寄信.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大綱"
+              "title": "寄信 的大綱"
             }
           },
           {
@@ -241,13 +242,16 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "53179944703360a1",
+  "active": "f2a66a9502f32fa9",
   "lastOpenFiles": [
+    "content/post/負載平衡.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/企業遠端桌面方案.md",
+    "content/post/企業大量自動部屬.md",
     "content/post/PowerDNS.md",
     "static/Pasted image 20260705144248.png",
     "content/post/AD.md",
     "static/Pasted image 20260704124233.png",
-    "content/post/企業大量自動部屬.md",
     "content/post/可觀測性.md",
     "content/post/各式生產力工具整理.md",
     "content/post/快速啟動工具.md",
@@ -259,7 +263,6 @@
     "content/post/Rclone.md",
     "content/post/DualBoot 多重開機.md",
     "content/post/Clonezilla.md",
-    "content/post/負載平衡.md",
     "content/post/寄信.md",
     "illumio Script.md",
     "hugo.yaml",
@@ -278,7 +281,6 @@
     "static/Pasted image 20260703150721.png",
     "static/Pasted image 20260703150409.png",
     "static/Pasted image 20260703150337.png",
-    "content/post/常用指令Windows.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",
