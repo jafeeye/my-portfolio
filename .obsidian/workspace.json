@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "506e922846aca257",
+        "id": "3b0d7b55acebfa83",
         "type": "split",
         "children": [
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 80.31496062992126,
+            "dimension": 81.98198198198197,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,40 +18,38 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/Keycloak.md",
+                    "file": "content/post/寄信.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Keycloak"
+                  "title": "寄信"
                 }
               }
             ]
           },
           {
-            "id": "33a4326b3daf678f",
+            "id": "c08065857a1b732c",
             "type": "tabs",
-            "dimension": 19.68503937007874,
+            "dimension": 18.01801801801802,
             "children": [
               {
-                "id": "1ed2d537b13755f0",
+                "id": "53179944703360a1",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
+                        "args": [],
+                        "executable": "C:\\Windows\\System32\\cmd.exe",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "darwin": true
+                          "win32": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -72,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -101,7 +99,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -135,8 +133,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 312.5024719238281,
-    "collapsed": true
+    "width": 227.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -152,12 +149,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/post/寄信.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "寄信 的大綱"
             }
           },
           {
@@ -226,38 +224,56 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5,
-    "collapsed": true
+    "width": 217.5
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "vscode-editor:Create Code File": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "vscode-editor:新建程式碼檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "1ed2d537b13755f0",
+  "active": "f2a66a9502f32fa9",
   "lastOpenFiles": [
-    "content/Keycloak.md",
-    "static/Pasted image 20260706115337.png",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/illumio K8S.md",
-    "content/post/illumio 流量模擬.md",
-    "content/post/immch 安裝教學.md",
+    "content/post/負載平衡.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/企業遠端桌面方案.md",
+    "content/post/企業大量自動部屬.md",
+    "content/post/PowerDNS.md",
+    "static/Pasted image 20260705144248.png",
+    "content/post/AD.md",
+    "static/Pasted image 20260704124233.png",
+    "content/post/可觀測性.md",
+    "content/post/各式生產力工具整理.md",
+    "content/post/快速啟動工具.md",
+    "content/post/防火牆.md",
+    "content/post/企業VPN架設.md",
+    "content/post/企業拓譜圖架設.md",
     "content/post/PVE 各系統安裝.md",
     "content/post/PVE 進階設定.md",
-    "負載平衡.md",
-    "寄信.md",
-    "content/post/常用指令linux.md",
+    "content/post/Rclone.md",
+    "content/post/DualBoot 多重開機.md",
+    "content/post/Clonezilla.md",
+    "content/post/寄信.md",
+    "illumio Script.md",
+    "hugo.yaml",
+    "content/post/x11.md",
+    "content/post/Hyper-V 進階設定.md",
+    "content/post/illumio 2x2 DR.md",
+    "content/post/incus.md",
+    "content/post/illumio K8S.md",
+    "content/post/illumio 除錯.md",
+    "static/Pasted image 20260703223039.png",
+    "content/Keycloak.md",
     "static/Pasted image 20260703152507.png",
     "static/Pasted image 20260703152246.png",
     "static/Pasted image 20260703152209.png",
@@ -265,27 +281,9 @@
     "static/Pasted image 20260703150721.png",
     "static/Pasted image 20260703150409.png",
     "static/Pasted image 20260703150337.png",
-    "static/Pasted image 20260703145928.png",
-    "static/Pasted image 20260703145756.png",
-    "content/post/常用指令Windows.md",
-    "content/post/ESXi與PVE斷線除錯.md",
-    "illumio Script.md",
-    "content/post/RDP 連線實作.md",
-    "content/post/常用指令macOS.md",
-    "content/post/K8S.md",
-    "content/post/K8s Policy.md",
-    "content/post/K8s 整理.md",
-    "content/post/各式OS整理.md",
-    "content/post/VCE 題庫製作.md",
-    "content/post/列印技術.md",
-    "content/post/CAT 補助翻譯.md",
-    "content/post/各式生產力工具整理.md",
-    "content/post/中文化及綠化.md",
-    "content/post/防火牆.md",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",
-    "hugo.yaml",
     "Clippings",
     "content/post/code/wsever_opti.ps1",
     "content/post/code/heidmall.yaml",
