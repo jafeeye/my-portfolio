@@ -10,7 +10,7 @@
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 65.4639175257732,
+            "dimension": 79.38144329896907,
             "children": [
               {
                 "id": "f2a66a9502f32fa9",
@@ -18,35 +18,20 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/PowerDNS.md",
+                    "file": "content/post/Keycloak.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "PowerDNS"
-                }
-              },
-              {
-                "id": "2b5ed65ffa6ce8d8",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "HAProxy.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "HAProxy"
+                  "title": "Keycloak"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
             "id": "9dd8fb270d723db8",
             "type": "tabs",
-            "dimension": 34.5360824742268,
+            "dimension": 20.618556701030926,
             "children": [
               {
                 "id": "dcca0e9810a93e7f",
@@ -260,9 +245,10 @@
   },
   "active": "dcca0e9810a93e7f",
   "lastOpenFiles": [
-    "HAProxy.md",
+    "content/post/Keycloak.md",
     "content/post/PowerDNS.md",
-    "content/Keycloak.md",
+    "illumio Script.md",
+    "content/post/HAProxy.md",
     "static/Pasted image 20260706162802.png",
     "static/Pasted image 20260706162729.png",
     "static/Pasted image 20260706161635.png",
@@ -285,7 +271,6 @@
     "content/post/Rclone.md",
     "content/post/DualBoot 多重開機.md",
     "content/post/Clonezilla.md",
-    "illumio Script.md",
     "hugo.yaml",
     "content/post/x11.md",
     "content/post/Hyper-V 進階設定.md",
