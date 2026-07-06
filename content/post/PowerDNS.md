@@ -6,6 +6,25 @@ date: 2026-07-05
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
 
 
+## LXC 安裝
+```
+apt-get update && apt-get install -y pdns-server pdns-backend-sqlite3
+
+chown -R www-data:pdns /opt/poweradmin
+find /opt/poweradmin -type d -exec chmod 775 {} \;
+find /opt/poweradmin -type f -exec chmod 664 {} \;
+chown pdns:pdns /opt/poweradmin/powerdns.db
+chmod 664 /opt/poweradmin/powerdns.db
+systemctl restart pdns apache2
+```
+
+設定檔備份
+```
+cp /opt/poweradmin_settings.php.bak /opt/poweradmin/config/settings.php 
+cp /opt/poweradmin_powerdns.db.bak /opt/poweradmin/powerdns.db
+```
+
+
 ## PowerDNS 與 AD DNS共存
 
 在 Linux 伺服器上配置兩套 PowerDNS 元件，在PVE Script 下的PowerDNS預設沒有安裝PowerDNS Recursor，先補裝此套件，此原理是透過 PowerDNS Recursor 遞迴解析，把不同網域交給不同的DNS查詢，首先給AD查詢，然後再給PowerDNS Authoritative，最後再派給外網DNS
