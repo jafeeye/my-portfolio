@@ -8,14 +8,52 @@ Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配P
 
 ## LXC 安裝
 ```
-apt-get update && apt-get install -y pdns-server pdns-backend-sqlite3
+# 1. 一口氣安裝 PowerDNS(SQLite3)、Apache 與 PHP 套件
+apt update
+apt install pdns-server pdns-backend-sqlite3 sqlite3 apache2 php php-sqlite3 php-mbstring php-intl php8.4-gettext php8.4-xml php8.4-intl -y
 
-chown -R www-data:pdns /opt/poweradmin
-find /opt/poweradmin -type d -exec chmod 775 {} \;
-find /opt/poweradmin -type f -exec chmod 664 {} \;
-chown pdns:pdns /opt/poweradmin/powerdns.db
-chmod 664 /opt/poweradmin/powerdns.db
-systemctl restart pdns apache2
+# 2. 建立存放目錄並注入官方 SQLite Schema 結構
+mkdir -p /var/lib/powerdns
+sqlite3 /var/lib/powerdns/pdns.sqlite3 < /usr/share/doc/pdns-backend-sqlite3/schema.sqlite3.sql
+
+# 3. 關鍵：把這個檔案與目錄的權限，同時交給 pdns 與網頁 (www-data) 共同存取
+chown -R pdns:www-data /var/lib/powerdns
+chmod 775 /var/lib/powerdns
+chmod 664 /var/lib/powerdns/pdns.sqlite3
+
+# 4.編輯設定檔
+nano /etc/powerdns/pdns.conf
+
+launch=gsqlite3 
+gsqlite3-database=/var/lib/powerdns/pdns.sqlite3 
+local-address=0.0.0.0
+
+systemctl restart pdns 
+systemctl enable pdns
+
+# 5.下載poweradmin
+# 下載 Poweradmin 4.2.1 穩定版（目前 4.2 系列的最新發行版） 
+cd /tmp
+wget https://github.com/poweradmin/poweradmin/archive/refs/tags/v4.2.1.tar.gz 
+# 解壓並移動到 Apache 網頁目錄 
+tar -zxvf v4.2.1.tar.gz 
+mv poweradmin-4.2.1 /var/www/html/poweradmin 
+# 修正目錄權限，讓 Apache (www-data) 能夠正常存取
+chown -R www-data:www-data /var/www/html/poweradmin
+
+# 6. 瀏覽器輸入http://<你的LXC_IP>/poweradmin/install/
+
+# 1. 啟用 Apache 的 rewrite 模組 
+a2enmod rewrite 
+# 2. 修改 Apache 設定檔，允許網頁目錄使用 .htaccess 進行路由覆寫 
+sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+
+
+sudo chown -R pdns:www-data /var/lib/powerdns # 2. 強制給予資料夾 775 權限（允許 www-data 群組在裡面建立暫存檔） sudo chmod 775 /var/lib/powerdns # 3. 強制給予資料庫檔案本身 664 權限（允許 www-data 讀寫） sudo chmod 664 /var/lib/powerdns/pdns.sqlite3
+
+
+
 ```
 
 設定檔備份

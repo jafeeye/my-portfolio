@@ -70,12 +70,18 @@ rm google-chrome-stable_current_amd64.deb
 
 ## chromium只能用snap，偏偏lxc不支援snap安全機制
 google-chrome --no-sandbox --disable-gpu
+
+
+## 安裝中文語言
+sudo apt install language-pack-zh-hant
+sudo apt-get install -y chinese
+
+
+## 補裝中文常用font
+sudo apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core fonts-noto-cjk fonts-wqy-microhei -y
+
 ```
 
-### 安裝中文語言
-sudo apt-get install language-pack-zh*sudo apt-get install -y chinese*
-### 補裝中文常用font
-sudo apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho fonts-ipafont-gothic fonts-unfonts-core
 
 
 ### 啟動腳本

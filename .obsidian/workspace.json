@@ -13,17 +13,17 @@
             "dimension": 79.38144329896907,
             "children": [
               {
-                "id": "f2a66a9502f32fa9",
+                "id": "e8bfa479899edd7d",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Keycloak.md",
+                    "file": "content/post/PowerDNS.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Keycloak"
+                  "title": "PowerDNS"
                 }
               }
             ]
@@ -74,8 +74,51 @@
                   "icon": "terminal",
                   "title": "Terminal: zsh"
                 }
+              },
+              {
+                "id": "6edc8fd723bca23b",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: zsh"
+                }
               }
-            ]
+            ],
+            "currentTab": 1
           }
         ],
         "direction": "horizontal"
@@ -135,7 +178,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 212.50247192382812
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -225,7 +269,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 217.5
+    "width": 294.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -243,18 +288,26 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "dcca0e9810a93e7f",
+  "active": "6edc8fd723bca23b",
   "lastOpenFiles": [
-    "content/post/Keycloak.md",
     "content/post/PowerDNS.md",
-    "illumio Script.md",
+    "content/post/PVE 各系統安裝.md",
     "content/post/HAProxy.md",
+    "content/post/RDP 連線實作.md",
+    "content/post/常用指令linux.md",
+    "content/post/illumio 2x2 DR.md",
+    "content/post/illumio 流量模擬.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/AIX 安裝.md",
+    "content/post/2026 家用Sever架設指南.md",
+    "content/post/02-軟體清單.md",
+    "content/post/Keycloak.md",
+    "illumio Script.md",
     "static/Pasted image 20260706162802.png",
     "static/Pasted image 20260706162729.png",
     "static/Pasted image 20260706161635.png",
     "content/post/寄信.md",
     "content/post/負載平衡.md",
-    "content/post/2026 家用Sever架設指南.md",
     "content/post/企業遠端桌面方案.md",
     "content/post/企業大量自動部屬.md",
     "static/Pasted image 20260705144248.png",
@@ -266,17 +319,9 @@
     "content/post/防火牆.md",
     "content/post/企業VPN架設.md",
     "content/post/企業拓譜圖架設.md",
-    "content/post/PVE 各系統安裝.md",
-    "content/post/PVE 進階設定.md",
     "content/post/Rclone.md",
     "content/post/DualBoot 多重開機.md",
-    "content/post/Clonezilla.md",
     "hugo.yaml",
-    "content/post/x11.md",
-    "content/post/Hyper-V 進階設定.md",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/incus.md",
-    "content/post/illumio K8S.md",
     "static/Pasted image 20260703223039.png",
     "static/Pasted image 20260703152507.png",
     "static/Pasted image 20260703152246.png",

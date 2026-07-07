@@ -8,7 +8,7 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 ## 網路
 - Debian 設定網路重新載入設定 `ifreload -a`  
 - 監聽Port `netstat -tunlp | grep 5432`  、 `ss -tunlp | grep 80`
-- 檢查網址有效 `crul - i 網址`   `nc -uv <IP> <Port>` 
+- 檢查網址有效 `crul -I -k 網址`   `nc -uv <IP> <Port>` 
 	- curl -k 略過憑證 
 - 網路重新取得IP `ifdown eth0 --force && ifup eth0`  
 - 查看DNS `cat /etc/resolv.conf`
