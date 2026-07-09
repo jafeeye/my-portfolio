@@ -39,8 +39,8 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 ## 檔案資料夾
 1. 檔案權限
 - 決定檔案執行權限 chmod 770 <資料夾>
-- 決定檔案擁有者是誰 chown -R <使用者名稱> <資料夾>
-2. scp 傳輸檔案
+- 決定檔案擁有者是誰 chown -R <使用者>:<群組> <資料夾>
+1. scp 傳輸檔案
 - 上傳目錄 `scp <參數> <本地檔案位置> <使用者帳號>＠<IP位置>: <遠端檔案位置> 
 sudo scp `-r` test/ `root@192.168.8.5:~`
 - 下載目錄 
@@ -72,10 +72,13 @@ ls -l
 
 ## 路徑
 ```
-/var/log
+var指存放程式執行會產生收集讀寫資料
+/var/log        log檔位置
+    /www        網頁位置
     /tmp
-    /lock
-    /liｂ        var系統變動資料
+    /spool      列印服務
+    /lock       程式執行鎖定檔案
+    /liｂ       應用程式資料重開機不消失(/var/lib/docker)
 /tmp
 /sbin
 /lib

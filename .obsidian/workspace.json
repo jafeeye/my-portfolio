@@ -4,13 +4,13 @@
     "type": "split",
     "children": [
       {
-        "id": "00d8ec220d796830",
+        "id": "5afdeb9c60475ace",
         "type": "split",
         "children": [
           {
             "id": "d7931b2d9796bb6d",
             "type": "tabs",
-            "dimension": 79.38144329896907,
+            "dimension": 75.97517730496453,
             "children": [
               {
                 "id": "e8bfa479899edd7d",
@@ -29,54 +29,12 @@
             ]
           },
           {
-            "id": "9dd8fb270d723db8",
+            "id": "36c0ccc67b76ba3d",
             "type": "tabs",
-            "dimension": 20.618556701030926,
+            "dimension": 24.02482269503546,
             "children": [
               {
-                "id": "dcca0e9810a93e7f",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "Terminal: zsh"
-                }
-              },
-              {
-                "id": "6edc8fd723bca23b",
+                "id": "d13edafa293bfaa4",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -117,8 +75,7 @@
                   "title": "Terminal: zsh"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           }
         ],
         "direction": "horizontal"
@@ -288,13 +245,16 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "6edc8fd723bca23b",
+  "active": "d13edafa293bfaa4",
   "lastOpenFiles": [
     "content/post/PowerDNS.md",
+    "static/Pasted image 20260709092627.png",
+    "static/Pasted image 20260708112816.png",
+    "static/Pasted image 20260708112538.png",
+    "content/post/常用指令linux.md",
     "content/post/PVE 各系統安裝.md",
     "content/post/HAProxy.md",
     "content/post/RDP 連線實作.md",
-    "content/post/常用指令linux.md",
     "content/post/illumio 2x2 DR.md",
     "content/post/illumio 流量模擬.md",
     "content/post/PVE 進階設定.md",
@@ -320,13 +280,9 @@
     "content/post/企業VPN架設.md",
     "content/post/企業拓譜圖架設.md",
     "content/post/Rclone.md",
-    "content/post/DualBoot 多重開機.md",
     "hugo.yaml",
     "static/Pasted image 20260703223039.png",
     "static/Pasted image 20260703152507.png",
-    "static/Pasted image 20260703152246.png",
-    "static/Pasted image 20260703152209.png",
-    "static/Pasted image 20260703150824.png",
     "null",
     "dev",
     "static/Diagram 2.svg.xml",

@@ -48,11 +48,26 @@ a2enmod rewrite
 # 2. 修改 Apache 設定檔，允許網頁目錄使用 .htaccess 進行路由覆寫 
 sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
+# 7.
 
+sudo chown -R pdns:www-data /var/lib/powerdns 
+# 2. 強制給予資料夾 775 權限（允許 www-data 群組在裡面建立暫存檔） 
+sudo chmod 775 /var/lib/powerdns 
+# 3. 強制給予資料庫檔案本身 664 權限（允許 www-data 讀寫） 
+sudo chmod 664 /var/lib/powerdns/pdns.sqlite3
 
-sudo chown -R pdns:www-data /var/lib/powerdns # 2. 強制給予資料夾 775 權限（允許 www-data 群組在裡面建立暫存檔） sudo chmod 775 /var/lib/powerdns # 3. 強制給予資料庫檔案本身 664 權限（允許 www-data 讀寫） sudo chmod 664 /var/lib/powerdns/pdns.sqlite3
+# 8. web DNS設置
+主機管理員:admin.bd1.dev
+主域名服務器:ns1.bd1.dev
+輔助域名服務器 :ns2.bd1.dev
 
+# 9 確認PowerDNS 設定檔路徑有被創立
+touch /var/www/html/poweradmin/config/setting.php 並貼上網頁的內容
+chown www-data:www-data /var/www/html/poweradmin/config/settings.php 
+chmod 664 /var/www/html/poweradmin/config/settings.php
 
+#刪除poweradmin install 資料夾才能正常運行
+rm -rf /var/www/html/poweradmin/install/
 
 ```
 
@@ -164,3 +179,133 @@ sudo systemctl restart pdns-recursor
 3. 在 **上游 DNS 伺服器 (Upstream DNS servers)** 欄位中，清空原本預設的外網 DNS，**唯獨填入你 PowerDNS Recursor 的 IP 與新 Port**：
     - 語法：`192.168.1.X:5353` （請換成你跑 PowerDNS 那台 Linux 的內網 IP）。
 4. 點選最下方的**儲存**，大功告成！
+
+
+## Windows DNS Zonetransfer PowerDNS
+1. 讓PowerDNS 支援Secondary功能
+```
+nano /etc/powerdns/pdns.conf
+secondary=yes
+systemctl restart pdns
+```
+
+2. Windows DNS 開啟 ZoneTransfer
+![](Pasted%20image%2020260708112538.png)
+
+3. PowerDNS 加入從屬區域
+![](Pasted%20image%2020260708112816.png)
+4.開啟同步
+```
+#測試是否有收到IP
+dig axfr bd1.dev @IP
+#同步PowerDNS
+pdns_control retrieve bd1.dev
+```
+
+
+## PowerDNS 外網解析
+1. 把原本 Authoritative Server 的Port 53改成別的
+```
+nano /etc/powerdns/pdns.conf
+local-port=5353
+local-address=0.0.0.0
+systemctl restart pdns
+```
+
+2. 安裝 PowerDNS Recursor
+```
+apt update && apt install pdns-recursor -y
+```
+
+3. 修改Recursor設定檔,現在新版是用yaml排版要注意寫法
+```
+nano /etc/powerdns/recursor.conf
+```
+新增以下內容
+```
+dnssec:
+  trustanchorfile: /usr/share/dns/root.key
+
+recursor:
+  hint_file: /usr/share/dns/root.hints
+  include_dir: /etc/powerdns/recursor.d
+  security_poll_suffix: ''
+
+  forward_zones_recurse:
+    - zone: .
+      forwarders:
+        - 192.168.50.1
+
+  forward_zones:
+    - zone: bd1.dev
+      forwarders:
+        - 127.0.0.1:5353
+
+incoming:
+  listen:
+    - 0.0.0.0
+    - '::'
+  allow_from:
+    - 172.16.0.0/16
+    - 127.0.0.0/8
+
+```
+重啟服務
+```
+systemctl restart pdns-recursor
+```
+
+4. 用dig查詢是否正常
+```
+# dig <網域> @<DNS位置> -p <Port>
+dig bd1.dev @127.0.0.1 -p 5353
+```
+
+![](Pasted%20image%2020260709092627.png)
+
+5. (進階設定)使用lua腳本，不用在自己新增遞迴Zone
+
+建立一個`nano /etc/powerdns/recursor-fallback.lua`
+```
+function preresolve(dq)
+    -- 1. 先把使用者的問題，悄悄丟給後台 5353 的 SQLite 權威版
+    local res = resolveUDP("127.0.0.1", 5353, dq.qname, dq.qtype)
+
+    -- 2. 如果後台有答案，而且不是錯誤（代表是內網網域）
+    if res and res.rcode == pdns.RCODE_NOERROR and #res.records > 0 then
+        dq:addRecords(res.records)
+        dq.rcode = pdns.RCODE_NOERROR
+        return true -- 內網攔截成功，直接回傳給用戶
+    end
+
+    -- 3. 如果後台找不到，就回傳 false，PowerDNS 會自動往下走 recursor.conf 裡設定的 Windows DNS 查外網
+    return false
+end
+```
+
+把 `/etc/powerdns/recursor.conf`
+```
+dnssec:
+  validation: off
+
+recursor:
+  hint_file: /usr/share/dns/root.hints
+  include_dir: /etc/powerdns/recursor.d
+  security_poll_suffix: ''
+
+  lua_config_file: /etc/powerdns/recursor-fallback.lua
+
+  # 預設外網流量全部交給有權限出海的 Windows DNS
+  forward_zones_recurse:
+    - zone: .
+      forwarders:
+        - 172.16.4.35
+
+incoming:
+  listen:
+    - 0.0.0.0
+    - '::'
+  allow_from:
+    - 172.16.0.0/16
+    - 127.0.0.0/8
+```
