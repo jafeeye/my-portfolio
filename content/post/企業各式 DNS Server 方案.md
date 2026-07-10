@@ -151,6 +151,15 @@ sudo systemctl restart pdns-recursor
 第一次進入ADguard是IP:3000,設定完後為IP:80進入
 
 ![](Pasted%20image%2020260705144248.png)
+之後修改 nano /opt/AdGuardHome/AdGuardHome.yaml
+```
+http
+  address: 192.168.10.6:80
+dns:
+  bind_hosts:
+    - 192.168.10.6
+```
+
 ### 🌐 混用後的流量封包走向
 
 內網所有設備（PC、手機、伺服器、舊設備）的 DNS，統一指向 **AdGuard Home**（Port 53）。
@@ -386,10 +395,6 @@ sqlite> select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.se
 
 >重新寫入DNS必須要重新創立虛擬機才有
 `dig eve.pve.box2.kmc.gr.jp @192.168.240.13`
-
-
-
-
 
 ## dnsmasq
 透過LXC 安裝
