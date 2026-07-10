@@ -165,18 +165,6 @@ rm -rf /var/lib/vz/images/GNS3_VM-disk00x.qcow2
 ![](Pastedimage20260222114008.png)
 
 
-## iVentoy LXC
-
-1.敲入參數
-```
-bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)"
-```
-2.參考 [YT影片](https://www.youtube.com/watch?v=TNseK41A0DQ)，使用Advanced 並且輸入`192.168.8.X/24` 自訂成以下參數
-![](iventoy260228.png)
-3.安裝後豋入SCP把ISO檔放進去就可以啟動服務
-![](iventoyscr260228.png)
-
-
 
 
 

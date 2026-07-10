@@ -353,6 +353,10 @@ webserver-address=192.168.240.13
 ################################# 
 # webserver-allow-from Webserver/API access is only allowed from these subnets 
 webserver-allow-from=127.0.0.1,::1,192.168.0.0/16
+#################################
+# webserver-port        Port of webserver/API to listen on
+#
+webserver-port=8081
 ```
 2. 重啟PowerDNS
 ```
@@ -361,7 +365,10 @@ sudo systemctl status pdns
 ```
 3. 測試PowerDNS透過 `pdnsutil` 寫入Zone
 ```
+# 正解zone名稱，這邊是internal
 sudo pdnsutil create-zone internal
+# 反解zone名稱，反解只能是.in-addr.arpa
+sudo pdnsutil create-zone 168.192.in-addr.arpa
 ```
 確認是否寫入在sqlite3
 ```
