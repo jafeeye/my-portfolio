@@ -7,23 +7,69 @@ toc: true
 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整...
 
 
-## 直通技術
-SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術
+## 優化: PVE 調整Swap
+預設PVE沒調整狀態下為60
+```
+## 強制清除目前所有高swap
+swapoff -a && swapon -a
+## 查看目前swap狀態,預設沒調整為60
+cat /proc/sys/vm/swappiness
+## 臨時關閉swap為0
+sysctl vm.swappiness=0
+## 永久調整,swap都為0
+nano /etc/sysctl.conf >> vm.swappiness=0
+```
+- [排障笔记-解决PVE中节点SWAP占用过高问题&一些关于PVE宿主硬盘的题外话](https://blog.welain.com/articles/2023/notes-about-pve/)
 
-ACS Patch
-Iommu group
-Gvt-g
-Io-pathrough
-ASUS BIOS 可開啟項目
-Iommu group
-SR-IOV
-VT-d
-進階/VMX
-Advanced/System Agent(SA)/VT-d
-PCH-FW Configuration/PTT，PTT Enable
-AMD RESET BUG
+## 優化: E1000斷線問題
+通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
+除錯顯示log
 
-使用SPICE 虛擬視窗+noVNC不偏移安裝方法[https://pvecli.xuan2host.com/spice-novnc/](https://pvecli.xuan2host.com/spice-novnc/)
+```
+journalctl -b -1 -e 
+journalctl --until "2026-02-27 11:00:00" -n 100 -r
+```
+
+發現這條，懷疑是驅動出現 `Detected Hardware Unit Hang`，關閉電源休眠可解決問題
+`Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
+
+```
+# 關閉卸載功能 Hardware Unit Hang
+ethtool -K enx00e01c680083 tso off gso off 
+ethtool -K eno1 tso off gso off 
+# 重新啟動網卡服務 
+systemctl restart networking
+```
+
+Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
+1. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
+
+## USB 網卡優化設定
+
+想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能
+
+```
+auto lo
+iface lo inet loopback
+
+iface nic0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.8.90/24
+        gateway 192.168.8.1
+        bridge-ports nic0 enx00e01c680083
+        bridge-stp off
+        bridge-fd 0
+        post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off
+
+iface nic1 inet manual
+source /etc/network/interfaces.d/*
+```
+
+- bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡
+- post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能
+
 
 ## 使用NVME開機
 1. 在VM中Hardware增加PCI Device，勾選ROM-Bar
@@ -55,11 +101,8 @@ Virtiofs
 - `VEN_1B36&DEV_0100`, the video device.
 - `VEN_QEMU&DEV_0001`, the guest panic device.
 
-## SDN 取得IP
-目前SDN功能還不穩定，目前版本以8.4.16測試，按圖施工
-![](pvesdn20260228.png)
-
-安裝dnsmasq才可在VM自動獲取IP
+## 網路: SDN取得IP
+1. 先在Node的Shell 安裝dnsmasq，才能在IPAM正常發DHCP，並且安裝完停用dnsmasq服務 ，PVE會啟動專屬實例。
 ```
 apt install dnsmasq
 # disable default instance
@@ -67,8 +110,14 @@ systemctl disable --now dnsmasq
 # 檢查dnsmasq是否啟用
 ps aux | grep dnsmasq
 ```
+2. 目前SDN功能還算測試階段，在此按圖新增一個vnet
+![](pvesdn20260228.png)
 
-PVE主機是`192.168.8.80` 環境是使用`192.168.8.0/24`，要把VM 用SDN分配成 `192.168.10.0/24`，但又希望8.x網段可以連去10.x網段，要開啟路由表功能
+3. 在VM或LXC網路選擇vnet，當在虛擬機內有順利取得IP即完成
+4. 在環境中實際是分配 `192.168.8.0/24` ，IPAM分配 `192.168.10.0/24`，如果想讓外面.8網段的設備順利連入.10網段，需做以下任一設定
+	- Windows 加入路由表 `route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.80`
+	- 路由器加入路由表
+5. 現在PVE內部雖然不同網段虛擬機可以互通，但是遇到自訂iptables規則，客製化NAT規則要開啟流量轉發
 ```
 # 檢查PVE封包轉發
 cat /proc/sys/net/ipv4/ip_forward
@@ -78,14 +127,103 @@ sysctl -w net.ipv4.ip_forward=1
 vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
 ```
 
-- Windows 加入路由表 `route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.80`
-- 路由器加入路由表
-## SDN Fabrics
+## 網路: SDN取得DNS+cloud-init
+
+1. 編輯 `nano /etc/pve/sdn/subnets.cfg`
+```
+subnet: local-192.168.10.0-24 
+        vnet vnet0 
+        dhcp-range start-address=192.168.10.150,end-address=192.168.10.250 
+        gateway 192.168.10.1 
+        snat 1
+        dhcp-dns-server 192.168.10.123 
+        reversednszone 10.168.192.in-addr.arpa.
+```
+2. 重啟SDN服務 `pvesh set /cluster/sdn`
+
+https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90
+
+## 網路: SDN Fabrics
 ```
 apt update
 apt install frr frr-pythontools
 systemctl enable frr.service
 ```
+
+## 網路: OPNSense + 切Vlan
+1. Node/System/Network 在橋接網口開啟vlan aware
+2. 建立VM那邊vlan填上設定的數值
+
+## 網路: PVE網口設定
+在banner會放上IP位置是從檔案去改的 nano /etc/issue
+修改主機ip
+1. nano /etc/network/interfaces
+2. nano /etc/hosts
+
+如果硬碟拔去新機器，無法進入畫面去檢查 `/etc/network/interfaces` ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可
+
+在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
+預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
+nano /etc/network/interfaces
+```
+auto lo iface lo inet loopback 
+iface enp1s0 inet manual 
+iface enp2s0 inet manual 
+iface enp3s0 inet manual 
+auto vmbr0 
+iface vmbr0 inet static 
+address 192.168.1.100/24 
+gateway 192.168.1.1 
+bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
+bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
+bridge-fd 2
+```
+也可以指定不同vmbr 其他Ip 這樣就是雙管理口
+
+```
+auto lo
+iface lo inet loopback
+
+auto nic0
+iface nic0 inet manual
+auto nic1
+iface nic1 inet manual
+auto nic2
+iface nic2 inet manual
+auto nic3
+iface nic3 inet manual
+iface wlp4s0 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+        address 192.168.1.5/24
+        gateway 192.168.1.1
+        bridge-ports nic2
+        bridge-stp on
+
+auto vmbr1
+iface vmbr1 inet manual
+        address 192.168.8.49/24
+        gateway 192.168.8.1
+        bridge-ports nic1
+        bridge-stp off
+        bridge-fd 0
+
+source /etc/network/interfaces.d/*
+```
+
+關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
+![](Pasted%20image%2020260524123306.png)
+
+修改 hosts
+![](Pasted%20image%2020260524125131.png)
+
+
+## 網路: BOND
+
+## 網路: ospf
+
+
 ## 去虛擬化
 
 
@@ -182,51 +320,44 @@ sqlite> select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.se
 `dig eve.pve.box2.kmc.gr.jp @192.168.240.13`
 
 
-
-
-
-
-## IPAM+cloud-init
-
-1. 編輯 `nano /etc/pve/sdn/subnets.cfg`
-```
-subnet: local-192.168.10.0-24 
-        vnet vnet0 
-        dhcp-range start-address=192.168.10.150,end-address=192.168.10.250 
-        gateway 192.168.10.1 
-        snat 1
-        dhcp-dns-server 192.168.10.123 
-        reversednszone 10.168.192.in-addr.arpa.
-```
-
-2. 重啟SDN服務 `pvesh set /cluster/sdn`
-
-
-
-
-
-https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90
-
-
-
-
-
 ## 編輯LXC容器檔案
 
 
 
 
 
-## Olivetin Addons
-`find / -name "*olivetin*"`
-`systemctl start OliveTin.service`
-`sudo systemctl restart OliveTin.service`
-`nano /etc/OliveTin/config.yaml`
+## 建立LXC容器
+1. 這邊使用PromCenter 示範
+![](Pasted%20image%2020260519205443.png)
+2. apt update && apt install -y curl
+3. apt update && apt install -y sudo
+4. curl -fsSL https://proxcenter.io/install/community | bash
+5. 加入 API,Privilege Separation打勾取消
+ ![](Pasted%20image%2020260519210337.png)
 
 
 
+## 修改LXC設定
+nano /etc/pve/lxc
+```
+lxc.cgroup2.devices.allow: c 10:232 rwm
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file 0 0
+lxc.mount.entry: /dev/kvm dev/kvm none bind,create=file 0 0
+lxc.cgroup.devices.allow: c 10:200 rwm # for compatibility
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/vhost-net dev/vhost-net none bind,create=file 0 0
+lxc.apparmor.profile: unconfined
+lxc.cap.drop:
+------如果要加入共享核顯要加以下代碼--------
+lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.cgroup2.devices.allow: c 29:0 rwm
+lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
+lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
+```
 
-找到下面路徑
+## Addons: Olivetin 
+找到下面路徑修改下面資料
 ```
 root@pve-server:~# find / -name "*olivetin*"
 /var/www/olivetin
@@ -235,12 +366,13 @@ root@pve-server:~# find / -name "*olivetin*"
 /var/lib/dpkg/info/olivetin.list
 find: ‘/proc/12645/task/12645/net’: Invalid argument
 find: ‘/proc/12645/net’: Invalid argument
+
+systemctl start OliveTin.service
+sudo systemctl restart OliveTin.service
+nano /etc/OliveTin/config.yaml
 ```
-修改下面資料
 
 無法登入可能是Datacenter的防火牆打開,LXC預設沒通過防火牆規則
-
-
 
 ## 修改硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
@@ -251,30 +383,37 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 ```
 
 
+## LVM 擴容
+
+Vda：ioblock 
+
+
+
 ## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
 2. `Node/Firewall` 選項Firewall切換成Yes
 3. VM選項Firewall切換成Yes
  
+
 ## 增加本機額外儲存設備
 1. `Node/Disks/Directory` 在Create Directory 可將空磁碟格式化成Ext4 
 2. `Datacenter/Storage` 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
 \* ISO檔可以直接掛載NAS 存放區域節省本機空間
+
 ## PVE Tools 9
 工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
 
 
-## 從ESXi 遷移
+## 遷移: 從ESXi 
 會有驅動問題，在Windows不能開機就選SATA
 ![](260404-pve.png)
 
-## P2V
-把目前開機的作業系統,使用對應軟體可直接熱轉換
-Disk2vhd
-StarWind V2V
-先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+## 遷移: P2V
+1. 把目前開機的作業系統,使用對應軟體可直接熱轉換
+- Disk2vhd
+- StarWind V2V
+2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
 ![](260404-v2v.png)
-
 
 ## PVE 使用vDSM掛載 iSCSI
 
@@ -298,6 +437,24 @@ StarWind V2V
 
 
 
+
+## 直通技術
+SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術
+
+ACS Patch
+Iommu group
+Gvt-g
+Io-pathrough
+ASUS BIOS 可開啟項目
+Iommu group
+SR-IOV
+VT-d
+進階/VMX
+Advanced/System Agent(SA)/VT-d
+PCH-FW Configuration/PTT，PTT Enable
+AMD RESET BUG
+
+使用SPICE 虛擬視窗+noVNC不偏移安裝方法[https://pvecli.xuan2host.com/spice-novnc/](https://pvecli.xuan2host.com/spice-novnc/)
 
 ## 顯卡直通
 
@@ -351,12 +508,6 @@ update-initramfs -u -k all
 如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
 
 6. `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
-
-
-
-
-
-
 
 
 ## PVE 共享目錄
@@ -418,7 +569,7 @@ https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 
 
 
-## 把不同虛擬機下硬碟掛載到目前VM
+## 不同虛擬機下硬碟掛載到目前VM
 正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載
 
 ```
@@ -483,14 +634,6 @@ https://github.com/45drives/cockpit-identities
 lspci -vv | grep BAR
 
 
-## 網路
-在banner會放上IP位置是從檔案去改的 nano /etc/issue
-修改主機ip
-1. nano /etc/network/interfaces
-2. nano /etc/hosts
-
-如果硬碟拔去新機器，無法進入畫面去檢查 `/etc/network/interfaces` ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可
-
 ## 救援PVE
 如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
 1. 使用Paragon Disk Manager或類似軟體把隨身碟格式化成EXT4
@@ -543,42 +686,6 @@ exit
 ```
 
 
-## 建立LXC容器
-1. 這邊使用PromCenter 示範
-![](Pasted%20image%2020260519205443.png)
-2. apt update && apt install -y curl
-3. apt update && apt install -y sudo
-4. curl -fsSL https://proxcenter.io/install/community | bash
-5. 加入 API,Privilege Separation打勾取消
- ![](Pasted%20image%2020260519210337.png)
-
-
-
-## 修改LXC設定
-nano /etc/pve/lxc
-```
-lxc.cgroup2.devices.allow: c 10:232 rwm
-lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file 0 0
-lxc.mount.entry: /dev/kvm dev/kvm none bind,create=file 0 0
-lxc.cgroup.devices.allow: c 10:200 rwm # for compatibility
-lxc.cgroup2.devices.allow: c 10:200 rwm
-lxc.mount.entry: /dev/vhost-net dev/vhost-net none bind,create=file 0 0
-lxc.apparmor.profile: unconfined
-lxc.cap.drop:
-------如果要加入共享核顯要加以下代碼--------
-lxc.cgroup2.devices.allow: c 226:0 rwm
-lxc.cgroup2.devices.allow: c 226:128 rwm
-lxc.cgroup2.devices.allow: c 29:0 rwm
-lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
-lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
-```
-
-## LVM 擴容
-
-Vda：ioblock 
-
-
-
 ## LVM處理
 ![](Pasted%20image%2020260530181126.png)
 
@@ -594,87 +701,18 @@ lvextend -l +100%FREE /dev/pve/root
 resize2fs /dev/pve/root
 ```
 
-## OPNSense + Vlan
-1. Node/System/Network 在橋接網口開啟vlan aware
-2. 建立VM那邊vlan填上設定的數值
-
-
-
-## PVE多網口設定
-在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
-預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
-nano /etc/network/interfaces
-```
-auto lo iface lo inet loopback 
-iface enp1s0 inet manual 
-iface enp2s0 inet manual 
-iface enp3s0 inet manual 
-auto vmbr0 
-iface vmbr0 inet static 
-address 192.168.1.100/24 
-gateway 192.168.1.1 
-bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
-bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
-bridge-fd 2
-```
-也可以指定不同vmbr 其他Ip 這樣就是雙管理口
-
-```
-auto lo
-iface lo inet loopback
-
-auto nic0
-iface nic0 inet manual
-auto nic1
-iface nic1 inet manual
-auto nic2
-iface nic2 inet manual
-auto nic3
-iface nic3 inet manual
-iface wlp4s0 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-        address 192.168.1.5/24
-        gateway 192.168.1.1
-        bridge-ports nic2
-        bridge-stp on
-
-auto vmbr1
-iface vmbr1 inet manual
-        address 192.168.8.49/24
-        gateway 192.168.8.1
-        bridge-ports nic1
-        bridge-stp off
-        bridge-fd 0
-
-source /etc/network/interfaces.d/*
-```
-
-關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
-![](Pasted%20image%2020260524123306.png)
-
-修改 hosts
-![](Pasted%20image%2020260524125131.png)
-
-
-## BOND
-
-## ospf
-
-
 ## Migrate
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
 
 
 
-## PVE 跑非x86
+## 模擬非x86 machines
 https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/
 https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/
 
 
 
-## PVE 使用xterm.js
+## 使用xterm.js
 - CT容器預設開箱即用，不用特別做設定
 VM做法 [官網說明文件](https://pve.proxmox.com/wiki/Serial_Terminal)
 1. qm set 101 -serial0 socket
@@ -682,17 +720,3 @@ VM做法 [官網說明文件](https://pve.proxmox.com/wiki/Serial_Terminal)
 `GRUB_CMDLINE_LINUX="quiet console=tty0 console=ttyS0,115200"`
 
 
-## PVE 調整Swap
-預設PVE沒調整狀態下為60
-```
-## 強制清除目前所有高swap
-swapoff -a && swapon -a
-## 查看目前swap狀態,預設沒調整為60
-cat /proc/sys/vm/swappiness
-## 臨時關閉swap為0
-sysctl vm.swappiness=0
-## 永久調整,swap都為0
-nano /etc/sysctl.conf >> vm.swappiness=0
-```
-
-- [排障笔记-解决PVE中节点SWAP占用过高问题&一些关于PVE宿主硬盘的题外话](https://blog.welain.com/articles/2023/notes-about-pve/)

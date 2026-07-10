@@ -1,12 +1,19 @@
 ---
-title: PowerDNS 遞迴解析
+title: DNS 遞迴解析
 toc: true
 date: 2026-07-05
 ---
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
-
-
-## PowerDNS
+CoreDNS
+dnsmasq：兼具DHCP功能
+MosDNS
+BindDNS
+OxiDNS
+Technitium
+AdGuard Home
+Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
+KeaDHCP
+## PowerDNS 簡介
 PowerDNS主要架構元件為以下三個
 - Authoritative Server (權威伺服器)
 - Recursor (遞迴解析伺服器)
@@ -315,4 +322,65 @@ incoming:
   allow_from:
     - 172.16.0.0/16
     - 127.0.0.0/8
+```
+
+
+## dnsmasq
+透過LXC 安裝
+```
+apt update && apt upgrade -y
+apt install dnsmasq -y
+# 確認port 53正常
+ss -tunlp
+```
+編寫 **dnsmasq.conf**
+```
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak 
+nano /etc/dnsmasq.conf
+```
+設定內容
+```
+# --- 基礎設定 ---
+# 監聽的介面，也可以寫 interface=eth0
+listen-address=127.0.0.1, 192.168.1.53  # 192.168.1.53 是這台 LXC 的固定 IP
+port=53
+domain-needed       # 限制唯有完整網域才能往外查（不轉發純主機名）
+bogus-priv          # 防止私有 IP 逆向解析請求流到外網
+
+# --- 上游 DNS 伺服器 (當 dnsmasq 找不到答案時向外問) ---
+server=1.1.1.1
+server=8.8.8.8
+
+# --- 內網本地 DNS 解析 ---
+local=/lab.home/     # 定義你的本地專屬網域
+expand-hosts
+domain=lab.home
+
+# --- DHCP 伺服器設定 (選用，如果家裡有路由器發 IP 則不要開) ---
+# 發放的 IP 範圍，以及租期 12 小時
+dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,12h
+# 預設閘道 (通常是你家路由器的 IP)
+dhcp-option=3,192.168.1.1
+# 分配給用戶端的 DNS 伺服器 (指向這台 LXC 自己)
+dhcp-option=6,192.168.1.53
+
+# --- 靜態 IP 綁定 (Static DHCP) ---
+# 適合把你家 PVE 主機、NAS、其他重要 VM 的 MAC 鎖定固定 IP
+dhcp-host=AA:BB:CC:DD:EE:FF,pve-host,192.168.1.10,infinite
+dhcp-host=11:22:33:44:55:66,my-nas,192.168.1.20,infinite
+```
+
+設定 PXE Proxy
+```
+interface = eth0
+bind-interfaces
+dhcp-range=192.168.0.0, proxy
+pxe-service=7, "ipxe net boot", Boot\x64\wdsmgfw.efi, 192.168.181.188
+```
+
+啟用
+```
+systemctl enable dnsmasq 
+systemctl start dnsmasq
+systemctl status dnsmasq
 ```
