@@ -6,7 +6,14 @@ date: 2026-07-05
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
 
 
-## LXC 安裝
+## PowerDNS
+PowerDNS主要架構元件為以下三個
+- Authoritative Server (權威伺服器)
+- Recursor (遞迴解析伺服器)
+- dnsdist (DNS 負載均衡與路由器)
+![](Diagram%203.svg)
+
+### LXC 安裝
 ```
 # 1. 一口氣安裝 PowerDNS(SQLite3)、Apache 與 PHP 套件
 apt update

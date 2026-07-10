@@ -1,0 +1,16 @@
+{{- $link := .Destination -}}
+{{- $text := .Text -}}
+
+{{- /* 判斷是否為 Wiki Link (如果文字與目的地相同，且沒有常見的網址或副檔名特徵) */ -}}
+{{- if and (not (hasPrefix $link "http")) (not (strings.Contains $link ".")) -}}
+    {{- /* 將空白字元替換為 Hugo 習慣的連字號，並轉為小寫 */ -}}
+    {{- $slug := $link | urlize -}}
+    {{- $page := .Page.GetPage $slug -}}
+    {{- if $page -}}
+        <a href="{{ $page.RelPermalink }}">{{ or $text $link }}</a>
+    {{- else -}}
+        <span class="broken-link" style="color: gray;">{{ or $text $link }} (頁面不存在)</span>
+    {{- end -}}
+{{- else -}}
+    <a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- end -}}
