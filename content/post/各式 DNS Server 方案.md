@@ -1,5 +1,5 @@
 ---
-title: DNS 遞迴解析
+title: 各式 DNS Server 方案
 toc: true
 date: 2026-07-05
 ---
@@ -10,9 +10,12 @@ MosDNS
 BindDNS
 OxiDNS
 Technitium
-AdGuard Home
+AdGuard Home：也提供簡單DHCP功能
 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
 KeaDHCP
+
+以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
+
 ## PowerDNS 簡介
 PowerDNS主要架構元件為以下三個
 - Authoritative Server (權威伺服器)
@@ -146,7 +149,7 @@ sudo systemctl restart pdns-recursor
 ```
 
 
-## PowerDNS + Adguard 
+## PowerDNS (Authoritative+Recursor) + Adguard 
 
 第一次進入ADguard是IP:3000,設定完後為IP:80進入
 
@@ -168,40 +171,23 @@ dns:
 1. **第一關：AdGuard Home（前線盾牌 🛡️）**
     - 收到查詢後，先比對廣告、追蹤器與惡意網站黑名單。
     - **如果是廣告**（例如 `ads.doubleclick.net`）：直接在第一關**攔截並丟棄**。
-    - **如果是正常查詢**（不管是外網 `google.com` 還是內網 `ad.internal`）：AdGuard 自己不做解析，**全部轉發給後方的 PowerDNS Recursor**。
+    - 查詢上游伺服器：經過特殊寫法，**把特定網域網址轉發給後方 PowerDNS Recursor**。
         
 2. **第二關：PowerDNS Recursor（核心分流 🚦）**
     - 收到 AdGuard 送過來的乾淨請求。
     - 執行你先前設定好的 YAML 條件式轉發（Forward Zones）邏輯：
         - 查 AD 網域（`ad.internal`） ➡️ 轉發給 **Windows AD DNS**（確保 LDAPS 正常）。
         - 查內部域名（`internal`） ➡️ 轉發給 **PowerDNS Authoritative (Port 5300)**。
-        - 查外網（`google.com`） ➡️ 直接向公網遞迴解析。
 
-### 🛠️ 簡單兩步驟：無痛混用設定
-
-因為 AdGuard Home 預設必須搶佔標準的 **Port 53**，我們只需要把 PowerDNS Recursor 往後挪一個 Port 讓位即可。
-
-#### 步驟 1：修改 PowerDNS Recursor 的 Port
-
-打開你那份漂亮的 `/etc/powerdns/recursor.conf` YAML 設定檔，將監聽連接埠從 `53` 改為 **`5353`**
-```YAML
-# 找到最下方的 incoming 區塊
-incoming:
-  listen:
-    - 0.0.0.0:5353  # 改聽 5353，把 Port 53 讓給 AdGuard
+3. 設定 AdGuard Home 上游 DNS
+4. 在 **上游 DNS 伺服器 (Upstream DNS servers)** 欄位中，清空原本預設的外網 DNS，**唯獨填入你 PowerDNS Recursor 的 IP 與新 Port**：
+```
+https://dns10.quad9.net/dns-query
+[/internal/]192.168.10.6:53
 ```
 
-```Bash
-sudo systemctl restart pdns-recursor
-```
+Adguard 有簡單提供 DNS Rewire 功能，就是做本地域名解析功能，但功能太過簡潔
 
-#### 步驟 2：設定 AdGuard Home 的上游 DNS
-
-1. 登入 AdGuard Home 的網頁後台。
-2. 點選 **設定 (Settings)** ➡️ **DNS 設定 (DNS settings)**。
-3. 在 **上游 DNS 伺服器 (Upstream DNS servers)** 欄位中，清空原本預設的外網 DNS，**唯獨填入你 PowerDNS Recursor 的 IP 與新 Port**：
-    - 語法：`192.168.1.X:5353` （請換成你跑 PowerDNS 那台 Linux 的內網 IP）。
-4. 點選最下方的**儲存**，大功告成！
 
 
 ## Windows DNS Zonetransfer PowerDNS
@@ -455,3 +441,4 @@ systemctl enable dnsmasq
 systemctl start dnsmasq
 systemctl status dnsmasq
 ```
+

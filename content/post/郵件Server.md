@@ -1,8 +1,11 @@
 ---
-title: 寄信
+title: 郵件Server 架設
 toc: true
 date: 2026-06-29
 ---
+
+
+
 1. 先安裝docker，跑mailhog服務
 docker run -d -p 1025:1025 -p 8025:8025 --name local_mailhog mailhog/mailhog
 2. 在 `/etc/illumio-pce/runtime_env.yml` 中把smtp的 IP:Port 從預設127.0.0.1:587改成
@@ -22,3 +25,8 @@ smtp_relay_address: 192.168.8.30:1025
 
 
 ## mailcow
+
+
+
+## iRedmail
+

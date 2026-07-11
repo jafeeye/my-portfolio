@@ -1,14 +1,10 @@
 ---
-title: 2026 家用Sever架設指南
+title: 2026 家用Homelab架設指南
 date: 2026-02-28
 toc: true
 ---
 ## 前言
 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄
-
-
-![](homelab-diagram.svg)
-
 
 三層式架構：Data Plane、Control Plane  
 列印VM：PaperMF、AirPrint、Windows 區網印表機  
@@ -16,12 +12,30 @@ toc: true
 VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce  
 Mointor VM：
 
+
+
+![](homelab-diagram.svg)
+
+
+Docker CT：Docker LXC + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯
+
+
+
+
 ![](lab.svg)
 
 
-## 機型
-瘦客戶端以及耐用度可以考慮 Dell Wyse、HP Prodesk
+## 設備選擇
+電腦主機：瘦客戶端以及耐用度可以考慮 Dell Wyse、HP Prodesk
+鍵盤：Logitech K400 Plus 鍵盤 (非必要)、手把收納架
 
+
+## OS選擇
+對於系統新舊而言，用最好的配置就是最好的系統
+
+| 系統平台     | RAM   |
+| -------- | ----- |
+| Win7 x86 | 512MB |
 
 ## 虛擬桌面
 Horizon Client 無法安裝,將host檔唯讀取消即可
@@ -30,7 +44,18 @@ Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGI
 https://github.com/VirtualDrivers/Virtual-Display-Driver
 
 
-## 檔案命名規則
+## 軟體
+JRiver Media Center
+PowerDVD
+PowerDVD 播放YouTube 
+Jriver 播放歌曲
+遠端桌面用ipad控制htpc
+Pegasus 當萬用前端 啟用crazyktv與es
+
+模擬器：DockStation、Redream、Pegasus gameos、Heimdall
+
+
+## 檔案命名
 有些程式路徑不能包含空格，Windows除了`\/：*？''｜` 都是支持，不能用空格是因為一些軟體的功能都是調用命令行執行，命令行程序傳輸參數就是用空白格來分割 ，要解決這問題就是路徑及代稱路徑參數一定要前後加單引號
 
 常見命名規則
@@ -43,22 +68,6 @@ https://github.com/VirtualDrivers/Virtual-Display-Driver
 ![](Pasted%20image%2020241123113507.png)
 範例3:
 ![](Pasted%20image%2020241123114616.png)
-
-
-## OS選擇
-對於系統新舊而言，用最好的配置就是最好的系統
-
-| 系統平台     | RAM   |
-| -------- | ----- |
-| Win7 x86 | 512MB |
-## 軟體
-JRiver Media Center
-PowerDVD
-## 模擬器
-DockStation
-Redream
-Pegasus gameos
-Heimdall
 
 
 ## 影音資料庫
@@ -141,20 +150,14 @@ Firefox 裝上 h264ify-ehanced 可以硬解H.264
 Youtube TV：可使用Chrome 外掛加上 Kiosk Mode
 
 
-## 設備
-Logitech K400 Plus 鍵盤 (非必要)、手把收納架
 
-## 作法
-PowerDVD 播放YouTube 
-Jriver 播放歌曲
-遠端桌面用ipad控制htpc
-Pegasus 當萬用前端 啟用crazyktv與es
 
-## 關閉設定
+
+
+
+## 優化設定
 關閉、停用 Win10自動傳送錯誤報告 Disable Error Reporting in Windows
 刪除自動排程器的關閉程式錯誤報告
-
-
 https://superuser.com/questions/1343290/disable-chrome-session-restore-popup
 
 

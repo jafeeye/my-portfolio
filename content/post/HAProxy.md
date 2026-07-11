@@ -274,3 +274,20 @@ listen stats
 ```
 
 
+## Roxy-WI 監控面板
+在另一個Ubuntu LXC安裝，本身不能監控自己
+```
+# 1.加入軟體源
+echo \
+  "deb [arch=amd64, trusted=yes] https://repo.roxy-wi.org/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/roxy-wi.list > /dev/null
+
+# 2.安裝軟體包  
+apt-get update
+apt-get install -y roxy-wi roxy-wi-checker roxy-wi-metrics roxy-wi-smon roxy-wi-portscanner roxy-wi-keep-alive roxy-wi-socket
+```
+
+進入網頁 https://IP ，預設帳號密碼 admin/admin
+![](static/Pasted%20image%2020260711151251.png)
+2. 在Server加入要監控主機IP
+![](static/Pasted%20image%2020260711151439.png)

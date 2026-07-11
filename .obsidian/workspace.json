@@ -8,20 +8,63 @@
         "type": "tabs",
         "children": [
           {
-            "id": "6b5931261869dc33",
+            "id": "a2dbf8e46d0a4522",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/企業各式 DNS Server 方案.md",
+                "file": "content/post/2026 家用Homelab架設指南.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "企業各式 DNS Server 方案"
+              "title": "2026 家用Homelab架設指南"
+            }
+          },
+          {
+            "id": "45c5da01671d1cd9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Cloudreve.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Cloudreve"
+            }
+          },
+          {
+            "id": "611f043504ca1ea6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Dashboard.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Dashboard"
+            }
+          },
+          {
+            "id": "a90feaf362b95c77",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/PVE 進階設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PVE 進階設定"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -94,13 +137,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/企業各式 DNS Server 方案.md",
+                "file": "content/post/PVE 進階設定.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "企業各式 DNS Server 方案 的大綱"
+              "title": "PVE 進階設定 的大綱"
             }
           },
           {
@@ -169,7 +212,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 294.5
+    "width": 219.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -187,15 +230,30 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "6b5931261869dc33",
+  "active": "a90feaf362b95c77",
   "lastOpenFiles": [
+    "Dashboard.md",
+    "content/post/2026 家用Homelab架設指南.md",
+    "Cloudreve.md",
+    "Zentyal.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/HAProxy.md",
+    "static/Pasted image 20260711151439.png",
+    "static/Pasted image 20260711151251.png",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/郵件Server.md",
+    "content/post/K8S.md",
+    "content/post/K8s 整理.md",
+    "content/post/x11.md",
+    "content/post/Docker 1.md",
+    "content/post/Docker.md",
+    "content/post/SSL 憑證.md",
+    "static/Diagram 4.svg.xml",
+    "static/Diagram 4.svg",
+    "Excalidraw/Drawing 2026-07-10 22.16.32.excalidraw.md",
     "content/post/企業大量自動部屬.md",
     "Scanopy.md",
-    "Dashboard.md",
-    "content/post/企業各式 DNS Server 方案.md",
-    "content/post/PVE 進階設定.md",
     "static/Pasted image 20260710193341.png",
-    "content/post/K8S.md",
     "content/post/企業共享設定.md",
     "content/post/企業虛擬化方案.md",
     "content/post/PVE 各系統安裝.md",
@@ -203,34 +261,19 @@
     "content/post/中文化及綠化.md",
     "K3s LXC.md",
     "content/post/ESXi斷線除錯.md",
-    "content/Docker.md",
     "content/post/OlivTin Docker安裝.md",
     "content/post/Clonezilla.md",
-    "content/post/Acrobat SDK.md",
-    "themes/hugo-theme-stack/README.md",
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",
     "layouts/_default/_markup",
     "layouts/_default",
-    "static/Diagram 4.svg.xml",
-    "static/Diagram 4.svg",
     "static/Diagram 3.svg.xml",
     "static/Diagram 3.svg",
     "static/Pasted image 20260709092627.png",
     "static/Pasted image 20260708112816.png",
     "static/Pasted image 20260708112538.png",
-    "content/post/常用指令linux.md",
-    "content/post/HAProxy.md",
-    "content/post/RDP 連線實作.md",
-    "content/post/illumio 2x2 DR.md",
-    "content/post/illumio 流量模擬.md",
-    "content/post/AIX 安裝.md",
-    "content/post/2026 家用Sever架設指南.md",
-    "content/post/02-軟體清單.md",
     "static/Pasted image 20260706162802.png",
-    "static/Pasted image 20260706162729.png",
-    "static/Pasted image 20260706161635.png",
     "null",
     "dev",
     "static/Diagram 2.svg.xml"
