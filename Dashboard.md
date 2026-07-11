@@ -30,4 +30,21 @@ https://github.com/daledavies/jump
 
 
 ## Homepage
+http://IP:3000
+```bookmarks.yaml
+- Developer:
+    - Github:
+        - icon: gitlab.svg
+          href: https://github.com/
+
+- Social:
+    - Reddit:
+        - abbr: RE
+          href: https://reddit.com/
+
+- Entertainment:
+    - YouTube:
+        - abbr: YT
+          href: https://youtube.com/
+```
 

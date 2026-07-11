@@ -358,6 +358,16 @@ Vda：ioblock
 2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
 ![](260404-v2v.png)
 
+## 遷移: Migrate
+在PDM刪除Local-LVM 還是有辦法進行遷移，失敗可能要把PVE版本升級或api key重加
+最大影響快照在CT 模式做不了
+- 403 Permission check failed (changing feature flags (except nesting) is only allowed for root@pam)：LXC 打開 `features: nesting=1,keyctl=1`
+![](static/Pasted%20image%2020260711175052.png)
+如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
+
+
+
+
 ## PVE 使用vDSM掛載 iSCSI
 
 1. 先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
@@ -643,11 +653,6 @@ lvextend -l +100%FREE /dev/pve/root
 ## 重整檔案系統
 resize2fs /dev/pve/root
 ```
-
-## Migrate
-如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
-
-
 
 ## 模擬非x86 machines
 https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/

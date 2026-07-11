@@ -8,31 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "a2dbf8e46d0a4522",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/2026 家用Homelab架設指南.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "2026 家用Homelab架設指南"
-            }
-          },
-          {
             "id": "45c5da01671d1cd9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Cloudreve.md",
+                "file": "content/post/SSL 憑證.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Cloudreve"
+              "title": "SSL 憑證"
             }
           },
           {
@@ -41,30 +27,43 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Dashboard.md",
+                "file": "content/post/企業大量部屬.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Dashboard"
+              "title": "企業大量部屬"
             }
           },
           {
-            "id": "a90feaf362b95c77",
+            "id": "6d3c1150ab405ae2",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/PVE 進階設定.md",
+                "file": "資料庫.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PVE 進階設定"
+              "title": "資料庫"
+            }
+          },
+          {
+            "id": "7bf80619f24288f4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/各式 DNS Server 方案.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "各式 DNS Server 方案"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -137,13 +136,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/PVE 進階設定.md",
+                "file": "content/post/SSL 憑證.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "PVE 進階設定 的大綱"
+              "title": "SSL 憑證 的大綱"
             }
           },
           {
@@ -230,52 +229,53 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "a90feaf362b95c77",
+  "active": "45c5da01671d1cd9",
   "lastOpenFiles": [
-    "Dashboard.md",
-    "content/post/2026 家用Homelab架設指南.md",
-    "Cloudreve.md",
-    "Zentyal.md",
+    "content/post/各式 DNS Server 方案.md",
     "content/post/PVE 進階設定.md",
+    "content/post/SSL 憑證.md",
+    "content/post/VCE 題庫製作.md",
+    "content/post/企業大量部屬.md",
+    "static/Diagram 5.svg.xml",
+    "static/Diagram 5.svg",
+    "資料庫.md",
+    "content/post/PVE 各系統安裝.md",
+    "Dashboard.md",
+    "phpIPAM.md",
+    "content/post/code/pve.yaml",
+    "content/post/code/wsever_opti.ps1",
+    "content/post/code/heidmall.yaml",
+    "static/Pasted image 20260711175052.png",
+    "Cloudreve.md",
+    "content/post/2026 家用Homelab架設指南.md",
+    "Zentyal.md",
     "content/post/HAProxy.md",
     "static/Pasted image 20260711151439.png",
     "static/Pasted image 20260711151251.png",
-    "content/post/各式 DNS Server 方案.md",
     "content/post/郵件Server.md",
     "content/post/K8S.md",
     "content/post/K8s 整理.md",
     "content/post/x11.md",
     "content/post/Docker 1.md",
     "content/post/Docker.md",
-    "content/post/SSL 憑證.md",
     "static/Diagram 4.svg.xml",
     "static/Diagram 4.svg",
     "Excalidraw/Drawing 2026-07-10 22.16.32.excalidraw.md",
-    "content/post/企業大量自動部屬.md",
     "Scanopy.md",
     "static/Pasted image 20260710193341.png",
     "content/post/企業共享設定.md",
     "content/post/企業虛擬化方案.md",
-    "content/post/PVE 各系統安裝.md",
     "static/Pasted image 20260710162448.png",
     "content/post/中文化及綠化.md",
     "K3s LXC.md",
     "content/post/ESXi斷線除錯.md",
-    "content/post/OlivTin Docker安裝.md",
-    "content/post/Clonezilla.md",
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",
     "layouts/_default/_markup",
     "layouts/_default",
-    "static/Diagram 3.svg.xml",
     "static/Diagram 3.svg",
     "static/Pasted image 20260709092627.png",
-    "static/Pasted image 20260708112816.png",
-    "static/Pasted image 20260708112538.png",
-    "static/Pasted image 20260706162802.png",
-    "null",
-    "dev",
-    "static/Diagram 2.svg.xml"
+    "static/Pasted image 20260708112816.png"
   ]
 }
