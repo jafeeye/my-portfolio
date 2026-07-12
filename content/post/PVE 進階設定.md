@@ -44,6 +44,79 @@ systemctl restart networking
 Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
 1. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
 
+## 優化: 刪除local-lvm
+```
+lvremove pve/data
+lvextend -l +100%FREE -r pve/root
+```
+
+## 優化: 固定網卡名稱
+## 实现方案(pve9)
+| **網卡名稱範例**          | **命名類型**     | **實際代表的硬體意義**            | **常見出現場景**          |
+| ------------------- | ------------ | ------------------------ | ------------------- |
+| **`eno1`**          | 板載 (Onboard) | 主機板內建的有線網卡               | 實體伺服器、PC 主機板原生網口    |
+| **`ens18`**         | 插槽 (Slot)    | 虛擬或實體熱插拔插槽第 18 號         | **PVE 虛擬機 (VM) 內部** |
+| **`enp1s0`**        | 匯流排 (PCIe)   | PCIe Bus 1, Slot 0 的實體網卡 | 實體機補插的獨立網卡、擴充卡      |
+| **`nic0` / `eth0`** | 自訂 / 傳統      | 人為綁定 MAC 或老舊核心隨機分配       | 經維運優化後的環境、老舊 Linux  |
+注意：在 Proxmox VE 9（基于 Debian 13）中，固定网卡名称的方式与 PVE 8（基于 Debian 12）有所不同，主要是因为 Debian 13 对 udev 规则的处理逻辑做了调整，传统的 70-persistent-net.rules 方式可能不再生效。
+在 PVE 9 中，推荐通过 systemd 的 .link 配置文件 来固定网卡名称，这是更现代且兼容的方式。
+步骤如下：
+1. 找出需要固定的网卡 MAC 地址
+```
+$ ip addr
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000
+link/ether 04:d4:c4:57:af:9d brd ff:ff:ff:ff:ff:ff
+```
+2. 创建 .link 配置文件`vi /etc/systemd/network/10-static-en219v.link` 内容为
+```
+[Match] 
+MACAddress=04:d4:c4:57:af:9d
+[Link] 
+Name=en219v
+```
+3. 修改 vmbr0 的配置
+因为一般都是远程操作，为了安全起见，重命名前后的两个网卡名字都加入到 vmbr0，以防万一出错时无法连接管理网络：`nano /etc/network/interfaces`内容为：
+
+目前对设备名称使用以下命名约定：
+
+- 以太网设备：en*，systemd 网络接口名称。此命名方案用于自版本 5.0 以来的新 Proxmox VE 安装。
+- 以太网设备：eth[N]，其中 0 ≤ N （eth0， eth1， …）此命名方案用于在5.0版本之前安装的Proxmox VE主机。升级到 5.0 时，名称将保持原样。
+- 网桥名称：vmbr[N]，其中 0 ≤ N ≤ 4094 （vmbr0 - vmbr4094）
+- bond：bond[N]，其中 0 ≤ N （bond0， bond1， …）
+- VLAN：只需将 VLAN 编号添加到设备名称中，用句点分隔（eno1.50、bond1.30）
+
+
+
+```
+iface en219v inet manual
+iface eno1 inet manual
+
+auto vmbr0
+iface vmbr0 inet static
+       ......
+       bridge-ports eno1 en219v
+
+```
+
+4. 更新`update-initramfs -u -k all` 重启`reboot`之后查看网卡名称发现已经固定：
+```
+$ ip addr 
+2: en100g1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000 link/ether 8c:3a:8e:88:7d:5a brd ff:ff:ff:ff:ff:ff altname enx8c2a8e886d5a
+```
+5. 修复 vmbr0 的 bridge-ports，把改名之前的网卡名字去掉。
+对于只有多个网卡的情况，操作要复杂一下，主要是需要区分是哪些网卡。如我这里有一台机器上有 100g 和 25g 两块双头网卡， 提供四个网口，其中 100g 网卡提供两个网口，25g 网卡提供两个网口。需要通过下面两个命令找出哪些网卡是 100g 网卡，哪些网卡是 25g 网卡， 记录好 mac 地址，然后再逐个网口进行操作：
+```
+ip addr
+lspci | grep Ethernet
+
+vi /etc/systemd/network/10-static-en25g1.link
+vi /etc/systemd/network/10-static-en25g2.link
+vi /etc/systemd/network/10-static-en100g1.link
+vi /etc/systemd/network/10-static-en100g2.link
+
+```
+
+
 ## USB 網卡優化設定
 
 想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能
@@ -226,6 +299,35 @@ source /etc/network/interfaces.d/*
 ## 網路: ospf
 
 
+
+## 網路路由
+![](static/default-network-setup-routed.svg)
+
+```
+种常见情况是，你有一个公共 IP（在本例中假定为 198.51.100.5），以及一个用于 VM 的额外 IP 块 （203.0.113.16/28）。对于此类情况，我们建议进行以下设置：
+
+auto lo
+iface lo inet loopback
+
+auto eno0
+iface eno0 inet static
+        address  198.51.100.5/29
+        gateway  198.51.100.1
+        post-up echo 1 > /proc/sys/net/ipv4/ip_forward
+        post-up echo 1 > /proc/sys/net/ipv4/conf/eno0/proxy_arp
+
+
+auto vmbr0
+iface vmbr0 inet static
+        address  203.0.113.17/28
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+
+```
+
+
+
 ## 去虛擬化
 
 
@@ -317,6 +419,14 @@ nano /etc/OliveTin/config.yaml
 
 無法登入可能是Datacenter的防火牆打開,LXC預設沒通過防火牆規則
 
+
+## Addons : MicroVM
+```
+curl -sLO $(curl -s https://api.github.com/repos/rcarmo/pve-microvm/releases/latest | grep browser_download_url | grep '.deb' | cut -d'"' -f4)
+dpkg -i pve-microvm_*.deb
+```
+![](static/Pasted%20image%2020260711232519.png)
+
 ## 修改硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
 當要Shrink虛擬磁碟，需透過指令縮寫指令
@@ -331,6 +441,21 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 Vda：ioblock 
 
 
+
+## LVM處理
+![](Pasted%20image%2020260530181126.png)
+
+預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區
+- **`local` (Directory 檔案系統)：** 專門用來放 ISO 鏡像、LXC 範本、備份檔（Backup），它的實體路徑在 Debian 的 `/var/lib/vz`。
+- **`local-lvm` (LVM-Thin 區塊儲存)：** 專門用來分配給虛擬機或容器當作硬碟（也就是你剛才砍掉的那個空間）。
+但其實有小技巧可以將兩個空間合併，這樣local才可以取回原本local-Lvm的容量
+```
+vgs
+## 將自由空間「全數塞給」根目錄（pve-root）
+lvextend -l +100%FREE /dev/pve/root
+## 重整檔案系統
+resize2fs /dev/pve/root
+```
 
 ## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
@@ -359,13 +484,17 @@ Vda：ioblock
 ![](260404-v2v.png)
 
 ## 遷移: Migrate
-在PDM刪除Local-LVM 還是有辦法進行遷移，失敗可能要把PVE版本升級或api key重加
+在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
 最大影響快照在CT 模式做不了
 - 403 Permission check failed (changing feature flags (except nesting) is only allowed for root@pam)：LXC 打開 `features: nesting=1,keyctl=1`
 ![](static/Pasted%20image%2020260711175052.png)
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
 
 
+
+
+## 轉換至ESXi
+![](PixPin_2026-05-02_00-17-16.png)
 
 
 ## PVE 使用vDSM掛載 iSCSI
@@ -486,29 +615,47 @@ qm rescan
 4. 最後要安裝Vitro-win驅動
 
 ## 正確刪除節點
-#### 離開集群後刪除節點 (離線節點)
+因為會有`corosync.conf` 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C (**此方法適用只退一台**)
+1. 先把Node C 關機 (用意為不送出Corosync 叢集廣播)
+2. 在Node A或Node B 其中一台下指令 (A,B其中一台做完設定會自動同步)
 ```
-systemctl stop pve-cluster.service #停止叢集服務
-systemctl stop corosync.service #停止叢集服務
-pmxcfs -l #將集群系統設置為本地模式
+# 1.先切去看節點名稱並記下
+ls -la /etc/pve/nodes/
+# 2. 透過官方指令，將C節點的開會投票名單中移除
+pvecm delnode C節點名稱 
+# 3. 透過官方指令，徹底清除C節點在網頁UI殘留問號資料夾 
+rm -rf /etc/pve/nodes/C節點名稱
+```
+3. Node C重開機 (要真的安全就把Node A跟B 都先關了)
+```
+# 停止 C 機器殘留的叢集通訊服務 
+systemctl stop corosync.service 
+# 刪除舊的通訊錄檔案 
+rm -f /etc/pve/corosync.conf
+```
+## 全部退出節點
+1. 前面那個方法適用只退其中一台，如果一次20台退群用下面方法
+```
+#1. 在20台一次下停止叢集服務 
+systemctl stop pve-cluster.service 
+systemctl stop corosync.service
+
+#2. 在20台將系統設置為本地模式，刪除corosync
+pmxcfs -l  # 強制解鎖成本地模式
 rm /etc/pve/corosync.conf
 rm -rf /etc/corosync/*
 killall pmxcfs
-systemctl start pve-cluster.service #重啟節點服務
-#重啟服務後,在資料中心並不會刪除,所以要再刪除節點
-cd /etc/pve/nodes
-ls
-rm -rf /etc/pve/nodes/節點名稱
-pvecm delnode
-```
-####  正常節點
-```
-cd /etc/pve/nodes/節點名稱
-rm -rf ***
-pvecm delnode ***
-```
-#### 叢集設定
 
+#3. 重啟節點服務
+systemctl start pve-cluster.service 
+
+# 4.重啟服務後,在webui並不會刪除,所以要再刪除自己以外節點 (千萬不要刪自己)
+ls -la /etc/pve/nodes
+rm -rf /etc/pve/nodes/自己以外節點名稱
+```
+
+## 叢集設定
+如果單純要以一個WebUI 管理把多台機器做叢集，這樣是不好的，光是一個SMB服務就會卡死
 PVE HA兩個群集設定
 https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 
@@ -553,10 +700,6 @@ qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
 ```
 搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
 硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
-
-## 轉換至ESXi
-![](PixPin_2026-05-02_00-17-16.png)
-
 
 ## LXC 安裝cockit開啟共享
 
@@ -639,21 +782,6 @@ exit
 ```
 
 
-## LVM處理
-![](Pasted%20image%2020260530181126.png)
-
-預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區
-- **`local` (Directory 檔案系統)：** 專門用來放 ISO 鏡像、LXC 範本、備份檔（Backup），它的實體路徑在 Debian 的 `/var/lib/vz`。
-- **`local-lvm` (LVM-Thin 區塊儲存)：** 專門用來分配給虛擬機或容器當作硬碟（也就是你剛才砍掉的那個空間）。
-但其實有小技巧可以將兩個空間合併，這樣local才可以取回原本local-Lvm的容量
-```
-vgs
-## 將自由空間「全數塞給」根目錄（pve-root）
-lvextend -l +100%FREE /dev/pve/root
-## 重整檔案系統
-resize2fs /dev/pve/root
-```
-
 ## 模擬非x86 machines
 https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/
 https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/
@@ -667,4 +795,13 @@ VM做法 [官網說明文件](https://pve.proxmox.com/wiki/Serial_Terminal)
 2. 編輯grub，加入下面這串，做`update-grub` 或`grub2-mkconfig --output=/boot/grub2/grub.cfg`
 `GRUB_CMDLINE_LINUX="quiet console=tty0 console=ttyS0,115200"`
 
+## 更新PVE
+免費版作法
+![](static/Pasted%20image%2020260712124046.png)
+```
+# 讓系統用新軟體源刷新清單，並用 pveupgrade 啟動升級
+apt-get update
+pveupgrade
+```
 
+無訂閱源比企業源更新還快

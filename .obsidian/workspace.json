@@ -13,26 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/SSL 憑證.md",
+                "file": "content/post/PVE 進階設定.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SSL 憑證"
-            }
-          },
-          {
-            "id": "611f043504ca1ea6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/企業大量部屬.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "企業大量部屬"
+              "title": "PVE 進階設定"
             }
           },
           {
@@ -62,8 +48,23 @@
               "icon": "lucide-file",
               "title": "各式 DNS Server 方案"
             }
+          },
+          {
+            "id": "0271c6f273a44fc2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Dashboard.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Dashboard"
+            }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -136,13 +137,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/SSL 憑證.md",
+                "file": "Dashboard.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "SSL 憑證 的大綱"
+              "title": "Dashboard 的大綱"
             }
           },
           {
@@ -229,21 +230,28 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "45c5da01671d1cd9",
+  "active": "0271c6f273a44fc2",
   "lastOpenFiles": [
+    "static/customised-heimdall-dashboard-with-css-v0-n279ilg3bhwc1.webp",
+    "static/Pasted image 20260712220933.png",
     "content/post/各式 DNS Server 方案.md",
+    "資料庫.md",
+    "content/post/企業大量部屬.md",
     "content/post/PVE 進階設定.md",
+    "static/default-network-setup-routed.svg",
+    "static/Pasted image 20260712124046.png",
+    "content/post/PVE 各系統安裝.md",
+    "content/post/code/wsever_opti.ps1",
+    "content/post/ESXi 安裝設定.md",
+    "content/post/ESXi斷線除錯.md",
+    "static/Pasted image 20260711232519.png",
     "content/post/SSL 憑證.md",
     "content/post/VCE 題庫製作.md",
-    "content/post/企業大量部屬.md",
     "static/Diagram 5.svg.xml",
     "static/Diagram 5.svg",
-    "資料庫.md",
-    "content/post/PVE 各系統安裝.md",
     "Dashboard.md",
     "phpIPAM.md",
     "content/post/code/pve.yaml",
-    "content/post/code/wsever_opti.ps1",
     "content/post/code/heidmall.yaml",
     "static/Pasted image 20260711175052.png",
     "Cloudreve.md",
@@ -265,17 +273,10 @@
     "static/Pasted image 20260710193341.png",
     "content/post/企業共享設定.md",
     "content/post/企業虛擬化方案.md",
-    "static/Pasted image 20260710162448.png",
-    "content/post/中文化及綠化.md",
-    "K3s LXC.md",
-    "content/post/ESXi斷線除錯.md",
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",
     "layouts/_default/_markup",
-    "layouts/_default",
-    "static/Diagram 3.svg",
-    "static/Pasted image 20260709092627.png",
-    "static/Pasted image 20260708112816.png"
+    "layouts/_default"
   ]
 }

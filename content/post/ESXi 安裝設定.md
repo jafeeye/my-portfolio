@@ -1,5 +1,5 @@
 ---
-title: ESXi 安裝與設定
+title: ESXi 安裝設定
 date: 2026-02-19
 toc: true
 tags:
@@ -109,6 +109,26 @@ chmod +x /vmfs/volumes/datastore1/esxi-shutdown.sh
 
 [[1]](#_ftnref1) Linux檔案的基本權限就有九個，分別是owner/group/others三種身份各有自己的read/write/execute權限，chmod +x為可執行、chmod 777全部可以rwx
 40 13 、45 13 處表示任務執行時間，格式為[分] [時] [日] [月份] [星期]，由於esxi的系統時間採用的是UTC時間（國際標準時間），而中國是UTC+8，所以想要在北京時間22:40時關閉虛擬機器的話，就只需要用22-8算出UTC時間為14，任務執行時間填寫為40 14 、45 14 就可以了。
+
+
+## 斷線除錯
+實際案例遇到i219v當拔除超過5分鐘後就無法再連線，根據排除因為i219v是消費級晶片,第一思路關閉自動協商調整成1000Mbps失效，第二關閉EEE省電模組寫死在驅動，雖然ESXi 可以使用但是社群版驅動`ne1000` ，BIOS也找不到可以關閉EEE選項，只好直接放棄ESXi
+
+```
+esxcli network nic tso set -n vmnic0 -e 0
+```
+持久化設定
+/etc/rc.local.d/local.sh 在exit0 之前加入下面這條
+```
+esxcli network nic tso set -n vmnic0 -e 0
+```
+重開機生效
+```
+/sbin/auto-backup.sh
+```
+
+ESXI 7升8
+![[Pasted image 20260321174801.png]]
 
 
 

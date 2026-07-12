@@ -4,7 +4,7 @@ date: 2026-02-17
 toc: true
 ---
 ## CML
-### 簡介
+
 新版CML採用Ubuntu 24.10發行版製作，原理是開機先將`cml_2.9.1xx.iso`進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項
 
 
@@ -18,8 +18,8 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 ![CML](static/cml0217.png)<span style="display:none">.</span>
 
 
-## Nested ESXi
-### 簡介
+## ESXi Nested
+
 先確認PVE系統設定檔
 ```
 cat /etc/modprobe.d/kvm-intel.conf
@@ -218,11 +218,16 @@ crontab -e
 ```
 
 
+## Flatcar Container Linux
 
 
 
+## Photon OS
+適合安裝Docker
 
 
+## K3S LXC
+K3s之所以會成功，是因為他把很多會影響權限的全拿掉了
 
 ## vDSM LXC
 1. 執行LXC腳本,設定容器權限
@@ -280,9 +285,6 @@ https://github.com/vdsm/virtual-dsm/issues/382
 
 
 
-
-## K3S LXC
-K3s之所以會成功，是因為他把很多會影響權限的全拿掉了
 
 ## 參考資料
 1. 安裝qemu-agent fail方法：https://forum.proxmox.com/threads/how-to-install-qemu-guest-agent-on-windows7-including-ver7600-7601-sp1-and-also-vista.136016/、提供qemu-ga 安裝vxKex思路：https://blog.qdac.cc/?p=5818
