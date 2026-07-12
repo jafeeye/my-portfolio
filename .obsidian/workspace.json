@@ -13,58 +13,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/PVE 進階設定.md",
+                "file": "content/post/線上託管服務.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "PVE 進階設定"
-            }
-          },
-          {
-            "id": "6d3c1150ab405ae2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "資料庫.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "資料庫"
-            }
-          },
-          {
-            "id": "7bf80619f24288f4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/各式 DNS Server 方案.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "各式 DNS Server 方案"
-            }
-          },
-          {
-            "id": "0271c6f273a44fc2",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Dashboard.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Dashboard"
+              "title": "線上託管服務"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -137,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Dashboard.md",
+                "file": "content/post/線上託管服務.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Dashboard 的大綱"
+              "title": "線上託管服務 的大綱"
             }
           },
           {
@@ -230,15 +187,20 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "0271c6f273a44fc2",
+  "active": "45c5da01671d1cd9",
   "lastOpenFiles": [
+    "content/post/資料庫.md",
+    "content/post/Zentyal.md",
+    "content/post/Scanopy.md",
+    "content/post/K3s LXC.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/線上託管服務.md",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/Dashboard.md",
     "static/i-really-like-how-easy-it-is-to-custom-glance-dynacat-v0-k1lom1cndv0h1.webp",
     "static/customised-heimdall-dashboard-with-css-v0-n279ilg3bhwc1.webp",
     "static/Pasted image 20260712220933.png",
-    "content/post/各式 DNS Server 方案.md",
-    "資料庫.md",
     "content/post/企業大量部屬.md",
-    "content/post/PVE 進階設定.md",
     "static/default-network-setup-routed.svg",
     "static/Pasted image 20260712124046.png",
     "content/post/PVE 各系統安裝.md",
@@ -250,14 +212,12 @@
     "content/post/VCE 題庫製作.md",
     "static/Diagram 5.svg.xml",
     "static/Diagram 5.svg",
-    "Dashboard.md",
-    "phpIPAM.md",
+    "content/post/phpIPAM.md",
     "content/post/code/pve.yaml",
     "content/post/code/heidmall.yaml",
     "static/Pasted image 20260711175052.png",
     "Cloudreve.md",
     "content/post/2026 家用Homelab架設指南.md",
-    "Zentyal.md",
     "content/post/HAProxy.md",
     "static/Pasted image 20260711151439.png",
     "static/Pasted image 20260711151251.png",
@@ -268,11 +228,8 @@
     "content/post/Docker 1.md",
     "content/post/Docker.md",
     "static/Diagram 4.svg.xml",
-    "static/Diagram 4.svg",
     "Excalidraw/Drawing 2026-07-10 22.16.32.excalidraw.md",
-    "Scanopy.md",
     "content/post/企業共享設定.md",
-    "content/post/企業虛擬化方案.md",
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",
