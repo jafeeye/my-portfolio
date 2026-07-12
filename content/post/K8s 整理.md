@@ -16,6 +16,12 @@ date: 2026-05-30
 | Read-only Filesystem Support |            | No                   | Partial              | Partial                  | Yes                |          |
 
 
+![](static/ingress.webp)
+
+![](static/Picture6.jpg)
+
+
+
 有對應多個runtime engine：containerd、crio、k3s_containerd
 
 **[kubevirt-manager](https://github.com/kubevirt-manager/kubevirt-manager)**

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/線上託管服務.md",
+                "file": "content/post/K8s 整理.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "線上託管服務"
+              "title": "K8s 整理"
             }
           }
         ]
@@ -94,13 +94,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/線上託管服務.md",
+                "file": "content/post/K8s 整理.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "線上託管服務 的大綱"
+              "title": "K8s 整理 的大綱"
             }
           },
           {
@@ -189,12 +189,21 @@
   },
   "active": "45c5da01671d1cd9",
   "lastOpenFiles": [
+    "static/Picture6.jpg",
+    "static/ingress.webp",
+    "content/post/K8S.md",
+    "content/post/PVE 進階設定.md",
+    "static/default-network-setup-bridge.svg",
+    "content/post/企業虛擬化方案.md",
+    "static/microvm-vs-lxc-vs-vm.svg",
+    "static/netbox-sot.webp",
+    "content/post/2026 家用Homelab架設指南.md",
+    "content/post/中文化及綠化.md",
+    "content/post/線上託管服務.md",
     "content/post/資料庫.md",
     "content/post/Zentyal.md",
     "content/post/Scanopy.md",
     "content/post/K3s LXC.md",
-    "content/post/PVE 進階設定.md",
-    "content/post/線上託管服務.md",
     "content/post/各式 DNS Server 方案.md",
     "content/post/Dashboard.md",
     "static/i-really-like-how-easy-it-is-to-custom-glance-dynacat-v0-k1lom1cndv0h1.webp",
@@ -211,25 +220,16 @@
     "content/post/SSL 憑證.md",
     "content/post/VCE 題庫製作.md",
     "static/Diagram 5.svg.xml",
-    "static/Diagram 5.svg",
     "content/post/phpIPAM.md",
     "content/post/code/pve.yaml",
     "content/post/code/heidmall.yaml",
-    "static/Pasted image 20260711175052.png",
     "Cloudreve.md",
-    "content/post/2026 家用Homelab架設指南.md",
     "content/post/HAProxy.md",
-    "static/Pasted image 20260711151439.png",
-    "static/Pasted image 20260711151251.png",
     "content/post/郵件Server.md",
-    "content/post/K8S.md",
     "content/post/K8s 整理.md",
     "content/post/x11.md",
     "content/post/Docker 1.md",
-    "content/post/Docker.md",
     "static/Diagram 4.svg.xml",
-    "Excalidraw/Drawing 2026-07-10 22.16.32.excalidraw.md",
-    "content/post/企業共享設定.md",
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",

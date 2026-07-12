@@ -234,7 +234,7 @@ systemctl enable frr.service
 修改主機ip
 1. nano /etc/network/interfaces
 2. nano /etc/hosts
-
+![](static/default-network-setup-bridge.svg)
 如果硬碟拔去新機器，無法進入畫面去檢查 `/etc/network/interfaces` ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可
 
 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" height="320">
+  <defs>
+    <style>
+      :root {
+        --text: #1a2a40;
+        --surface: #e8eff6;
+        --primary: #2b6cb0;
+        --accent: #c05050;
+        --green: #2a7a3a;
+        --col-bg: #d4e0ef;
+        --title-bg: #2b6cb0;
+        --title-text: #ffffff;
+        --border-hw: #c05050;
+        --border-proc: #888888;
+        --box-stroke: #2b6cb0;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --text: #e8d8d0;
+          --surface: #2a1e18;
+          --primary: #e08050;
+          --accent: #50b0a0;
+          --green: #60c870;
+          --col-bg: #3a2a20;
+          --title-bg: #e08050;
+          --title-text: #1a1008;
+          --border-hw: #50b0a0;
+          --border-proc: #aaaaaa;
+          --box-stroke: #e08050;
+        }
+      }
+      text { font-family: 'Segoe UI', system-ui, sans-serif; }
+    </style>
+  </defs>
+  <rect x="18" y="18" width="196" height="280" rx="8" fill="var(--col-bg)" opacity="0.55"/>
+  <rect x="252" y="18" width="196" height="280" rx="8" fill="var(--col-bg)" opacity="0.55"/>
+  <rect x="486" y="18" width="196" height="280" rx="8" fill="var(--col-bg)" opacity="0.55"/>
+  <rect x="22" y="22" width="188" height="28" rx="5" fill="var(--title-bg)"/>
+  <text x="116" y="41" text-anchor="middle" font-size="12" font-weight="700" fill="var(--title-text)">Standard VM</text>
+  <rect x="34" y="58" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="116" y="80" text-anchor="middle" font-size="11" fill="var(--text)">BIOS / UEFI</text>
+  <line x1="116" y1="92" x2="116" y2="100" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="116,103 112,97 120,97" fill="var(--text)"/>
+  <rect x="34" y="103" width="164" height="42" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="116" y="119" text-anchor="middle" font-size="10.5" fill="var(--text)">Legacy Devices</text>
+  <text x="116" y="134" text-anchor="middle" font-size="9.5" fill="var(--text)" opacity="0.8">(IDE, VGA, USB, PCI)</text>
+  <line x1="116" y1="145" x2="116" y2="153" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="116,156 112,150 120,150" fill="var(--text)"/>
+  <rect x="34" y="156" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="116" y="178" text-anchor="middle" font-size="11" fill="var(--text)">Full Kernel</text>
+  <line x1="116" y1="190" x2="116" y2="198" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="116,201 112,195 120,195" fill="var(--text)"/>
+  <rect x="34" y="201" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="116" y="223" text-anchor="middle" font-size="11" fill="var(--text)">Userspace</text>
+  <text x="116" y="258" text-anchor="middle" font-size="11" font-style="italic" fill="var(--green)">~2–5s boot</text>
+  <rect x="30" y="54" width="172" height="185" rx="5" fill="none" stroke="var(--border-hw)" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <text x="116" y="284" text-anchor="middle" font-size="9.5" fill="var(--accent)" font-weight="600">HW isolation</text>
+  <rect x="256" y="22" width="188" height="28" rx="5" fill="var(--title-bg)"/>
+  <text x="350" y="41" text-anchor="middle" font-size="12" font-weight="700" fill="var(--title-text)">microVM</text>
+  <rect x="268" y="58" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="350" y="80" text-anchor="middle" font-size="11" fill="var(--text)">Direct Kernel Boot</text>
+  <line x1="350" y1="92" x2="350" y2="100" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="350,103 346,97 354,97" fill="var(--text)"/>
+  <rect x="268" y="103" width="164" height="42" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="350" y="119" text-anchor="middle" font-size="10.5" fill="var(--text)">Virtio Only</text>
+  <text x="350" y="134" text-anchor="middle" font-size="9.5" fill="var(--text)" opacity="0.8">(blk, net, serial)</text>
+  <line x1="350" y1="145" x2="350" y2="153" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="350,156 346,150 354,150" fill="var(--text)"/>
+  <rect x="268" y="156" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="350" y="178" text-anchor="middle" font-size="11" fill="var(--text)">Minimal Kernel</text>
+  <line x1="350" y1="190" x2="350" y2="198" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="350,201 346,195 354,195" fill="var(--text)"/>
+  <rect x="268" y="201" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="350" y="223" text-anchor="middle" font-size="11" fill="var(--text)">Userspace</text>
+  <text x="350" y="258" text-anchor="middle" font-size="11" font-style="italic" fill="var(--green)">&lt;300ms boot</text>
+  <rect x="264" y="54" width="172" height="185" rx="5" fill="none" stroke="var(--border-hw)" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <text x="350" y="284" text-anchor="middle" font-size="9.5" fill="var(--accent)" font-weight="600">HW isolation</text>
+  <rect x="490" y="22" width="188" height="28" rx="5" fill="var(--title-bg)"/>
+  <text x="584" y="41" text-anchor="middle" font-size="12" font-weight="700" fill="var(--title-text)">LXC Container</text>
+  <rect x="502" y="58" width="164" height="42" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="584" y="74" text-anchor="middle" font-size="11" fill="var(--text)">Shared Host</text>
+  <text x="584" y="89" text-anchor="middle" font-size="11" fill="var(--text)">Kernel</text>
+  <line x1="584" y1="100" x2="584" y2="108" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="584,111 580,105 588,105" fill="var(--text)"/>
+  <rect x="502" y="111" width="164" height="42" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="584" y="127" text-anchor="middle" font-size="10.5" fill="var(--text)">Namespaces</text>
+  <text x="584" y="142" text-anchor="middle" font-size="10.5" fill="var(--text)">+ cgroups</text>
+  <line x1="584" y1="153" x2="584" y2="161" stroke="var(--text)" stroke-width="1.2"/>
+  <polygon points="584,164 580,158 588,158" fill="var(--text)"/>
+  <rect x="502" y="164" width="164" height="34" rx="4" fill="var(--surface)" stroke="var(--box-stroke)" stroke-width="1.5"/>
+  <text x="584" y="186" text-anchor="middle" font-size="11" fill="var(--text)">Userspace</text>
+  <text x="584" y="222" text-anchor="middle" font-size="11" font-style="italic" fill="var(--green)">~instant</text>
+  <rect x="498" y="54" width="172" height="150" rx="5" fill="none" stroke="var(--border-proc)" stroke-width="1.8" stroke-dasharray="6,4"/>
+  <text x="584" y="250" text-anchor="middle" font-size="9.5" fill="var(--border-proc)" font-weight="600">Process isolation only</text>
+</svg>
