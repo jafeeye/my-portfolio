@@ -25,7 +25,281 @@ https://soulteary.com/2022/02/23/building-a-personal-bookmark-navigation-app-fro
 https://github.com/daledavies/jump
 
 
-## Glance
+## Glance/ Dynacat
+
+
+![](static/i-really-like-how-easy-it-is-to-custom-glance-dynacat-v0-k1lom1cndv0h1.webp)
+
+
+```
+          - type: group
+            widgets:
+              - type: reddit
+                subreddit: selfhosted
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: pcmasterrace
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: plex
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: bookstack
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: 3Dprinting
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: bambulab
+                show-thumbnails: true
+                collapse-after: 8
+```
+
+```censored.yaml
+## BRANDING ###
+server:
+  assets-path: /app/assets
+ 
+branding:
+  logo-url: /assets/logo.png
+  favicon-url: /assets/logo.png
+ 
+theme:
+  custom-css-file: /assets/style.css
+  light: true
+  background-color: 34 30 94
+
+
+### PAGES ###
+pages:
+  ### HOME ###
+  - name: Home
+    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+    hide-desktop-navigation: true
+    columns:
+      - size: small
+        widgets:
+          - type: clock
+            title: TIME
+            hour-format: 24h
+            
+          - type: bookmarks
+            title: APPS
+            groups:
+              - title:
+                same-tab: true
+                links:
+                  - title: NAS
+                    url: https://nas.my-nas.com
+                    icon: mdi:nas
+
+
+          - type: releases
+            cache: 1d
+            show-source-icon: true
+            token: ${GITHUB_TOKEN}
+            limit: 20
+            collapse-after: 4
+            repositories:
+              - codeberg:bookstack/bookstack
+              - paperless-ngx/paperless-ngx
+              - dani-garcia/vaultwarden
+
+
+### MIDDLE ROW ###
+      - size: full
+        widgets:
+          - type: custom-api
+            title: Ce jour-là
+            cache: 24h
+            template: |
+              {{ $month := now.Format "01" }}
+              {{ $day := now.Format "02" }}
+              {{ $url := printf "https://fr.wikipedia.org/api/rest_v1/feed/onthisday/events/%s/%s" $month $day }}
+              {{ $resp := newRequest $url | withHeader "User-Agent" "yourNameDashboard/1.0 (https://yourdomain.com)" | getResponse }}
+              {{ $events := $resp.JSON.Array "events" }}
+              {{ $count := len $events }}
+              {{ if gt $count 0 }}
+                {{ $seed := add (mul now.Year 366) now.YearDay }}
+                {{ $idx := mod $seed $count }}
+                {{ range $i, $e := $events }}
+                  {{ if eq $i $idx }}
+                    {{ $year := $e.Int "year" }}
+                    {{ $yearsAgo := sub now.Year $year }}
+                    {{ $link := $e.String "pages.0.content_urls.desktop.page" }}
+                    <p class="size-h4 color-paragraph">
+                      <span class="color-highlight">{{ $year }}</span> ·
+                      {{ if $link }}
+                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer">{{ $e.String "text" }}</a>
+                      {{ else }}
+                        {{ $e.String "text" }}
+                      {{ end }}
+                    </p>
+                    {{ if gt $yearsAgo 0 }}
+                      <p class="size-h6 color-subdue">Il y a {{ $yearsAgo }} an{{ if gt $yearsAgo 1 }}s{{ end }}</p>
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ else }}
+                <p class="size-h4 color-paragraph">Aucun événement trouvé pour aujourd'hui.</p>
+              {{ end }}
+              
+          - type: group
+            widgets:
+              - type: reddit
+                subreddit: selfhosted
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: pcmasterrace
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: plex
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: bookstack
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: 3Dprinting
+                show-thumbnails: true
+                collapse-after: 8
+              - type: reddit
+                subreddit: bambulab
+                show-thumbnails: true
+                collapse-after: 8
+
+
+          - type: videos
+            include-shorts: true
+            channels:
+              - UC_yP2DpIgs5Y1uWC0T03Chw # JDG
+              - UCeeFfhMcJa1kjtfZAGskOCA # TechLinked
+              - UC_R99mJdkzksbgeedOyLbKw # Ici Japon Corp.
+              - UCeGEv5MBdmGMgZFPrAlEmFA # Tev - Ici Japon
+              - UCPTlw9-dflN3_Sw9AfQs3vw # Faune Cool
+              - UCH66RFWfw6CSm2T1EM4ik1g # Bookstack
+              - UC4peNo-31r7fhQZgu0_JRIA # Sheshounet
+              - UCDsMKIpr1ZHXHpACszKpRUw # JRM
+              - UCMQSwUNSnMOP4IRysfeg8EA # Simon Puech
+              - UCseGV3amBLISlIOMQodPfVQ # Sylvqin
+              - UCGt553K1a2MNHfioKJFPCPA # ThéoBabac
+              - UCHDxYLv8iovIbhrfl16CNyg # GameLinked
+              - UC17vsYVoIwch5UzPar1LDmQ # ymfah
+
+
+### RIGHT ROW ###
+      - size: small
+        widgets:
+          - type: custom-api
+            title: Paperless-NGX
+            title-url: ${PAPERLESS_URL}
+            url: ${PAPERLESS_URL}/api/statistics/
+            headers:
+              Authorization: Token ${PAPERLESS_TOKEN}
+              Accept: application/json
+            cache: 1m
+            template: |
+              {{ $total := .JSON.Int "documents_total" }}
+              {{ $inbox := .JSON.Int "documents_inbox" }}
+              {{ $correspondents := .JSON.Int "correspondent_count" }}
+
+
+              <div class="flex justify-between text-center">
+                <div>
+                  {{ if gt $inbox 0 }}
+                    <a href="${PAPERLESS_URL}/view/3"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       style="text-decoration:none; color:inherit;">
+                      <div class="size-h3" style="color: var(--color-negative) !important;">
+                        {{ $inbox | formatNumber }}
+                      </div>
+                      <div class="size-h5 uppercase" style="color: var(--color-negative) !important;">
+                        Inbox
+                      </div>
+                    </a>
+                  {{ else }}
+                    <div class="color-highlight size-h3">{{ $inbox | formatNumber }}</div>
+                    <div class="size-h5 uppercase">À traiter</div>
+                  {{ end }}
+                </div>
+
+
+                <div>
+                  <div class="color-highlight size-h3">{{ $total | formatNumber }}</div>
+                  <div class="size-h5 uppercase">Factures</div>
+                </div>
+
+
+                <div>
+                  <div class="color-highlight size-h3">{{ $correspondents | formatNumber }}</div>
+                  <div class="size-h5 uppercase">Correspondents</div>
+                </div>
+              </div>
+
+
+          - type: group
+            widgets:
+              - type: bookmarks
+                title: Tools
+                groups:
+                  - same-tab: true
+                    links:
+                      - title: Center text
+                        url: https://onlinetexttools.com/center-text
+                      - title: Check driver
+                        url: https://www.pcilookup.com/
+                      - title: IconsDB
+                        url: https://www.iconsdb.com/
+                      - title: iLovePDF
+                        url: https://www.ilovepdf.com/fr
+                      - title: IT-Tools
+                        url: https://it-tools.tech
+                      - title: MailTo Maker
+                        url: https://mailto.vercel.app/
+                      - title: Pictogrammers
+                        url: https://pictogrammers.com/library/mdi/
+                      - title: SVG Converter
+                        url: https://svgconverter.app/
+              - type: bookmarks
+                title: Media
+                groups:
+                  - same-tab: true
+                    color: 40 100 50
+                    links:
+                      - title: JustWatch
+                        url: https://www.justwatch.com/fr
+                      - title: LetterBoxd
+                        url: https://letterboxd.com/
+                      - title: Plex
+                        url: https://app.plex.tv/desktop/
+
+
+              - type: bookmarks
+                title: Web & Info
+                groups:
+                  - same-tab: true
+                    color: 200 50 50
+                    links:
+                      - title: it-connect
+                        url: https://www.it-connect.fr/
+                      - title: MariusHosting
+                        url: https://Mariushosting.com
+                      - title: PhoenixJP
+                        url: https://www.phoenixjp.info/news/fr/numeriques-1
+
+```
+
+
+
 
 
 
@@ -271,3 +545,6 @@ http://IP:3000
           href: https://youtube.com/
 ```
 
+## Navhub
+
+專案預覽：[https://git-hub-cc.github.io/Deploy/navhub](https://git-hub-cc.github.io/Deploy/navhub) 備用預覽：[https://navhub-cc.netlify.app](https://navhub-cc.netlify.app/) 專案地址：[https://github.com/git-hub-cc/NavHub](https://github.com/git-hub-cc/NavHub)
