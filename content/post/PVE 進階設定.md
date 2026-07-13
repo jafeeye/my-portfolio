@@ -805,3 +805,10 @@ pveupgrade
 ```
 
 無訂閱源比企業源更新還快
+
+
+## LXC 設定
+nesting=1 # 啟用容器嵌套,可在裡面跑docker
+
+
+## OpenVSwtch

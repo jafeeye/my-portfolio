@@ -29,7 +29,7 @@ systemctl enable --now ssh
 apt install curl
 ```
 ## Debian LXC
-使用Debian 13 LXC 安裝
+使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
 ```
 apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
 ```

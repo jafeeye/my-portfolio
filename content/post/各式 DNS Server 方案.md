@@ -442,3 +442,62 @@ systemctl start dnsmasq
 systemctl status dnsmasq
 ```
 
+## dnsproxy
+
+
+## PowerDNS 資料庫問題
+```
+簡易維護使用sqlite
+# 查詢底下檔案權限
+ls -la /var/lib/powerdns/
+# 發現底下有pdns.sqlite3-shm跟pdns.sqlite3-wal，看權限是不是屬於www-data
+```
+
+為了解決這種因為「兩個不同帳號同時搶同一個 SQLite 資料庫」產生的權限衝突，最 root-cause（根本）的解法是**把 `pdns` 帳號直接加進 `www-data` 群組，並利用 Linux 的 `umask` 或是 `SGID` 讓新建立的檔案強制繼承群組**。
+請直接依序執行以下三個動作：
+### 步驟一：把 pdns 帳號加到 www-data 群組
+
+讓 PowerDNS 服務有權限處理網頁端建立的東西：
+```
+sudo usermod -aG www-data pdns
+sudo usermod -aG pdns www-data
+```
+
+### 步驟二：設定資料夾的 SGID（黃金關鍵）
+
+我們要在 `/var/lib/powerdns` 資料夾上加上一個特殊的 `SGID` 權限（原本的 `775` 改成 `2775`）。它的神奇之處在於：**未來不管是誰（pdns 或是 www-data）在這個資料夾下建立任何新檔案（包括臨時的 -shm 和 -wal），群組一律會強制繼承資料夾的群組（也就是 www-data）**！
+```
+# 1. 再次把所有權交回，並把資料夾群組定為 www-data
+sudo chown -R pdns:www-data /var/lib/powerdns
+
+# 2. 開啟 SGID (注意那個 2)
+sudo chmod 2775 /var/lib/powerdns
+
+# 3. 再次把現有的檔案權限刷乾淨
+sudo chmod 664 /var/lib/powerdns/pdns.sqlite*
+```
+
+### 步驟三：重啟 PowerDNS 與你的網頁後台服務
+
+為了讓剛剛加入群組（`usermod`）的設定在服務中生效，一定要重啟：
+```
+sudo systemctl restart pdns
+sudo systemctl restart pdns-recursor
+
+# 如果你有裝網頁後台（例如 powerdns-admin），也請重啟它，或者重啟 nginx/apache
+# sudo systemctl restart powerdns-admin
+# sudo systemctl restart apache
+```
+
+
+
+## 測試
+```
+# DNS 主機那台
+dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
+
+Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
+# 修改 nano /etc/resolv.conf
+
+
+```
