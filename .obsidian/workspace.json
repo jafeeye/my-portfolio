@@ -32,12 +32,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Severless 服務.md",
+                    "file": "content/post/OS整理.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Severless 服務"
+                  "title": "OS整理"
                 }
               },
               {
@@ -194,13 +194,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/Severless 服務.md",
+                "file": "content/post/OS整理.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Severless 服務 的大綱"
+              "title": "OS整理 的大綱"
             }
           },
           {
@@ -289,8 +289,8 @@
   },
   "active": "4c8dd32aa7fce659",
   "lastOpenFiles": [
-    "Ai工具.md",
     "content/post/Severless 服務.md",
+    "Ai工具.md",
     "Nginx Plus.md",
     "static/Diagram 6.svg.xml",
     "static/Diagram 6.svg",
