@@ -10,38 +10,10 @@
           {
             "id": "83b1245b2217b5b8",
             "type": "tabs",
-            "dimension": 69.8329853862213,
+            "dimension": 78.30802603036877,
             "children": [
               {
                 "id": "5b2d465ce67db32f",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/常用指令linux.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "常用指令linux"
-                }
-              },
-              {
-                "id": "25f34d7fe0e70926",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "Linux網路設定.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Linux網路設定"
-                }
-              },
-              {
-                "id": "817084ba2fe41dc0",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
@@ -55,40 +27,54 @@
                 }
               },
               {
-                "id": "4ee4dc1ae8000026",
+                "id": "4c8dd32aa7fce659",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Colortokens.md",
+                    "file": "content/post/Severless 服務.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Colortokens"
+                  "title": "Severless 服務"
                 }
               },
               {
-                "id": "cddef645f6656487",
+                "id": "b6211c963c3e094d",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/RDP 連線實作.md",
+                    "file": "pidgvin share.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "RDP 連線實作"
+                  "title": "pidgvin share"
+                }
+              },
+              {
+                "id": "25f34d7fe0e70926",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/常用指令linux.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "常用指令linux"
                 }
               }
             ],
-            "currentTab": 2
+            "currentTab": 1
           },
           {
             "id": "e9f8c520ea509919",
             "type": "tabs",
-            "dimension": 30.167014613778704,
+            "dimension": 21.69197396963124,
             "children": [
               {
                 "id": "12d6c1fbc36f3171",
@@ -129,7 +115,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：zsh"
                 }
               }
             ]
@@ -158,7 +144,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -192,8 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 235.5,
-    "collapsed": true
+    "width": 235.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -209,12 +194,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/post/Severless 服務.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Severless 服務 的大綱"
             }
           },
           {
@@ -287,33 +273,39 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "vscode-editor:Create Code File": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "vscode-editor:新建程式碼檔案": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "12d6c1fbc36f3171",
+  "active": "4c8dd32aa7fce659",
   "lastOpenFiles": [
+    "Ai工具.md",
+    "content/post/Severless 服務.md",
     "Nginx Plus.md",
-    "content/post/RDP 連線實作.md",
+    "static/Diagram 6.svg.xml",
+    "static/Diagram 6.svg",
+    "content/post/SSL 憑證.md",
+    "pidgvin share.md",
     "content/post/常用指令linux.md",
+    "content/post/netbox.md",
+    "Linux網路設定.md",
+    "content/post/RDP 連線實作.md",
     "content/post/illumio 流量模擬.md",
     "content/post/Dashboard.md",
     "Colortokens.md",
-    "Linux網路設定.md",
     "content/post/PVE 進階設定.md",
     "content/post/Keycloak.md",
     "content/post/各式 DNS Server 方案.md",
-    "content/post/netbox.md",
     "content/post/Scanopy.md",
     "content/post/K8s 整理.md",
     "static/Picture6.jpg",
@@ -334,12 +326,7 @@
     "static/Pasted image 20260712220933.png",
     "content/post/企業大量部屬.md",
     "static/default-network-setup-routed.svg",
-    "static/Pasted image 20260712124046.png",
-    "content/post/PVE 各系統安裝.md",
     "content/post/code/wsever_opti.ps1",
-    "content/post/ESXi 安裝設定.md",
-    "content/post/ESXi斷線除錯.md",
-    "content/post/SSL 憑證.md",
     "static/Diagram 5.svg.xml",
     "content/post/code/pve.yaml",
     "content/post/code/heidmall.yaml",
@@ -347,7 +334,6 @@
     "hugo.yaml",
     "layouts/_default/_markup/render-link.html.ts",
     "layouts/_default/_markup/render-link.html",
-    "layouts/_default/_markup",
-    "layouts/_default"
+    "layouts/_default/_markup"
   ]
 }
