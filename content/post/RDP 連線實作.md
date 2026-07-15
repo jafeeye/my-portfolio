@@ -34,7 +34,7 @@ sudo firewall-cmd --zone=public --add-port=3389/tcp --permanent
 sudo firewall-cmd --reload
 ```
 
-## Ubunut LXC on XRDP
+## Ubunut LXC on Xfce
 ```
 ## 安裝xfce
 apt update && apt install xfce4 xfce4-goodies -y 
@@ -82,8 +82,6 @@ sudo apt-get install fonts-arphic-ukai fonts-arphic-uming fonts-ipafont-mincho f
 
 ```
 
-
-
 ### 啟動腳本
 無法打中文是因為使用者無法去執行ibus權限，指派成root就可以或是在一般使用者載入ibus環境，去`/etc/xrdp/sesman.ini` 去找UserWindowManager、DefaultWindowManager，看這設定檔放在哪，代表設定檔是放在startwm.sh
 ```
@@ -123,6 +121,34 @@ sudo systemctl restart xrdp
 ### 無法擷取鍵盤
 在Rocky Linux用Win+Space或Ctrl+Space無法切換輸入法，代表快速鍵沒有被攔截進去rdp，需要遠端桌面更改設定。
 開啟mstsc，本機資源/鍵盤/套用Windows按鍵組合，選擇`在遠端電腦上` 
+
+
+### 無法啟動chrome
+```
+rm -f ~/.config/google-chrome/SingletonLock
+
+# 改寫 Chrome 的啟動包裝（推薦）
+
+你可以建立一個自訂的啟動指令，每次開 Chrome 前自動幫你檢查並刪除鎖定檔。
+
+1. 在你的家目錄建立一個小指令碼，例如 `vi ~/start-chrome.sh`：
+    
+    Bash
+    
+    ```
+    #!/bin/bash
+    # 自動清理可能殘留的鎖定檔
+    rm -f ~/.config/google-chrome/SingletonLock
+    rm -f ~/.config/google-chrome/SingletonSocket
+    # 啟動真正的 Chrome 並把參數傳過去
+    exec /usr/bin/google-chrome-stable "$@"
+    ```
+    
+2. 給予執行權限：`chmod +x ~/start-chrome.sh`
+    
+3. 把 XFCE 桌面或面板快捷鍵的「指令（Command）」路徑，改成指向你寫的這個 `~/start-chrome.sh`。這樣以後每次點圖示，它都會先幫你「掃雷」再開瀏覽器。
+
+```
 
 ## Gnome鎖定畫面卡住輸入密碼
 ```

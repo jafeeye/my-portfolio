@@ -11,6 +11,7 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 - 監聽Port `netstat -tunlp | grep 5432`  、 `ss -tunlp | grep 80`
 - 檢查網址有效 `crul -I -k 網址`   `nc -uv <IP> <Port>` 
 	- curl -k 略過憑證 
+	- wget --no-check-certificate 忽略憑證錯誤
 - 網路重新取得IP `ifdown eth0 --force && ifup eth0`  
 - 查看DNS `cat /etc/resolv.conf`
 - 看default gateway ：ip route show

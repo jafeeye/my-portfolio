@@ -10,7 +10,6 @@ toc: true
 touch /etc/.pve-ignore.hosts
 echo "192.168.8.8 illumio-kevin.dev" >> /etc/hosts
 ```
-
 安裝 openssh server
 ```
 # 如果沒反應，代表沒裝或沒開，直接物理安裝： 
@@ -31,12 +30,16 @@ apt install curl
 ## Debian LXC
 使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
 ```
-apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
+# 1.安裝套件
+apt update && apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
+
+# 2.systemd-resolved 讓容器可以讀取PVE DNS欄位
+apt update && apt install systemd-resolved -y
 ```
+
 
 看安裝錯誤訊息
 /var/log/illumio_install.log
-
 hostname做restart 就會同步過去
 
 ## Rocky Linux
@@ -112,6 +115,7 @@ nft delete table inet ILO-FILTER-X
 ## nc 模擬流量
 ```
 dnf install -y nmap-ncat
+apt update && apt install ncat -y
 # -l: 進入監聽模式 (Listen) 
 # -p: 指定連接埠號碼 (Port) 
 # -v: 顯示詳細日誌 (Verbose) 

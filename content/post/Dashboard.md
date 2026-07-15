@@ -363,6 +363,8 @@ tail -n 50 /var/log/nginx/error.log
 2026/07/14 01:03:50 [notice] 4577#4577: using inherited sockets from "5;6;"
 ```
 
+### 出現Server 500 錯誤
+
 
 
 
@@ -586,6 +588,63 @@ div.create .input textarea{
   }
 }
 ```
+
+
+### 自訂-修改標題名稱
+
+### 步驟 1：先準備好 logo 圖片，讓網頁能存取到
+
+最簡單的方式是把圖片放進 Heimdall 的 `public/storage` 目錄。先確認這個目錄存在並且有對外連結：
+```bash
+ls -la /var/www/heimdall/public/storage
+```
+
+如果沒有這個資料夾或是空的，先建立 symlink（Laravel 標準做法）：
+```bash
+cd /var/www/heimdall
+php artisan storage:link
+```
+
+接著把你的 logo 檔案（例如 `gss-logo.png`）放到：
+```bash
+/var/www/heimdall/storage/app/public/gss-logo.png
+```
+
+放好之後，瀏覽器應該可以透過這個網址看到圖片：
+```
+http://172.16.8.137/storage/gss-logo.png
+```
+
+先用瀏覽器開這個網址測試看看，圖片有出現再繼續下一步，避免 CSS 抓不到圖檔卻找不到原因。
+### 步驟 2：在你的 Custom CSS 最後面加上這段
+
+```css
+/* top brand header bar */
+body::before {
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    background-image: url('/storage/gss-logo.png');
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    background-size: auto 30px;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 999;
+}
+```
+
+
+
+
+
+
+
+
 
 
 ## Homepage
