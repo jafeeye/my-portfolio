@@ -305,6 +305,68 @@ pages:
 
 ## Heimdall
 
+在Debian 13 LXC 安裝，沒出現畫面Console mode改成shell (13預設是php8.4 還要引入其他套件庫)
+
+```
+# 1.安裝依賴套件,因為heidmall是用php8.2開發,套件要裝8.2
+apt update && apt install -y nginx unzip git
+apt install -y php8.4-fpm php8.4-cli php8.4-sqlite3 php8.4-xml php8.4-zip php8.4-mbstring php8.4-curl php8.4-intl php8.4-gd
+systemctl enable php8.4-fpm
+
+# 2.github下載套件
+mkdir -p /var/www/heimdall 
+cd /var/www/heimdall
+# 在後面加上一個點代表在目前資料夾不創專案目錄
+git clone https://github.com/linuxserver/Heimdall.git .
+
+# 3.給權限
+cp .env.example .env 
+# 產生密鑰 # (注意：Heimdall 基於 Laravel，若有 composer 可執行 php artisan key:generate，若無，可以直接用 LinuxServer 預編譯版本) 
+chown -R www-data:www-data /var/www/heimdall 
+chmod -R 775 /var/www/heimdall/storage
+```
+配置nginx
+```
+nano /etc/nginx/sites-available/default
+
+server {
+    # 修改 Heimdall 進入點 public 資料夾
+    root /var/www/heimdall/public;
+    index index.php index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # 修改解析PHP腳本
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        # 注意：填上PHP版本,php -v，把php8.4-fpm 改對應版本
+        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
+    }
+    # 禁止任何人下載設定檔
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+檢查有些頁面錯誤
+```
+
+systemctl restart php8.4-fpm 
+systemctl restart nginx
+
+
+tail -n 50 /var/log/nginx/error.log
+2026/07/14 01:03:50 [notice] 4577#4577: using inherited sockets from "5;6;"
+```
+
+
+
+
+
 ![](static/Pasted%20image%2020260712220933.png)
 
 ```
