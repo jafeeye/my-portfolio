@@ -1,8 +1,11 @@
 ---
-title: 各式OS發行版整理
+title: OS發行版整理
 toc: true
 date: 2026-05-29
 ---
+## NasOS
+FygoOS
+
 ParrotOS：另一種Kail Linux 的Debian發行版
 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S  
 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia  
@@ -20,3 +23,6 @@ UmbrelOS
 Raspberry Pi OS Desktop
 RetroNAS
 MS-DOS 8.0  
+
+
+

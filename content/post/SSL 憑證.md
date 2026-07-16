@@ -179,7 +179,7 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 ## Windows ADCS
 
 
-
+## Caddy - 本地Root憑證做到可以瀏覽.local 加密
 
 
 
