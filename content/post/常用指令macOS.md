@@ -9,28 +9,29 @@ date: 2026-04-02
 | macOS | /home       | 純粹掛載目錄,如果Linux使用zfs格式也會當掛載點 |
 |       | /user/使用者名稱 | macOS 家目錄                   |
 
-| 功能                     | 快速鍵                     |
-| ---------------------- | ----------------------- |
-| 新增資料夾                  | Cmd + Shift + N         |
-| 擷取整個螢幕儲存至桌面            | Shift + Cmd + 3         |
-| 截圖選擇區域儲存至桌面            | Shift + Cmd + 4         |
-| 截圖選擇區域儲存至剪貼簿           | Shift + Cmd + 4，再按下Ctrl |
-| 顯示隱藏檔案                 | Shift + Cmd + .         |
-| 顯示截圖工具                 | Shift + Cmd + 5         |
-| 開啟「下載」資料夾              | Cmd + Opt + L           |
-| 在 Finder 中開啟桌面資料夾      | Cmd + Shift + D         |
-| 丟至垃圾桶                  | Cmd + Delete            |
-| 重命名                    | Return                  |
-| 顯示特殊符號(注音模式下中文)        | Opt+Shift+B             |
-| Finder到指定資料夾           | Cmd + Shift + G         |
-| make alias             | Option+Cmd+drag         |
-| hide/show file         | Cmd+Shift+.             |
-| hide dock              | Cmd+Option+D            |
-| halve window           | fn+control+方向           |
-| Option`+`Command`+`Esc | 關閉程式                    |
-| 中文輸入法反引號               | Option+~                |
-| 勿擾模式                   | F6                      |
-| Ctrl+Cmd+Space         | emoji keyboard          |
+| 功能                     | 快速鍵                 |
+| ---------------------- | ------------------- |
+| 新增資料夾                  | Cmd + Shift + N     |
+| 擷取整個螢幕儲存至桌面            | ⇧ + Cmd + 3         |
+| 截圖選擇區域儲存至桌面            | ⇧ + Cmd + 4         |
+| 截圖選擇區域儲存至剪貼簿           | ⇧ + Cmd + 4，再按下Ctrl |
+| 顯示隱藏檔案                 | ⇧ + Cmd + .         |
+| 顯示截圖工具                 | ⇧ + Cmd + 5         |
+| 開啟「下載」資料夾              | Cmd + Opt + L       |
+| 在 Finder 中開啟桌面資料夾      | Cmd + ⇧ + D         |
+| 丟至垃圾桶                  | Cmd + Delete        |
+| 重命名                    | Return              |
+| 顯示特殊符號(注音模式下中文)        | Opt+Shift+B         |
+| Finder到指定資料夾           | Cmd + Shift + G     |
+| make alias             | Option+Cmd+drag     |
+| hide/show file         | Cmd+ ⇧ +.           |
+| hide dock              | Cmd+Option+D        |
+| halve window           | fn+control+方向       |
+| Option`+`Command`+`Esc | 關閉程式                |
+| 中文輸入法反引號               | Option+~            |
+| 勿擾模式                   | F6                  |
+| Ctrl+Cmd+Space         | emoji keyboard      |
+| Spotlight              | ＾+Space             |
 
 修復損毀應用程式
 `sudo spctl --master-disable`

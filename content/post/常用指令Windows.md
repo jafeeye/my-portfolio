@@ -21,7 +21,7 @@ Windows 雖然是GUI操作介面為主，但也不乏許多相關指令可以除
 - `rsop.msc` 顯示本機原則結果
 
 ## 網路
-- 查開的Port `netstat -nao`
+- 查Port  `netstat -nao` (ps) 
 - 路由表 `route print` `route add 192.169.0.1` (有docker很好用) `route delete`
 - 刪除DNS快取 `ipconfig /flushdns`
 - 查詢地址 `nslookup www.google.com.tw`

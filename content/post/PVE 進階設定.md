@@ -812,3 +812,8 @@ nesting=1 # 啟用容器嵌套,可在裡面跑docker
 
 
 ## OpenVSwtch
+
+
+## 安裝Ｗin11
+一定要選UEFI 才能安裝
+登入Shift+F10 start ms-cxh:localonly
