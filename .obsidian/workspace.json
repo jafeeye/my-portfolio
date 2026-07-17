@@ -18,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Nginx Plus.md",
+                    "file": "content/post/Keycloak.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Nginx Plus"
+                  "title": "Keycloak"
                 }
               }
             ]
@@ -288,6 +288,9 @@
   },
   "active": "e1db9308acbfc555",
   "lastOpenFiles": [
+    "content/post/Keycloak.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/企業大量部屬.md",
     "content/post/Nginx Plus.md",
     "content/post/Linux網路設定.md",
     "content/post/Ai工具.md",
@@ -300,12 +303,9 @@
     "content/post/雲端設定.md",
     "content/post/RDP 連線實作.md",
     "content/post/常用指令linux.md",
-    "content/post/企業大量部屬.md",
-    "content/post/PVE 進階設定.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/illumio 流量模擬.md",
     "content/post/Dashboard.md",
-    "content/post/Keycloak.md",
     "content/post/各式 DNS Server 方案.md",
     "content/post/netbox.md",
     "content/post/Scanopy.md",

@@ -817,3 +817,206 @@ nesting=1 # 啟用容器嵌套,可在裡面跑docker
 ## 安裝Ｗin11
 一定要選UEFI 才能安裝
 登入Shift+F10 start ms-cxh:localonly
+
+## PVE 高 io delay
+籌劃提供診斷命令與結果解讀方法。
+
+以下是實際排查步驟,照順序做下去就能抓出問題出在哪:
+
+### 1. 先看整體 IO Delay 走勢
+
+bash
+
+```bash
+top
+```
+
+看右上角 `%wa`(wait)這欄,或用:
+
+bash
+
+```bash
+sar -u 1 5
+```
+
+確認目前 IO delay 是持續高還是偶發尖峰(例如備份時才會飆高)。
+
+### 2. 查是哪顆實體磁碟在拖慢
+
+bash
+
+```bash
+iostat -x 1
+```
+
+重點看:
+
+- **`%util`**:接近 100% 表示這顆碟已經滿載
+- **`await`**:平均等待時間(ms),數字越大越慢。HDD 正常約在 10ms 內,SSD/NVMe 應該在 1ms 以內,超過 20-50ms 就有問題
+- **`r/s` `w/s`**:每秒讀寫次數,配合 `%util` 看是不是硬碟被操爆
+
+### 3. 檢查磁碟健康狀態
+
+bash
+
+```bash
+smartctl -a /dev/sdX
+```
+
+重點看:
+
+- `Reallocated_Sector_Ct`(重新配置磁區數,越多代表硬碟開始壞了)
+- `Current_Pending_Sector`
+- SSD 的話看 `Media_Wearout_Indicator` 或 `Percentage Used`(NVMe)
+
+### 4. 如果是用 ZFS
+
+bash
+
+```bash
+zpool iostat -v 1
+zpool status
+arc_summary | head -30
+```
+
+- `zpool status` 看有沒有 DEGRADED 或 resilvering 中
+- `arc_summary` 看 ARC 命中率(Hit % 太低代表記憶體不夠)
+
+### 5. 如果是 Ceph
+
+bash
+
+```bash
+ceph -s
+ceph osd perf
+```
+
+看 `ceph osd perf` 裡每個 OSD 的 `apply_latency` / `commit_latency`,異常高的那顆 OSD 就是兇手。
+
+### 6. 確認是不是備份工作造成的
+
+bash
+
+```bash
+cat /var/log/pve/tasks/index | grep vzdump
+```
+
+或直接看 PVE 網頁介面的 Tasks 紀錄,對照 IO delay 飆高的時間點是否吻合。
+
+### 7. 檢查是否有大量 Swap 使用
+
+bash
+
+```bash
+free -h
+vmstat 1
+```
+
+`si` `so` 欄位(swap in/out)如果持續非 0,代表記憶體不足導致額外磁碟 IO。
+
+---
+
+**建議做法**:先跑 `iostat -x 1 10`,把結果貼給我(或截圖),我可以幫你直接判讀是哪顆磁碟、哪個環節出問題。
+
+Analyzed storage migration from directory-based to ZFS pools
+
+現在配置很清楚了。你有 **`local`(dir 類型)** 儲存,以及兩個 **ZFS pool 儲存**(`local_images`、`rpool-2`)可用。問題是這 19 個 VM/CT 全部都存在 `local` 這個 dir 儲存上,用 raw 檔案 + loop device 的方式運作,而你其實已經有 ZFS pool 可以用區塊裝置(zvol)的方式跑,效能會好很多。
+
+### 先確認實體磁碟現況
+
+麻煩貼一下:
+
+bash
+
+```bash
+iostat -x 1 5
+zpool status
+zpool list
+df -h /var/lib/vz
+```
+
+這樣可以確認:
+
+1. `local`(dir)背後掛的實體磁碟是什麼、目前 `%util`/`await` 多高
+2. `local_images` 和 `rpool-2` 這兩個 ZFS pool 是不是用不同的實體磁碟(如果是,遷移過去才有意義;如果 `local` 跟 ZFS pool 其實共用同一組實體磁碟,那遷移只能減少 loop device 開銷,底層磁碟瓶頸還是存在)
+
+### 解法方向(確認磁碟資訊後可以動手做)
+
+**把這些 VM/CT 的磁碟從 `local` 搬到 `local_images` 或 `rpool-2`**,這樣會變成 ZFS zvol(區塊裝置),不再需要 loop device。
+
+- **VM**:在 PVE 網頁介面 → 選 VM → Hardware → 選中磁碟 → **Disk Action → Move Storage**,選目標為 `local_images` 或 `rpool-2`,可以線上不關機做(前提是原本磁碟格式支援)
+- **CT**:同樣在 Resources 裡選 rootfs → **Volume Action → Move Storage**
+
+也可以用指令批次做,例如:
+
+bash
+
+```bash
+qm move-disk <VMID> scsi0 local_images
+# 或 CT:
+pct move-volume <CTID> rootfs local_images
+```
+
+由於你有 19 個要搬,建議先搬 1-2 個測試效果,確認 IO delay 有沒有下降,再決定要不要全部搬,同時要注意搬移過程本身會消耗 IO,建議挑離峰時間、一個一個慢慢搬,不要同時搬多個。
+
+先麻煩貼一下上面那幾個指令的結果,我再幫你確認底層磁碟狀況跟遷移的優先順序。
+
+root@isbdtester03:~# zpool list NAME SIZE ALLOC FREE CKPOINT EXPANDSZ FRAG CAP DEDUP HEALTH ALTROOT rpool-2 928G 18.6G 909G - - 10% 2% 1.00x ONLINE -
+
+Investigated missing storage pool and plotted diagnostic strategy
+
+看起來 `local_images` 這個 pool 在這台 `isbdtester03` 上並不存在(storage.cfg 裡它是設定給 `nodes: isbdtester` 這個節點用的,不是 `isbdtester03`),所以你這台機器目前只有 **`rpool-2`**(928G,只用了 18.6G)可以用,而且看起來空間還很充裕。
+
+這代表:你這台機器上有一個幾乎全空的 ZFS pool(`rpool-2`),卻沒有拿來用,19 個 VM/CT 全部擠在 `local`(dir,raw+loop)上運作 — 這基本上就是問題的核心。
+
+### 還需要確認的資訊
+
+麻煩貼一下:
+
+bash
+
+```bash
+zpool status rpool-2
+iostat -x 1 5
+df -h /var/lib/vz
+```
+
+想確認:
+
+1. `rpool-2` 背後是什麼硬碟(HDD/SSD/NVMe),以及是不是跟 `/var/lib/vz`(local)所在的磁碟是**不同一組實體硬碟**
+2. 目前 `iostat` 顯示哪顆磁碟 `%util` 最高、`await` 最誇張
+
+如果 `rpool-2` 跟 `local` 是接在不同實體硬碟上,那把這 19 個 VM 搬去 `rpool-2` 會有立竿見影的效果 —— 既去掉了 loop device 開銷,又把負載分散到目前幾乎閒置的磁碟上。
+
+這樣說起來 我在家裡刪除local-lvm 把ct容器放在local 裡面跑是不是也會發生這個問題
+
+分析了刪除本地儲存後仍會遭遇相同問題。
+
+是的,會發生一模一樣的問題,而且原理完全相同。
+
+### 為什麼會這樣
+
+`local-lvm` 是 **LVM-thin**,幫每個 CT/VM 分配獨立的 **Logical Volume(LV)**,LV 本質上就是一個區塊裝置,容器可以直接掛載使用,不需要額外轉一層。
+
+如果改成把 CT 放在 `local`(dir 類型儲存),PVE 對 CT 的處理方式是:
+
+1. 在 `/var/lib/vz/images/<CTID>/` 底下建立一個 **`.raw` 檔案**當作這個容器的磁碟映像
+2. 因為容器需要「掛載」一個檔案系統才能跑,而 `.raw` 檔案本身只是普通檔案,不能直接掛載
+3. 所以 PVE 會透過 **loop device** 把這個 raw 檔案「包裝」成一個假的區塊裝置,再掛載給容器用
+
+這樣就會多一層開銷:「容器 IO → 檔案系統 → loop device 轉換 → 底層檔案系統 → 實體磁碟」,比起 LVM-thin 的「容器 IO → LV(區塊裝置)→ 實體磁碟」多繞了一大圈。
+
+### 影響程度
+
+- 如果只有 1-2 個 CT,可能感覺不明顯
+- 但只要 CT 數量一多(像你這台伺服器有 19 個),loop device 的管理開銷(`kworker/u*:*+loopN` 那種核心執行緒)就會疊加起來,IO delay 就會明顯竄升,跟你現在遇到的狀況一樣
+
+### 建議
+
+家裡如果也打算跑多個 CT,建議:
+
+- **保留 LVM-thin**(不要刪),或
+- 改用 **ZFS**(建立一個 zfspool 儲存,CT 磁碟會變成 zvol,一樣是區塊裝置,沒有 loop device 問題)
+
+只要是能提供「區塊裝置」的儲存類型(LVM-thin、ZFS zvol、Ceph RBD),CT 都不會用到 loop device;只要是 `dir` 類型(檔案系統目錄)存 CT 的 raw 磁碟,就一定會有 loop device 開銷。VM 的話因為 QEMU 本身就是用檔案模擬磁碟(不透過 loop device),所以 VM 放 `dir` 存 raw 檔案不會有這個問題,只有 CT 才會受影響。
+
