@@ -462,7 +462,6 @@ ls -la /var/lib/powerdns/
 sudo usermod -aG www-data pdns
 sudo usermod -aG pdns www-data
 ```
-
 ### 步驟二：設定資料夾的 SGID（黃金關鍵）
 
 我們要在 `/var/lib/powerdns` 資料夾上加上一個特殊的 `SGID` 權限（原本的 `775` 改成 `2775`）。它的神奇之處在於：**未來不管是誰（pdns 或是 www-data）在這個資料夾下建立任何新檔案（包括臨時的 -shm 和 -wal），群組一律會強制繼承資料夾的群組（也就是 www-data）**！
@@ -488,9 +487,6 @@ sudo systemctl restart pdns-recursor
 # sudo systemctl restart powerdns-admin
 # sudo systemctl restart apache
 ```
-
-
-
 ## 測試
 ```
 # DNS 主機那台
@@ -498,6 +494,64 @@ dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
 
 Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
 # 修改 nano /etc/resolv.conf
-
-
 ```
+
+## DNSdist
+1. 安裝
+```
+apt update && apt install -y dnsdist
+```
+2. 配置DOH 證書
+```
+openssl req -x509 -newkey rsa:4096 -keyout /etc/dnsdist/key.pem -out /etc/dnsdist/cert.pem -days 1000 -nodes -subj '/CN=這台主機IP或域名'
+```
+比較嚴謹的2層簽法(寫入SAN屬性)
+```
+sudo openssl req -x509 -newkey rsa:4096 \
+  -keyout /etc/dnsdist/key.pem \
+  -out /etc/dnsdist/cert.pem \
+  -days 1000 -nodes \
+  -subj '/CN=192.168.10.3' \
+  -addext "subjectAltName = IP:192.168.10.3"
+```
+3. 配置證書權限
+```
+# 1. 讓擁有者和群組保持為 root
+sudo chown root:root /etc/dnsdist/cert.pem /etc/dnsdist/key.pem
+
+# 2. 開放讀取權限（讓任何執行 dnsdist 的內部帳號都能讀到這兩個檔案）
+sudo chmod 644 /etc/dnsdist/cert.pem /etc/dnsdist/key.pem
+```
+4. 编辑 dnsdist 设定 `/etc/dnsdist/dnsdist.conf`
+其中 newServer 把 Pi-hole(127.0.0.1:53)加为后端 server,addDOHLocal 建立 DoH 监听端点,webserver 则是 dnsdist 自己的管理界面(记得改成不冲突的 port,比如 8080)。
+```lua
+-- disable security status polling via DNS
+setSecurityPollSuffix("")
+-- 全域放行 ACL
+setACL({'0.0.0.0/0', '::/0'})
+-- 監聽設定
+addLocal('0.0.0.0:5300', { reusePort=true })
+addDOHLocal('0.0.0.0:443', "/etc/dnsdist/cert.pem", "/etc/dnsdist/key.pem", '/dns-query')
+-- 明確指定後端 PowerDNS 的位置
+-- 根據你剛剛 dig 會通，你的 PowerDNS 應該是開在 53 埠口，所以我們直接指到 192.168.10.3:53
+newServer({address="192.168.10.3:53", name="powerdns-backend"})
+-- 網頁主控台
+webserver('0.0.0.0:8080')
+setWebserverConfig({password="設定密碼", acl="0.0.0.0/0"})
+```
+
+5. 啟動
+```
+sudo systemctl enable --now dnsdist
+sudo systemctl restart dnsdist
+```
+6. 檢查
+```
+curl -k -v https://192.168.10.3/
+dig @192.168.10.3 dns.powerdns.internal
+dig @192.168.10.3 dns.powerdns.internal +doh
+curl -k -v -H "accept: application/dns-json" "https://192.168.10.3/dns-query?name=dns.powerdns.internal"
+```
+出現網頁有寫IP位置代表服務有正常運作
+![](static/Pasted%20image%2020260718202905.png)
+6. 網址最後在瀏覽器填入 `https://192.168.10.x/dns-query` 完成

@@ -6,3 +6,7 @@ date: 2026-06-21
 
 docker ps 
 docker logs <容器名稱>
+
+Arcnane
+User: arcane
+Password: arcane-admin
