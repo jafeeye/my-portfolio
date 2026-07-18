@@ -1,5 +1,5 @@
 ---
-title: ESXi 安裝設定
+title: ESXi 安裝與細項配置
 date: 2026-02-19
 toc: true
 tags:
@@ -11,13 +11,8 @@ RVTools：好用Windows管理ESXi虛擬機軟體
 ```
 esxcfg-nics -l   //檢查所有網孔
 ```
-
-
-
-
 ### 取消ESXi 虛擬內存
 開機後按`Shift+o` 在cdromBoot runweasel 後面加入`autoPartitionOSDataSize = 4096`  
-
 
 ## 跳過vCenter 記憶體檢查
 跳過vCenter Setup介面的硬件檢查[[1]](#_ftn1)
@@ -41,7 +36,7 @@ set:
 [[1]](#_ftnref1) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357
 
 
-### 內顯直通
+## 直通內顯
 UHD 630 直通方法
 1. 主機/管理/系統/高級設定，在`VMkernel.Boot.disableACSCheck` 修改為 True，作用為IOMMU強制獨立分組
 2. 主機->管理->硬體，UHD Graphics 630 切換為直通
@@ -49,9 +44,28 @@ UHD 630 直通方法
 4. 在虛擬機選項/高級/編輯設置，添加參數 `hypervisor.cpuid.v0` 為 `FALSE` ，欺騙作業系統不在虛擬機執行
 5. 在VM中的PCIE設備添加UHD Graphics 630
 
-### 直通SATA控制器
+## 直通SATA控制器
+```
+lspci -v | grep "Class 0106" -B 1
+## 填入以下資訊
+vi /etc/vmware/passthru.map
+#Intel Corporation Lynx Point AHCI Controller
+8086 31e3 d3d0 false
+
+## 重開機即可
+```
 
 
+## 直通RDM硬碟
+1. 儲存區/裝置，可以看到目前的外部硬碟與SSD，這邊先從名稱點進去，記錄第二塊硬碟名稱複製`Local ATA Disk (t10.ATA_____WDC_WD5000AACS2D00ZUB0________________________WD2DWCASU2603567)` 括弧裡面名稱
+![](static/Pasted%20image%2020260718173909.png)
+2. 進入ESXi Shell輸入指令
+```
+vmkfstools -z /vmfs/devices/disks/t10.ATA_____WDC_WD5000AACS2D00ZUB0________________________WD2DWCASU260
+3567 /vmfs/volumes/datastore1/wd500g_rdm.vmdk
+```
+3. 把這個 `wd500g_rdm.vmdk` 加入虛擬機即可
+![](static/Pasted%20image%2020260718174428.png)
 ## 常用指令
 ```
 # esxcli vm process list #獲取正在運行的虛擬機器的資訊

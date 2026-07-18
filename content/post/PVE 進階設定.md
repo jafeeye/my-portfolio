@@ -51,7 +51,9 @@ lvextend -l +100%FREE -r pve/root
 ```
 
 ## 優化: 固定網卡名稱
-## 实现方案(pve9)
+
+实现方案(pve9)
+
 | **網卡名稱範例**          | **命名類型**     | **實際代表的硬體意義**            | **常見出現場景**          |
 | ------------------- | ------------ | ------------------------ | ------------------- |
 | **`eno1`**          | 板載 (Onboard) | 主機板內建的有線網卡               | 實體伺服器、PC 主機板原生網口    |
@@ -84,8 +86,6 @@ Name=en219v
 - 网桥名称：vmbr[N]，其中 0 ≤ N ≤ 4094 （vmbr0 - vmbr4094）
 - bond：bond[N]，其中 0 ≤ N （bond0， bond1， …）
 - VLAN：只需将 VLAN 编号添加到设备名称中，用句点分隔（eno1.50、bond1.30）
-
-
 
 ```
 iface en219v inet manual
@@ -436,13 +436,13 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 ```
 
 
-## LVM 擴容
+## LVM 擴容處理
+常用幾種格式
+LVM
+LVM-thin
+Zfs-pool
 
 Vda：ioblock 
-
-
-
-## LVM處理
 ![](Pasted%20image%2020260530181126.png)
 
 預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區
@@ -456,6 +456,37 @@ lvextend -l +100%FREE /dev/pve/root
 ## 重整檔案系統
 resize2fs /dev/pve/root
 ```
+
+
+系統合併Local-lvm後又要差分LVM分區
+1. 因為整塊硬碟都是Ext4了，所以要使用GParted進入命令列
+2. 輸入命令列
+```
+1.檢查磁碟狀態
+df -Th /
+pvs
+lvs 
+vgs
+vgscan 
+vgchange -ay 
+
+$lvs
+LV   VG  Attr       LSize
+root pve -wi-a----- <944.87g
+swap pve -wi-a-----    8.00g
+
+#確保分區沒被掛載，不然資料會損毀
+$mount | grep pve-root
+#檢查檔案系統有無問題
+e2fsck -f /dev/pve/root
+#縮小Ext4檔案系統
+resize2fs /dev/pve/root 250G
+#縮小LV (這邊為255g)
+lvreduce -L 255G /dev/pve/root
+#保險對齊一次檔案系統
+
+```
+
 
 ## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
@@ -813,58 +844,36 @@ nesting=1 # 啟用容器嵌套,可在裡面跑docker
 
 ## OpenVSwtch
 
-
+https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/
 ## 安裝Ｗin11
 一定要選UEFI 才能安裝
 登入Shift+F10 start ms-cxh:localonly
 
 ## PVE 高 io delay
-籌劃提供診斷命令與結果解讀方法。
-
-以下是實際排查步驟,照順序做下去就能抓出問題出在哪:
-
-### 1. 先看整體 IO Delay 走勢
-
-bash
-
+籌劃提供診斷命令與結果解讀方法。以下是實際排查步驟,照順序做下去就能抓出問題出在哪:
+1. 先看整體 IO Delay 走勢
 ```bash
 top
 ```
-
 看右上角 `%wa`(wait)這欄,或用:
-
-bash
-
 ```bash
 sar -u 1 5
 ```
-
 確認目前 IO delay 是持續高還是偶發尖峰(例如備份時才會飆高)。
-
-### 2. 查是哪顆實體磁碟在拖慢
-
-bash
-
+2. 查是哪顆實體磁碟在拖慢
 ```bash
 iostat -x 1
 ```
-
 重點看:
-
 - **`%util`**:接近 100% 表示這顆碟已經滿載
 - **`await`**:平均等待時間(ms),數字越大越慢。HDD 正常約在 10ms 內,SSD/NVMe 應該在 1ms 以內,超過 20-50ms 就有問題
 - **`r/s` `w/s`**:每秒讀寫次數,配合 `%util` 看是不是硬碟被操爆
 
-### 3. 檢查磁碟健康狀態
-
-bash
-
+3. 檢查磁碟健康狀態
 ```bash
 smartctl -a /dev/sdX
 ```
-
 重點看:
-
 - `Reallocated_Sector_Ct`(重新配置磁區數,越多代表硬碟開始壞了)
 - `Current_Pending_Sector`
 - SSD 的話看 `Media_Wearout_Indicator` 或 `Percentage Used`(NVMe)
