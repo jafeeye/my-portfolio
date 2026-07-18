@@ -557,3 +557,6 @@ curl -k -v -H "accept: application/dns-json" "https://192.168.10.3/dns-query?nam
 6. 網址最後在瀏覽器填入 `https://192.168.10.x/dns-query` 完成
 7. macOS 憑證
 ![](static/Pasted%20image%2020260718204149.png)
+
+
+## Pi-hole

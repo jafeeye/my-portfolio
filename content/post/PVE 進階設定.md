@@ -174,7 +174,8 @@ Virtiofs
 - `VEN_1B36&DEV_0100`, the video device.
 - `VEN_QEMU&DEV_0001`, the guest panic device.
 
-## 網路: SDN取得IP
+## 網路
+### SDN取得IP
 1. 先在Node的Shell 安裝dnsmasq，才能在IPAM正常發DHCP，並且安裝完停用dnsmasq服務 ，PVE會啟動專屬實例。
 ```
 apt install dnsmasq
@@ -202,7 +203,7 @@ sysctl -w net.ipv4.ip_forward=1
 vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
 ```
 
-## 網路: SDN取得DNS+cloud-init
+### SDN取得DNS+cloud-init
 
 1. 編輯 `nano /etc/pve/sdn/subnets.cfg`
 ```
@@ -218,18 +219,18 @@ subnet: local-192.168.10.0-24
 
 https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90
 
-## 網路: SDN Fabrics
+### SDN Fabrics
 ```
 apt update
 apt install frr frr-pythontools
 systemctl enable frr.service
 ```
 
-## 網路: OPNSense + 切Vlan
+### OPNSense + 切Vlan
 1. Node/System/Network 在橋接網口開啟vlan aware
 2. 建立VM那邊vlan填上設定的數值
 
-## 網路: PVE網口設定
+### PVE網口設定
 在banner會放上IP位置是從檔案去改的 nano /etc/issue
 修改主機ip
 1. nano /etc/network/interfaces
@@ -294,13 +295,11 @@ source /etc/network/interfaces.d/*
 ![](Pasted%20image%2020260524125131.png)
 
 
-## 網路: BOND
+### BOND
 
-## 網路: ospf
+### OSPF
 
-
-
-## 網路路由
+### 網路路由
 ![](static/default-network-setup-routed.svg)
 
 ```
@@ -326,7 +325,9 @@ iface vmbr0 inet static
 
 ```
 
+### OpenVSwtch
 
+https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/
 
 ## 去虛擬化
 
@@ -349,29 +350,10 @@ iface vmbr0 inet static
 ## ceph
 
 
-## NetBox API 整合
-整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)
-1. 打開NetBox，輸入token
-![](netbox01260301.png)
+## LXC
+### 編輯LXC容器檔案
 
-2. 因為API要使用SSL連線，必須把憑證匯入PVE信任憑證，
-```
-openssl s_client -showcerts -connect 192.168.8.128:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /usr/local/share/ca-certificates/netbox.crt
-#更新系統信任清單
-update-ca-certificates
-```
-3. 憑證匯入後加入API出現hotsname錯誤，代表PVE認可憑證，不過IP位置憑證內登記的名字（可能是 `netbox.example.com`）跟 IP 對不起來，直接在PVE查看 fingerprint 
-![](netbox260301.png)
-```
-openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint -sha256
-```
-4. 直接填入API位置 `https://192.168.8.x/api` ，並且填入FingerPrint跟token完成
-![](pvenetbox260301.png)
-
-
-## 編輯LXC容器檔案
-
-## 建立LXC容器
+### 建立LXC容器
 1. 這邊使用PromCenter 示範
 ![](Pasted%20image%2020260519205443.png)
 2. apt update && apt install -y curl
@@ -380,9 +362,7 @@ openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint
 5. 加入 API,Privilege Separation打勾取消
  ![](Pasted%20image%2020260519210337.png)
 
-
-
-## 修改LXC設定
+### 修改LXC設定
 nano /etc/pve/lxc
 ```
 lxc.cgroup2.devices.allow: c 10:232 rwm
@@ -400,6 +380,10 @@ lxc.cgroup2.devices.allow: c 29:0 rwm
 lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
 lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
 ```
+
+### LXC 設定
+nesting=1 # 啟用容器嵌套,可在裡面跑docker
+
 
 ## Addons: Olivetin 
 找到下面路徑修改下面資料
@@ -438,13 +422,14 @@ qm rescan --vmid 148  //重新偵測硬碟大小
 
 ## LVM 擴容處理
 常用幾種格式
-LVM
-LVM-thin
+LVM:放光碟檔及一些不重要檔案，大概切16 GB ~ 32 GB
+LVM-thin:跑VM核心，剩下全部都給他
 Zfs-pool
 
 Vda：ioblock 
 ![](Pasted%20image%2020260530181126.png)
 
+刪除Local-LVM (適用軟路由)
 預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區
 - **`local` (Directory 檔案系統)：** 專門用來放 ISO 鏡像、LXC 範本、備份檔（Backup），它的實體路徑在 Debian 的 `/var/lib/vz`。
 - **`local-lvm` (LVM-Thin 區塊儲存)：** 專門用來分配給虛擬機或容器當作硬碟（也就是你剛才砍掉的那個空間）。
@@ -486,7 +471,26 @@ lvreduce -L 255G /dev/pve/root
 #保險對齊一次檔案系統
 
 ```
+3. LVM-Thin Pool 建立
+```
+#看出目前剩餘空間
 
+$vgs
+VG  #PV #LV #SN Attr   VSize    VFree
+pve   1   2   0 wz--n- <952.87g <689.87g
+
+#建立LVM-Thin
+$lvcreate -l 100%FREE --thinpool pve/data
+
+#看現在系統所有lvs
+$lvs
+LV   VG  Attr       LSize    Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+data pve twi-a-tz-- <689.70g             0.00   10.42
+root pve -wi-ao----  255.00g
+swap pve -wi-ao----    8.00g
+```
+4. 把剛剛創立的lvs掛載上去就完成LVM-thin建立
+![](static/Pasted%20image%2020260718223625.png)
 
 ## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
@@ -521,10 +525,7 @@ lvreduce -L 255G /dev/pve/root
 ![](static/Pasted%20image%2020260711175052.png)
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
 
-
-
-
-## 轉換至ESXi
+## 遷移: 轉換至ESXi
 ![](PixPin_2026-05-02_00-17-16.png)
 
 
@@ -568,6 +569,19 @@ PCH-FW Configuration/PTT，PTT Enable
 AMD RESET BUG
 
 使用SPICE 虛擬視窗+noVNC不偏移安裝方法[https://pvecli.xuan2host.com/spice-novnc/](https://pvecli.xuan2host.com/spice-novnc/)
+
+#### Hyper-V 遷移至PVE
+1. 將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳
+2.  輸入以下指令
+```
+mkdir /var/lib/vz/hdd
+cd /var/lib/vz/hdd
+qemu-img convert -O qcow2 WIN10.vhdx vm-103-disk0.qcow2
+mv vm-103-disk0.qcow2 /var/lib/vz/images/103/
+qm rescan
+```
+3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
+4. 最後要安裝Vitro-win驅動
 
 ## 顯卡直通
 
@@ -632,19 +646,6 @@ update-initramfs -u -k all
 
 > 主要GPU勾選會讓終端不顯示畫面，可以再安裝完驅動再勾
 
-#### Hyper-V 遷移至PVE
-1. 將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳
-2.  輸入以下指令
-```
-mkdir /var/lib/vz/hdd
-cd /var/lib/vz/hdd
-qemu-img convert -O qcow2 WIN10.vhdx vm-103-disk0.qcow2
-mv vm-103-disk0.qcow2 /var/lib/vz/images/103/
-qm rescan
-```
-3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
-4. 最後要安裝Vitro-win驅動
-
 ## 正確刪除節點
 因為會有`corosync.conf` 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C (**此方法適用只退一台**)
 1. 先把Node C 關機 (用意為不送出Corosync 叢集廣播)
@@ -699,6 +700,10 @@ https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 4. 轉換成範本
 
 
+
+## 安裝Ｗin11
+一定要選UEFI 才能安裝
+登入Shift+F10 start ms-cxh:localonly
 
 ## 不同虛擬機下硬碟掛載到目前VM
 正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載
@@ -838,17 +843,6 @@ pveupgrade
 無訂閱源比企業源更新還快
 
 
-## LXC 設定
-nesting=1 # 啟用容器嵌套,可在裡面跑docker
-
-
-## OpenVSwtch
-
-https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/
-## 安裝Ｗin11
-一定要選UEFI 才能安裝
-登入Shift+F10 start ms-cxh:localonly
-
 ## PVE 高 io delay
 籌劃提供診斷命令與結果解讀方法。以下是實際排查步驟,照順序做下去就能抓出問題出在哪:
 1. 先看整體 IO Delay 走勢
@@ -877,11 +871,7 @@ smartctl -a /dev/sdX
 - `Reallocated_Sector_Ct`(重新配置磁區數,越多代表硬碟開始壞了)
 - `Current_Pending_Sector`
 - SSD 的話看 `Media_Wearout_Indicator` 或 `Percentage Used`(NVMe)
-
-### 4. 如果是用 ZFS
-
-bash
-
+4. 如果是用 ZFS
 ```bash
 zpool iostat -v 1
 zpool status
@@ -891,10 +881,7 @@ arc_summary | head -30
 - `zpool status` 看有沒有 DEGRADED 或 resilvering 中
 - `arc_summary` 看 ARC 命中率(Hit % 太低代表記憶體不夠)
 
-### 5. 如果是 Ceph
-
-bash
-
+5.如果是 Ceph
 ```bash
 ceph -s
 ceph osd perf
@@ -903,19 +890,12 @@ ceph osd perf
 看 `ceph osd perf` 裡每個 OSD 的 `apply_latency` / `commit_latency`,異常高的那顆 OSD 就是兇手。
 
 ### 6. 確認是不是備份工作造成的
-
-bash
-
 ```bash
 cat /var/log/pve/tasks/index | grep vzdump
 ```
 
 或直接看 PVE 網頁介面的 Tasks 紀錄,對照 IO delay 飆高的時間點是否吻合。
-
 ### 7. 檢查是否有大量 Swap 使用
-
-bash
-
 ```bash
 free -h
 vmstat 1
@@ -923,20 +903,11 @@ vmstat 1
 
 `si` `so` 欄位(swap in/out)如果持續非 0,代表記憶體不足導致額外磁碟 IO。
 
----
-
 **建議做法**:先跑 `iostat -x 1 10`,把結果貼給我(或截圖),我可以幫你直接判讀是哪顆磁碟、哪個環節出問題。
-
 Analyzed storage migration from directory-based to ZFS pools
-
 現在配置很清楚了。你有 **`local`(dir 類型)** 儲存,以及兩個 **ZFS pool 儲存**(`local_images`、`rpool-2`)可用。問題是這 19 個 VM/CT 全部都存在 `local` 這個 dir 儲存上,用 raw 檔案 + loop device 的方式運作,而你其實已經有 ZFS pool 可以用區塊裝置(zvol)的方式跑,效能會好很多。
 
 ### 先確認實體磁碟現況
-
-麻煩貼一下:
-
-bash
-
 ```bash
 iostat -x 1 5
 zpool status
