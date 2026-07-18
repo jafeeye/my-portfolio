@@ -35,7 +35,8 @@
               "title": "資產盤點軟體"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -109,13 +110,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/各式 DNS Server 方案.md",
+                "file": "content/post/資產盤點軟體.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "各式 DNS Server 方案 的大綱"
+              "title": "Outline of 資產盤點軟體"
             }
           },
           {
@@ -188,25 +189,27 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
-      "vscode-editor:新建程式碼檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "vscode-editor:Create Code File": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "5b2d465ce67db32f",
+  "active": "4540f64d6f12f009",
   "lastOpenFiles": [
+    "content/post/各式 DNS Server 方案.md",
+    "static/Pasted image 20260718204149.png",
+    "static/Pasted image 20260718203951.png",
     "static/Pasted image 20260718202905.png",
     "content/post/資產盤點軟體.md",
-    "content/post/各式 DNS Server 方案.md",
     "content/post/Docker.md",
     "content/post/Docker 1.md",
     "content/post/企業VPN架設.md",
@@ -239,9 +242,6 @@
     "content/post/pidgvin share.md",
     "hugo.yaml",
     "static/Picture6.jpg",
-    "static/ingress.webp",
-    "static/default-network-setup-bridge.svg",
-    "static/microvm-vs-lxc-vs-vm.svg",
     "content/post/code/wsever_opti.ps1",
     "static/Diagram 5.svg.xml",
     "content/post/code/pve.yaml",
