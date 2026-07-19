@@ -4,6 +4,7 @@ toc: true
 date: 2026-07-03
 ---
 
+## Docker 方式安裝
 1. 使用Docker 安裝
 ```
 # 更新系統套件 
@@ -215,3 +216,14 @@ Sign SAML Request：Yes
 | 5   | LDAP Attribute                       | ldap抓取欄位,這邊抓UPN登入電子郵件帳號 | UserPrincipalName              |
 
 
+## 更改原本Port
+```
+nano /opt/keycloak/conf/keycloak.conf
+# 更改 HTTP 的監聽 Port (預設是 8080)
+http-port=8080
+# 更改 HTTPS 的監聽 Port (預設是 8443) 
+https-port=8443
+
+/opt/keycloak/bin/kc.sh build 
+systemctl restart keycloak
+```

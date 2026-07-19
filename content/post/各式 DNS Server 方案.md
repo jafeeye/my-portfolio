@@ -560,3 +560,158 @@ curl -k -v -H "accept: application/dns-json" "https://192.168.10.3/dns-query?nam
 
 
 ## Pi-hole
+
+
+## Caddy DOH+反向代理
+```
+scp /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt .
+```
+
+
+Caddy 寫法
+```
+{
+  local_certs
+}
+:80 {
+        root * /usr/share/caddy
+        file_server
+
+        # Another common task is to set up a reverse proxy:
+        # reverse_proxy localhost:8080
+
+        # Or serve a PHP site through php-fpm:
+        # php_fastcgi localhost:9000
+}
+
+=沒寫Port預設轉到https=
+192.168.10.9 {
+   # 正常的網頁服務
+   # root * /var/www/html
+   # file_server
+    # DoH 流量轉發給 DNSdist (假設 DNSdist 監聽在 8080)
+    reverse_proxy /dns-query 192.168.10.6:8080 {
+        transport http {
+            # 或者是 proxy_protocol v2，用來傳遞客戶端真實 IP
+            versions h2c
+        }
+        header_up Host {upstream_hostport}
+    }
+}
+
+docker.internal {
+    # 告訴 Caddy 用內部的 CA 幫這個自訂域名簽發憑證
+    tls internal
+    # 後端指向你實際跑 Open WebUI 的那一台 IP 與 Port
+    reverse_proxy 192.168.10.7:5380
+}
+```
+
+DNSDist 寫法
+```
+-- disable security status polling via DNS
+setSecurityPollSuffix("")
+
+-- 全域放行 ACL
+setACL({'0.0.0.0/0', '::/0'})
+
+-- 監聽設定
+addLocal('0.0.0.0:5300', { reusePort=true })
+addDOHLocal('0.0.0.0:8080', nil, nil, { "/dns-query" })
+
+-- 明確指定後端 PowerDNS 的位置
+-- dig 會通，PowerDNS 開在53埠口，直接指到 192.168.10.6:53
+newServer({address="192.168.10.6:53", name="powerdns-backend"})
+
+-- 網頁主控台(不要用8081會跟原本PowerDNS結果網頁撞)
+webserver('0.0.0.0:8082')
+setWebserverConfig({password="設定密碼", acl="0.0.0.0/0"})
+```
+
+## 步驟二：在 LXC 內安裝 Caddy
+
+進入該 LXC 的 Console（主控台），依序執行以下官方標準 APT 安裝指令：
+
+1. 更新系統並安裝基礎依賴
+```
+apt update && apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+```
+2. 匯入 Caddy 官方安全金鑰
+```
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+```
+3. 加入 Caddy 官方軟體源
+```
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.pve.d/caddy-stable.list
+```
+
+_(備註：有些系統路徑可能不同，若報錯也可以用 `/etc/apt/sources.list.v/` 或標準的 `/etc/apt/sources.list.d/caddy-stable.list`)_
+
+4. 正式安裝 Caddy
+```
+apt update && apt install -y caddy
+```
+
+安裝完成後，Caddy 就會自動以 Systemd 服務的形式在背景跑起來了！你可以用這行指令確認狀態：
+```
+systemctl status caddy
+```
+
+## 步驟三：設定你的 Caddyfile
+
+Caddy 安裝好後，預設的設定檔位在 `/etc/caddy/Caddyfile`。
+
+### 1. 編輯設定檔
+```
+nano /etc/caddy/Caddyfile
+```
+### 2. 配置你的內網服務
+
+把你之前規劃的 Local CA、DoH 反向代理及 Open WebUI 填進去。這裡結合我們之前討論的優化結構（加入 `.internal` 保留網域）：
+
+```
+{
+    # 啟用本地憑證中心 (自建 Local CA)
+    local_certs
+}
+
+# 1. 處理本機 IP 的服務
+192.168.10.9 {
+    # 正常的網頁服務 (可以放你的導航頁首頁，如 Homepage)
+    root * /var/www/html
+    file_server
+
+    # DoH 流量轉發給 DNSdist
+    reverse_proxy /dns-query 192.168.10.6:8080 {
+        transport http {
+            versions h2c
+        }
+        header_up Host {upstream_hostport}
+    }
+}
+
+# 2. Open WebUI 服務
+ai.internal {
+    tls internal
+    reverse_proxy 192.168.10.7:5380
+}
+
+# 3. Keycloak 服務 (維持預設 8080，由 Caddy 扛 HTTPS 轉換)
+sso.internal {
+    tls internal
+    reverse_proxy 192.168.10.8:8080 {
+        header_up X-Forwarded-Proto https
+    }
+}
+```
+
+### 3. 檢查並重載 Caddy 設定
+
+每次修改完 `Caddyfile`，請養成好習慣在 LXC 內跑這兩行命令：
+```
+# 檢查語法有沒有寫錯
+caddy validate --config /etc/caddy/Caddyfile
+
+# 讓設定無痛生效（免重啟服務、不斷線）
+caddy reload --config /etc/caddy/Caddyfile
+```
