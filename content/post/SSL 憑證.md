@@ -172,9 +172,15 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 - Nginx / Harbor 的私鑰欄位：填孫子的 `docker1.training.lab.key`。
 - 你的電腦 / PVE 信任清單：只需要匯入最頂層的阿公 `root.crt`。
 
+
+
+## mTLS
+
 ## EJBCA Community
 ## Step CA
 
+## HashiCorp Vault PKI
+## OpenBao
 
 ## Windows ADCS
 
