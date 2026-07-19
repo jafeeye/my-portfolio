@@ -13,6 +13,8 @@ Technitium
 AdGuard Home：也提供簡單DHCP功能
 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
 KeaDHCP
+SmartDNS
+Pi-hole
 
 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
 
@@ -442,9 +444,6 @@ systemctl start dnsmasq
 systemctl status dnsmasq
 ```
 
-## dnsproxy
-
-
 ## PowerDNS 資料庫問題
 ```
 簡易維護使用sqlite
@@ -495,6 +494,9 @@ dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
 Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
 # 修改 nano /etc/resolv.conf
 ```
+
+## DNSProxy
+
 
 ## DNSdist
 1. 安裝
