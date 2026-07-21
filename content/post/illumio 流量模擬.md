@@ -126,7 +126,9 @@ nc -v 192.168.8.8 8444
 
 發起多個Port
 ```
+
 for port in 3000 4000 5000 6000; do nc 192.168.1.100 $port & done
+
 ## 接收方
 for port in 3000 4000 5000 6000; do nc --recv-only 172.16.8.104 $port & done
 for port in 3000 4000 5000 6000; do nc 172.16.8.104 $port < /dev/null & done

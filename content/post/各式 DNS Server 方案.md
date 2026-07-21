@@ -717,3 +717,23 @@ caddy validate --config /etc/caddy/Caddyfile
 # 讓設定無痛生效（免重啟服務、不斷線）
 caddy reload --config /etc/caddy/Caddyfile
 ```
+
+
+## XCaddy 
+
+做到只轉發第7層流量，不轉第4層
+瀏覽器跑L7 Agent 跑L4
+
+
+
+
+## 清除Recursor
+```
+dig @172.16.8.8 -p 53 illumio-kevin.bd1.dev
+rec_control wipe-cache illumio-sandra.bd2.dev
+```
+
+
+
+PowerDNS Recursor`rec_control`清快取、看統計、reload 設定等
+PowerDNS Authoritative `pdnsutil`管理 zone/記錄、check-zone、increase-serial 等

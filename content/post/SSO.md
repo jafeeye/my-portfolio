@@ -1,10 +1,27 @@
 ---
-title: keycloak
+title: SSO
 toc: true
 date: 2026-07-03
 ---
+方案比較
 
-## Docker 方式安裝
+| **軟體名稱**            | **屬性**           | **SAML 能力** | **內建統一 Dashboard 門戶** | **適用場景**                |
+| ------------------- | ---------------- | ----------- | --------------------- | ----------------------- |
+| **authentik**       | 開源 (Self-Hosted) | 強，設定直覺      | **優異**，現代化卡片式介面       | 中小型企業、私有雲、技術團隊維運        |
+| **Keycloak**        | 開源 (Self-Hosted) | 極強，標準架構     | 偏向帳戶管理，需客製 Theme      | 大型開源專案、需要複雜多租戶架構        |
+| **ZITADEL**         | 開源/商業雙軌          | 完整支援        | 有，簡潔的 Workspace 介面    | B2B SaaS 開發商、雲原生架構需求    |
+| **Okta / Entra ID** | 商業 SaaS          | 工業標準級       | **頂級**，支援分類、搜尋與推播     | 不想維護基礎設施、有法遵與資安高合規需求的企業 |
+| Authelia            |                  |             |                       |                         |
+| Microsoft ADFS      |                  |             |                       |                         |
+
+## Authentik
+
+
+
+
+## Keycloak
+
+### Docker 方式安裝
 1. 使用Docker 安裝
 ```
 # 更新系統套件 
@@ -64,7 +81,7 @@ sudo firewall-cmd --reload
 ```
 
 
-## LXC 方式安裝
+### LXC 方式安裝
 ```
 # 1.更新套件清單並升級 
 apt update && apt upgrade -y 
@@ -178,7 +195,7 @@ https://illumio-kevin.bd1.dev:8443/login/acs/a1183a40...
 Force Re-authentication：Yes
 Sign SAML Request：Yes
 
-## LDAP
+### LDAP
 
 ![](Pasted%20image%2020260706162802.png)
 
@@ -216,7 +233,7 @@ Sign SAML Request：Yes
 | 5   | LDAP Attribute                       | ldap抓取欄位,這邊抓UPN登入電子郵件帳號 | UserPrincipalName              |
 
 
-## 更改原本Port
+### 更改原本Port
 ```
 nano /opt/keycloak/conf/keycloak.conf
 # 更改 HTTP 的監聽 Port (預設是 8080)

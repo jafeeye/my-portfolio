@@ -189,6 +189,12 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 
 
 
+
+## infisical ：保管憑證及api key
+
+
+
+
 ## 結論 - 使用情境
 
 | **情境**                   | **憑證層級選擇**            | **為什麼？**               |

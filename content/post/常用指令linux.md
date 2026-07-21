@@ -297,3 +297,7 @@ bash 尋找順序
 | **`~/.profile`**      | **登入系統時**執行（Login Shell）<br>_※ Bourne shell 家族的通用設定_ | 全域環境變數（例如 `PATH`）、不依賴特定 Shell 的設定。          | Ubuntu |
 | **`~/.bash_profile`** | **登入系統時**執行（Login Shell）<br>_※ 專屬 Bash Shell 的設定_    | 效果同上，但只有使用 Bash 登入時才會讀取。                    | rocky  |
 | **`~/.bashrc`**       | **打開新終端機視窗時**執行<br>（Non-login Interactive Shell）     | 命令別名（`alias`）、終端機提示字元顏色（`PS1`）、特定 Shell 函數。 |        |
+|                       |                                                      |                                             |        |
+
+## Debian
+套件位置：/etc/apt/sources.list.d/
