@@ -10,6 +10,7 @@
           {
             "id": "83b1245b2217b5b8",
             "type": "tabs",
+            "dimension": 80.19801980198021,
             "children": [
               {
                 "id": "967415e45e7fffef",
@@ -96,11 +97,12 @@
                 }
               }
             ],
-            "currentTab": 5
+            "currentTab": 1
           },
           {
             "id": "6f416cf19f6e6d41",
             "type": "tabs",
+            "dimension": 19.801980198019802,
             "children": [
               {
                 "id": "24be7bea6a1e0a35",
@@ -315,12 +317,12 @@
   },
   "active": "24be7bea6a1e0a35",
   "lastOpenFiles": [
-    "content/post/illumio 流量模擬.md",
     "content/post/SSO.md",
+    "Colortokens.md",
+    "content/post/illumio 流量模擬.md",
     "content/post/SSL 憑證.md",
     "content/post/常用指令linux.md",
     "illumio 常用指令.md",
-    "Colortokens.md",
     "網路架構設計.md",
     "content/post/各式 DNS Server 方案.md",
     "content/post/proj/MDT企業大量自動部屬.md",
