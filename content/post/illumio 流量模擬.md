@@ -126,14 +126,16 @@ nc -v 192.168.8.8 8444
 
 發起多個Port
 ```
+## 接收
+for port in 20 21 53 3389; do while true; do nc -l -k -p $port > /dev/null 2>&1; sleep 1; done & done
 
-for port in 3000 4000 5000 6000; do nc 192.168.1.100 $port & done
+## 發起
+for port in 20 21 53 3389; do while true; do nc 172.16.7.107 $port < /dev/null; sleep 1; done & done
 
-## 接收方
-for port in 3000 4000 5000 6000; do nc --recv-only 172.16.8.104 $port & done
-for port in 3000 4000 5000 6000; do nc 172.16.8.104 $port < /dev/null & done
 ```
 驗證是否在背景 `jobs`
 查詢執行程式 ps aux | grep nc
+結束程式 `kill -9 $(jobs -p)`
 ![](Pasted%20image%2020260616150724.png)
-結束程式 `killall -9 nc`
+
+ncat 如果出現Connection refused 代表port可能被ncat 以外佔用,timeout 確定雙方無法連線

@@ -25,6 +25,56 @@ Docker CT：Docker LXC + Coolify (Addons) + Code Server (Addons) 同時可達到
 ![](lab.svg)
 
 
+
+
+## Homelab 架設
+
+
+### 網路
+結合前面決定的架構（**PowerDNS 當主總機、Windows AD 獨立在 `ad.homelab.test` 子網域**），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：
+#### 命名建議：用「用途 + VLAN ID」
+在 PVE 的 **SDN Zones** 與 **VNets** 中，建議直接採用直覺的命名慣例：
+1. **一般自建服務 / 容器區段（對應 PowerDNS）**：
+    - **VNet 名稱**：`vlan10-infra` 或 `infra-v10`
+    - **Subnet 網段**：例如 `192.168.10.0/24`    
+    - **PVE IPAM 設定**：選擇 PVE 內建的 `pve` IPAM，讓 PVE 自動追蹤這個網段所有 VM/LXC 的 IP。
+
+2. **Windows AD 網域設備區段（對應 Windows AD / 子網域）**：
+    - **VNet 名稱**：`vlan20-ad` 或 `ad-v20`
+    - **Subnet 網段**：例如 `192.168.20.0/24`
+    - **PVE IPAM 設定**：同樣可以讓 PVE 記錄，但**這個網段的 DHCP 與 DNS 發放權要交給 Windows AD DHCP/DNS**，PVE 的 IPAM 在這邊主要扮演「資產盤點與紀錄」的角色，避免跟 Windows DHCP 派發的 IP 撞號。
+
+### CA架設
+
+Windows Server CA
+- Enterprise Root CA
+- Enterprise Subordinate CA
+- Standalone Root CA
+- Standalone Subordinate CA
+
+## 公網網域
+## 內網網域
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## 設備選擇
 電腦主機：瘦客戶端以及耐用度可以考慮 Dell Wyse、HP Prodesk
 鍵盤：Logitech K400 Plus 鍵盤 (非必要)、手把收納架

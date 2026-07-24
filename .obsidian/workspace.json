@@ -10,34 +10,20 @@
           {
             "id": "83b1245b2217b5b8",
             "type": "tabs",
-            "dimension": 80.19801980198021,
+            "dimension": 61.24497991967871,
             "children": [
-              {
-                "id": "967415e45e7fffef",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/各式 DNS Server 方案.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "各式 DNS Server 方案"
-                }
-              },
               {
                 "id": "82ecf106dc7103d2",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/SSO.md",
+                    "file": "content/post/線上託管服務.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "SSO"
+                  "title": "線上託管服務"
                 }
               },
               {
@@ -46,12 +32,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令linux.md",
+                    "file": "content/post/2026 家用Homelab架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令linux"
+                  "title": "2026 家用Homelab架設指南"
                 }
               },
               {
@@ -74,35 +60,21 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Colortokens.md",
+                    "file": "content/post/各式 DNS Server 方案.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Colortokens"
-                }
-              },
-              {
-                "id": "702c29895f3edbca",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/illumio 流量模擬.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "illumio 流量模擬"
+                  "title": "各式 DNS Server 方案"
                 }
               }
             ],
-            "currentTab": 1
+            "currentTab": 3
           },
           {
             "id": "6f416cf19f6e6d41",
             "type": "tabs",
-            "dimension": 19.801980198019802,
+            "dimension": 38.75502008032129,
             "children": [
               {
                 "id": "24be7bea6a1e0a35",
@@ -145,8 +117,51 @@
                   "icon": "terminal",
                   "title": "Terminal: zsh"
                 }
+              },
+              {
+                "id": "236f84d0d4b23bec",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "Terminal: zsh"
+                }
               }
-            ]
+            ],
+            "currentTab": 1
           }
         ],
         "direction": "horizontal"
@@ -315,16 +330,24 @@
       "omnisearch:Omnisearch": false
     }
   },
-  "active": "24be7bea6a1e0a35",
+  "active": "236f84d0d4b23bec",
   "lastOpenFiles": [
-    "content/post/SSO.md",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/K8S.md",
+    "content/post/K8s 整理.md",
+    "content/post/企業大量部屬.md",
+    "content/post/PVE 進階設定.md",
+    "content/post/illumio K8S.md",
     "Colortokens.md",
+    "content/post/線上託管服務.md",
+    "content/post/SSO.md",
+    "illumio 常用指令.md",
+    "content/post/2026 家用Homelab架設指南.md",
+    "content/post/VScode.md",
+    "content/post/常用指令linux.md",
     "content/post/illumio 流量模擬.md",
     "content/post/SSL 憑證.md",
-    "content/post/常用指令linux.md",
-    "illumio 常用指令.md",
     "網路架構設計.md",
-    "content/post/各式 DNS Server 方案.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "illustrator.md",
     "static/Pasted image 20260720201534.png",
@@ -333,21 +356,13 @@
     "content/post/負載平衡.md",
     "content/post/常用指令AIX.md",
     "content/post/可觀測性.md",
-    "content/post/企業大量部屬.md",
     "content/post/incus.md",
-    "content/post/illumio K8S.md",
     "content/post/Hyper-V 進階設定.md",
-    "content/post/VScode.md",
     "content/post/VMware Workstation 進階功能.md",
     "content/post/Session TMOUT.md",
     "content/post/RDP 連線實作.md",
-    "content/post/pidgvin share.md",
-    "content/post/Docker.md",
     "static/Pasted image 20260719123345.png",
-    "content/post/資產盤點軟體.md",
     "static/Pasted image 20260719123134.png",
-    "content/post/郵件Server.md",
-    "content/post/常用指令Windows.md",
     "static/Pasted image 20260718223625.png",
     "static/Pasted image 20260718204149.png",
     "static/Pasted image 20260718203951.png",
