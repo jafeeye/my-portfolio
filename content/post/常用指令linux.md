@@ -77,6 +77,9 @@ ls -l
 
 關掉ssh登入一直出現訊息 `dmesg -n 1`
 ## 路徑
+![[static/Diagram 11.svg]]
+
+
 ```
 var指存放程式執行會產生收集讀寫資料
 /var/log        log檔位置

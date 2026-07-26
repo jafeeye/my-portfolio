@@ -1,9 +1,9 @@
 ---
-title: Excel
+title: TQC Excel
 toc: true
 date: 2026-06-21
 ---
-## TQC
+## 常用快速鍵
 Ctrl Shift > 選取
 Ctrl A 全選
 Ctrl 方向 移到最邊邊

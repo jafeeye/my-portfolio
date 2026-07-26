@@ -529,6 +529,39 @@ swap pve -wi-ao----    8.00g
 ![](PixPin_2026-05-02_00-17-16.png)
 
 
+## 硬碟大小
+
+如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
+vmdk qcow 互轉
+cd /var/lib/vz/images/147/
+qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
+
+縮減磁碟
+使用GParted 開機移動磁區
+qemu-img resize --shrink vm-147-disk-0.qcow2 160G
+qemu-img info 可以檢查真實大小
+如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
+
+WEBGUI/Move disk 可以做轉換格式動作
+![](Pasted%20image%2020260530180758.png)
+
+## 匯入硬碟
+```
+qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
+```
+搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
+硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
+
+## 不同虛擬機下硬碟掛載到目前VM
+正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載
+
+```
+qm config 104 | grep disk
+# 假設目標是 VM 101，且你要掛載為 scsi1
+qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
+
+```
+
 ## PVE 使用vDSM掛載 iSCSI
 
 1. 先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
@@ -704,38 +737,6 @@ https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 ## 安裝Ｗin11
 一定要選UEFI 才能安裝
 登入Shift+F10 start ms-cxh:localonly
-
-## 不同虛擬機下硬碟掛載到目前VM
-正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載
-
-```
-qm config 104 | grep disk
-# 假設目標是 VM 101，且你要掛載為 scsi1
-qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
-
-```
-
-## 硬碟大小
-
-如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
-vmdk qcow 互轉
-cd /var/lib/vz/images/147/
-qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
-
-縮減磁碟
-使用GParted 開機移動磁區
-qemu-img resize --shrink vm-147-disk-0.qcow2 160G
-qemu-img info 可以檢查真實大小
-如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
-
-WEBGUI/Move disk 可以做轉換格式動作
-![](Pasted%20image%2020260530180758.png)
-## 匯入硬碟
-```
-qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
-```
-搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
-硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
 
 ## LXC 安裝cockit開啟共享
 

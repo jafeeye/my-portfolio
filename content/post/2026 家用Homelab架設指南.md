@@ -16,6 +16,20 @@ Mointor VM：
 
 ![](homelab-diagram.svg)
 
+LXC (Router)
+- Adguard 
+- PowerDNS
+- Caddy
+- Certimate
+- stepca
+- infisical
+- nginx-ui
+- haos
+- homeassisant
+- kms
+- iStoreOS
+
+
 
 Docker CT：Docker LXC + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯
 
@@ -56,6 +70,9 @@ Windows Server CA
 ## 內網網域
 
 
+## DNS
+
+AdGuard DNS+PowerDNS Authoritative+Caddy
 
 
 

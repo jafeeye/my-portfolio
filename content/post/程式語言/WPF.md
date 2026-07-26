@@ -1,3 +1,12 @@
+---
+title: 程式語言-WPF
+toc: true
+date: 2026-07-26
+---
+![[static/Diagram 9.svg]]
+
+
+
 C# 命名方法
 Button.Text 物件中文名稱
 Button.Name 物件變數
@@ -53,8 +62,9 @@ Alt+Enter
 在WPF上似乎有人談論設定起始焦點的困難(WPF Initial Focus Nightmare)
 
 **MVVM用法**
+![[static/Diagram 10.svg]]
 
-![[Pasted image 20241121230100.png]]
+
 
 
 WinForms 加入DPI

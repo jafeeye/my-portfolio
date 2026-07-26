@@ -1,16 +1,19 @@
 ---
-title: KPM寫作工具整合
+title: 寫作整合KPM
 toc: true
 date: 2026-04-11
 ---
 
 ## Obsidian
 要確定開啟目錄下有.obsidian資料夾，設定才會同步
+- Remtely Save：同步OneDrive、WebDAV
+- Omnisearch：搜尋所有寫過文章
+- Digram.net：畫流程圖向量編輯(可用外部svg導入)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)
+- Image TookIt：快速顯示圖片
+
 - Dynamic Table of Content ：動態目錄外掛
 - Embedded Code Title：程式碼檔名
-- Remtely Save：同步OneDrive、WebDAV
 - emo：自動將圖片上傳自Github
-- Digram.net：畫流程圖好用軟體，向量編輯圖片(可用外部svg導入)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)
 - Commander：側邊欄按鈕隱藏
 - Media Extened:嵌入Youtube等多媒體檔案
 - cMenu
@@ -21,7 +24,14 @@ date: 2026-04-11
 - Timelines：編年史記
 - Heatmap Calendar：热图，按年展示各习惯打卡情况
 - AnyBlock
-- Omnisearch
+
+
+### 常用快速鍵
+- Ctrl+Shift+N 分割視窗顯示新分頁
+- Ctrl+P 顯示命令列
+- Ctrl+Shift+P 顯示Omnisearch
+
+
 ### 寫作大綱
 **腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）** 
 
@@ -76,6 +86,35 @@ time-played, length, rating from "games" sort rating desc
 
 
 
+## Eagle
+
+
+
+
+
+
+## Affinity
+
+
+
+
+
+## Typora
+
+
+
+
+
+
+
+## VS Code
+常用指令：Option+Z Ａlt+Z 切換自動換行
+選擇程式語言: Ctrl+K,M
+自動換行: Alt+Z
+Markdown Allin1
+
+
+
 ## Memo
 YT影片下載字幕，英文字幕直接轉成中文
 ![](Pasted%20image%2020260411101809.png)
@@ -83,9 +122,23 @@ YT影片下載字幕，英文字幕直接轉成中文
 
 
 
-### 延伸閱讀
+快速提取Office文檔所有圖片
+![gh|300](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744378916000bk5khg.png)
+
+
+註解PDF檔案
+![gh|300](https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744378848000pq5g2f.png)
+
+Word 編輯Markdown Writage
+
+快速把樂譜輸出成PDF
+
+Typora 產生各種主題
+
+## 延伸閱讀
 
 1. [我的习惯追踪工作流 - 经验分享 - Obsidian 中文论坛](https://forum-zh.obsidian.md/t/topic/10506)
 2. [Obsidian 中文帮助，裡面介紹許多OB的寫法](https://publish.obsidian.md/help-zh/%E7%BC%96%E8%BE%91%E4%B8%8E%E6%A0%BC%E5%BC%8F%E5%8C%96/%E6%A0%87%E7%AD%BE)
 3. [[KPM管理研究]]
 4. KPM學習交流網站，[PKMER](https://pkmer.cn/)
+

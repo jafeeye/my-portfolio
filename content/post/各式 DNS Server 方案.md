@@ -6,14 +6,14 @@ date: 2026-07-05
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
 CoreDNS
 dnsmasq：兼具DHCP功能
-MosDNS
+mosDNS：適用複雜DNS分流
 BindDNS
 OxiDNS
 Technitium
 AdGuard Home：也提供簡單DHCP功能
 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
 KeaDHCP
-SmartDNS
+SmartDNS：內建多上游併發查詢、最快回應優先 (Best IP)機制，也常用於DNS測速
 Pi-hole
 
 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
@@ -737,3 +737,7 @@ rec_control wipe-cache illumio-sandra.bd2.dev
 
 PowerDNS Recursor`rec_control`清快取、看統計、reload 設定等
 PowerDNS Authoritative `pdnsutil`管理 zone/記錄、check-zone、increase-serial 等
+
+
+
+## Adguard HomeMosDNS+SmartDNS。AD去广告，MosDNS分流，SmartDNS测速

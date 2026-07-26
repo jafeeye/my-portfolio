@@ -24,5 +24,11 @@ Raspberry Pi OS Desktop
 RetroNAS
 MS-DOS 8.0  
 
-
+## NAS 系統
+ZimaOS
+CasaOS
+fnOS
+TrueNAS
+UnRAID
+OMV
 
