@@ -105,8 +105,10 @@ AdGuard DNS+PowerDNS Authoritative+Caddy
 | Win7 x86 | 512MB |
 
 ## 虛擬桌面
-Horizon Client 無法安裝,將host檔唯讀取消即可
-Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGISTRATION=1
+Horizon
+1.安裝 `Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGISTRATION=1`
+2.安裝 Omnissa-Horizon-Agent-Direct-Connection-x86_64-8.16.0-16560454767
+3.Horizon Client 無法安裝,將host檔唯讀取消即可
 
 https://github.com/VirtualDrivers/Virtual-Display-Driver
 
