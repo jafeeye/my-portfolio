@@ -189,8 +189,14 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 
 
 
+## mkcert: 一鍵生成root憑證
+
+
 
 ## infisical ：保管憑證及api key
+
+
+
 
 
 

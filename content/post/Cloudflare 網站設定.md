@@ -14,6 +14,35 @@ Full (Strict) SSL 模式
 Origin Rules端口 (端口轉發)
 
 
+
+
+## 託管網域
+
+![](static/Pasted%20image%2020260727170201.png)
+## Cloudflare Tunnel
+
+
+3. 設定https IP，這邊假設為PVE IP `https://192.168.100.1:8006`，如果直接設定會出現Bad gateway，
+4. ![](static/Pasted%20image%2020260727163205.png)
+
+![](static/Pasted%20image%2020260727163315.png)
+
+![](static/Pasted%20image%2020260727163442.png)
+
+
+5. 加上ZeroTrust
+![](static/Pasted%20image%2020260727164349.png)
+
+
+![](static/Pasted%20image%2020260727165817.png)
+
+
+
+## MFA 驗證
+
+
+
+
 ### 參考資料
 [使用 Cloudflare 幫你的網站掛上 SSL 憑證與 CDN](https://docfunc.com/posts/92/%E4%BD%BF%E7%94%A8-cloudflare-%E5%B9%AB%E4%BD%A0%E7%9A%84%E7%B6%B2%E7%AB%99%E6%8E%9B%E4%B8%8A-ssl-%E6%86%91%E8%AD%89%E8%88%87-cdn-post)
 [用 Cloudflare Tunnel 打通 Synology NAS](https://sakkyoi.tech/article/cloudflare-tunnel-synology-nas/)
