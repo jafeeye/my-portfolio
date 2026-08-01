@@ -10,7 +10,7 @@
           {
             "id": "83b1245b2217b5b8",
             "type": "tabs",
-            "dimension": 64.8695652173913,
+            "dimension": 79.93981945837513,
             "children": [
               {
                 "id": "a028ff64d4ddbee9",
@@ -32,12 +32,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Cloudflare 網站設定.md",
+                    "file": "content/post/常用指令macOS.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Cloudflare 網站設定"
+                  "title": "常用指令macOS"
                 }
               }
             ],
@@ -46,7 +46,7 @@
           {
             "id": "b149bef28df29218",
             "type": "tabs",
-            "dimension": 35.130434782608695,
+            "dimension": 20.060180541624874,
             "children": [
               {
                 "id": "7b08f106579d0497",
@@ -150,8 +150,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 271.5,
-    "collapsed": true
+    "width": 271.5
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -263,18 +262,23 @@
   },
   "active": "7b08f106579d0497",
   "lastOpenFiles": [
+    "content/post/常用指令macOS.md",
+    "content/post/TQC illustrator.md",
+    "static/Pasted image 20260727202924.png",
+    "static/Pasted image 20260727202018.png",
+    "static/Pasted image 20260727201416.png",
+    "static/Pasted image 20260727200707.png",
+    "static/Pasted image 20260727195859.png",
+    "static/Pasted image 20260727193956.png",
+    "static/Pasted image 20260727193727.png",
     "content/post/Cloudflare 網站設定.md",
     "static/Pasted image 20260727170201.png",
     "static/Pasted image 20260727165817.png",
     "static/Pasted image 20260727164349.png",
-    "static/Pasted image 20260727163442.png",
-    "static/Pasted image 20260727163315.png",
-    "static/Pasted image 20260727163205.png",
     "瀏覽器設定.md",
     "content/post/SSL 憑證.md",
     "content/post/2026 家用Homelab架設指南.md",
     "content/post/Visio.md",
-    "static/Pasted image 20260726212211.png",
     "content/post/code/bash.sh",
     "content/post/架站.md",
     "content/post/寫作整合KPM.md",
@@ -282,14 +286,11 @@
     "content/post/code/docker-compose.yaml",
     "content/post/常用指令linux.md",
     "static/Diagram 11.svg.xml",
-    "static/Diagram 11.svg",
     "content/post/Linux網路設定.md",
     "content/post/AI工具.md",
     "content/post/程式語言/WPF.md",
     "static/Diagram 10.svg.xml",
-    "static/Diagram 10.svg",
     "static/Diagram 9.svg.xml",
-    "static/Diagram 9.svg",
     "content/post/影片轉檔播放.md",
     "static/Diagram 8.svg.xml",
     "content/post/Appsheet.md",
@@ -306,8 +307,6 @@
     "content/post/程式語言/git.md",
     "content/post/程式語言/C++ QT.md",
     "content/post/程式語言/js.md",
-    "content/post/程式語言/XiaoChao.md",
-    "content/page/archives/index.md",
-    "content/post/TQC Excel.md"
+    "content/post/程式語言/XiaoChao.md"
   ]
 }
