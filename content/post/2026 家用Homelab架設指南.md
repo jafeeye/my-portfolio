@@ -28,12 +28,22 @@ LXC (Router)
 - homeassisant
 - kms
 - iStoreOS
-
-
-
-Docker CT：Docker LXC + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯
-
-
+Docker LXC：Docker  + Coolify (Addons) + Code Server (Addons) 
+同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯
+- arcane
+- Portainer.io
+- baidunetdisk
+- copyparty
+- filebot
+- homeassisant
+- librespeed
+- mailhog
+- pingvin-share x
+- Coolify
+- Code Server
+- Obsidian Ignis
+- traefik
+- screengo
 
 
 ![](lab.svg)

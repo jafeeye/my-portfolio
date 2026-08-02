@@ -13,35 +13,48 @@
             "dimension": 79.93981945837513,
             "children": [
               {
-                "id": "a028ff64d4ddbee9",
+                "id": "bd7c67ad6d0343e9",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/SSL 憑證.md",
+                    "file": "content/post/2026 家用Homelab架設指南.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "SSL 憑證"
+                  "title": "2026 家用Homelab架設指南"
                 }
               },
               {
-                "id": "04e0b3b45ec83548",
+                "id": "38ce2533293c58fb",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/常用指令macOS.md",
+                    "file": "content/post/PVE 進階設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "常用指令macOS"
+                  "title": "PVE 進階設定"
+                }
+              },
+              {
+                "id": "95934dde08fa64db",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/常用指令 (各系統).md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "常用指令 (各系統)"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
             "id": "b149bef28df29218",
@@ -87,7 +100,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: zsh"
+                  "title": "終端：zsh"
                 }
               }
             ]
@@ -113,10 +126,12 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "檔案瀏覽器"
             }
           },
           {
@@ -236,34 +251,80 @@
               "icon": "lucide-archive",
               "title": "所有屬性"
             }
+          },
+          {
+            "id": "9367e372d2d4329b",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 219.5,
+    "width": 429.5,
     "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "markdown-importer:Open format converter": false,
-      "bases:Create new base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "vscode-editor:Create Code File": false,
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "markdown-importer:開啟 Markdown 格式轉換器": false,
+      "bases:建立新的 base": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "vscode-editor:新建程式碼檔案": false,
       "terminal:Open terminal": false,
-      "omnisearch:Omnisearch": false
+      "omnisearch:Omnisearch": false,
+      "simple-mind-map:新建思維導圖": false,
+      "obsidian-importer:Open Importer": false,
+      "realclaudian:Open Claudian": false
     }
   },
   "active": "7b08f106579d0497",
   "lastOpenFiles": [
-    "content/post/常用指令macOS.md",
-    "content/post/TQC illustrator.md",
+    "content/post/2026 家用Homelab架設指南.md",
+    "content/post/code/compose.yaml",
+    "content/post/PVE 進階設定.md",
+    "content/post/Hyper-V 進階設定.md",
+    "static/Pasted image 20260802114117.png",
+    "content/post/SSL 憑證.md",
+    "content/post/常用指令 (各系統).md",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/proj/MDT企業大量自動部屬.md",
+    "content/post/PowerAutomate.md",
+    "content/post/現場演出.md",
+    "content/post/測試軟體.md",
+    "content/post/AI工具.md",
+    "content/post/常用指令Windows.md",
+    "content/post/常用指令linux.md",
+    "content/post/電子書製作.md",
+    "content/post/Google Security.md",
+    "content/post/OpenShift 教學.md",
+    "content/post/Visio.md",
+    "content/post/Zentyal.md",
+    "content/post/SSO.md",
+    "content/post/K3s LXC.md",
+    "content/post/K8S.md",
+    "content/post/打譜.md",
+    "content/post/中文化及綠化.md",
+    "content/post/可觀測性.md",
+    "content/post/acme.sh 設定.md",
+    "content/post/code/docker-compose - 複製.yaml",
+    "content/post/code/espanso.yml",
+    "content/post/code/wsever_opti.ps1",
+    "content/post/code/heidmall.yaml",
+    "content/post/code/espanso.yaml",
+    "content/post/code/pve.yaml",
+    "content/post/code/docker-compose.yaml",
     "static/Pasted image 20260727202924.png",
     "static/Pasted image 20260727202018.png",
     "static/Pasted image 20260727201416.png",
@@ -271,42 +332,9 @@
     "static/Pasted image 20260727195859.png",
     "static/Pasted image 20260727193956.png",
     "static/Pasted image 20260727193727.png",
-    "content/post/Cloudflare 網站設定.md",
     "static/Pasted image 20260727170201.png",
     "static/Pasted image 20260727165817.png",
-    "static/Pasted image 20260727164349.png",
-    "瀏覽器設定.md",
-    "content/post/SSL 憑證.md",
-    "content/post/2026 家用Homelab架設指南.md",
-    "content/post/Visio.md",
     "content/post/code/bash.sh",
-    "content/post/架站.md",
-    "content/post/寫作整合KPM.md",
-    "content/post/OS整理.md",
-    "content/post/code/docker-compose.yaml",
-    "content/post/常用指令linux.md",
-    "static/Diagram 11.svg.xml",
-    "content/post/Linux網路設定.md",
-    "content/post/AI工具.md",
-    "content/post/程式語言/WPF.md",
-    "static/Diagram 10.svg.xml",
-    "static/Diagram 9.svg.xml",
-    "content/post/影片轉檔播放.md",
-    "static/Diagram 8.svg.xml",
-    "content/post/Appsheet.md",
-    "content/post/Windows Server.md",
-    "content/post/打譜.md",
-    "content/post/喇叭.md",
-    "content/post/修筆電.md",
-    "content/post/OCR.md",
-    "content/post/pichome.md",
-    "content/post/code/heidmall.yaml",
-    "content/post/code/moredoc.yaml",
-    "content/post/code/Navidrome Auto Login-2025-05-24.user.js",
-    "content/post/code/pve.yaml",
-    "content/post/程式語言/git.md",
-    "content/post/程式語言/C++ QT.md",
-    "content/post/程式語言/js.md",
-    "content/post/程式語言/XiaoChao.md"
+    "static/Diagram 11.svg.xml"
   ]
 }

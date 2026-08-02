@@ -13,7 +13,8 @@
     "php",
     "cs",
     "ps1",
-    "yaml"
+    "yaml",
+    "yml"
   ],
   "folding": true,
   "lineNumbers": true,

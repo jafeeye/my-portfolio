@@ -1,0 +1,138 @@
+services:
+## Traefik 反向代理
+  traefik:
+    container_name: traefik
+    image: traefik:v3.4
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8090:8080"   # Traefik dashboard,改成沒被佔用的 port
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/certs:/certs:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+    restart: unless-stopped
+## Obsidian 網頁版
+  ignis:
+    container_name: ignis
+    image: nobbe/ignis:latest
+    ports:
+      - "8080:8080"
+    environment:
+    # match these to your host user (run: id)
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./vaults:/vaults
+      - ./data:/app/data
+      - obsidian-app:/app/obsidian-app
+    restart: unless-stopped
+## pingvin
+  pingvin-share:
+    container_name: pingvin-share-x
+    image: smp46/pingvin-share-x
+    ports:
+      - "3000:3000"
+    environment:
+      - TRUST_PROXY=false # Set to true if a reverse proxy is in front of the container
+    volumes:
+      - ./pingvin-data:/opt/app/backend/data:rw,z
+      - ./pingvin-data/images:/opt/app/frontend/public/img:rw,z
+    restart: unless-stopped
+　　labels:
+      - traefik.enable=true
+      - traefik.http.routers.pingvin.rule=Host(`pingvin.home.lab`)
+      - traefik.http.routers.pingvin.entrypoints=websecure
+      - traefik.http.routers.pingvin.tls=true
+      - traefik.http.services.pingvin.loadbalancer.server.port=3000
+## baidunetdisk
+  baidunetdisk:
+    container_name: baidunetdisk
+    image: johngong/baidunetdisk:latest
+    ports:
+      - "5800:5800"
+      - "5900:5900"
+    volumes:
+      - ./baidunetdisk/config:/config
+      - ./baidunetdisk/download:/config/baidunetdiskdownload
+    restart: unless-stopped
+## filebot
+  filebot:
+    container_name: filebot
+    image: jlesage/filebot
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./filebot-data:/config:rw
+      - ./file-data/user:/storage:rw
+    restart: unless-stopped
+## copyparty
+  copyparty:
+    container_name: copyparty
+    image: copyparty/ac:latest
+    ports:
+      - "3923:3923"
+    volumes:
+      - ./copyparty/config:/cfg
+      - ./copyparty/data:/w
+    restart: unless-stopped
+## mailhog
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+    restart: unless-stopped
+
+## librespeed 測速
+  librespeed:
+    container_name: librespeed
+    image: ghcr.io/librespeed/speedtest:latest
+    ports:
+      - "8880:80"
+    environment:
+      - MODE=standalone
+      - TITLE=LibreSpeed
+      - TELEMETRY=false
+    volumes:
+      - ./librespeed/data:/database
+    restart: unless-stopped
+
+## home assistant
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    ports:
+      - "8123:8123"
+    environment:
+      - TZ=Asia/Taipei
+    volumes:
+      - ./homeassistant/config:/config
+    restart: unless-stopped
+
+## scrutiny 硬碟健康監控
+  scrutiny:
+    container_name: scrutiny
+    image: ghcr.io/analogj/scrutiny:master-omnibus
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN
+    ports:
+      - "8081:8080"   # web UI(改成 8081,因為 8080 被 ignis 用了)
+      - "8086:8086"   # 內建 InfluxDB
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ./scrutiny/config:/opt/scrutiny/config
+      - ./scrutiny/influxdb:/opt/scrutiny/influxdb
+    restart: unless-stopped
+volumes:
+  obsidian-app:

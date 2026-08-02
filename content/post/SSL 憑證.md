@@ -186,6 +186,16 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 
 
 ## Caddy - 本地Root憑證做到可以瀏覽.local 加密
+有內建本地RootCA，並且會發給子網域證書
+`/var/lib/caddy/.local/share/caddy/certificates/local/`
+開啟本地acme server 加入
+```
+http://:9000 { 
+acme_server 
+}
+```
+systemctl reload caddy
+curl http://192.168.10.9:9000/acme/local/directory 確認是否正常
 
 
 

@@ -8,8 +8,12 @@ date: 2026-04-11
 要確定開啟目錄下有.obsidian資料夾，設定才會同步
 - Remtely Save：同步OneDrive、WebDAV
 - Omnisearch：搜尋所有寫過文章
-- Digram.net：畫流程圖向量編輯(可用外部svg導入)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)
+- Digram.net：畫向量(可導入svg)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)
 - Image TookIt：快速顯示圖片
+- Simple Mind Map：心智圖
+- Canvas：Obsidian預設畫圖
+
+
 
 - Dynamic Table of Content ：動態目錄外掛
 - Embedded Code Title：程式碼檔名
@@ -24,13 +28,10 @@ date: 2026-04-11
 - Timelines：編年史記
 - Heatmap Calendar：热图，按年展示各习惯打卡情况
 - AnyBlock
-
-
-### 常用快速鍵
+#### 常用快速鍵
 - Ctrl+Shift+N 分割視窗顯示新分頁
 - Ctrl+P 顯示命令列
 - Ctrl+Shift+P 顯示Omnisearch
-
 
 ### 寫作大綱
 **腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）** 

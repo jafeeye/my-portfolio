@@ -741,3 +741,111 @@ PowerDNS Authoritative `pdnsutil`管理 zone/記錄、check-zone、increase-seri
 
 
 ## Adguard HomeMosDNS+SmartDNS。AD去广告，MosDNS分流，SmartDNS测速
+
+
+## Traefik
+
+Caddy 自己會產生一整套 CA(根憑證 + 中繼憑證),平常拿來幫你自動簽發各個網站的憑證。我們要做的是:**把 Caddy 的中繼憑證私鑰借出來,幫 Traefik 的網域手動簽一張憑證**,這樣 Traefik 跟 Caddy 用的是同一套信任鏈,你的電腦/手機只要信任過 Caddy 的根憑證,連 Traefik 的網站也會直接被信任。
+
+1. 從 Caddy 容器裡把 CA 檔案複製出來
+假設你的 Caddy 容器名稱叫 `caddy`(如果不是,底下指令要換成你實際的名字)。
+在你的專案資料夾裡開終端機,執行:
+```bash
+mkdir -p ./traefik/ca
+
+docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt ./traefik/ca/root.crt
+docker compose cp caddy:/data/caddy/pki/authorities/local/intermediate.crt ./traefik/ca/intermediate.crt
+docker compose cp caddy:/data/caddy/pki/authorities/local/intermediate.key ./traefik/ca/intermediate.key
+```
+跑完這三行,你的資料夾應該長這樣:
+```
+traefik/
+└── ca/
+    ├── root.crt
+    ├── intermediate.crt
+    └── intermediate.key
+```
+
+**這三個檔案分別是什麼:**
+- `root.crt`:Caddy 的根憑證,等一下要拿去讓你的電腦/瀏覽器信任
+- `intermediate.crt` / `intermediate.key`:中繼憑證跟它的私鑰,等一下要拿來簽 Traefik 的憑證
+
+2. 安裝 `root.crt` 到系統信任庫
+如果你的電腦已經裝過 Caddy 的 root.crt 了(之前你有沒有裝過?),這步可以跳過。如果還沒裝過:
+Windows(打開系統管理員權限的 cmd):
+```
+certutil -addstore -f "ROOT" traefik\ca\root.crt
+```
+
+3. 用 Caddy 的中繼憑證,幫 Traefik 的網域簽一張新憑證
+在同一個終端機裡,繼續執行:
+```bash
+# 產生金鑰 + 簽署請求(CSR)
+openssl req -new -newkey rsa:2048 -nodes \
+  -keyout ./traefik.test.key \
+  -out ./traefik.test.csr \
+  -subj "/CN=*.test" \
+  -addext "subjectAltName=DNS:*.test,DNS:test"
+
+# 用 Caddy 的 intermediate 簽發,效期設 1 年
+openssl x509 -req -in ./traefik.test.csr \
+  -CA ./intermediate.crt -CAkey ./intermediate.key -CAcreateserial \
+  -out ./traefik.test.crt -days 730 \
+  -extfile <(printf "subjectAltName=DNS:*.test,DNS:test")
+
+# 組成完整鏈(leaf + intermediate),Traefik 才吃得下
+cat ./traefik.test.crt ./intermediate.crt \
+  > ./traefik.test.fullchain.crt
+```
+
+**這三個指令分別在做什麼:**
+1. 第一個:產生一把新的私鑰,跟一份「我要申請 `*.home.lab` 這個網域憑證」的申請書(CSR)
+2. 第二個:拿 Caddy 的中繼私鑰,在那份申請書上蓋章簽名,變成一張正式的憑證,效期 365 天
+3. 第三個:因為瀏覽器驗證的時候需要看到完整的信任鏈(從你的憑證一路到根憑證),所以把「你的憑證」跟「中繼憑證」接在一起,變成一份完整檔案
+
+跑完之後,你的資料夾長這樣:
+```
+traefik/
+├── ca/
+│   ├── root.crt
+│   ├── intermediate.crt
+│   └── intermediate.key
+└── certs/
+    ├── traefik.home.lab.key           ← 私鑰
+    ├── traefik.home.lab.csr           ← 申請書(之後用不到了,可以留著也可以刪)
+    ├── traefik.home.lab.crt           ← 你的憑證(單獨一張)
+    └── traefik.home.lab.fullchain.crt ← 完整鏈,這個是等一下要用的
+```
+
+4. 建立 `traefik/dynamic/tls.yml`
+在專案資料夾裡建立 `traefik/dynamic/tls.yml` 這個檔案,內容寫:
+```yaml
+tls:
+  certificates:
+    - certFile: /certs/traefik.home.lab.fullchain.crt
+      keyFile: /certs/traefik.home.lab.key
+```
+
+這裡的路徑 `/certs/...` 指的是 Traefik 容器內部的路徑,不是你電腦上的路徑 —— 之所以能對應到步驟 3 產生的檔案,是因為你的 docker-compose.yml 裡已經有這行掛載:
+```yaml
+    volumes:
+      - ./traefik/certs:/certs:ro
+```
+
+意思是你電腦上的 `./traefik/certs` 資料夾,會被 Traefik 容器看成是它內部的 `/certs`。所以只要步驟 3 產生的檔案真的放在 `./traefik/certs` 裡,檔名對得上,這裡就抓得到。
+最終確你的資料夾長怎樣
+```
+你的專案資料夾/
+├── docker-compose.yml
+└── traefik/
+    ├── ca/
+    │   ├── root.crt
+    │   ├── intermediate.crt
+    │   └── intermediate.key
+    ├── certs/
+    │   ├── traefik.home.lab.key
+    │   └── traefik.home.lab.fullchain.crt
+    └── dynamic/
+        └── tls.yml
+```
+

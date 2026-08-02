@@ -1,0 +1,12 @@
+{
+  "id": "conv-1785576185826-qy3l3isui",
+  "providerId": "claude",
+  "title": "檢視檔案並建議補充內容",
+  "titleGenerationStatus": "success",
+  "createdAt": 1785576185832,
+  "updatedAt": 1785582217501,
+  "lastResponseAt": 1785582102453,
+  "sessionId": null,
+  "selectedModel": "haiku",
+  "currentNote": "content/post/Visio.md"
+}

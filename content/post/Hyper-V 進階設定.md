@@ -114,7 +114,8 @@ dbus-run-session startxfce4
 ## 二代機器強制舊式vhd
 
 
-
+## WSL
+![](static/Pasted%20image%2020260802114117.png)
 
 
 
