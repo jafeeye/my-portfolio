@@ -180,7 +180,7 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 ## Step CA
 
 ## HashiCorp Vault PKI
-## OpenBao
+## OpenBao (開源版)
 
 ## Windows ADCS
 
@@ -207,6 +207,22 @@ curl http://192.168.10.9:9000/acme/local/directory 確認是否正常
 
 
 
+## ACME Server
+Nginx : Nginx-acme
+Caddy Caddy Docker Proxy
+
+
+![](static/acme_unfurl_org_7df5a14fe8.png)
+![](static/acme_how_it_works_88d170c87a.avif)
+
+
+
+HTTP-01 挑戰是一種用於證明網域所有權的自動化方法
+DNSSEC（網域名稱系統安全擴充）
+
+
+一篇關於 Caddy Traefik certbot Nginx 怎麼設定acme
+https://smallstep.com/blog/private-acme-server/
 
 
 

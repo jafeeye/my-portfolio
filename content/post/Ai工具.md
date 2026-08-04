@@ -17,3 +17,8 @@ OpenDesign
 
 Skill 資料夾
 C:\Users\帳戶名\.codex\skill
+
+## Prompt
+```
+請以官方資料為主，不要亂加指令
+```

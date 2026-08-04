@@ -13,35 +13,21 @@
             "dimension": 79.93981945837513,
             "children": [
               {
-                "id": "bd7c67ad6d0343e9",
+                "id": "40d6781aa369ed2f",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Homelab架設指南.md",
+                    "file": "content/post/AI工具.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Homelab架設指南"
+                  "title": "AI工具"
                 }
               },
               {
-                "id": "38ce2533293c58fb",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/PVE 進階設定.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "PVE 進階設定"
-                }
-              },
-              {
-                "id": "95934dde08fa64db",
+                "id": "ad915537e1f486b2",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
@@ -53,8 +39,23 @@
                   "icon": "lucide-file",
                   "title": "常用指令 (各系統)"
                 }
+              },
+              {
+                "id": "8ef24c0c2699ab99",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/TQC illustrator.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "TQC illustrator"
+                }
               }
-            ]
+            ],
+            "currentTab": 2
           },
           {
             "id": "b149bef28df29218",
@@ -100,7 +101,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：zsh"
+                  "title": "Terminal: zsh"
                 }
               }
             ]
@@ -131,7 +132,7 @@
                 "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
-              "title": "檔案瀏覽器"
+              "title": "Files"
             }
           },
           {
@@ -165,7 +166,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 271.5
+    "width": 271.5,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -272,38 +274,47 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:開啟快速切換": false,
-      "graph:查看關聯圖": false,
-      "canvas:建立新畫布": false,
-      "daily-notes:開啟今天的每日筆記": false,
-      "templates:插入模板": false,
-      "command-palette:開啟命令面板": false,
-      "markdown-importer:開啟 Markdown 格式轉換器": false,
-      "bases:建立新的 base": false,
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
-      "vscode-editor:新建程式碼檔案": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "markdown-importer:Open format converter": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "vscode-editor:Create Code File": false,
+      "simple-mind-map:Create new mind map": false,
       "terminal:Open terminal": false,
       "omnisearch:Omnisearch": false,
-      "simple-mind-map:新建思維導圖": false,
       "obsidian-importer:Open Importer": false,
       "realclaudian:Open Claudian": false
     }
   },
   "active": "7b08f106579d0497",
   "lastOpenFiles": [
+    "content/post/TQC illustrator.md",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/常用指令 (各系統).md",
+    "illumio 常用指令.md",
+    "content/post/AI工具.md",
+    "content/post/AIX 安裝.md",
+    "Ingress Egress Controller.md",
+    "content/post/程式語言/AHK.md",
     "content/post/2026 家用Homelab架設指南.md",
-    "content/post/code/compose.yaml",
+    "content/post/負載平衡.md",
+    "content/post/Nginx Plus.md",
+    "content/post/SSL 憑證.md",
+    "static/acme_how_it_works_88d170c87a.avif",
+    "static/acme_unfurl_org_7df5a14fe8.png",
     "content/post/PVE 進階設定.md",
+    "content/post/code/compose.yaml",
     "content/post/Hyper-V 進階設定.md",
     "static/Pasted image 20260802114117.png",
-    "content/post/SSL 憑證.md",
-    "content/post/常用指令 (各系統).md",
-    "content/post/各式 DNS Server 方案.md",
     "content/post/proj/MDT企業大量自動部屬.md",
     "content/post/PowerAutomate.md",
     "content/post/現場演出.md",
     "content/post/測試軟體.md",
-    "content/post/AI工具.md",
     "content/post/常用指令Windows.md",
     "content/post/常用指令linux.md",
     "content/post/電子書製作.md",
@@ -312,12 +323,6 @@
     "content/post/Visio.md",
     "content/post/Zentyal.md",
     "content/post/SSO.md",
-    "content/post/K3s LXC.md",
-    "content/post/K8S.md",
-    "content/post/打譜.md",
-    "content/post/中文化及綠化.md",
-    "content/post/可觀測性.md",
-    "content/post/acme.sh 設定.md",
     "content/post/code/docker-compose - 複製.yaml",
     "content/post/code/espanso.yml",
     "content/post/code/wsever_opti.ps1",
@@ -332,8 +337,6 @@
     "static/Pasted image 20260727195859.png",
     "static/Pasted image 20260727193956.png",
     "static/Pasted image 20260727193727.png",
-    "static/Pasted image 20260727170201.png",
-    "static/Pasted image 20260727165817.png",
     "content/post/code/bash.sh",
     "static/Diagram 11.svg.xml"
   ]

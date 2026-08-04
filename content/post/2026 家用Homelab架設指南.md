@@ -84,7 +84,9 @@ Windows Server CA
 
 AdGuard DNS+PowerDNS Authoritative+Caddy
 
-
+##  MDM
+Apple Open Directory
+macOS Server
 
 
 
