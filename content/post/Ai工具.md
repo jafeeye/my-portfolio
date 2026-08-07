@@ -18,6 +18,11 @@ OpenDesign
 Skill 資料夾
 C:\Users\帳戶名\.codex\skill
 
+[codex-ppt-skill](https://github.com/ningzimu/codex-ppt-skill/)
+
+使用方法：＠Codex Ppt
+
+
 ## Prompt
 ```
 請以官方資料為主，不要亂加指令

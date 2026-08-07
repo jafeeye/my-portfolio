@@ -26,11 +26,12 @@ date: 2026-07-03
 ```
 # 更新系統套件 
 sudo dnf update -y 
-# 新增 Docker 官方套件庫 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo 
+# 新增 Docker 官方套件庫 
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo 
 # 安裝 Docker 引擎 
 sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y 
 # 啟動 Docker 並設定開機自動啟動 
-sudo systemctl start docker sudo systemctl enable docker
+sudo systemctl start docker && sudo systemctl enable docker
 # 建立一個目錄
 mkdir ~/keycloak && cd ~/keycloak
 # 建立yaml

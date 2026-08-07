@@ -34,4 +34,12 @@ network:
 netplan apply
 ```
 
+## Rocky Linux
+```
+nmcli connection modify enp6s18 ipv4.dns "8.8.8.8 8.8.4.4" 
+nmcli connection modify enp6s18 ipv4.ignore-auto-dns yes 
+nmcli connection up enp6s18
+nmcli connection show enp6s18 | grep dns
+cat /etc/resolv.conf
+```
 
