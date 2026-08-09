@@ -6,6 +6,9 @@ toc: true
 Debian 固定DNS
 
 
+Debian LXC 13 使用PVE的DNS
+apt update && apt install systemd-resolved -y
+
 
 
 ## Ubuntu
