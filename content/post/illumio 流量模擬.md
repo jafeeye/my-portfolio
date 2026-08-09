@@ -133,6 +133,70 @@ for port in 20 21 53 3389; do while true; do nc -l -k -p $port > /dev/null 2>&1;
 for port in 20 21 53 3389; do while true; do nc 172.16.7.107 $port < /dev/null; sleep 1; done & done
 
 ```
+
+改良後腳本
+```
+#!/bin/bash
+
+# 所有測試主機 IP
+IPS=(
+    172.16.7.107
+    172.16.7.108
+    172.16.7.109
+)
+
+# 測試 Port
+PORTS=(
+    20
+    21
+    53
+    3389
+)
+
+# 取得本機主要 IPv4
+MY_IP=$(hostname -I | awk '{print $1}')
+
+echo "Local IP: $MY_IP"
+echo "Starting listeners..."
+
+# =========================
+# 接收端
+# =========================
+for port in "${PORTS[@]}"; do
+    while true; do
+        nc -l -k -p "$port" > /dev/null 2>&1
+        sleep 1
+    done &
+done
+
+# =========================
+# 發送端
+# =========================
+echo "Starting connections..."
+
+for ip in "${IPS[@]}"; do
+
+    # 跳過自己的 IP
+    if [[ "$ip" == "$MY_IP" ]]; then
+        echo "Skip local IP: $ip"
+        continue
+    fi
+
+    for port in "${PORTS[@]}"; do
+        while true; do
+            nc -w 1 "$ip" "$port" < /dev/null
+            sleep 1
+        done &
+    done
+
+done
+
+# 等待所有背景程序
+wait
+```
+
+
+
 驗證是否在背景 `jobs`
 查詢執行程式 ps aux | grep nc
 結束程式 `kill -9 $(jobs -p)`
