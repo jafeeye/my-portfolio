@@ -4,8 +4,8 @@
   "title": "檢查檔案並新增資料",
   "titleGenerationStatus": "success",
   "createdAt": 1785582235936,
-  "updatedAt": 1785582296518,
-  "lastResponseAt": 1785582296518,
+  "updatedAt": 1786258862573,
+  "lastResponseAt": 1786258862573,
   "sessionId": "019fbcfe-b1a1-7b32-b203-05deb433ce89",
   "selectedModel": "gpt-5.6-sol",
   "providerState": {
@@ -14,15 +14,14 @@
     "transcriptRootPath": "C:\\Users\\PIN\\.codex\\sessions",
     "workspaceDependencyToolVersion": 1
   },
-  "currentNote": "content/post/Visio.md",
   "usage": {
-    "inputTokens": 17707,
+    "inputTokens": 50918,
     "cacheCreationInputTokens": 0,
-    "cacheReadInputTokens": 16128,
+    "cacheReadInputTokens": 49024,
     "contextWindow": 258400,
     "contextWindowIsAuthoritative": true,
-    "contextTokens": 17707,
-    "percentage": 7,
+    "contextTokens": 50918,
+    "percentage": 20,
     "model": "gpt-5.6-sol"
   }
 }

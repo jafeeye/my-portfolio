@@ -3,20 +3,17 @@ title: illumio 2x2 DR
 toc: true
 date: 2026-05-29
 ---
-## 重裝illumio 
+## 重裝illumio 2x2
 1. 重置資料庫重新設定
 `sudo -u ilo-pce illumio-pce-ctl reset`
-
-2. 4台電腦分別寫入 hosts,給主要那台core FQDN別名 (hosts可用scp複製)
+2. 4台電腦分別寫入 hosts,給主要那台core FQDN別名 (hosts可用scp複製)，並且把主機hostname重命名方便識別
 ```
-172.16.7.106 illumio-core0.bd1.dev
-172.16.7.106 illumio2x2.bd1.dev
-172.16.8.85 illumio-core1.bd1.dev
-172.16.8.112 illumio-data0.bd1.dev
-172.16.8.124 illumio-data1.bd1.dev
+172.16.7.106 sandra.bd1.dev
+172.16.7.106 sandra-core0.bd1.dev
+172.16.8.85 sandra-core1.bd1.dev
+172.16.8.112 sandra-data0.bd1.dev
+172.16.8.124 sandra-data1.bd1.dev
 ```
-
-
 
 /etc/illumio-pce/runtime-env.yml
 ```

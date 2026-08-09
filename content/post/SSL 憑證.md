@@ -178,6 +178,8 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 
 ## EJBCA Community
 ## Step CA
+https://koromatech.com/master-ssl-pki-in-your-homelab-build-a-self-hosted-ca-with-step-ca-phase-1-part-1/
+
 
 ## HashiCorp Vault PKI
 ## OpenBao (開源版)

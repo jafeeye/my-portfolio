@@ -639,14 +639,6 @@ body::before {
 ```
 
 
-
-
-
-
-
-
-
-
 ## Homepage
 http://IP:3000
 ```bookmarks.yaml
@@ -669,3 +661,8 @@ http://IP:3000
 ## Navhub
 
 專案預覽：[https://git-hub-cc.github.io/Deploy/navhub](https://git-hub-cc.github.io/Deploy/navhub) 備用預覽：[https://navhub-cc.netlify.app](https://navhub-cc.netlify.app/) 專案地址：[https://github.com/git-hub-cc/NavHub](https://github.com/git-hub-cc/NavHub)
+
+
+## [Bujic Panel](https://github.com/chao-eng/bujic-panel)
+
+## Navidash

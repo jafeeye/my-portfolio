@@ -6,14 +6,14 @@ date: 2026-07-05
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
 CoreDNS
 dnsmasq：兼具DHCP功能
-mosDNS：適用複雜DNS分流
+mosDNS：常用於複雜DNS分流
 BindDNS
 OxiDNS
 Technitium
 AdGuard Home：也提供簡單DHCP功能
 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
 KeaDHCP
-SmartDNS：內建多上游併發查詢、最快回應優先 (Best IP)機制，也常用於DNS測速
+SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制，
 Pi-hole
 
 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
@@ -849,3 +849,16 @@ tls:
         └── tls.yml
 ```
 
+
+
+## DoH Server
+Adguard DNSProxy
+
+### 用表格對照一次
+
+
+|                      | 資料來源                       | 查詢流程                  | 典型用途                   |
+| -------------------- | -------------------------- | --------------------- | ---------------------- |
+| **權威 DNS Server**    | 自己管理的 zone 記錄              | 直接從自己的資料庫回答           | 你自己網域的官方解析（PowerDNS）   |
+| **DNS Proxy Server** | 完全沒有，仰賴上游                  | 轉發給指定的上游 DNS，快取回應     | 路由器內建 DNS、Pi-hole、家用網路 |
+| **遞迴解析器**            | 沒有自己的 zone，但會自己走完整個 DNS 階層 | 自己一路問到 root/TLD/權威伺服器 | Unbound、企業內部解析器        |
