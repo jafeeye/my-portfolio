@@ -20,5 +20,8 @@ EntraID
 
 ## Traefik Manager
 
+![](static/Pasted%20image%2020260809201308.png)
+
+
 ## dnsweaver
 如果覺得PowerDNS子網域設定太麻煩，可直接用Wild 對應Traefik主機IP，雖然省事但還是不太好

@@ -44,6 +44,7 @@ Docker LXC：Docker  + Coolify (Addons) + Code Server (Addons)
 - Obsidian Ignis
 - traefik
 - screengo
+- OpenList
 
 
 ![](lab.svg)
@@ -69,7 +70,6 @@ Docker LXC：Docker  + Coolify (Addons) + Code Server (Addons)
     - **PVE IPAM 設定**：同樣可以讓 PVE 記錄，但**這個網段的 DHCP 與 DNS 發放權要交給 Windows AD DHCP/DNS**，PVE 的 IPAM 在這邊主要扮演「資產盤點與紀錄」的角色，避免跟 Windows DHCP 派發的 IP 撞號。
 
 ### CA架設
-
 Windows Server CA
 - Enterprise Root CA
 - Enterprise Subordinate CA
@@ -79,9 +79,7 @@ Windows Server CA
 ## 公網網域
 ## 內網網域
 
-
 ## DNS
-
 AdGuard DNS+PowerDNS Authoritative+Caddy
 
 ##  MDM
