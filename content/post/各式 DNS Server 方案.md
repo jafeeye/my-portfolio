@@ -3,6 +3,12 @@ title: 各式 DNS Server 方案
 toc: true
 date: 2026-07-05
 ---
+
+|                      | 資料來源                       | 查詢流程                  | 典型用途                   |
+| -------------------- | -------------------------- | --------------------- | ---------------------- |
+| **權威 DNS Server**    | 自己管理的 zone 記錄              | 直接從自己的資料庫回答           | 你自己網域的官方解析（PowerDNS）   |
+| **DNS Proxy Server** | 完全沒有，仰賴上游                  | 轉發給指定的上游 DNS，快取回應     | 路由器內建 DNS、Pi-hole、家用網路 |
+| **遞迴解析器**            | 沒有自己的 zone，但會自己走完整個 DNS 階層 | 自己一路問到 root/TLD/權威伺服器 | Unbound、企業內部解析器        |
 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole
 CoreDNS
 dnsmasq：兼具DHCP功能
@@ -17,6 +23,7 @@ SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優
 Pi-hole
 DNSControl
 dnsweaver
+Adguard DNSProxy
 
 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
 
@@ -27,7 +34,7 @@ PowerDNS主要架構元件為以下三個
 - dnsdist (DNS 負載均衡與路由器)
 ![](Diagram%203.svg)
 
-### LXC 安裝
+### LXC 安裝PowerDNS
 ```
 # 1. 一口氣安裝 PowerDNS(SQLite3)、Apache 與 PHP 套件
 apt update
@@ -98,123 +105,47 @@ cp /opt/poweradmin_settings.php.bak /opt/poweradmin/config/settings.php
 cp /opt/poweradmin_powerdns.db.bak /opt/poweradmin/powerdns.db
 ```
 
-
-## PowerDNS 與 AD DNS共存
-
-在 Linux 伺服器上配置兩套 PowerDNS 元件，在PVE Script 下的PowerDNS預設沒有安裝PowerDNS Recursor，先補裝此套件，此原理是透過 PowerDNS Recursor 遞迴解析，把不同網域交給不同的DNS查詢，首先給AD查詢，然後再給PowerDNS Authoritative，最後再派給外網DNS
-
-### 配置 PowerDNS Authoritative (授權伺服器)
-
-負責管理 AD 以外的其他內網自訂紀錄（例如：Nginx、Harbor、GitLab 等伺服器的 `*.internal` 紀錄）。
-- **修改設定檔：** `/etc/powerdns/pdns.conf`
-- **關鍵修改：** 因為預設用 PowerDNS Authoritative 的 Port 53，這邊交給給 Recursor，改成`5300` 埠。
-```Ini, TOML
-    local-port=5300
-    local-address=127.0.0.1
+## PowerDNS 資料庫問題
 ```
-- **重啟服務：** `sudo systemctl restart pdns`
-
-### 配置 PowerDNS Recursor 5.x (遞迴伺服器)
-
-站在內網第一線，負責接收所有設備的 DNS 請求（Port 53），並落實條件式轉發（Forward Zones）。
-1. **修改YAML （適用 5.x 新版)設定檔：** `/etc/powerdns/recursor.conf`
-```YAML
-    dnssec:
-      trustanchorfile: /usr/share/dns/root.key
-    
-    recursor:
-      hint_file: /usr/share/dns/root.hints
-      include_dir: /etc/powerdns/recursor.d
-      security_poll_suffix: ''
-    
-      # 💡 5.x 新版條件式轉發 (將 AD 紀錄與內網紀錄精準分流)
-      forward_zones:
-        # 只要查 AD 網域，就丟給 Windows DC (假設 DC IP 是 192.168.1.10)
-        - zone: ad.internal
-          forwarders: [ 192.168.1.10 ]
-        - zone: _msdcs.ad.internal
-          forwarders: [ 192.168.1.10 ]
-    
-        # 其他內部自訂域名，丟給剛剛改聽 5300 埠的 PowerDNS Authoritative
-        - zone: internal
-          forwarders: [ 127.0.0.1:5300 ]
-    
-    # 💡 5.x 正確的監聽入口設定：監聽全內網的標準 Port 53
-    incoming:
-      listen:
-        - 0.0.0.0:53
+簡易維護使用sqlite
+# 查詢底下檔案權限
+ls -la /var/lib/powerdns/
+# 發現底下有pdns.sqlite3-shm跟pdns.sqlite3-wal，看權限是不是屬於www-data
 ```
-2.  **驗證 YAML 語法並重啟：**
-```Bash
-# 檢查設定檔是否正確（必須無 Fatal 錯誤）
-sudo pdns_recursor --check-config
-# 重啟服務
+
+為了解決這種因為「兩個不同帳號同時搶同一個 SQLite 資料庫」產生的權限衝突，最 root-cause（根本）的解法是**把 `pdns` 帳號直接加進 `www-data` 群組，並利用 Linux 的 `umask` 或是 `SGID` 讓新建立的檔案強制繼承群組**。
+請直接依序執行以下三個動作：
+### 步驟一：把 pdns 帳號加到 www-data 群組
+
+讓 PowerDNS 服務有權限處理網頁端建立的東西：
+```
+sudo usermod -aG www-data pdns
+sudo usermod -aG pdns www-data
+```
+### 步驟二：設定資料夾的 SGID（黃金關鍵）
+
+我們要在 `/var/lib/powerdns` 資料夾上加上一個特殊的 `SGID` 權限（原本的 `775` 改成 `2775`）。它的神奇之處在於：**未來不管是誰（pdns 或是 www-data）在這個資料夾下建立任何新檔案（包括臨時的 -shm 和 -wal），群組一律會強制繼承資料夾的群組（也就是 www-data）**！
+```
+# 1. 再次把所有權交回，並把資料夾群組定為 www-data
+sudo chown -R pdns:www-data /var/lib/powerdns
+
+# 2. 開啟 SGID (注意那個 2)
+sudo chmod 2775 /var/lib/powerdns
+
+# 3. 再次把現有的檔案權限刷乾淨
+sudo chmod 664 /var/lib/powerdns/pdns.sqlite*
+```
+### 步驟三：重啟 PowerDNS 與你的網頁後台服務
+
+為了讓剛剛加入群組（`usermod`）的設定在服務中生效，一定要重啟：
+```
+sudo systemctl restart pdns
 sudo systemctl restart pdns-recursor
+
+# 如果你有裝網頁後台（例如 powerdns-admin），也請重啟它，或者重啟 nginx/apache
+# sudo systemctl restart powerdns-admin
+# sudo systemctl restart apache
 ```
-
-
-## PowerDNS (Authoritative+Recursor) + Adguard 
-
-第一次進入ADguard是IP:3000,設定完後為IP:80進入
-
-![](Pasted%20image%2020260705144248.png)
-之後修改 nano /opt/AdGuardHome/AdGuardHome.yaml
-```
-http
-  address: 192.168.10.6:80
-dns:
-  bind_hosts:
-    - 192.168.10.6
-```
-
-### 🌐 混用後的流量封包走向
-
-內網所有設備（PC、手機、伺服器、舊設備）的 DNS，統一指向 **AdGuard Home**（Port 53）。
-當設備發出 DNS 查詢時，封包會經歷以下完美的旅程：
-
-1. **第一關：AdGuard Home（前線盾牌 🛡️）**
-    - 收到查詢後，先比對廣告、追蹤器與惡意網站黑名單。
-    - **如果是廣告**（例如 `ads.doubleclick.net`）：直接在第一關**攔截並丟棄**。
-    - 查詢上游伺服器：經過特殊寫法，**把特定網域網址轉發給後方 PowerDNS Recursor**。
-        
-2. **第二關：PowerDNS Recursor（核心分流 🚦）**
-    - 收到 AdGuard 送過來的乾淨請求。
-    - 執行你先前設定好的 YAML 條件式轉發（Forward Zones）邏輯：
-        - 查 AD 網域（`ad.internal`） ➡️ 轉發給 **Windows AD DNS**（確保 LDAPS 正常）。
-        - 查內部域名（`internal`） ➡️ 轉發給 **PowerDNS Authoritative (Port 5300)**。
-
-3. 設定 AdGuard Home 上游 DNS
-4. 在 **上游 DNS 伺服器 (Upstream DNS servers)** 欄位中，清空原本預設的外網 DNS，**唯獨填入你 PowerDNS Recursor 的 IP 與新 Port**：
-```
-https://dns10.quad9.net/dns-query
-[/internal/]192.168.10.6:53
-```
-
-Adguard 有簡單提供 DNS Rewire 功能，就是做本地域名解析功能，但功能太過簡潔
-
-
-
-## Windows DNS Zonetransfer PowerDNS
-1. 讓PowerDNS 支援Secondary功能
-```
-nano /etc/powerdns/pdns.conf
-secondary=yes
-systemctl restart pdns
-```
-
-2. Windows DNS 開啟 ZoneTransfer
-![](Pasted%20image%2020260708112538.png)
-
-3. PowerDNS 加入從屬區域
-![](Pasted%20image%2020260708112816.png)
-4.開啟同步
-```
-#測試是否有收到IP
-dig axfr bd1.dev @IP
-#同步PowerDNS
-pdns_control retrieve bd1.dev
-```
-
 
 ## PowerDNS 外網解析
 1. 把原本 Authoritative Server 的Port 53改成別的
@@ -386,120 +317,125 @@ sqlite> select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.se
 >重新寫入DNS必須要重新創立虛擬機才有
 `dig eve.pve.box2.kmc.gr.jp @192.168.240.13`
 
-## dnsmasq
-透過LXC 安裝
-```
-apt update && apt upgrade -y
-apt install dnsmasq -y
-# 確認port 53正常
-ss -tunlp
-```
-編寫 **dnsmasq.conf**
-```
-mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak 
-nano /etc/dnsmasq.conf
-```
-設定內容
-```
-# --- 基礎設定 ---
-# 監聽的介面，也可以寫 interface=eth0
-listen-address=127.0.0.1, 192.168.1.53  # 192.168.1.53 是這台 LXC 的固定 IP
-port=53
-domain-needed       # 限制唯有完整網域才能往外查（不轉發純主機名）
-bogus-priv          # 防止私有 IP 逆向解析請求流到外網
+## PowerDNS 相關指令
 
-# --- 上游 DNS 伺服器 (當 dnsmasq 找不到答案時向外問) ---
-server=1.1.1.1
-server=8.8.8.8
-
-# --- 內網本地 DNS 解析 ---
-local=/lab.home/     # 定義你的本地專屬網域
-expand-hosts
-domain=lab.home
-
-# --- DHCP 伺服器設定 (選用，如果家裡有路由器發 IP 則不要開) ---
-# 發放的 IP 範圍，以及租期 12 小時
-dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,12h
-# 預設閘道 (通常是你家路由器的 IP)
-dhcp-option=3,192.168.1.1
-# 分配給用戶端的 DNS 伺服器 (指向這台 LXC 自己)
-dhcp-option=6,192.168.1.53
-
-# --- 靜態 IP 綁定 (Static DHCP) ---
-# 適合把你家 PVE 主機、NAS、其他重要 VM 的 MAC 鎖定固定 IP
-dhcp-host=AA:BB:CC:DD:EE:FF,pve-host,192.168.1.10,infinite
-dhcp-host=11:22:33:44:55:66,my-nas,192.168.1.20,infinite
+### 清除Recursor
 ```
+dig @172.16.8.8 -p 53 illumio-kevin.bd1.dev
+rec_control wipe-cache illumio-sandra.bd2.dev
+```
+PowerDNS Recursor`rec_control`清快取、看統計、reload 設定等
+PowerDNS Authoritative `pdnsutil`管理 zone/記錄、check-zone、increase-serial 等
 
-設定 PXE Proxy
-```
-interface = eth0
-bind-interfaces
-dhcp-range=192.168.0.0, proxy
-pxe-service=7, "ipxe net boot", Boot\x64\wdsmgfw.efi, 192.168.181.188
-```
 
-啟用
-```
-systemctl enable dnsmasq 
-systemctl start dnsmasq
-systemctl status dnsmasq
-```
 
-## PowerDNS 資料庫問題
-```
-簡易維護使用sqlite
-# 查詢底下檔案權限
-ls -la /var/lib/powerdns/
-# 發現底下有pdns.sqlite3-shm跟pdns.sqlite3-wal，看權限是不是屬於www-data
-```
 
-為了解決這種因為「兩個不同帳號同時搶同一個 SQLite 資料庫」產生的權限衝突，最 root-cause（根本）的解法是**把 `pdns` 帳號直接加進 `www-data` 群組，並利用 Linux 的 `umask` 或是 `SGID` 讓新建立的檔案強制繼承群組**。
-請直接依序執行以下三個動作：
-### 步驟一：把 pdns 帳號加到 www-data 群組
-
-讓 PowerDNS 服務有權限處理網頁端建立的東西：
+## DNS 相關應用
+### 實作1：PowerDNS 與 AD DNS共存
+在 Linux 伺服器上配置兩套 PowerDNS 元件，在PVE Script 下的PowerDNS預設沒有安裝PowerDNS Recursor，先補裝此套件，此原理是透過 PowerDNS Recursor 遞迴解析，把不同網域交給不同的DNS查詢，首先給AD查詢，然後再給PowerDNS Authoritative，最後再派給外網DNS
+#### 配置 PowerDNS Authoritative (授權伺服器)
+負責管理 AD 以外的其他內網自訂紀錄（例如：Nginx、Harbor、GitLab 等伺服器的 `*.internal` 紀錄）。
+- **修改設定檔：** `/etc/powerdns/pdns.conf`
+- **關鍵修改：** 因為預設用 PowerDNS Authoritative 的 Port 53，這邊交給給 Recursor，改成`5300` 埠。
+```Ini, TOML
+    local-port=5300
+    local-address=127.0.0.1
 ```
-sudo usermod -aG www-data pdns
-sudo usermod -aG pdns www-data
+- **重啟服務：** `sudo systemctl restart pdns`
+#### 配置 PowerDNS Recursor (遞迴伺服器)
+站在內網第一線，負責接收所有設備的 DNS 請求（Port 53），並落實條件式轉發（Forward Zones）。
+1. **修改YAML （適用 5.x 新版)設定檔：** `/etc/powerdns/recursor.conf`
+```YAML
+    dnssec:
+      trustanchorfile: /usr/share/dns/root.key
+    
+    recursor:
+      hint_file: /usr/share/dns/root.hints
+      include_dir: /etc/powerdns/recursor.d
+      security_poll_suffix: ''
+    
+      # 💡 5.x 新版條件式轉發 (將 AD 紀錄與內網紀錄精準分流)
+      forward_zones:
+        # 只要查 AD 網域，就丟給 Windows DC (假設 DC IP 是 192.168.1.10)
+        - zone: ad.internal
+          forwarders: [ 192.168.1.10 ]
+        - zone: _msdcs.ad.internal
+          forwarders: [ 192.168.1.10 ]
+    
+        # 其他內部自訂域名，丟給剛剛改聽 5300 埠的 PowerDNS Authoritative
+        - zone: internal
+          forwarders: [ 127.0.0.1:5300 ]
+    
+    # 💡 5.x 正確的監聽入口設定：監聽全內網的標準 Port 53
+    incoming:
+      listen:
+        - 0.0.0.0:53
 ```
-### 步驟二：設定資料夾的 SGID（黃金關鍵）
-
-我們要在 `/var/lib/powerdns` 資料夾上加上一個特殊的 `SGID` 權限（原本的 `775` 改成 `2775`）。它的神奇之處在於：**未來不管是誰（pdns 或是 www-data）在這個資料夾下建立任何新檔案（包括臨時的 -shm 和 -wal），群組一律會強制繼承資料夾的群組（也就是 www-data）**！
-```
-# 1. 再次把所有權交回，並把資料夾群組定為 www-data
-sudo chown -R pdns:www-data /var/lib/powerdns
-
-# 2. 開啟 SGID (注意那個 2)
-sudo chmod 2775 /var/lib/powerdns
-
-# 3. 再次把現有的檔案權限刷乾淨
-sudo chmod 664 /var/lib/powerdns/pdns.sqlite*
-```
-### 步驟三：重啟 PowerDNS 與你的網頁後台服務
-
-為了讓剛剛加入群組（`usermod`）的設定在服務中生效，一定要重啟：
-```
-sudo systemctl restart pdns
+2.  **驗證 YAML 語法並重啟：**
+```Bash
+# 檢查設定檔是否正確（必須無 Fatal 錯誤）
+sudo pdns_recursor --check-config
+# 重啟服務
 sudo systemctl restart pdns-recursor
-
-# 如果你有裝網頁後台（例如 powerdns-admin），也請重啟它，或者重啟 nginx/apache
-# sudo systemctl restart powerdns-admin
-# sudo systemctl restart apache
-```
-## 測試
-```
-# DNS 主機那台
-dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
-
-Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
-# 修改 nano /etc/resolv.conf
 ```
 
-## DNSProxy
+### 實作2：PowerDNS (Authoritative+Recursor) + AdGuard 
+#### 混用流量封包走向
+
+內網所有設備（PC、手機、伺服器、舊設備）的 DNS，統一指向 **AdGuard Home**（Port 53）。
+當設備發出 DNS 查詢時，封包會經歷以下完美的旅程：
+**第一關：AdGuard Home（前線盾牌 🛡️）**
+    - 收到查詢後，先比對廣告、追蹤器與惡意網站黑名單。
+    - **如果是廣告**（例如 `ads.doubleclick.net`）：直接在第一關**攔截並丟棄**。
+    - 查詢上游伺服器：經過特殊寫法，**把特定網域網址轉發給後方 PowerDNS Recursor**。
+**第二關：PowerDNS Recursor（核心分流 🚦）**
+    - 收到 AdGuard 送過來的乾淨請求。
+    - 執行你先前設定好的 YAML 條件式轉發（Forward Zones）邏輯：
+        - 查 AD 網域（`ad.internal`） ➡️ 轉發給 **Windows AD DNS**（確保 LDAPS 正常）。
+        - 查內部域名（`internal`） ➡️ 轉發給 **PowerDNS Authoritative (Port 5300)**。
+
+1. 第一次進入ADguard是IP:3000,設定完後為IP:80進入
+
+![](Pasted%20image%2020260705144248.png)
+2. 之後修改 nano /opt/AdGuardHome/AdGuardHome.yaml
+```
+http
+  address: 192.168.10.6:80
+dns:
+  bind_hosts:
+    - 192.168.10.6
+```
+
+3. 設定 AdGuard Home 上游 DNS，在  (Upstream DNS servers) 欄位中，清空原本預設的外網 DNS，**唯獨填入你 PowerDNS Recursor 的 IP 與新 Port**：
+```
+https://dns10.quad9.net/dns-query
+[/internal/]192.168.10.6:53
+```
+Adguard 有簡單提供 DNS Rewire 功能，就是做本地域名解析功能，但功能太過簡潔
+
+### 實作3：Windows DNS Zonetransfer PowerDNS
+1. 讓PowerDNS 支援Secondary功能
+```
+nano /etc/powerdns/pdns.conf
+secondary=yes
+systemctl restart pdns
+```
+
+2. Windows DNS 開啟 ZoneTransfer
+![](Pasted%20image%2020260708112538.png)
+
+3. PowerDNS 加入從屬區域
+![](Pasted%20image%2020260708112816.png)
+4.開啟同步
+```
+#測試是否有收到IP
+dig axfr bd1.dev @IP
+#同步PowerDNS
+pdns_control retrieve bd1.dev
+```
 
 
-## DNSdist
+### 實作4：自簽IP證書+DNSdist
 1. 安裝
 ```
 apt update && apt install -y dnsdist
@@ -561,10 +497,7 @@ curl -k -v -H "accept: application/dns-json" "https://192.168.10.3/dns-query?nam
 ![](static/Pasted%20image%2020260718204149.png)
 
 
-## Pi-hole
-
-
-## Caddy DOH+反向代理
+### 實作5：Caddy DOH+反向代理
 ```
 scp /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt .
 ```
@@ -629,7 +562,7 @@ webserver('0.0.0.0:8082')
 setWebserverConfig({password="設定密碼", acl="0.0.0.0/0"})
 ```
 
-## 步驟二：在 LXC 內安裝 Caddy
+#### 步驟二：在 LXC 內安裝 Caddy
 
 進入該 LXC 的 Console（主控台），依序執行以下官方標準 APT 安裝指令：
 
@@ -653,7 +586,7 @@ apt update && apt install -y caddy
 systemctl status caddy
 ```
 
-## 步驟三：設定你的 Caddyfile
+#### 步驟三：設定你的 Caddyfile
 
 Caddy 安裝好後，預設的設定檔位在 `/etc/caddy/Caddyfile`。
 
@@ -710,29 +643,89 @@ caddy validate --config /etc/caddy/Caddyfile
 caddy reload --config /etc/caddy/Caddyfile
 ```
 
-
-## XCaddy 
+#### XCaddy 
 
 做到只轉發第7層流量，不轉第4層
 瀏覽器跑L7 Agent 跑L4
 
 
+### 實作6：Adguard Home+MosDNS+SmartDNS
+AD去广告，MosDNS分流，SmartDNS测速
 
 
-## 清除Recursor
+## DNS測試指令
 ```
-dig @172.16.8.8 -p 53 illumio-kevin.bd1.dev
-rec_control wipe-cache illumio-sandra.bd2.dev
+# DNS 主機那台
+dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
+
+Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
+# 修改 nano /etc/resolv.conf
 ```
 
+## dnsmasq
+透過LXC 安裝
+```
+apt update && apt upgrade -y
+apt install dnsmasq -y
+# 確認port 53正常
+ss -tunlp
+```
+編寫 **dnsmasq.conf**
+```
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak 
+nano /etc/dnsmasq.conf
+```
+設定內容
+```
+# --- 基礎設定 ---
+# 監聽的介面，也可以寫 interface=eth0
+listen-address=127.0.0.1, 192.168.1.53  # 192.168.1.53 是這台 LXC 的固定 IP
+port=53
+domain-needed       # 限制唯有完整網域才能往外查（不轉發純主機名）
+bogus-priv          # 防止私有 IP 逆向解析請求流到外網
+
+# --- 上游 DNS 伺服器 (當 dnsmasq 找不到答案時向外問) ---
+server=1.1.1.1
+server=8.8.8.8
+
+# --- 內網本地 DNS 解析 ---
+local=/lab.home/     # 定義你的本地專屬網域
+expand-hosts
+domain=lab.home
+
+# --- DHCP 伺服器設定 (選用，如果家裡有路由器發 IP 則不要開) ---
+# 發放的 IP 範圍，以及租期 12 小時
+dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,12h
+# 預設閘道 (通常是你家路由器的 IP)
+dhcp-option=3,192.168.1.1
+# 分配給用戶端的 DNS 伺服器 (指向這台 LXC 自己)
+dhcp-option=6,192.168.1.53
+
+# --- 靜態 IP 綁定 (Static DHCP) ---
+# 適合把你家 PVE 主機、NAS、其他重要 VM 的 MAC 鎖定固定 IP
+dhcp-host=AA:BB:CC:DD:EE:FF,pve-host,192.168.1.10,infinite
+dhcp-host=11:22:33:44:55:66,my-nas,192.168.1.20,infinite
+```
+
+設定 PXE Proxy
+```
+interface = eth0
+bind-interfaces
+dhcp-range=192.168.0.0, proxy
+pxe-service=7, "ipxe net boot", Boot\x64\wdsmgfw.efi, 192.168.181.188
+```
+
+啟用
+```
+systemctl enable dnsmasq 
+systemctl start dnsmasq
+systemctl status dnsmasq
+```
+
+## DNSProxy
 
 
-PowerDNS Recursor`rec_control`清快取、看統計、reload 設定等
-PowerDNS Authoritative `pdnsutil`管理 zone/記錄、check-zone、increase-serial 等
-
-
-
-## Adguard HomeMosDNS+SmartDNS。AD去广告，MosDNS分流，SmartDNS测速
+## Pi-hole
 
 
 ## Traefik
@@ -843,14 +836,6 @@ tls:
 
 
 
-## DoH Server
-Adguard DNSProxy
-
-### 用表格對照一次
 
 
-|                      | 資料來源                       | 查詢流程                  | 典型用途                   |
-| -------------------- | -------------------------- | --------------------- | ---------------------- |
-| **權威 DNS Server**    | 自己管理的 zone 記錄              | 直接從自己的資料庫回答           | 你自己網域的官方解析（PowerDNS）   |
-| **DNS Proxy Server** | 完全沒有，仰賴上游                  | 轉發給指定的上游 DNS，快取回應     | 路由器內建 DNS、Pi-hole、家用網路 |
-| **遞迴解析器**            | 沒有自己的 zone，但會自己走完整個 DNS 階層 | 自己一路問到 root/TLD/權威伺服器 | Unbound、企業內部解析器        |
+
