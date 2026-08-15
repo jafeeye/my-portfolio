@@ -15,6 +15,8 @@ Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)
 KeaDHCP
 SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制，
 Pi-hole
+DNSControl
+dnsweaver
 
 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS
 
@@ -474,7 +476,6 @@ sudo chmod 2775 /var/lib/powerdns
 # 3. 再次把現有的檔案權限刷乾淨
 sudo chmod 664 /var/lib/powerdns/pdns.sqlite*
 ```
-
 ### 步驟三：重啟 PowerDNS 與你的網頁後台服務
 
 為了讓剛剛加入群組（`usermod`）的設定在服務中生效，一定要重啟：
@@ -541,7 +542,6 @@ newServer({address="192.168.10.3:53", name="powerdns-backend"})
 webserver('0.0.0.0:8080')
 setWebserverConfig({password="設定密碼", acl="0.0.0.0/0"})
 ```
-
 5. 啟動
 ```
 sudo systemctl enable --now dnsdist
@@ -568,7 +568,6 @@ curl -k -v -H "accept: application/dns-json" "https://192.168.10.3/dns-query?nam
 ```
 scp /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt .
 ```
-
 
 Caddy 寫法
 ```
@@ -646,16 +645,11 @@ curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmo
 ```
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.pve.d/caddy-stable.list
 ```
-
 _(備註：有些系統路徑可能不同，若報錯也可以用 `/etc/apt/sources.list.v/` 或標準的 `/etc/apt/sources.list.d/caddy-stable.list`)_
 
 4. 正式安裝 Caddy
 ```
 apt update && apt install -y caddy
-```
-
-安裝完成後，Caddy 就會自動以 Systemd 服務的形式在背景跑起來了！你可以用這行指令確認狀態：
-```
 systemctl status caddy
 ```
 
@@ -663,12 +657,11 @@ systemctl status caddy
 
 Caddy 安裝好後，預設的設定檔位在 `/etc/caddy/Caddyfile`。
 
-### 1. 編輯設定檔
+1. 編輯設定檔
 ```
 nano /etc/caddy/Caddyfile
 ```
-### 2. 配置你的內網服務
-
+ 2. 配置你的內網服務
 把你之前規劃的 Local CA、DoH 反向代理及 Open WebUI 填進去。這裡結合我們之前討論的優化結構（加入 `.internal` 保留網域）：
 
 ```
@@ -707,8 +700,7 @@ sso.internal {
 }
 ```
 
-### 3. 檢查並重載 Caddy 設定
-
+3. 檢查並重載 Caddy 設定
 每次修改完 `Caddyfile`，請養成好習慣在 LXC 內跑這兩行命令：
 ```
 # 檢查語法有沒有寫錯

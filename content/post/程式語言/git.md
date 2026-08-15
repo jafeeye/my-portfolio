@@ -1,8 +1,23 @@
 ---
-title: git
+title: Git 同步部落格
 toc: true
 date: 2026-06-18
 ---
+## 拉取同步專案
+```
+## 建立本地 Git 身分
+git config --global user.name "你的GitHub名稱"
+git config --global user.email "你的GitHub Email"
+## clone專案
+git clone https://github.com/你的帳號/my-project.git
+git add .
+git commit -m "update"
+## 在這部就會出現github登入畫面
+git push
+```
+
+## VuePress
+
 
 ## 建立hugo
 ```

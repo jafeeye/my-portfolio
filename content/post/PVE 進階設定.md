@@ -414,23 +414,23 @@ dpkg -i pve-microvm_*.deb
 ## 硬碟修改
 ### 匯入VM硬碟
 ```
-qm importdisk <VMID> <虛擬機硬碟檔> <匯入位置> --format <格式> 
+qm importdisk <VMID> <虛擬機硬碟檔> <匯入放置位置> --format <格式> 
 qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
 ```
-搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
-硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
+- 匯入成vmdk、raw不能做快照
+- 匯入放置位置如果在LVM，因為會轉成raw如果原VM硬碟大小為500G(實際占用可能為10G)，但會轉換時LVM真實大小小於500G直接報錯
+- 硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
+- 搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
 
 ### 修改VM硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
-當要Shrink虛擬磁碟，需透過指令縮寫指令
 ```
+#當要Shrink虛擬磁碟，需透過指令縮減指令
 qemu-img resize --shrink /var/lib/vz/images/148/vm-148-disk-0.qcow2 50G
 qm rescan --vmid 148  //重新偵測硬碟大小
 ```
 
-
 ### 轉換VM硬碟
-
 如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
 vmdk qcow 互轉
 cd /var/lib/vz/images/147/
@@ -445,7 +445,7 @@ qemu-img info 可以檢查真實大小
 WEBGUI/Move disk 可以做轉換格式動作
 ![](Pasted%20image%2020260530180758.png)
 
-## LVM 擴容處理
+### LVM 擴容處理
 常用幾種格式
 LVM:放光碟檔及一些不重要檔案，大概切16 GB ~ 32 GB
 LVM-thin:跑VM核心，剩下全部都給他
