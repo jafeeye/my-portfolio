@@ -411,7 +411,16 @@ dpkg -i pve-microvm_*.deb
 ```
 ![](static/Pasted%20image%2020260711232519.png)
 
-## 修改硬碟大小
+## 硬碟修改
+### 匯入VM硬碟
+```
+qm importdisk <VMID> <虛擬機硬碟檔> <匯入位置> --format <格式> 
+qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
+```
+搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
+硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
+
+### 修改VM硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
 當要Shrink虛擬磁碟，需透過指令縮寫指令
 ```
@@ -419,6 +428,22 @@ qemu-img resize --shrink /var/lib/vz/images/148/vm-148-disk-0.qcow2 50G
 qm rescan --vmid 148  //重新偵測硬碟大小
 ```
 
+
+### 轉換VM硬碟
+
+如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
+vmdk qcow 互轉
+cd /var/lib/vz/images/147/
+qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
+
+縮減磁碟
+使用GParted 開機移動磁區
+qemu-img resize --shrink vm-147-disk-0.qcow2 160G
+qemu-img info 可以檢查真實大小
+如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
+
+WEBGUI/Move disk 可以做轉換格式動作
+![](Pasted%20image%2020260530180758.png)
 
 ## LVM 擴容處理
 常用幾種格式
@@ -528,29 +553,6 @@ swap pve -wi-ao----    8.00g
 ## 遷移: 轉換至ESXi
 ![](PixPin_2026-05-02_00-17-16.png)
 
-
-## 硬碟大小
-
-如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
-vmdk qcow 互轉
-cd /var/lib/vz/images/147/
-qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
-
-縮減磁碟
-使用GParted 開機移動磁區
-qemu-img resize --shrink vm-147-disk-0.qcow2 160G
-qemu-img info 可以檢查真實大小
-如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
-
-WEBGUI/Move disk 可以做轉換格式動作
-![](Pasted%20image%2020260530180758.png)
-
-## 匯入硬碟
-```
-qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
-```
-搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan --vmid 149
-硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白
 
 ## 不同虛擬機下硬碟掛載到目前VM
 正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載

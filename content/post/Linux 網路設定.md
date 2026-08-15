@@ -3,6 +3,14 @@ title: Linux 網路設定
 date: 2026-07-13
 toc: true
 ---
+## Linux 常用網路指令
+```
+ip -br address 常看網卡所有ip
+ip route
+```
+
+
+
 Debian 固定DNS
 
 
@@ -15,11 +23,10 @@ apt update && apt install systemd-resolved -y
 Ubuntu LXC，預設用systemd-resolved ，會把PVE WebUI上的DNS套到LXC容器上
 
 預設會是用 Netplan。你可以在 YAML 設定檔中，明確指定不使用 DHCP 帶來的 DNS（`dhcp4-overrides`）。
-1. **打開 Netplan 設定檔：**
+1. **打開 Netplan 設定檔：** (檔名可能不同)
 ```
 nano /etc/netplan/50-cloud-init.yaml
 ```
-    _(檔名可能依環境不同，請至 `/etc/netplan/` 查看)_
 2. **修改內容加入 overrides：**
 ```
 network:
