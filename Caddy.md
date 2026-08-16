@@ -211,6 +211,9 @@ for f in /tmp/cert*.pem; do
   openssl x509 -in "$f" -noout -subject -issuer
 done
 
+## 確認憑證是不是3層
+grep -c "BEGIN CERTIFICATE" /home/ctuser/tls.crt
+
 ## 驗證
 openssl verify \
   -CAfile /home/ctuser/caddy-root.crt \
@@ -219,10 +222,6 @@ openssl verify \
 ```
 複製憑證到安裝目錄
 ```
-sudo cp \
-  /root/.acme.sh/colortokens.bd1.dev/fullchain.cer \
-  /home/ctuser/tls.crt
-
 sudo cp \
   /root/.acme.sh/colortokens.bd1.dev/colortokens.bd1.dev.key \
   /home/ctuser/tls.key
@@ -244,6 +243,10 @@ HTTPS
 yes
 ./deploy.sh --poc
 ```
+確認全綠燈
+![](static/Pasted%20image%2020260816201228.png)
+
+
 
 ./deploy.sh --poc 不能重新佈署 可能有其他方法
 ## wildcard SAN + ACME 驗證機制
