@@ -1,3 +1,9 @@
+---
+title: Caddy
+toc: true
+date: 2026-08-16
+---
+
 DNS Chanllage 提供 `http-01 / dns-01 / tls-alpn-01`
 Caddyfile **已經有一個 `{}` global block** 而是要合併
 ```
