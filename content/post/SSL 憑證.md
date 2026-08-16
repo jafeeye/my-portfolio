@@ -8,6 +8,7 @@ date: 2026-07-10
 - 使用免費Let's Crypt 
 - 使用免費DuckDNS,後墜為DuckDNS
 - 反向代理騙過驗證 把lan 又代理成 duckdns
+![](static/mtls_image.png)
 
 
 ![](Diagram%204.svg)
