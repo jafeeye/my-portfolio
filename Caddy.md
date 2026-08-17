@@ -126,7 +126,7 @@ export ACME_TLS_INSECURE=1
 ```
 
 
-## 實例:簽一張Colortokens憑證
+## 實例1:簽一張Colortokens憑證並安裝
 架構圖
 ```
 Caddy ACME CA
@@ -156,13 +156,11 @@ tls.key
 ```
 
 
-
-
 ```
 sudo apt update && apt install -y socat
 ```
 
-要使用root權限簽發
+要使用root權限簽發，這邊比較麻煩要求憑證要有RSA，萬用憑證 Wildcard SAN ，ACME 驗證要能簽發成功，要進行DNS-01 Challenge
 ```
 ~/.acme.sh/acme.sh --issue \
   --server https://acme-ca.test:9000/acme/local/directory \
@@ -219,9 +217,7 @@ openssl verify \
 ```
 複製憑證到安裝目錄
 ```
-sudo cp \
-  /root/.acme.sh/colortokens.bd1.dev/fullchain.cer \
-  /home/ctuser/tls.crt
+update-ca-certificates
 
 sudo cp \
   /root/.acme.sh/colortokens.bd1.dev/colortokens.bd1.dev.key \
@@ -234,7 +230,7 @@ sudo chown ctuser:ctuser \
 sudo chmod 644 /home/ctuser/tls.crt
 sudo chmod 600 /home/ctuser/tls.key
 ```
-## 安裝
+### 安裝
 ```
 cd $HOME/onprem-infrastructure/single-node
 ./deploy.sh --domain
@@ -246,5 +242,3 @@ yes
 ```
 
 ./deploy.sh --poc 不能重新佈署 可能有其他方法
-## wildcard SAN + ACME 驗證機制
-DNS-01 challenge
