@@ -424,24 +424,20 @@ qm importdisk 149 /var/lib/vz/images/WIN-8B2EOR9COIE.qcow2 local --format qcow2
 
 ### 修改VM硬碟大小
 當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
+縮減磁碟方法
 ```
-#當要Shrink虛擬磁碟，需透過指令縮減指令
+#1.使用GParted 開機移動磁區
+#2.當要Shrink虛擬磁碟，需透過指令縮減指令
 qemu-img resize --shrink /var/lib/vz/images/148/vm-148-disk-0.qcow2 50G
 qm rescan --vmid 148  //重新偵測硬碟大小
+#3.qemu-img info 可以檢查真實大小
 ```
-
+如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
 ### 轉換VM硬碟
 如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
 vmdk qcow 互轉
 cd /var/lib/vz/images/147/
 qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
-
-縮減磁碟
-使用GParted 開機移動磁區
-qemu-img resize --shrink vm-147-disk-0.qcow2 160G
-qemu-img info 可以檢查真實大小
-如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來
-
 WEBGUI/Move disk 可以做轉換格式動作
 ![](Pasted%20image%2020260530180758.png)
 
@@ -517,6 +513,29 @@ swap pve -wi-ao----    8.00g
 4. 把剛剛創立的lvs掛載上去就完成LVM-thin建立
 ![](static/Pasted%20image%2020260718223625.png)
 
+## 遷移
+### 遷移: 從ESXi 
+會有驅動問題，在Windows不能開機就選SATA
+![](260404-pve.png)
+
+### 遷移: P2V
+1. 把目前開機的作業系統,使用對應軟體可直接熱轉換
+- Disk2vhd
+- StarWind V2V
+2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+![](260404-v2v.png)
+
+### 遷移: Migrate
+在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
+最大影響快照在CT 模式做不了
+- 403 Permission check failed (changing feature flags (except nesting) is only allowed for root@pam)：LXC 打開 `features: nesting=1,keyctl=1`
+![](static/Pasted%20image%2020260711175052.png)
+如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
+
+### 遷移: 轉換至ESXi
+![](PixPin_2026-05-02_00-17-16.png)
+
+
 ## 啟用防火牆
 1. `Datacenter/Firewall/Option` 選項Firewall切換成Yes
 2. `Node/Firewall` 選項Firewall切換成Yes
@@ -530,29 +549,6 @@ swap pve -wi-ao----    8.00g
 
 ## PVE Tools 9
 工具地址 `https://github.com/Mapleawaa/PVE-Tools-9`
-
-
-## 遷移: 從ESXi 
-會有驅動問題，在Windows不能開機就選SATA
-![](260404-pve.png)
-
-## 遷移: P2V
-1. 把目前開機的作業系統,使用對應軟體可直接熱轉換
-- Disk2vhd
-- StarWind V2V
-2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
-![](260404-v2v.png)
-
-## 遷移: Migrate
-在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
-最大影響快照在CT 模式做不了
-- 403 Permission check failed (changing feature flags (except nesting) is only allowed for root@pam)：LXC 打開 `features: nesting=1,keyctl=1`
-![](static/Pasted%20image%2020260711175052.png)
-如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
-
-## 遷移: 轉換至ESXi
-![](PixPin_2026-05-02_00-17-16.png)
-
 
 ## 不同虛擬機下硬碟掛載到目前VM
 正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載

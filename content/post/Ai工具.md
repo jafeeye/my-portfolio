@@ -18,6 +18,8 @@ OpenDesign
 Skill 資料夾
 C:\Users\帳戶名\.codex\skill
 
+
+ADHD
 [codex-ppt-skill](https://github.com/ningzimu/codex-ppt-skill/)
 
 使用方法：＠Codex Ppt

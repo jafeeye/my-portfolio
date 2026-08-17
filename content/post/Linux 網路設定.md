@@ -5,8 +5,17 @@ toc: true
 ---
 ## Linux 常用網路指令
 ```
-ip -br address 常看網卡所有ip
+ip -br address                      //常看網卡所有ip
+ip link
 ip route
+resolvectl status  cat /etc/resolv.conf
+nc -vz IP PORT
+curl -v URL                         //測HTTP
+curl -vk URL                        //測HTTPS
+nft list ruleset                    //防火牆規則
+tcpdump -ni any host 192.168.8.100  //抓封包
+dig
+
 ```
 
 
@@ -14,14 +23,12 @@ ip route
 Debian 固定DNS
 
 
-Debian LXC 13 使用PVE的DNS
-apt update && apt install systemd-resolved -y
-
-
+## Debian LXC 13
+要使用PVE的LXC上的DNS選項，需安裝套件
+`apt update && apt install systemd-resolved -y`
 
 ## Ubuntu
 Ubuntu LXC，預設用systemd-resolved ，會把PVE WebUI上的DNS套到LXC容器上
-
 預設會是用 Netplan。你可以在 YAML 設定檔中，明確指定不使用 DHCP 帶來的 DNS（`dhcp4-overrides`）。
 1. **打開 Netplan 設定檔：** (檔名可能不同)
 ```
@@ -43,7 +50,6 @@ network:
 ```
 netplan apply
 ```
-
 ## Rocky Linux
 ```
 nmcli connection modify enp6s18 ipv4.dns "8.8.8.8 8.8.4.4" 

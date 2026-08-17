@@ -220,10 +220,6 @@ openssl verify \
 ```
 複製憑證到安裝目錄
 ```
-
-
-
-
 sudo cp \
   /root/.acme.sh/colortokens.bd1.dev/colortokens.bd1.dev.key \
   /home/ctuser/tls.key
@@ -234,6 +230,8 @@ sudo chown ctuser:ctuser \
 
 sudo chmod 644 /home/ctuser/tls.crt
 sudo chmod 600 /home/ctuser/tls.key
+
+update-ca-certificates
 ```
 ### 安裝
 ```
