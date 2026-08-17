@@ -209,6 +209,9 @@ for f in /tmp/cert*.pem; do
   openssl x509 -in "$f" -noout -subject -issuer
 done
 
+## 確認憑證是不是3層
+grep -c "BEGIN CERTIFICATE" /home/ctuser/tls.crt
+
 ## 驗證
 openssl verify \
   -CAfile /home/ctuser/caddy-root.crt \
@@ -217,7 +220,9 @@ openssl verify \
 ```
 複製憑證到安裝目錄
 ```
-update-ca-certificates
+
+
+
 
 sudo cp \
   /root/.acme.sh/colortokens.bd1.dev/colortokens.bd1.dev.key \
@@ -240,5 +245,9 @@ HTTPS
 yes
 ./deploy.sh --poc
 ```
+確認全綠燈
+![](static/Pasted%20image%2020260816201228.png)
+
+
 
 ./deploy.sh --poc 不能重新佈署 可能有其他方法
