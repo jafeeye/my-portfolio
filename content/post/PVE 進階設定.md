@@ -765,6 +765,20 @@ https://github.com/45drives/cockpit-identities
 lspci -vv | grep BAR
 
 
+## 常用位置
+```
+查看所有位置
+cat /etc/pve/storage.cfg
+
+光碟映像檔
+/var/lib/vz/template/iso
+
+
+
+```
+
+
+
 ## 救援PVE
 如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
 1. 使用Paragon Disk Manager或類似軟體把隨身碟格式化成EXT4
