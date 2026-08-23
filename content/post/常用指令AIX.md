@@ -3,14 +3,25 @@ title: 常用指令-AIX
 toc: true
 date: 2026-05-26
 ---
+## 常用指令
 cd -
 ls -l
 ipfstat -io
+shutdown -F
+errpt //log檔是用errlog
+lspv
+prtconf
+
+chdev -l inet0 -a hostname=aix01 //修改hostname
+hostname                                             // 顯示hostname
 
 顯示目前任務(迴圈)
 方法1：while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; done
 方法2：nmon -C <程式名稱>，進入畫面再按t
 ## 快速鍵
+鍵盤Backspace 無法使用 `stty erase ^?` ，其實在unix Ctrl+H跟Ctrl+? 都是退格鍵意思
+![](static/Pasted%20image%2020260823142144.png)
+
 set -o emacs 模式
 
 | **動作**       | **現代鍵盤按鍵**  | **Emacs 模式標準按鍵 (完全不會噴亂碼)** | **記憶口訣**          |
@@ -32,7 +43,6 @@ set -o emacs 模式
 
 ## 設定
 
-選單快速鍵
 
 | 動作       | 快速鍵    |
 | -------- | ------ |
@@ -44,11 +54,40 @@ nmon 等待時間很長,輸入oslevel -s
 stty erase 或使用set -o vi
 
 ## 安裝軟體
-安裝OpenSSH (預設無安裝)，驗證 ssh IP位置
+### 安裝內建 bundle 套件
+OpenSSH (預設無安裝)
 smit install 進入安裝畫面
 ![](Pasted%20image%2020260621111926.png)
 
+安裝單一套件
+
 `lslpp -l|grep open` 檢查目前安裝套件有無open開頭
+
+
+### 修復db4 問題
+出現db4 eror ，代表rpm 管理程式有問題需重建數據庫
+rpm --rebuilddb
+rpm -qa
+rpm --version
+出現db4 error：rpm --rebuilddb
+### 安裝AIX Toolbox
+AIX Toolbox for Linux Applications
+- 舊版 AIX（如 AIX 7.1 / 7.2 早期）支援 **`yum`**。
+- 新版 AIX（如 AIX 7.2 晚期、AIX 7.3）全面改用 **`dnf`**（背後跑的是 Python 3 體系）。
+```
+tar -xvf ../dnf_bundle_aix_71_72_v4.tar
+./install_dnf.sh -y
+```
+安裝curl 加入路徑
+```
+/opt/freeware/bin/curl --version
+export PATH=/opt/freeware/bin:$PATH
+which curl
+curl --version
+
+```
+
+安裝ven會有curl跟ksh 相容性問題
 
 ### 設定網路
 
@@ -58,26 +97,39 @@ smit mktcpip //引導網路設定 (設定IP、Gateway、mask)，設定完ping區
 查看目前IP `ifconfig -a`
 ![](Pasted%20image%2020260616230441.png)
 
-
+快速設定網路方法
+lsdev  -Cc if
+ifconfig en0 192.168.8.75 up
+ifconfig -a 查看網卡IP
+netstat -rn 看路由表
 lsdev -Cc adapter
 lsdev -Cc if
 smit tcpip
 netstat -rn
 
 
-快速設定網路方法
-lsdev  -Cc if
-ifconfig en0 192.168.8.75 up
-ifconfig -a 查看網卡IP
-netstat -rn 看路由表
+## vi
+/ 搜尋，按Esc 再按n可以跳到下一個
 
-關機
-shutdown -F
-errpt //log檔是用errlog
-lspv
+## 調整大小 LVM
+```
+#查看vg大小，從FreePPs可以知道LVM剩多少空間
+lsvg rootvg
 
-其他
-prtconf
+#幫/tmp 加上2GB空間
+chfs -a size=+512M /
+chfs -a size=+1G /tmp
+chfs -a size=+3G /opt
+chfs -a size=+1G /var
+
+
+/       96 MB  → 約 608 MB    # 解決現在 100% 滿
+/tmp    96 MB  → 約 1.1 GB    # 放/解壓 DNF bundle
+/opt    32 MB  → 約 3.0 GB    # AIX Toolbox /opt/freeware
+```
+![](Pasted%20image%2020260531135722.png)
+
+
 ## 檔案資料夾
 | **特性**     | **df (Disk Free)**                  | **du (Disk Usage)**       |
 | ---------- | ----------------------------------- | ------------------------- |
@@ -99,20 +151,40 @@ dd if=/dev/urandom of=/tmp/test.raw bs=1M count=2048
 
 列出資料夾下面檔案：在打路徑打到一半時，接著按`Esc`+`=` 
 ![](Pasted%20image%2020260531135413.png)
-## LVM
-```
-#查看vg大小，從FreePPs可以知道LVM剩多少空間
-lsvg rootvg
 
-#幫/tmp 加上2GB空間
-chfs -a size=+2G /tmp
+
+
+
+
+## 安裝illumio
 ```
-![](Pasted%20image%2020260531135722.png)
-## 安裝軟體
-出現db4 error：rpm --rebuilddb
-AIX Toolbox for Linux Applications
-- 舊版 AIX（如 AIX 7.1 / 7.2 早期）支援 **`yum`**。
-- 新版 AIX（如 AIX 7.2 晚期、AIX 7.3）全面改用 **`dnf`**（背後跑的是 Python 3 體系）。
+/opt/freeware/bin/curl -k \
+"https://illumio-test.bd1.dev:8443/api/v27/software/ven/image?pair_script=pair.aix.sh&profile_id=3" \
+-o /opt/illumio_ven/tmp/pair.sh
+```
+
+
+ksh不相容語法，需修改
+```
+sed 's|CURL_OPTIONS+="--proxy \$PROXYSERVER "|CURL_OPTIONS="${CURL_OPTIONS}--proxy $PROXYSERVER "|' \
+/opt/illumio_ven/tmp/pair.sh
+sed 's|CURL_OPTIONS+="--insecure "|CURL_OPTIONS="${CURL_OPTIONS}--insecure "|' \
+/opt/illumio_ven/tmp/pair.sh
+
+
+```
+
+
+```
+/opt/illumio_ven/tmp/pair.sh --management-server illumio-test.bd1.dev:8443 --activation-code 2093936d1a2a3ac6c16001e70a1cbc27c4ba2bdc8e4182abb57a498c17411b4c33de5744a24e2c34da001aa15001985ce53af411359a19b5216a6fe0d056a1383ae0b1cf2d7140e40 --insecure
+```
+
+比較簡單的方法用bash
+```
+/opt/freeware/bin/bash --version
+```
+
+
 
 
 ## 參考資料

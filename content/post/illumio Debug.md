@@ -4,6 +4,13 @@ toc: true
 date: 2026-08-22
 ---
 ## 假設環境
+可能錯誤
+- 換一個IP 
+- 在不同vlan 上
+- Port被擋
+- host解析錯誤
+
+
 基本上遇到10.100.100.x，就要確認4台機器是不是都在vlan 100 上，並可以互相連線
 ```
                     Core / Distribution
@@ -171,14 +178,28 @@ sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management create-domain --user-
 *如果單純改yml切去runlevel1是會出錯的，因為/var/lib/illumio-pce/runtime/config/consul/consul.json 殘留舊叢集IP
 ```
 
-快速重置
+sh快速重置整台PCE 
 ```
 ## 1.stop
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl stop
 ## 2.reset (全部重置包括db)
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl reset
 ```
-快速重置db
+
+sh快速重置db  (用於snc0快速初始化帳號)
+```
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl start --runlevel 1
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-status -w
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management drop
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management setup
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl start --runlevel 5
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-status -w
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management create-domain --user-name admin@bd1.dev --full-name 'admin' --org-name 'Office.'
+sudo -u ilo-pce illumio-pce-ctl ven-software-install /var/tmp/illumio-ven-bundle-25.2.20-2018.tar.bz2 --compatibility-matrix /var/tmp/illumio-release-compatibility-81-494.tar.bz2
+```
+
+
+
 
 更換憑證
 
@@ -203,6 +224,41 @@ rm -rf /etc/illumio-pce
 
 
 ## 資料倒回
+假設兩台不同域名
+```
+openssl req -x509 -newkey rsa:4096 \
+  -sha256 \
+  -days 3650 \
+  -nodes \
+  -keyout bd1-dev.key \
+  -out bd1-dev.crt \
+  -subj "/C=TW/ST=Taiwan/L=Taipei/O=Lab/OU=Illumio/CN=*.bd1.dev" \
+  -addext "subjectAltName=DNS:*.bd1.dev,DNS:bd1.dev" \
+  -addext "keyUsage=critical,digitalSignature,keyEncipherment" \
+  -addext "extendedKeyUsage=serverAuth"
+```
+
+```
+cp bd1-dev.crt /var/lib/illumio-pce/cert/server.crt
+cp bd1-dev.key /var/lib/illumio-pce/cert/server.key
+
+chown root:ilo-pce /var/lib/illumio-pce/cert/server.crt
+chown ilo-pce:ilo-pce /var/lib/illumio-pce/cert/server.key
+
+chmod 400 /var/lib/illumio-pce/cert/server.key
+chmod 444 /var/lib/illumio-pce/cert/server.crt
+
+rm -f /etc/pki/ca-trust/source/anchors/server.crt
+update-ca-trust extract
+
+openssl x509 -in /var/lib/illumio-pce/cert/server.crt -out /tmp/illumio_ca.pem
+cp /var/lib/illumio-pce/cert/server.crt /etc/pki/ca-trust/source/anchors/server.crt
+update-ca-trust extract
+
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env check
+```
+
+
 
 
 
@@ -249,10 +305,25 @@ ilo.pdn.dpdns.org.   A   192.168.8.20
 
 
 
+## 升版
+```
+sudo -u ilo-pce illumio-pce-ctl stop --wait 
+rpm -Uvh illumio-pce-26.2.10-3013.el9.x86_64.rpm illumio-pce-ui-26.2.10.UI1-3247.x86_64.rpm
+sudo -u ilo-pce illumio-pce-ctl check-env 
+sudo -u ilo-pce illumio-pce-ctl start --runlevel 1 
+sudo -u ilo-pce illumio-pce-ctl status -svw 
+sudo -u ilo-pce illumio-pce-ctl get-runlevel 
+sudo -u ilo-pce illumio-pce-db-management migrate 
+sudo -u ilo-pce illumio-pce-ctl set-runlevel 5 
+sudo -u ilo-pce illumio-pce-ctl status -svw
+```
+
+
+
 
 ## 防火牆阻擋測試
+![](static/Pasted%20image%2020260823124613.png)
 
-![](static/Pasted%20image%2020260822185657.png)
 
 pve的放火牆無法立即阻斷，要等原本連線斷掉才生效
 測試一定要兩台雙方測試 因為可以只擋一邊
@@ -271,16 +342,38 @@ ip -br addr
 ```
 
 
+core0 (結束用pkill ncat)
+```open-ports.sh
+#!/bin/bash
 
+PORTS="$(seq 3100 3600)
+$(seq 5100 6300)
+$(seq 8000 8400)
+8443
+$(seq 11200 11300)
+$(seq 24200 25300)"
+
+for port in $PORTS; do
+    ncat -lk "$port" >/dev/null 2>&1 &
+done
+
+echo "Fake TCP listeners started."
+echo "Processes: $(pgrep -c ncat)"
 ```
-nc -lvp 8300  nc <ip> <port>
-pkill ncat
+core1
+```
+nmap -Pn -n \
+  -p 3100-3600,5100-6300,8000-8400,8443,11200-11300,24200-25300 \
+  192.168.8.25
+```
+nc 快速測試
+```
+雙向 nc -lvp 8300 / nc <ip> <port>
 ```
 
 
 ```
 conntrack -D -p tcp -d 192.168.8.26 --dport 8300
 conntrack -D -p tcp -d 192.168.8.26
-
 ```
 stateful firewall 有狀態防火牆，會記住之前流量放行
