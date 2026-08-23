@@ -188,6 +188,7 @@ sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl reset
 ```
 ## 1.移除
 rpm -e illumio-pce
+rpm -e illumio-pce-ui
 ## 2.刪除目錄
 rm -rf /var/lib/illumio-pce
 rm -rf /var/log/illumio-pce

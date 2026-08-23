@@ -89,7 +89,6 @@ sudo chown root:ilo-pce /var/lib/illumio-pce/cert
 
 重新執行腳本出現 `Error: Unable to verify certificate chain.` 要把
 ```
-
 trusted_ca_bundle: "/var/lib/illumio-pce/cert/server.crt"
 ```
 憑證檢查
@@ -98,18 +97,6 @@ illumio-pce-env setup --test 5 --list
 ```
 
 
-## 移除illumio
-In order to completely uninstall and remove the PCE for your system, perform the following steps:
-1. Remove the PCE UI package:
-    `rpm -e illumio-pce-ui`
-2. Remove the main PCE package:
-    `rpm -e illumio-pce`
-3. Manually delete these directories:
-```
-/var/lib/illumio-pce
-/var/log/illumio-pce
-/etc/illumio-pce
-```
 
 ## 憑證重新識別
 
