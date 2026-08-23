@@ -10,11 +10,7 @@ Always use HTTPS：永遠使用 HTTPS。
 Brotli：使用 Brotli 壓縮加快網站的載入速度。
  Flexible SSL 
 Full (Strict) SSL 模式
-
 Origin Rules端口 (端口轉發)
-
-
-
 
 ## 託管網域
 
@@ -72,7 +68,28 @@ Illumio
         transport http {
             tls_insecure_skip_verify
         }
-    ## header_up打上公網網域名
+    ## header_up Host 打上完整公網網域名
+        header_up Host xxx.pdn.example.com
+        header_up X-Forwarded-Host xxx.pdn.example.com
+        header_up X-Forwarded-Proto https
+        header_up X-Forwarded-Port 443
+    }
+}
+```
+4. 如果是Cluster 2x2，Candy寫成以下設定
+```
+:8080 {
+    reverse_proxy https://192.168.8.12:8443 https://192.168.8.13:8443 {
+        lb_policy round_robin
+
+        health_uri /node_available
+        health_interval 10s
+        health_timeout 3s
+
+        transport http {
+            tls_insecure_skip_verify
+        }
+    ## header_up Host 打上完整公網網域名
         header_up Host xxx.pdn.example.com
         header_up X-Forwarded-Host xxx.pdn.example.com
         header_up X-Forwarded-Proto https
