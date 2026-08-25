@@ -183,6 +183,7 @@ dig @192.168.10.3 TXT _acme-challenge.colortokens.bd1.dev
   --server https://acme-ca.test:9000/acme/local/directory \
   --insecure \
   -d colortokens.bd1.dev \
+  -d '*.colortokens.bd1.dev' \
   --force \
   --yes-I-know-dns-manual-mode-enough-go-ahead-please
 ```

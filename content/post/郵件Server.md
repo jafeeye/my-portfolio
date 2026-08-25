@@ -22,6 +22,13 @@ smtp_relay_address: 192.168.8.30:1025
 把`smtp.sendmail(from_, recipients, msg.as_bytes())` 改成 `smtp.sendmail(from_, recipients, msg.as_string())`
 
 
+
+## mailpit
+
+
+
+
+
 ## mailcow
 
 架設前設定
