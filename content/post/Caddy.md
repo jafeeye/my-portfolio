@@ -163,13 +163,15 @@ sudo apt update && apt install -y socat
 要使用root權限簽發，這邊比較麻煩要求憑證要有RSA，萬用憑證 Wildcard SAN ，ACME 驗證要能簽發成功，要進行DNS-01 Challenge
 ```
 ~/.acme.sh/acme.sh --issue \
-  --server https://acme-ca.test:9000/acme/local/directory \
-  --insecure \
-  --dns \
-  --yes-I-know-dns-manual-mode-enough-go-ahead-please \
-  --keylength 2048 \
-  -d colortokens.bd1.dev \
-  -d '*.colortokens.bd1.dev'
+  --server https://acme-ca.test:9000/acme/local/directory \
+  --insecure \
+  --dns \
+  --yes-I-know-dns-manual-mode-enough-go-ahead-please \
+  --keylength 2048 \
+  -d colortokens.bd1.dev \
+  -d '*.colortokens.bd1.dev' \
+  -d 'artifacts-colortokens.bd1.dev' \
+  --force
 ```
 
 ```
@@ -180,12 +182,13 @@ dig @192.168.10.3 TXT _acme-challenge.colortokens.bd1.dev
 新增完紀錄後執行
 ```
 ~/.acme.sh/acme.sh --renew \
-  --server https://acme-ca.test:9000/acme/local/directory \
-  --insecure \
-  -d colortokens.bd1.dev \
-  -d '*.colortokens.bd1.dev' \
-  --force \
-  --yes-I-know-dns-manual-mode-enough-go-ahead-please
+  --server 'https://acme-ca.test:9000/acme/local/directory' \
+  --insecure \
+  -d 'colortokens.bd1.dev' \
+  -d '*.colortokens.bd1.dev' \
+  -d 'artifacts-colortokens.bd1.dev' \
+  --force \
+  --yes-I-know-dns-manual-mode-enough-go-ahead-please
 ```
 把憑證簽在一起，要做的是把 Caddy Root CA 接在 fullchain 後面
 ```
@@ -225,6 +228,7 @@ sudo cp \
   /root/.acme.sh/colortokens.bd1.dev/colortokens.bd1.dev.key \
   /home/ctuser/tls.key
 
+
 sudo chown ctuser:ctuser \
   /home/ctuser/tls.crt \
   /home/ctuser/tls.key
@@ -244,9 +248,38 @@ HTTPS
 yes
 ./deploy.sh --poc
 ```
+
+./deploy.sh --poc 不能重新佈署 可能有其他方法
+./deploy.sh --invite
 確認全綠燈
 ![](static/Pasted%20image%2020260816201228.png)
 
 
 
-./deploy.sh --poc 不能重新佈署 可能有其他方法
+```
+~/.acme.sh/acme.sh --issue \
+  --server https://acme-ca.test:9000/acme/local/directory \
+  --insecure \
+  --dns \
+  --yes-I-know-dns-manual-mode-enough-go-ahead-please \
+  --keylength 2048 \
+  -d colortokens.bd1.dev \
+  -d '*.colortokens.bd1.dev' \
+  -d 'artifacts-colortokens.bd1.dev'
+```
+
+
+
+```
+~/.acme.sh/acme.sh --issue \
+  --server 'https://acme-ca.test:9000/acme/local/directory' \
+  --insecure \
+  --dns \
+  --yes-I-know-dns-manual-mode-enough-go-ahead-please \
+  --keylength 2048 \
+  -d 'colortokens.bd1.dev' \
+  -d '*.colortokens.bd1.dev' \
+  -d 'artifacts-colortokens.bd1.dev' \
+  --force
+```
+

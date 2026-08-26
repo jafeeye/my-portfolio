@@ -297,7 +297,7 @@ HAProxy
 ```
 
 ```
-ilo.pdn.dpdns.org.   A   192.168.8.20
+xxx.pdn.dpdns.org.   A   192.168.8.20
 ```
 ## 反向代理+負載平衡
 

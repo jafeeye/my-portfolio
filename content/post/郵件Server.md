@@ -24,7 +24,27 @@ smtp_relay_address: 192.168.8.30:1025
 
 
 ## mailpit
+```
+services:
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    restart: unless-stopped
 
+    ports:
+      - "587:1025"
+      - "8025:8025"
+
+    environment:
+      MP_SMTP_TLS_CERT: /certs/fullchain.cer
+      MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key
+      MP_SMTP_REQUIRE_STARTTLS: "true"
+
+      MP_SMTP_AUTH: "testuser:testpass123"
+
+    volumes:
+      - ./certs:/certs:ro
+```
 
 
 
