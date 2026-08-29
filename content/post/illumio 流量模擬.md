@@ -3,8 +3,7 @@ title: illumio LXC ncat
 date: 2026-06-16
 toc: true
 ---
-
-## 前置作業
+## LXC安裝前置作業
 
 避免hosts被覆蓋
 ```
@@ -23,12 +22,12 @@ systemctl restart sshd
 apt update && apt install openssh-server
 systemctl enable --now ssh
 ```
-## Ubuntu LXC
+### Ubuntu LXC
 使用非特權容器 22.04 LTS，裝完curl後直接執行 `illumio-ven-ctl` 無任何問題
 ```
 apt install curl
 ```
-## Debian LXC
+### Debian LXC
 使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
 ```
 # 1.安裝套件
@@ -37,7 +36,6 @@ apt update && apt install -y uuid-runtime iproute2 iptables ipset ca-certificate
 # 2.systemd-resolved 讓容器可以讀取PVE DNS欄位
 apt update && apt install systemd-resolved -y
 ```
-
 
 看安裝錯誤訊息
 /var/log/illumio_install.log
@@ -195,7 +193,6 @@ done
 # 等待所有背景程序
 wait
 ```
-
 
 
 驗證是否在背景 `jobs`

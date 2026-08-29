@@ -668,6 +668,17 @@ update-initramfs -u -k all
 6. `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
 
 
+## 常用位置
+```
+查看所有位置
+cat /etc/pve/storage.cfg
+
+光碟映像檔
+/var/lib/vz/template/iso
+```
+
+
+
 ## PVE 共享目錄
 
 ![](PixPin_2026-04-05_22-57-21.png)
@@ -765,19 +776,8 @@ https://github.com/45drives/cockpit-identities
 lspci -vv | grep BAR
 
 
-## 常用位置
-```
-查看所有位置
-cat /etc/pve/storage.cfg
-
-光碟映像檔
-/var/lib/vz/template/iso
-
-
-
-```
-
-
+## 匯入OVA
+![](static/Pasted%20image%2020260829123053.png)
 
 ## 救援PVE
 如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援
@@ -1012,4 +1012,7 @@ df -h /var/lib/vz
 - 改用 **ZFS**(建立一個 zfspool 儲存,CT 磁碟會變成 zvol,一樣是區塊裝置,沒有 loop device 問題)
 
 只要是能提供「區塊裝置」的儲存類型(LVM-thin、ZFS zvol、Ceph RBD),CT 都不會用到 loop device;只要是 `dir` 類型(檔案系統目錄)存 CT 的 raw 磁碟,就一定會有 loop device 開銷。VM 的話因為 QEMU 本身就是用檔案模擬磁碟(不透過 loop device),所以 VM 放 `dir` 存 raw 檔案不會有這個問題,只有 CT 才會受影響。
+
+## 進階功能
+保護 - 可保護虛擬機器設定值不被更動
 

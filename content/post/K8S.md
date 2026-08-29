@@ -3,6 +3,9 @@ title: K8s
 toc: true
 date: 2026-05-22
 ---
+![](static/Picture6%201.jpg)
+
+![](static/ingress%201.webp)
 ## 安裝Master,Worker1,Worker2
 先修改3台hostname
 ```

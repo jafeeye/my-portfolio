@@ -3,7 +3,12 @@ title: OS發行版整理
 toc: true
 date: 2026-05-29
 ---
-## NasOS
+## OS發行版
+
+
+![](static/20230427194612.png)
+
+
 FygoOS
 
 ParrotOS：另一種Kail Linux 的Debian發行版
@@ -24,7 +29,8 @@ UmbrelOS
 Raspberry Pi OS Desktop
 RetroNAS
 MS-DOS 8.0  
-
+Solaris 10、11/ OpenIndiana / SmartOS / OmniOS
+PrimeOS/ Phoenix OS / FydeOS
 ## NAS 系統
 ZimaOS
 CasaOS

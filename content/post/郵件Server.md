@@ -92,3 +92,20 @@ sudo docker compose up -d
 
 ## Zimbra
 
+
+## 除錯
+name I or service not know：SMTP Host 無法被解析
+```
+getent hosts smtp-mail.bd1.dev
+nslookup smtp-mail.bd1.dev
+
+```
+
+
+```
+swaks \
+  --server smtp-server.company.com \
+  --port 25 \
+  --from testuser@company.com \
+  --to receiver@company.com
+```

@@ -6,6 +6,14 @@ PVE上安裝
 關掉use table point，至少滑鼠不會飄太過去
 將硬碟設定SATA
 
+## 安裝步驟
+安裝畫面-1
+![](static/PixPin_2026-08-23_00-00-43.png)
+安裝畫面-2
+![](static/PixPin_2026-08-23_00-07-26.png)
+安裝畫面-3
+![](static/PixPin_2026-08-23_00-24-43.png)
+
 
 Solaris CDE（Common Desktop Environment）
 ![](static/Pasted%20image%2020260823095859.png)

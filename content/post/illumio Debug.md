@@ -223,8 +223,34 @@ rm -rf /etc/illumio-pce
 ```
 
 
-## 資料倒回
+## 資料倒回 (異地DR)
 假設兩台不同域名
+舊 SNC：illumio-kevin.dev
+新 SNC：illumio-test.bd1.dev
+
+```
+新 SNC 建好
+→ runlevel 1
+→ database setup
+→ restore policy DB
+→ migrate
+→ restore traffic DB（如果有）
+→ runlevel 5
+```
+
+1. 先確認新舊 PCE 版本 `rpm -qa | grep '^illumio-pce'`
+2. 舊 SNC 備份 Policy DB
+3. 舊SNC  備份 Traffic DB
+4. 停止新SNC，啟動到 Runlevel 1
+5. Setup 新 SNC Database
+6. Restore Policy DB 
+```
+sudo -u ilo-pce illumio-pce-db-management restore \
+  --file /var/lib/illumio-pce/restore/policy-db.tar.gz \
+  --update-fqdn
+```
+7.  sudo -u ilo-pce illumio-pce-db-management migrate
+
 ```
 openssl req -x509 -newkey rsa:4096 \
   -sha256 \
@@ -257,6 +283,22 @@ update-ca-trust extract
 
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env check
 ```
+
+腳本
+```
+sudo -u ilo-pce illumio-pce-ctl stop
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env check
+sudo -u ilo-pce illumio-pce-ctl start --runlevel 1
+sudo -u ilo-pce illumio-pce-db-management setup
+sudo -u ilo-pce illumio-pce-db-management restore \
+  --file /var/lib/illumio-pce/restore/policy-db.tar.gz \
+  --update-fqdn
+sudo -u ilo-pce illumio-pce-db-management migrate
+sudo -u ilo-pce illumio-pce-ctl set-runlevel 5
+sudo -u ilo-pce illumio-pce-ctl status
+```
+
+
 
 
 
@@ -377,3 +419,21 @@ conntrack -D -p tcp -d 192.168.8.26 --dport 8300
 conntrack -D -p tcp -d 192.168.8.26
 ```
 stateful firewall 有狀態防火牆，會記住之前流量放行
+
+
+
+## 測試IOPS
+```
+dnf install -y fio
+
+fio --name=illumio-iops-test \
+    --filename=/var/lib/illumio-pce/fio-test \
+    --size=2G \
+    --bs=8k \
+    --rw=randwrite \
+    --iodepth=32 \
+    --direct=1 \
+    --runtime=60 \
+    --time_based \
+    --group_reporting
+```

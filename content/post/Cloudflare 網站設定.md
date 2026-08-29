@@ -37,7 +37,7 @@ Origin Rules端口 (端口轉發)
 ## MFA 驗證
 
 
-## 實作1：透過反向代理連進illumio
+## 實作1: 透過反向代理連進illumio
 ```
 外網
     │
@@ -98,6 +98,33 @@ Illumio
 }
 ```
 4. 外面用瀏覽器進去用 xxx.pdn.example.com:8443
+
+
+
+
+## 實作2 : Cloudflare Zero Trust Gateway 自架 DOH
+```mermaid
+flowchart TD
+    A[外部裝置]
+    B[Cloudflare Pages]
+    C[Cloudflare Tunnel]
+    D[PowerDNS]
+
+    A --> B
+    B --> C
+    C --> D
+```
+
+
+
+
+
+
+
+
+
+
+
 ### 參考資料
 [使用 Cloudflare 幫你的網站掛上 SSL 憑證與 CDN](https://docfunc.com/posts/92/%E4%BD%BF%E7%94%A8-cloudflare-%E5%B9%AB%E4%BD%A0%E7%9A%84%E7%B6%B2%E7%AB%99%E6%8E%9B%E4%B8%8A-ssl-%E6%86%91%E8%AD%89%E8%88%87-cdn-post)
 [用 Cloudflare Tunnel 打通 Synology NAS](https://sakkyoi.tech/article/cloudflare-tunnel-synology-nas/)

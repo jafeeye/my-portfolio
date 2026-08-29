@@ -4,6 +4,7 @@ toc: true
 date: 2026-07-10
 ---
 ## 什么是 K3s？
+![](static/2023_06_26_22_41_07_72d1e9e6f582.jpg)
 
 K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。
 适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。
@@ -28,8 +29,11 @@ K3s 的核心优势：
 ![](static/Kubernetes-k8s-安裝選擇地圖-1.png)
 
 ## 在 Proxmox 容器中安装 K3s
+
+目前發現問題，重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，原因不明
+
 Step 1：创建 LXC 容器
-在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框：  
+在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框：  (不要在建立好unprivileged=1改回0，權限會大亂)
 ![](https://raw.githubusercontent.com/kingsd041/picture/main/202507102112500.png)
 选择模板，本例使用 Ubuntu 20.04：  
 ![](https://raw.githubusercontent.com/kingsd041/picture/main/202507102113959.png)
@@ -63,13 +67,9 @@ fi
 mount --make-rshared /
 EOF
 ```
-添加可自行权限并重启容器：
-`chmod +x /etc/rc.local 
-reboot
-
-Step 4：准备容器环境
-在容器中执行以下命令，安装依赖：
-`apt install -y curl iptables
+添加可自行权限并重启容器：`chmod +x /etc/rc.local && reboot`  
+Step 4：准备容器环境，在容器中执行以下命令，安装依赖：
+`apt install -y curl iptables`
 > 个别 lxc 模版缺少 `iptables` `openssh-server`，需要手动安装
 
 Step 5：安装 K3s
@@ -105,7 +105,7 @@ scp root@<Server node的IP>:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 sed -i '' 's/127.0.0.1/<Server node的實際IP>/' ~/.kube/config
 
 ## 修改文件中的 IP 地址为容器的实际地址。然后测试连接：
-`kubectl get pods --all-namespaces`
+kubectl get pods --all-namespaces
 ```
 
 **這時節點狀態會是 `NotReady`，這是正常的**——因為還沒有 CNI，先不用管，繼續下一步。
