@@ -638,6 +638,1432 @@ body::before {
 }
 ```
 
+優化過後
+```
+/* ============================================================
+   Heimdall - GSS Dashboard
+   Grid 排版 + 保留 Tiles 搜尋
+   ============================================================ */
+
+
+/* ============================================================
+   全域
+   ============================================================ */
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+
+/* 主背景 */
+#app .content {
+    background-color: #026fbc;
+    min-height: 100vh;
+
+    padding-top: 60px;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   GSS Header
+   ============================================================ */
+
+body::before {
+    content: "";
+
+    display: block;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 60px;
+
+    background-color: #ffffff;
+
+    background-image: url('/storage/gss-logo.png');
+
+    background-repeat: no-repeat;
+
+    background-position: 20px center;
+
+    background-size: auto 30px;
+
+    border-bottom: 1px solid #e0e0e0;
+
+    z-index: 999;
+}
+
+
+/* ============================================================
+   Search
+   ============================================================ */
+
+.searchform {
+
+    margin-top: 15px !important;
+
+    margin-bottom: 35px !important;
+}
+
+
+/* ============================================================
+   Categories 總容器
+   ============================================================ */
+
+#app #sortable.categories {
+
+    display: grid !important;
+
+    /*
+       根據螢幕寬度自動排列 Category
+    */
+    grid-template-columns:
+        repeat(auto-fit, minmax(300px, 1fr));
+
+    gap: 28px;
+
+    width:
+        calc(100% - 140px) !important;
+
+    max-width: 1500px !important;
+
+    margin-left: auto !important;
+
+    margin-right: auto !important;
+
+    column-count: unset !important;
+
+    column-width: unset !important;
+
+    align-items: start;
+}
+
+
+/* ============================================================
+   Category 外框
+   ============================================================ */
+
+#app #sortable.categories .category {
+
+    display: grid !important;
+
+    /*
+       Category 裡的書籤自動換行
+    */
+    grid-template-columns:
+        repeat(auto-fit, minmax(240px, 1fr));
+
+    /*
+       書籤間距
+    */
+    gap: 8px 12px;
+
+    width: 100% !important;
+
+    margin: 0 !important;
+
+    /*
+       左右留白
+    */
+    padding:
+        0
+        14px
+        14px
+        14px;
+
+    box-sizing: border-box;
+
+    background-color:
+        rgba(0, 55, 92, 0.40);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    break-inside: auto !important;
+
+    -webkit-animation:
+        slide-in-top
+        0.5s
+        cubic-bezier(0.250, 0.460, 0.450, 0.940)
+        both;
+
+    animation:
+        slide-in-top
+        0.5s
+        cubic-bezier(0.250, 0.460, 0.450, 0.940)
+        both;
+}
+
+
+/* ============================================================
+   Category 標題
+   ============================================================ */
+
+#app #sortable.categories
+.category > .title {
+
+    /*
+       Header 橫跨整個 Category
+    */
+    grid-column: 1 / -1;
+
+    /*
+       Category 有左右 14px padding
+       Header 往外補回去
+    */
+    margin-left: -14px;
+
+    margin-right: -14px;
+
+    margin-bottom: 7px;
+
+    padding:
+        10px
+        14px;
+
+    box-sizing: border-box;
+
+    background-color:
+        rgba(0, 35, 65, 0.55);
+
+    border-radius:
+        10px
+        10px
+        0
+        0;
+}
+
+
+#app #sortable.categories
+.category > .title a {
+
+    color: #ffffff;
+
+    text-decoration: none;
+}
+
+
+/* ============================================================
+   App Container
+   ============================================================ */
+
+#app #sortable.categories
+.category > .item-container {
+
+    /*
+       非常重要：
+       不要設定 display:block !important
+
+       Heimdall Tiles 搜尋會自己切換 display:none
+    */
+
+    width: 100%;
+
+    min-width: 0;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    break-inside: avoid;
+}
+
+
+/* ============================================================
+   App Button
+   ============================================================ */
+
+.item {
+
+    width: 100%;
+
+    height: 50px !important;
+
+    min-height: 50px;
+
+    margin: 0 !important;
+
+    box-sizing: border-box;
+
+    border-radius: 6px;
+
+    border: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            #161b1f 0%,
+            #4a4a4a 100%
+        ) !important;
+}
+
+
+/* Hover */
+.item:hover {
+
+    filter: brightness(1.10);
+
+    transition:
+        filter 0.15s ease;
+}
+
+
+/* 隱藏白色 bubble */
+.item::after {
+
+    display: none;
+}
+
+
+/* 隱藏右邊箭頭 */
+.fa-arrow-alt-to-right {
+
+    display: none;
+}
+
+
+/* ============================================================
+   Icon
+   ============================================================ */
+
+.app-icon {
+
+    max-width: 36px;
+
+    max-height: 36px;
+}
+
+
+.app-icon-container {
+
+    flex-basis: 36px;
+
+    margin-left: 4px;
+}
+
+
+/* ============================================================
+   Bookmark 文字
+   ============================================================ */
+
+.item .details {
+
+    min-width: 0;
+}
+
+
+.item .details .title {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   Tooltip
+   ============================================================ */
+
+.tooltip {
+
+    display: none;
+}
+
+
+/* ============================================================
+   Animation
+   ============================================================ */
+
+@-webkit-keyframes slide-in-top {
+
+    0% {
+
+        -webkit-transform:
+            translateY(-1000px);
+
+        transform:
+            translateY(-1000px);
+
+        opacity: 0;
+    }
+
+    100% {
+
+        -webkit-transform:
+            translateY(0);
+
+        transform:
+            translateY(0);
+
+        opacity: 1;
+    }
+}
+
+
+@keyframes slide-in-top {
+
+    0% {
+
+        -webkit-transform:
+            translateY(-1000px);
+
+        transform:
+            translateY(-1000px);
+
+        opacity: 0;
+    }
+
+    100% {
+
+        -webkit-transform:
+            translateY(0);
+
+        transform:
+            translateY(0);
+
+        opacity: 1;
+    }
+}
+
+
+/* ============================================================
+   Large Desktop
+   ============================================================ */
+
+@media only screen
+and (min-width: 1600px) {
+
+    #app #sortable.categories {
+
+        grid-template-columns:
+            repeat(4, minmax(300px, 1fr));
+    }
+}
+
+
+/* ============================================================
+   Desktop
+   ============================================================ */
+
+@media only screen
+and (min-width: 1200px)
+and (max-width: 1599px) {
+
+    #app #sortable.categories {
+
+        grid-template-columns:
+            repeat(3, minmax(280px, 1fr));
+    }
+}
+
+
+/* ============================================================
+   Tablet
+   ============================================================ */
+
+@media only screen
+and (min-width: 768px)
+and (max-width: 1199px) {
+
+    #app #sortable.categories {
+
+        width:
+            calc(100% - 70px) !important;
+
+        grid-template-columns:
+            repeat(2, minmax(260px, 1fr));
+    }
+}
+
+
+/* ============================================================
+   Mobile
+   ============================================================ */
+
+@media only screen
+and (max-width: 767px) {
+
+    #app #sortable.categories {
+
+        width:
+            calc(100% - 30px) !important;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 20px;
+    }
+
+
+    #app #sortable.categories .category {
+
+        grid-template-columns:
+            1fr;
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+
+        padding-bottom: 10px;
+    }
+
+
+    #app #sortable.categories
+    .category > .title {
+
+        margin-left: -10px;
+
+        margin-right: -10px;
+    }
+
+
+    #config-buttons a {
+
+        width: 35px;
+
+        height: 35px;
+    }
+}
+
+
+/* ============================================================
+   低高度畫面
+   ============================================================ */
+
+@media only screen
+and (max-height: 900px) {
+
+    .searchform {
+
+        margin-top: 8px !important;
+
+        margin-bottom: 20px !important;
+    }
+
+
+    #app #sortable.categories {
+
+        gap: 20px;
+    }
+
+
+    #app #sortable.categories .category {
+
+        gap: 6px 10px;
+
+        padding-bottom: 10px;
+    }
+
+
+    #app #sortable.categories
+    .category > .title {
+
+        padding-top: 7px;
+
+        padding-bottom: 7px;
+
+        margin-bottom: 6px;
+    }
+
+
+    .item {
+
+        height: 44px !important;
+
+        min-height: 44px;
+    }
+
+
+    .app-icon {
+
+        max-width: 31px;
+
+        max-height: 31px;
+    }
+}
+
+
+/* ============================================================
+   很矮的畫面
+   ============================================================ */
+
+@media only screen
+and (max-height: 760px) {
+
+    .searchform {
+
+        margin-bottom: 12px !important;
+    }
+
+
+    .item {
+
+        height: 40px !important;
+
+        min-height: 40px;
+    }
+
+
+    .app-icon {
+
+        max-width: 28px;
+
+        max-height: 28px;
+    }
+
+
+    #app #sortable.categories
+    .category > .title {
+
+        padding-top: 5px;
+
+        padding-bottom: 5px;
+    }
+}
+
+
+/* ============================================================
+   Settings CSS Editor
+   ============================================================ */
+
+.module-container {
+
+    max-width: 1090px;
+}
+
+
+div.create .input {
+
+    width: 1020px;
+}
+
+
+div.create .input textarea {
+
+    width: 1020px;
+
+    height: 600px;
+}
+```
+
+自訂義js
+```
+/* ============================================================
+   Heimdall Categories - Custom Drag & Drop
+   ------------------------------------------------------------
+   功能：
+   1. 保留 Heimdall Tiles 搜尋
+   2. Category 內 App 可拖曳排序
+   3. 可連續拖曳
+   4. 排序後寫回 Heimdall /order
+   5. 重新整理後保留順序
+   ============================================================ */
+
+$(document).ready(function () {
+
+    /* ========================================================
+       基本檢查
+       ======================================================== */
+
+    const rootElement =
+        document.getElementById("sortable");
+
+    if (!rootElement) {
+        console.error(
+            "[Heimdall Custom Sort] #sortable not found."
+        );
+        return;
+    }
+
+    if (typeof Sortable === "undefined") {
+        console.error(
+            "[Heimdall Custom Sort] SortableJS not found."
+        );
+        return;
+    }
+
+
+    /* ========================================================
+       Heimdall URL
+       ======================================================== */
+
+    const baseElement =
+        document.querySelector("base");
+
+    let heimdallBase;
+
+    if (
+        baseElement &&
+        baseElement.href
+    ) {
+
+        heimdallBase =
+            baseElement.href;
+
+    } else {
+
+        heimdallBase =
+            window.location.origin + "/";
+
+    }
+
+
+    /*
+     * 確保結尾有 /
+     */
+    if (
+        !heimdallBase.endsWith("/")
+    ) {
+
+        heimdallBase += "/";
+
+    }
+
+
+    const orderUrl =
+        new URL(
+            "order",
+            heimdallBase
+        ).href;
+
+
+    console.log(
+        "[Heimdall Custom Sort] Order URL:",
+        orderUrl
+    );
+
+
+    /* ========================================================
+       取得 Heimdall 原本 root Sortable
+       ======================================================== */
+
+    const rootSortable =
+        Sortable.get(
+            rootElement
+        );
+
+
+    /*
+     * 我們會控制 Category 內的 App，
+     * 所以 Heimdall 原本 root sortable
+     * 在 Categories 模式下保持 disabled。
+     */
+    function disableRootSortable() {
+
+        if (rootSortable) {
+
+            try {
+
+                rootSortable.option(
+                    "disabled",
+                    true
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "[Heimdall Custom Sort] Unable to disable root Sortable:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* ========================================================
+       儲存目前 App 排序
+       ======================================================== */
+
+    function saveAppOrder() {
+
+        const ids = [];
+
+
+        /*
+         * 按照：
+         *
+         * Category 1
+         *   App
+         *   App
+         *
+         * Category 2
+         *   App
+         *   App
+         *
+         * 的實際 DOM 順序收集 ID。
+         */
+        $("#sortable.categories .category")
+            .each(function () {
+
+                $(this)
+                    .children(
+                        ".item-container"
+                    )
+                    .each(function () {
+
+                        const id =
+                            $(this)
+                                .attr(
+                                    "data-id"
+                                );
+
+
+                        if (
+                            id !== undefined &&
+                            id !== null &&
+                            id !== ""
+                        ) {
+
+                            ids.push(
+                                String(id)
+                            );
+
+                        }
+
+                    });
+
+            });
+
+
+        if (
+            ids.length === 0
+        ) {
+
+            console.warn(
+                "[Heimdall Custom Sort] No App IDs found."
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "[Heimdall Custom Sort] Saving order:",
+            ids
+        );
+
+
+        /*
+         * 使用 jQuery AJAX。
+         *
+         * Heimdall 自己也是透過 jQuery
+         * POST 排序資料。
+         */
+        $.ajax({
+
+            url:
+                orderUrl,
+
+            type:
+                "POST",
+
+            data: {
+                order: ids
+            },
+
+            success:
+                function (
+                    response,
+                    textStatus,
+                    xhr
+                ) {
+
+                    console.log(
+                        "[Heimdall Custom Sort] ✓ Order saved.",
+                        "HTTP:",
+                        xhr.status
+                    );
+
+                },
+
+            error:
+                function (
+                    xhr,
+                    textStatus,
+                    errorThrown
+                ) {
+
+                    console.error(
+                        "[Heimdall Custom Sort] ✗ Order save failed."
+                    );
+
+                    console.error(
+                        "HTTP status:",
+                        xhr.status
+                    );
+
+                    console.error(
+                        "Status:",
+                        textStatus
+                    );
+
+                    console.error(
+                        "Error:",
+                        errorThrown
+                    );
+
+                    console.error(
+                        "Response:",
+                        xhr.responseText
+                    );
+
+                }
+
+        });
+
+    }
+
+
+    /* ========================================================
+       Category Sortable instances
+       ======================================================== */
+
+    let categorySortables = [];
+
+
+    /* ========================================================
+       是否處於 Heimdall 編輯模式
+       ======================================================== */
+
+    function isEditMode() {
+
+        return $("#app")
+            .hasClass(
+                "header"
+            );
+
+    }
+
+
+    /* ========================================================
+       強制重新確認 Sortable 狀態
+       ======================================================== */
+
+    function refreshSortableState() {
+
+        const enabled =
+            isEditMode();
+
+
+        /*
+         * 父層永遠不要跟 Category
+         * 同時處理 App 拖曳。
+         */
+        disableRootSortable();
+
+
+        categorySortables
+            .forEach(function (
+                sortable
+            ) {
+
+                try {
+
+                    sortable.option(
+                        "disabled",
+                        !enabled
+                    );
+
+                } catch (error) {
+
+                    console.warn(
+                        "[Heimdall Custom Sort] Sortable state error:",
+                        error
+                    );
+
+                }
+
+            });
+
+
+        console.log(
+            "[Heimdall Custom Sort]",
+            enabled
+                ? "EDIT MODE - enabled"
+                : "NORMAL MODE - disabled"
+        );
+
+    }
+
+
+    /* ========================================================
+       初始化 Category Sortables
+       ======================================================== */
+
+    function initializeCategorySortables() {
+
+        /*
+         * 先清理舊 instance，
+         * 避免重複綁定。
+         */
+        categorySortables
+            .forEach(function (
+                sortable
+            ) {
+
+                try {
+
+                    sortable.destroy();
+
+                } catch (error) {
+
+                    /* ignore */
+
+                }
+
+            });
+
+
+        categorySortables = [];
+
+
+        const categories =
+            document.querySelectorAll(
+                "#sortable.categories .category"
+            );
+
+
+        categories.forEach(
+            function (
+                category
+            ) {
+
+                /*
+                 * 如果這個 category 已經被其他程式
+                 * 建立過 Sortable，先移除。
+                 */
+                const existing =
+                    Sortable.get(
+                        category
+                    );
+
+
+                if (existing) {
+
+                    try {
+
+                        existing.destroy();
+
+                    } catch (error) {
+
+                        /* ignore */
+
+                    }
+
+                }
+
+
+                const sortable =
+                    Sortable.create(
+                        category,
+                        {
+
+                            /*
+                             * 預設關閉。
+                             *
+                             * 進入 Heimdall 編輯模式才打開。
+                             */
+                            disabled:
+                                true,
+
+
+                            /*
+                             * 只能拖 App。
+                             *
+                             * 不包含 Category title。
+                             */
+                            draggable:
+                                ".item-container",
+
+
+                            /*
+                             * 不設定 group。
+                             *
+                             * 所以 App 只能在自己的
+                             * Category 裡重新排序。
+                             */
+                            group:
+                                false,
+
+
+                            /*
+                             * 動畫
+                             */
+                            animation:
+                                150,
+
+
+                            /*
+                             * Grid 排版不要強制 vertical。
+                             *
+                             * SortableJS 自己判斷。
+                             */
+
+
+                            /*
+                             * 使用 fallback，
+                             * 對 Heimdall link 元素較穩定。
+                             */
+                            forceFallback:
+                                true,
+
+
+                            fallbackOnBody:
+                                true,
+
+
+                            fallbackTolerance:
+                                3,
+
+
+                            /*
+                             * 不讓 dragover 往父層冒泡，
+                             * 避免 #sortable 原生 Sortable
+                             * 搶到事件。
+                             */
+                            dragoverBubble:
+                                false,
+
+
+                            /*
+                             * 避免文字被選取後無法拖動。
+                             */
+                            preventOnFilter:
+                                false,
+
+
+                            /*
+                             * CSS classes
+                             */
+                            ghostClass:
+                                "heimdall-sortable-ghost",
+
+                            chosenClass:
+                                "heimdall-sortable-chosen",
+
+                            dragClass:
+                                "heimdall-sortable-drag",
+
+
+                            /* ==================================
+                               Drag Start
+                               ================================== */
+
+                            onStart:
+                                function () {
+
+                                    /*
+                                     * 再關一次父層。
+                                     *
+                                     * 因為 Heimdall 本身可能
+                                     * 剛剛又把它打開。
+                                     */
+                                    disableRootSortable();
+
+
+                                    console.log(
+                                        "[Heimdall Custom Sort] Drag started."
+                                    );
+
+                                },
+
+
+                            /* ==================================
+                               Drag End
+                               ================================== */
+
+                            onEnd:
+                                function (
+                                    evt
+                                ) {
+
+                                    console.log(
+                                        "[Heimdall Custom Sort] Drag ended:",
+                                        evt.oldIndex,
+                                        "→",
+                                        evt.newIndex
+                                    );
+
+
+                                    /*
+                                     * 只有實際位置有變
+                                     * 才送出儲存。
+                                     */
+                                    if (
+                                        evt.oldIndex !==
+                                        evt.newIndex
+                                    ) {
+
+                                        saveAppOrder();
+
+                                    }
+
+
+                                    /*
+                                     * 非常重要：
+                                     *
+                                     * 拖完後重新確認我們自己的
+                                     * Sortable 還是 Enabled。
+                                     *
+                                     * 避免第一次拖完後被 Heimdall
+                                     * 或 Sortable global state 關掉。
+                                     */
+                                    setTimeout(
+                                        function () {
+
+                                            disableRootSortable();
+
+
+                                            categorySortables
+                                                .forEach(
+                                                    function (
+                                                        instance
+                                                    ) {
+
+                                                        try {
+
+                                                            instance.option(
+                                                                "disabled",
+                                                                false
+                                                            );
+
+                                                        } catch (
+                                                            error
+                                                        ) {
+
+                                                            console.warn(
+                                                                "[Heimdall Custom Sort] Re-enable error:",
+                                                                error
+                                                            );
+
+                                                        }
+
+                                                    }
+                                                );
+
+
+                                            console.log(
+                                                "[Heimdall Custom Sort] Ready for next drag."
+                                            );
+
+                                        },
+                                        50
+                                    );
+
+                                }
+
+                        }
+                    );
+
+
+                categorySortables.push(
+                    sortable
+                );
+
+            }
+        );
+
+
+        console.log(
+            "[Heimdall Custom Sort]",
+            categorySortables.length,
+            "categories initialized."
+        );
+
+
+        refreshSortableState();
+
+    }
+
+
+    /* ========================================================
+       第一次初始化
+       ======================================================== */
+
+    /*
+     * 稍微等 Heimdall 自己的 app.js
+     * 初始化完成。
+     */
+    setTimeout(
+        function () {
+
+            initializeCategorySortables();
+
+            disableRootSortable();
+
+        },
+        300
+    );
+
+
+    /* ========================================================
+       Heimdall 編輯按鈕
+       ======================================================== */
+
+    /*
+     * Heimdall 點 ↔ 後，
+     * 自己會先切換 #app.header
+     * 並控制原生 sortable。
+     *
+     * 所以我們稍微晚一點再接管。
+     */
+    $("#app").on(
+        "click.heimdallCustomSort",
+        "#config-button",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    refreshSortableState();
+
+                },
+                150
+            );
+
+
+            /*
+             * 第二次保險。
+             *
+             * 防止 Heimdall 後續程式
+             * 又把 root sortable 打開。
+             */
+            setTimeout(
+                function () {
+
+                    disableRootSortable();
+
+                    refreshSortableState();
+
+                },
+                350
+            );
+
+        }
+    );
+
+
+    /* ========================================================
+       防止原生 root Sortable 被重新打開
+       ======================================================== */
+
+    /*
+     * 編輯模式期間每 1 秒檢查一次。
+     *
+     * 這不是重新建立 Sortable，
+     * 只是在 root 被 Heimdall 打開時
+     * 再把它關掉。
+     */
+    setInterval(
+        function () {
+
+            if (
+                isEditMode()
+            ) {
+
+                disableRootSortable();
+
+            }
+
+        },
+        1000
+    );
+
+
+    /* ========================================================
+       Debug helper
+       ======================================================== */
+
+    /*
+     * F12 Console 可以輸入：
+     *
+     * heimdallSortDebug()
+     *
+     * 查看目前狀態。
+     */
+    window.heimdallSortDebug =
+        function () {
+
+            console.log(
+                "=============================="
+            );
+
+            console.log(
+                "Heimdall Custom Sort Debug"
+            );
+
+            console.log(
+                "Edit mode:",
+                isEditMode()
+            );
+
+            console.log(
+                "Category Sortables:",
+                categorySortables.length
+            );
+
+            console.log(
+                "Order URL:",
+                orderUrl
+            );
+
+            console.log(
+                "Root Sortable:",
+                rootSortable
+            );
+
+
+            categorySortables
+                .forEach(
+                    function (
+                        sortable,
+                        index
+                    ) {
+
+                        console.log(
+                            "Category",
+                            index + 1,
+                            "disabled:",
+                            sortable.option(
+                                "disabled"
+                            )
+                        );
+
+                    }
+                );
+
+
+            console.log(
+                "=============================="
+            );
+
+        };
+
+});
+```
+
+
+
+
+
+
 
 ## Homepage
 http://IP:3000
