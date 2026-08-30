@@ -182,3 +182,75 @@ Step 8：部署测试应用
 总结
 将 K3s 部署在 Proxmox 容器中，是一种轻量、灵活、经济的 Kubernetes 实践方式。无论你是个人爱好者，还是中小企业探索容器化落地，这一方案都值得一试。
 拥抱边缘计算，从这一套组合方案开始，让 Kubernetes 部署变得简单、高效！
+
+
+
+## 安裝 Rancher
+```
+瀏覽器 https://rancher.192.168.8.190.sslip.io:31988
+        ↓
+Istio Ingress Gateway
+        ↓
+Gateway + VirtualService
+        ↓
+Rancher Service:80
+        ↓
+Rancher Pod
+```
+因為Rancher 要跑在https，因此使用sslip.io這個網域
+```
+nslookup rancher.192.168.8.190.sslip.io
+tnc 192.168.8.190 -Port 8080
+curl.exe -v http://192.168.8.190:8080/ping
+curl.exe -vk http://192.168.8.190:8080/ping
+```
+完成安裝需要以下4步
+```
+1.安裝K3s
+2.安裝Helm
+3.安裝cert-manager
+4.安裝Rancher (確認RAM為8G，不然絕對跑不起來)
+```
+3. 安裝 Cert-Manager
+```
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true
+```
+確認狀態正常
+```
+kubectl -n cert-manager rollout status deployment/cert-manager
+kubectl -n cert-manager rollout status deployment/cert-manager-webhook
+kubectl -n cert-manager rollout status deployment/cert-manager-cainjector
+```
+4. 安裝 Rancher
+```
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm repo update
+
+kubectl create namespace cattle-system
+
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.192.168.8.190.sslip.io ort\
+  --set bootstrapPassword='請換成你的強密碼' \
+  --set replicas=1
+```
+5. 安裝完可能沒辦法馬上進去，可以使用NodeP用PortForwarding進去
+```
+rancher.192.168.8.190.sslip.io:31988
+```
+6. 確認有無開啟LoadBlancing 
+```
+systemctl cat k3s | grep -E 'servicelb|disable'ble'
+cat /etc/rancher/k3s/config.yaml 2>/dev/null
+        '--disable-network-policy' \
+        '--disable-kube-proxy' \
+        '--disable=traefik' \
+        '--disable=servicelb' \
+
+```
