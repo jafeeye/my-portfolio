@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "1f33aefc0019fb70",
+        "id": "a07e845d7527fe0e",
         "type": "split",
         "children": [
           {
             "id": "a527fd6a6bbcbd1b",
             "type": "tabs",
-            "dimension": 76.08247422680412,
             "children": [
               {
                 "id": "a9df0dd4ac7a4247",
@@ -18,23 +17,22 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/K3s LXC.md",
+                    "file": "content/post/OS整理.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "K3s LXC"
+                  "title": "OS整理"
                 }
               }
             ]
           },
           {
-            "id": "f9396a20640dc497",
+            "id": "b8d9d022390fed15",
             "type": "tabs",
-            "dimension": 23.917525773195877,
             "children": [
               {
-                "id": "52b38aa5687fc943",
+                "id": "d8190c7b0b108283",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -259,8 +257,9 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "52b38aa5687fc943",
+  "active": "d8190c7b0b108283",
   "lastOpenFiles": [
+    "content/post/OS整理.md",
     "content/post/K3s LXC.md",
     "content/post/PVE 各系統安裝.md",
     "static/Pasted image 20260830113029.png",
@@ -268,7 +267,6 @@
     "content/post/K8S.md",
     "static/Pasted image 20260829233657.png",
     "content/post/ESXi 安裝細項配置.md",
-    "content/post/OS整理.md",
     "content/post/郵件Server.md",
     "static/ingress 1.webp",
     "static/Picture6 1.jpg",

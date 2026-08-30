@@ -18,8 +18,7 @@ NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nv
 incusOS：所有指令都被禁止，只能建立LXC相關容器  
 OpenVZ：  
 IBM PowerVC：IBM專屬虛擬化平台，需授權  
-Talos Linux：針對K8s的發行版  
-RancherOSP  
+Talos Linux/RancherOS ：針對K8s的發行版  
 FreeDOS
 SvarDOS：開源DR-DOS
 PCDOS

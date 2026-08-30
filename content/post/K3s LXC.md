@@ -3,6 +3,10 @@ title: K3s LXC
 toc: true
 date: 2026-07-10
 ---
+## 基本概念
+K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server
+
+
 ## 什么是 K3s？
 ![](static/2023_06_26_22_41_07_72d1e9e6f582.jpg)
 
@@ -186,7 +190,10 @@ Step 8：部署测试应用
 
 
 ## 安裝 Rancher
-這邊安裝架構 (Cilium+Istio+NO LB)
+架構
+Cilium 取代 kube-proxy
+Istio 取代 Traefik
+ServiceLB 關閉
 ```
 瀏覽器 https://rancher.192.168.8.190.sslip.io:31988
         ↓
@@ -295,3 +302,5 @@ kubectl create token headlamp-admin -n headlamp
 ```
 https://headlamp.192.168.8.190.sslip.io:31988
 ```
+
+## 安裝 Kiali
