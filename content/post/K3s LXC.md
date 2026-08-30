@@ -186,6 +186,7 @@ Step 8：部署测试应用
 
 
 ## 安裝 Rancher
+這邊安裝架構 (Cilium+Istio+NO LB)
 ```
 瀏覽器 https://rancher.192.168.8.190.sslip.io:31988
         ↓
@@ -239,6 +240,13 @@ helm install rancher rancher-stable/rancher \
   --set hostname=rancher.192.168.8.190.sslip.io ort\
   --set bootstrapPassword='請換成你的強密碼' \
   --set replicas=1
+## 如果部屬失敗在重新佈署一次
+helm upgrade rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --reuse-values \
+  --set hostname=rancher.192.168.8.190.sslip.io \
+  --set replicas=1  
+  
 ```
 5. 安裝完可能沒辦法馬上進去，可以使用NodeP用PortForwarding進去
 ```
@@ -253,4 +261,37 @@ cat /etc/rancher/k3s/config.yaml 2>/dev/null
         '--disable=traefik' \
         '--disable=servicelb' \
 
+```
+
+## 安裝 Headlamp
+用於取代 K8s Dashboard
+```
+helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
+helm repo update
+
+kubectl create namespace headlamp
+helm install headlamp headlamp/headlamp \
+  --namespace headlamp
+kubectl get pods,svc -n headlamp
+
+kubectl port-forward \
+  --address 0.0.0.0 \
+  -n headlamp svc/headlamp 8080:80
+
+```
+建立Tokens
+```
+## 建立管理帳號
+kubectl create serviceaccount headlamp-admin \
+  -n headlamp
+## 授予 cluster-admin
+kubectl create clusterrolebinding headlamp-admin \
+  --serviceaccount=headlamp:headlamp-admin \
+  --clusterrole=cluster-admin  
+取得登入 Token
+kubectl create token headlamp-admin -n headlamp
+```
+最後功能正常改成
+```
+https://headlamp.192.168.8.190.sslip.io:31988
 ```

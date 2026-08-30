@@ -53,7 +53,7 @@ Vitro SCSI Single
 
 ## Rancher
 
-
+![](static/Pasted%20image%2020260830113029.png)
 ## Harvester
 | Option                   | Required Value   |
 | ------------------------ | ---------------- |
