@@ -10,6 +10,7 @@
           {
             "id": "a527fd6a6bbcbd1b",
             "type": "tabs",
+            "dimension": 80.28933092224231,
             "children": [
               {
                 "id": "a9df0dd4ac7a4247",
@@ -17,12 +18,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/OS整理.md",
+                    "file": "content/post/Traefik.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "OS整理"
+                  "title": "Traefik"
                 }
               }
             ]
@@ -30,6 +31,7 @@
           {
             "id": "b8d9d022390fed15",
             "type": "tabs",
+            "dimension": 19.710669077757686,
             "children": [
               {
                 "id": "d8190c7b0b108283",
@@ -68,7 +70,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
                 }
               }
             ]
@@ -259,6 +261,10 @@
   },
   "active": "d8190c7b0b108283",
   "lastOpenFiles": [
+    "content/post/Traefik.md",
+    "content/post/反向代理工具.md",
+    "content/post/各式 DNS Server 方案.md",
+    "content/post/SSL 憑證.md",
     "content/post/OS整理.md",
     "content/post/K3s LXC.md",
     "content/post/PVE 各系統安裝.md",
@@ -287,14 +293,11 @@
     "static/PixPin_2026-08-23_00-07-26.png",
     "static/PixPin_2026-08-23_00-00-43.png",
     "content/post/Caddy.md",
-    "content/post/SSL 憑證.md",
     "content/post/常用指令AIX.md",
     "content/post/homeassisant.md",
     "content/post/下載相依套件.md",
     "hugo.yaml",
     "content/post/Linux 初始化設定.md",
-    "MindMap 2026-08-16 16.11.11.smm.md",
-    "content/post/AIX 安裝.md",
     "FETCH_HEAD",
     "static/Diagram 13.svg.xml",
     "static/Diagram 12.svg.xml",
