@@ -16,6 +16,8 @@ macOS 要push之前驗證裝 `brew tap microsoft/git-credential-manager`
 - 網路重新取得IP `ifdown eth0 --force && ifup eth0`  
 - 查看DNS `cat /etc/resolv.conf`
 - 看default gateway ：ip route show
+- 看hosts  `getent hosts illumio.twse.com.tw`
+
 >\* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
 >如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8
 

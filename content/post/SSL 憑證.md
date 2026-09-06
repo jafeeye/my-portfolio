@@ -3,6 +3,14 @@ title: SSL 憑證
 toc: true
 date: 2026-07-10
 ---
+
+| 軟體                            | 開源免費自架 | Web UI    | 帳密/API Key | 憑證/私有 CA  | 功能                     |
+| ----------------------------- | ------ | --------- | ---------- | --------- | ---------------------- |
+| **OpenBao**                   | ✅      | ✅         | ✅          | ✅         | 最接近完整替代                |
+| **Smallstep step-ca**         | ✅      | 基本功能偏 CLI | ❌          | ✅ 很強      | 最適合管理三層憑證              |
+| **SOPS + age**                | ✅      | ❌         | ✅          | 只能當加密檔案保存 | 適合 GitOps/K8s          |
+| **Bitwarden Secrets Manager** | 部分限制   | ✅         | ✅          | 普通        | 免費自架條件不如 OpenBao       |
+| **Infisical CE**              | ✅      | ✅ 最漂亮     | ✅          | ✅         | 其實你現在用的就是開源版，但部分進階功能收費 |
 以現在目前大家能通過SSL憑證，不外乎以下幾種
 - 買網域,有公網憑證去信任本地網址
 - 使用免費Let's Crypt 
@@ -14,16 +22,21 @@ date: 2026-07-10
 ![](Diagram%204.svg)
 
 
-## 遠端匯憑證方法
+## 常用指令
+1. 列出所有憑證PEM Base64、簽發者
+`openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs`
+![](static/Pasted%20image%2020260906211240.png)
+2. 遠端匯憑證
 ```
 # 抓下網站SSL憑證
 openssl s_client -showcerts -connect IP位置:443 </dev/null 2>/dev/null | 
-
 openssl x509 -outform PEM > /usr/local/share/ca-certificates/netbox.crt
-
 #更新系統信任清單
 update-ca-certificates
 ```
+
+
+
 
 ## 憑證簽發流程
 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證
@@ -174,7 +187,7 @@ cat docker1.training.lab.crt intermediate.crt > fullchain.crt
 - 你的電腦 / PVE 信任清單：只需要匯入最頂層的阿公 `root.crt`。
 
 
-
+## Certify The Web (要付費)
 ## mTLS
 
 ## EJBCA Community
@@ -208,7 +221,11 @@ curl http://192.168.10.9:9000/acme/local/directory 確認是否正常
 
 ## infisical ：保管憑證及api key
 
+![](static/Pasted%20image%2020260906211656.png)
 
+
+## XCA
+![](static/Pasted%20image%2020260906211924.png)
 
 ## ACME Server
 Nginx : Nginx-acme
@@ -227,7 +244,7 @@ DNSSEC（網域名稱系統安全擴充）
 一篇關於 Caddy Traefik certbot Nginx 怎麼設定acme
 https://smallstep.com/blog/private-acme-server/
 
-
+![](static/Pasted%20image%2020260905193356.png)
 
 
 ## 結論 - 使用情境
