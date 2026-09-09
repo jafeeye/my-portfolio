@@ -194,7 +194,7 @@ sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management drop
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management setup
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl start --runlevel 5
 sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-status -w
-sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management create-domain --user-name admin@bd1.dev --full-name 'admin' --org-name 'Office.'
+sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management create-domain --user-name admin@illumio-kevin.bd1.dev --full-name 'admin' --org-name 'GSS.'
 sudo -u ilo-pce illumio-pce-ctl ven-software-install /var/tmp/illumio-ven-bundle-25.2.20-2018.tar.bz2 --compatibility-matrix /var/tmp/illumio-release-compatibility-81-494.tar.bz2
 ```
 

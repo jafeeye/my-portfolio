@@ -41,12 +41,11 @@ options kvm-amd nested=Y ept=Y //amd開啟嵌套虛擬化
 
 
 ## EVE-NG
-最小大小為50G，但為擴充開機磁碟設定為100G
-Vitro SCSI Single
+最小大小為50G，但為擴充開機磁碟設定為100G、Vitro SCSI Single
 
-1. 先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 `root/eve`，登入後會到藍色畫面做初始化設定，再重開機就可以看到ip
+1. 先放入iso檔後，安裝檔會進行cloud-init自動化安裝後重開機，第一次開機要先登入帳號密碼進行下一步安裝設定，帳號/密碼為 `root/eve`，登入後會到藍色畫面做初始化設定，設定IP、Hostname、DNS，再重開機就可以看到介面
 ![](260308-eveng.png)
-2. 進入網頁後登入初始密碼 `admin/eve`，此時再進行帳號設定
+2. 輸入IP，進入網頁後登入初始密碼 `admin/eve`，此時再進行帳號設定
 ![](260308-evengui.png)
 
 
