@@ -1,11 +1,30 @@
 ---
-title: OpenShift 教學
+title: OpenShift
 toc: true
 date: 2026-05-23
 ---
 1. 單機環境 -> 有的，裝 [Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)](https://www.redhat.com/en/blog/codeready-containers) / 以前的名字叫做 CRC ... 現在叫做 OpenShift Local。
 2. 自建**免費叢集** -> 社群版 [OKD](https://github.com/okd-project/okd)。
 3. 自建**試用叢集** -> 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。
+
+
+## MicroShift
+安裝
+```
+sudo subscription-manager register
+sudo subscription-manager refresh
+sudo subscription-manager identity
+sudo subscription-manager status
+```
+
+```
+sudo subscription-manager repos \
+  --enable="rhel-9-for-$(uname -m)-baseos-rpms" \
+  --enable="rhel-9-for-$(uname -m)-appstream-rpms" \
+  --enable="rhocp-4.22-for-rhel-9-$(uname -m)-rpms" \
+  --enable="fast-datapath-for-rhel-9-$(uname -m)-rpms"
+```
+
 
 
 
