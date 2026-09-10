@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "de20687e60189f16",
+        "id": "abc2cd3aa1ce14aa",
         "type": "split",
         "children": [
           {
             "id": "b8d9d022390fed15",
             "type": "tabs",
-            "dimension": 79.71602434077079,
             "children": [
               {
                 "id": "ee5417073a12fdb3",
@@ -18,23 +17,22 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/OpenShift.md",
+                    "file": "content/post/Docker.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "OpenShift"
+                  "title": "Docker"
                 }
               }
             ]
           },
           {
-            "id": "08fac689c2472b36",
+            "id": "1ff94a29d8b60277",
             "type": "tabs",
-            "dimension": 20.28397565922921,
             "children": [
               {
-                "id": "bcf6e6cdf54e5fae",
+                "id": "4d695b6e1bee2931",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
@@ -138,7 +136,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 222.83334350585938
+    "width": 222.83334350585938,
+    "collapsed": true
   },
   "right": {
     "id": "4357a1d8db811d29",
@@ -154,7 +153,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/post/OpenShift.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -260,8 +258,13 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "ee5417073a12fdb3",
+  "active": "4d695b6e1bee2931",
   "lastOpenFiles": [
+    "content/post/Docker.md",
+    "content/post/郵件Server架設.md",
+    "content/post/illumio Debug.md",
+    "content/post/proj/跳板機.md",
+    "content/post/OpenShift.md",
     "content/post/企業虛擬化方案.md",
     "未命名 1.md",
     "content/post/虛擬機器比較.md",
@@ -281,19 +284,14 @@
     "content/post/企業大量部屬.md",
     "content/post/illumio 流量模擬.md",
     "static/Pasted image 20260905193356.png",
-    "content/post/illumio Debug.md",
     "content/post/ESXi 安裝細項配置.md",
     "content/post/illumio K8S.md",
     "content/post/illumio 常用指令.md",
     "content/post/Traefik.md",
     "content/post/反向代理工具.md",
     "content/post/OS整理.md",
-    "content/post/PVE 各系統安裝.md",
     "static/Pasted image 20260830113029.png",
-    "content/post/Dashboard.md",
-    "content/post/K8S.md",
     "static/Pasted image 20260829233657.png",
-    "content/post/郵件Server.md",
     "static/ingress 1.webp",
     "static/Picture6 1.jpg",
     "static/20230427194612.png",

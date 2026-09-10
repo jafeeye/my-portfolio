@@ -3,6 +3,14 @@ title: docker
 toc: true
 date: 2026-06-21
 ---
+Volume 用法
+```
+    environment:
+      MP_SMTP_TLS_CERT: /certs/wildcard.bd1.dev.crt
+    volumes:
+      - ./mailpit/certs:/certs:ro
+```
+
 docker ps 
 docker logs <容器名稱>
 Arcane
