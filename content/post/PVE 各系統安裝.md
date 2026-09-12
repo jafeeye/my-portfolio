@@ -20,14 +20,14 @@ CD/DVD (ide1)：refplat-20250616-fcs.iso
 
 ## ESXi Nested
 
-先確認PVE系統設定檔
+1. 先確認PVE系統設定檔
 ```
 cat /etc/modprobe.d/kvm-intel.conf
 options kvm-intel nested=Y  //Intel開啟嵌套虛擬化
 options kvm ignore_msrs=y  //Intel開啟嵌套虛擬化
 options kvm-amd nested=Y ept=Y //amd開啟嵌套虛擬化
 ```
-安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面  
+2. 安裝嵌套式ESXi，要在PVE中啟用**Enable NUMA**，才能進入使用畫面  
 
 | 類型                  | 設定                       | 說明                                                                      |
 | ------------------- | ------------------------ | ----------------------------------------------------------------------- |
@@ -51,14 +51,15 @@ options kvm-amd nested=Y ept=Y //amd開啟嵌套虛擬化
 
 
 ## Rancher
-
-![](static/Pasted%20image%2020260830113029.png)
 ## Harvester
 | Option                   | Required Value   |
 | ------------------------ | ---------------- |
 | OS Type                  | `Other OS Types` |
 | CPU Type                 | `Host`           |
 | Network Type (Harvester) | `e1000`          |
+
+
+![](static/Pasted%20image%2020260830113029.png)
 
 
 ## Nutanix

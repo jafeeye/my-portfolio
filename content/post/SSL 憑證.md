@@ -26,7 +26,13 @@ date: 2026-07-10
 1. 列出所有憑證PEM Base64、簽發者
 `openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs`
 ![](static/Pasted%20image%2020260906211240.png)
-2. 遠端匯憑證
+2. 列出憑證所有訊息
+```
+openssl x509 \
+  -in /var/lib/illumio-pce/cert/server.crt \
+  -noout -text
+```
+3. 遠端匯憑證
 ```
 # 抓下網站SSL憑證
 openssl s_client -showcerts -connect IP位置:443 </dev/null 2>/dev/null | 
@@ -49,32 +55,30 @@ update-ca-certificates
 
 憑證鏈（Certificate Chain）![](Diagram%205.svg) 完整憑證本身要具備 root.crt (根憑證) + intermediate.crt (中繼憑證)+ server.crt (終端憑證)，有時候為了省事，會直接用 openssl 簽兩張 (根+終端)也可過信任
 
-## OpenSSL 兩層簽法
+## OpenSSL 二層簽法
 
 因為我們是在實驗室環境（`.lab`），我們不花錢去跟外面大廠（如 DigiCert）買憑證，所以我們要「**自己開一家戶政事務所（俗稱自簽 CA）**」。
-1. 產生 CA 的私鑰（Private Key）
+1. 產生 CA 的私鑰（Private Key）：戶政事務所刻了一個「全天下只有所長知道的官方大印章（私鑰）」。這個印章絕對不能被偷走，因為未來所有發出去的身分證，都要用這個印章來蓋章。`4096` 代表這個印章的防偽複雜度極高。
 ```
 openssl genrsa -out ca.key 4096
 ```
-- **白話意思**：戶政事務所刻了一個「全天下只有所長知道的官方大印章（私鑰）」。這個印章絕對不能被偷走，因為未來所有發出去的身分證，都要用這個印章來蓋章。`4096` 代表這個印章的防偽複雜度極高。
-2. 產生 CA 的公開憑證（Public Certificate）
+
+2. 產生 CA 的公開憑證（Public Certificate）：戶政事務所對外掛牌開張（`ca.crt`），告訴全天下（`-subj` 裡面的地區、UUU 組織等欄位）：「我是合法的戶政事務所，我的有效期限是 10 年（`3650` 天）。」 未來你的瀏覽器或 Docker 用戶端，必須要把這個 `ca.crt` 檔案匯入到電腦裡，點選「信任它」，這家戶政事務所說的話才算數。
 ```
 openssl req -x509 -new -nodes -sha512 -days 3650 \
     -subj "/C=TW/ST=Taiwan/L=Taipei/O=UUU/OU=DKL/CN=docker1.training.lab" \
     -key ca.key \
     -out ca.crt
 ```
-- **白話意思**：戶政事務所對外掛牌開張（`ca.crt`），告訴全天下（`-subj` 裡面的地區、UUU 組織等欄位）：「我是合法的戶政事務所，我的有效期限是 10 年（`3650` 天）。」
-- 未來你的瀏覽器或 Docker 用戶端，必須要把這個 `ca.crt` 檔案匯入到電腦裡，點選「信任它」，這家戶政事務所說的話才算數。
 
 **伺服器向 CA 申請身分證（憑證）**
 現在戶政事務所蓋好了，你的 Docker 伺服器（`docker1.training.lab`）要來申請一張證明自己合法身份的證書。
 
-3. 產生伺服器的私鑰（Private Key）
+3. 產生伺服器的私鑰（Private Key）：你（伺服器）自己在家裡，秘密生成了一個「你自己的個人私章」（`docker1.training.lab.key`）。未來在進行 HTTPS 加密連線時，伺服器要用這個私章來解密資料。這個檔案一樣絕對不能外流！
 ```
 openssl genrsa -out docker1.training.lab.key 4096
 ```
-- **白話意思**：你（伺服器）自己在家裡，秘密生成了一個「你自己的個人私章」（`docker1.training.lab.key`）。未來在進行 HTTPS 加密連線時，伺服器要用這個私章來解密資料。這個檔案一樣絕對不能外流！
+
 4. 產生伺服器的「憑證簽發申請書（CSR）」
 ```
 openssl req -sha512 -new \
@@ -86,14 +90,14 @@ openssl req -sha512 -new \
 - 申請書上寫明了你的基本資料（`-subj`），最重要的欄位是 **`CN=docker1.training.lab`**，這代表你跟政府宣稱：「我的網址就叫這個名字，請政府幫我驗證！」
 
 5. 戶政事務所大印一蓋，核發身分證（CRT）
+- **白話意思**：你把那份申請書（`-in ...csr`）送到戶政事務所。所長看了一下沒問題，拿出剛才第一步刻好的官方大印章（`-CAkey ca.key`），對照著政府公告（`-CA ca.crt`），用力在你的申請書上蓋下去！
+- 產出的產物就是 **`docker1.training.lab.crt`**。這就是你的「實體身分證（數位憑證）」！它的有效期限同樣是 10 年。
 ```
 openssl x509 -req -sha512 -days 3650 \
     -CA ca.crt -CAkey ca.key -CAcreateserial \
     -in docker1.training.lab.csr \
     -out docker1.training.lab.crt
 ```
-- **白話意思**：你把那份申請書（`-in ...csr`）送到戶政事務所。所長看了一下沒問題，拿出剛才第一步刻好的官方大印章（`-CAkey ca.key`），對照著政府公告（`-CA ca.crt`），用力在你的申請書上蓋下去！
-- 產出的產物就是 **`docker1.training.lab.crt`**。這就是你的「實體身分證（數位憑證）」！它的有效期限同樣是 10 年。
 
 6. 最終在 Docker / Harbor 上怎麼使用這些檔案？
  當這 5 個指令跑完後，你會得到一堆檔案，最常拿去配置在 Nginx、Harbor 或 Docker 上的有這三個：

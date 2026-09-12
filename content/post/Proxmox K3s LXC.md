@@ -1,13 +1,14 @@
 ---
-title: K3s LXC
+title: Proxmox K3s LXC 實作
 toc: true
 date: 2026-07-10
+tags:
+  - "#K8s"
 ---
-## 基本概念
+## 一、基本概念
 K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server
 
-
-## 什么是 K3s？
+### 什麼是 K3s？
 ![](static/2023_06_26_22_41_07_72d1e9e6f582.jpg)
 
 K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。
@@ -17,13 +18,11 @@ K3s 的核心优势：
 - **轻量简洁**：二进制体积小，依赖少
 - **部署快速**：一条命令即可启动 Kubernetes
 - **资源占用低**：最低可运行在 512MB 内存设备上
-
 为什么选择 LXC 容器？
 - **更高效**：相比完整虚拟机，占用资源更少
 - **更隔离**：提供安全、独立的运行环境
 - **更灵活**：在 Proxmox 中便于扩容和管理
 通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。
-
 为什么要将 K3s 与 Proxmox 容器结合？
 将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合：
 - 对 Kubernetes 感兴趣的 Homelab 爱好者
@@ -32,9 +31,14 @@ K3s 的核心优势：
 
 ![](static/Kubernetes-k8s-安裝選擇地圖-1.png)
 
-## 在 Proxmox 容器中安装 K3s
+### Proxmox 容器安装 K3s
 
-目前發現問題，重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，原因不明
+**已知問題：**
+目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入`.bashrc`
+```
+echo 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml' >> /root/.bashrc
+source /root/.bashrc
+```
 
 Step 1：创建 LXC 容器
 在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框：  (不要在建立好unprivileged=1改回0，權限會大亂)
@@ -187,9 +191,8 @@ Step 8：部署测试应用
 将 K3s 部署在 Proxmox 容器中，是一种轻量、灵活、经济的 Kubernetes 实践方式。无论你是个人爱好者，还是中小企业探索容器化落地，这一方案都值得一试。
 拥抱边缘计算，从这一套组合方案开始，让 Kubernetes 部署变得简单、高效！
 
-
-
-## 安裝 Rancher
+## 二、安裝相關管理套件
+### 安裝 Rancher
 架構
 Cilium 取代 kube-proxy
 Istio 取代 Traefik
@@ -270,7 +273,7 @@ cat /etc/rancher/k3s/config.yaml 2>/dev/null
 
 ```
 
-## 安裝 Headlamp
+### 安裝 Headlamp
 用於取代 K8s Dashboard
 ```
 helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
@@ -303,4 +306,40 @@ kubectl create token headlamp-admin -n headlamp
 https://headlamp.192.168.8.190.sslip.io:31988
 ```
 
-## 安裝 Kiali
+### 安裝 Kiali
+
+## 三、Services Mesh
+| 比較項目                 | Sidecar Mode      | Ambient Mode       | Ambient + Waypoint                |
+| -------------------- | ----------------- | ------------------ | --------------------------------- |
+| Proxy 部署位置           | 每個 Pod 一個 Envoy   | 每個 Node 一個 ztunnel | 每個 Node 有 ztunnel，另外部署共享 Waypoint |
+| Pod 內是否增加容器          | 會增加 `istio-proxy` | 不會                 | 不會                                |
+| L4 TCP 控管            | ✅                 | ✅                  | ✅                                 |
+| mTLS 加密              | ✅                 | ✅                  | ✅                                 |
+| 身分驗證                 | ✅                 | ✅                  | ✅                                 |
+| L4 Policy            | ✅                 | ✅                  | ✅                                 |
+| L7 HTTP 控管           | ✅                 | ❌                  | ✅                                 |
+| URL／Path 控管          | ✅                 | ❌                  | ✅                                 |
+| HTTP Header／JWT      | ✅                 | ❌                  | ✅                                 |
+| Retry／Timeout／路由     | ✅                 | ❌                  | ✅                                 |
+| HTTP Metrics／Tracing | ✅                 | ❌                  | ✅                                 |
+| Proxy 數量             | 每個 Pod 一個，最多      | 每個 Node 一個，最少      | ztunnel 加上需要的 Waypoint            |
+| 資源消耗                 | 較高                | 最低                 | 中等                                |
+| 更新 Proxy             | 通常需重啟 Pod         | 不用重啟應用 Pod         | 不用重啟應用 Pod                        |
+| 適合情境                 | 每個服務都需要完整 L7      | 只需要加密與 L4 微分段      | 部分服務需要 L7 功能                      |
+| 是否需要 Istio CNI       | 建議，但不一定必要         | 必要                 | 必要                                |
+各別角色關係
+
+|元件|用途|白話說法|
+|---|---|---|
+|Flannel／Calico／Cilium|建立 Pod 網路、分配 Pod IP|幫 Pod 鋪網路|
+|Istio CNI|攔截並重新導向 Pod 流量|把流量抓進 Istio|
+|ztunnel|mTLS、身分辨識、L4 Policy|管「誰可以連誰、哪個 Port」|
+|Waypoint|HTTP 路由與 L7 Policy|管「連進來後，可以存取哪個 API」|
+|Sidecar Envoy|單一 Pod 的 L4＋L7 處理|每個 Pod 自帶一名完整警衛|
+|Istiod|發送憑證、政策與 Proxy 設定|Istio 的中央控制中心|
+
+|模式|流量路徑|
+|---|---|
+|Sidecar|`App A → Sidecar A → Sidecar B → App B`|
+|Ambient|`App A → ztunnel A → ztunnel B → App B`|
+|Ambient + Waypoint|`App A → ztunnel A → Waypoint B → ztunnel B → App B`|

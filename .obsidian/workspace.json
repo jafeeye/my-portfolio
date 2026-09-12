@@ -4,7 +4,7 @@
     "type": "split",
     "children": [
       {
-        "id": "abc2cd3aa1ce14aa",
+        "id": "3611c24322d977d8",
         "type": "split",
         "children": [
           {
@@ -17,29 +17,29 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Docker.md",
+                    "file": "content/post/PVE 各系統安裝.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Docker"
+                  "title": "PVE 各系統安裝"
                 }
               }
             ]
           },
           {
-            "id": "1ff94a29d8b60277",
+            "id": "d0a05ccdb94623e2",
             "type": "tabs",
             "children": [
               {
-                "id": "4d695b6e1bee2931",
+                "id": "db5bb621e1dddae5",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\my-portfolio",
+                      "cwd": "C:\\Users\\PIN\\Desktop\\obsidian\\my-portfolio",
                       "focus": false,
                       "profile": {
                         "args": [],
@@ -136,8 +136,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 222.83334350585938,
-    "collapsed": true
+    "width": 222.83334350585938
   },
   "right": {
     "id": "4357a1d8db811d29",
@@ -229,8 +228,8 @@
             "state": {
               "type": "claudian-view",
               "state": {},
-              "icon": "bot",
-              "title": "Claudian"
+              "icon": "lucide-ghost",
+              "title": "claudian-view"
             }
           }
         ]
@@ -258,11 +257,17 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "4d695b6e1bee2931",
+  "active": "db5bb621e1dddae5",
   "lastOpenFiles": [
+    "content/post/PVE 各系統安裝.md",
+    "content/post/Proxmox K3s LXC.md",
+    "content/post/Nutanix.md",
+    "content/post/SSL 憑證.md",
+    "content/post/illumio 流量模擬.md",
+    "content/post/資產盤點軟體.md",
+    "content/post/illumio Debug.md",
     "content/post/Docker.md",
     "content/post/郵件Server架設.md",
-    "content/post/illumio Debug.md",
     "content/post/proj/跳板機.md",
     "content/post/OpenShift.md",
     "content/post/企業虛擬化方案.md",
@@ -270,11 +275,9 @@
     "content/post/虛擬機器比較.md",
     "illumio Container.md",
     "Python.md",
-    "content/post/SSL 憑證.md",
     "static/Pasted image 20260906211924.png",
     "static/Pasted image 20260906211656.png",
     "static/Pasted image 20260906211240.png",
-    "content/post/K3s LXC.md",
     "content/post/各式 DNS Server 方案.md",
     "未命名.md",
     "content/post/常用指令linux.md",
@@ -282,14 +285,10 @@
     "content/post/2026 家用Homelab架設指南.md",
     "content/post/HAProxy.md",
     "content/post/企業大量部屬.md",
-    "content/post/illumio 流量模擬.md",
     "static/Pasted image 20260905193356.png",
     "content/post/ESXi 安裝細項配置.md",
     "content/post/illumio K8S.md",
     "content/post/illumio 常用指令.md",
-    "content/post/Traefik.md",
-    "content/post/反向代理工具.md",
-    "content/post/OS整理.md",
     "static/Pasted image 20260830113029.png",
     "static/Pasted image 20260829233657.png",
     "static/ingress 1.webp",
