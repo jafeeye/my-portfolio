@@ -6,9 +6,485 @@ date: 2026-05-23
 1. 單機環境 -> 有的，裝 [Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)](https://www.redhat.com/en/blog/codeready-containers) / 以前的名字叫做 CRC ... 現在叫做 OpenShift Local。
 2. 自建**免費叢集** -> 社群版 [OKD](https://github.com/okd-project/okd)。
 3. 自建**試用叢集** -> 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。
+## 一、單節點部屬
+
+SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk
+可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 `master.ign`、缺少 DNS 和 `bootstrapInPlace` 的問題。
+
+> 以下假設：
+> - 安裝工具主機：`192.168.8.83`
+> - OKD SNO：`192.168.8.84`
+> - Cluster Name：`okd-sno`
+> - Base Domain：`myk8s.local`
+> - 磁碟：`/dev/vda`
+> - Gateway：`192.168.8.1`
+> - DNS：使用你現有的 PowerDNS
+> - OKD 版本：`4.13.0-0.okd-2023-06-04-080300`
+
+Step1.準備 DNS
+在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：
+
+| 類型  | 名稱                           | IP             |
+| --- | ---------------------------- | -------------- |
+| A   | `api.okd-sno.myk8s.test`     | `192.168.8.24` |
+| A   | `api-int.okd-sno.myk8s.test` | `192.168.8.24` |
+| A   | `*.apps.okd-sno.myk8s.test`  | `192.168.8.24` |
+| A   | `sno.okd-sno.myk8s.test`     | `192.168.8.24` |
+
+最好也建立 PTR：
+```
+192.168.8.24 → sno.okd-sno.myk8s.test
+```
+在安裝工具主機測試：
+```
+dig api.okd-sno.myk8s.test
+dig api-int.okd-sno.myk8s.test
+dig console-openshift-console.apps.okd-sno.myk8s.test
+dig -x 192.168.8.84
+```
+前三筆都應解析到：
+```
+192.168.8.24
+```
+特別是 wildcard 測試不能省略：
+```
+dig test.apps.okd-sno.myk8s.test
+```
+
+Step2.準備固定 IP
+最簡單穩定的方法，是在 MikroTik 或現有 DHCP Server 建立 DHCP Reservation，讓 OKD VM 的 MAC Address 永遠取得：
+```
+IP：192.168.8.24
+Gateway：192.168.8.1
+DNS：你的 PowerDNS IP
+```
+不要讓它每次開機取得不同 IP，否則 DNS 會全部失效。
+在 PVE 建立 VM 後，先記下 VM 網卡 MAC Address，再到 DHCP Server 綁定 IP。
+
+Step3.下載 OKD Installer 與 OC
+在 Rocky Linux `192.168.8.83` 執行：
+```
+sudo dnf install -y wget tar jq bind-utils python3
+```
+建立工具目錄：
+```
+mkdir -p ~/okd-tools
+cd ~/okd-tools
+```
+下載 Installer：
+```
+wget https://github.com/okd-project/okd/releases/download/4.22.0-okd-scos.0/openshift-install-linux-4.22.0-okd-scos.0.tar.gz
+```
+下載 OpenShift CLI：
+```
+wget https://github.com/okd-project/okd/releases/download/4.22.0-okd-scos.0/openshift-client-linux-4.22.0-okd-scos.0.tar.gz
+```
+解壓縮：
+```
+tar -xvf openshift-install-linux-4.13.0-0.okd-2023-06-04-080300.tar.gz
+tar -xvf openshift-client-linux-4.13.0-0.okd-2023-06-04-080300.tar.gz
+```
+安裝工具：
+```
+sudo install -m 0755 openshift-install /usr/local/bin/openshift-install
+sudo install -m 0755 oc /usr/local/bin/oc
+sudo install -m 0755 kubectl /usr/local/bin/kubectl
+```
+確認版本：
+```
+openshift-install version
+oc version --client
+```
+兩者必須是相同的 OKD 4.13 release。這個流程不需要 Butane。
+
+Step4.產生 SSH Key
+如果尚未有 SSH Key：
+```
+ssh-keygen -t ed25519 -f ~/.ssh/okd-sno -N ""
+```
+查看公鑰：
+```
+cat ~/.ssh/okd-sno.pub
+```
+把完整輸出保留下來，稍後放入 `install-config.yaml`。
+
+Step5.建立安裝目錄
+```
+mkdir -p ~/okd-install
+cd ~/okd-install
+```
+建立：
+```
+vi install-config.yaml
+```
+填入：
+```
+apiVersion: v1
+baseDomain: myk8s.local
+
+metadata:
+  name: okd-sno
+
+compute:
+- name: worker
+  replicas: 0
+
+controlPlane:
+  name: master
+  replicas: 1
+
+networking:
+  networkType: OVNKubernetes
+
+  machineNetwork:
+  - cidr: 192.168.8.0/24
+
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+
+  serviceNetwork:
+  - 172.30.0.0/16
+
+platform:
+  none: {}
+
+bootstrapInPlace:
+  installationDisk: /dev/vda
+
+pullSecret: '{"auths":{"fake":{"auth":"ZmFrZTpmYWtl"}}}'
+
+sshKey: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...'
+```
+把最後一行換成：
+```
+cat ~/.ssh/okd-sno.pub
+```
+顯示的完整公鑰。
+注意：
+```
+bootstrapInPlace:
+  installationDisk: /dev/vda
+```
+必須和 PVE VM 裡真正的磁碟名稱一致。
+
+Step6.備份 install-config.yaml
+`openshift-install` 產生 Ignition 時，會吃掉原本的 `install-config.yaml`，所以先備份：
+```
+cp install-config.yaml install-config.yaml.backup
+```
+確認格式：
+```
+openshift-install create manifests --dir=.
+```
+不過這個指令也會消耗 `install-config.yaml`。若要直接產生 SNO Ignition，比較簡單的做法是先還原：
+```
+cp install-config.yaml.backup install-config.yaml
+```
+然後執行：
+```
+openshift-install create single-node-ignition-config --dir=.
+```
+完成後檢查：
+```
+ls -lh
+```
+應該看到類似：
+```
+bootstrap-in-place-for-live-iso.ign
+auth/
+metadata.json
+```
+關鍵檔案是：
+```
+bootstrap-in-place-for-live-iso.ign
+```
+不是 `master.ign`。
+
+Step7.下載相容的 FCOS ISO
+不要直接抓 FCOS 官網最新版本，先讓 OKD Installer 告訴你搭配的 CoreOS 版本：
+```
+openshift-install coreos print-stream-json > ~/okd-install/stream.json
+```
+取得 ISO URL：
+```
+jq -r \
+'.architectures.x86_64.artifacts.metal.formats.iso.disk.location' \
+~/okd-install/stream.json
+```
+直接下載：
+```
+FCOS_ISO_URL=$(jq -r \
+'.architectures.x86_64.artifacts.metal.formats.iso.disk.location' \
+~/okd-install/stream.json)
+
+wget "$FCOS_ISO_URL" -O ~/okd-install/fedora-coreos-okd.iso
+```
+檢查：
+```
+ls -lh ~/okd-install/fedora-coreos-okd.iso
+```
+接著將 ISO 上傳到 PVE 的 ISO Storage。
+
+Step8.啟動 Ignition HTTP Server
+進入安裝目錄：
+```
+cd ~/okd-install
+```
+確認檔案存在：
+```
+ls -lh bootstrap-in-place-for-live-iso.ign
+```
+啟動 HTTP Server：
+```
+python3 -m http.server 8080 --bind 0.0.0.0
+```
+如果 Rocky Linux 開啟 firewalld：
+```
+sudo firewall-cmd --permanent --add-port=8080/tcp
+sudo firewall-cmd --reload
+```
+從其他主機測試：
+```
+curl -I http://192.168.8.83:8080/bootstrap-in-place-for-live-iso.ign
+```
+應該看到：
+```
+HTTP/1.0 200 OK
+```
+安裝過程中這個終端不要關閉。
+
+Step9.在 Proxmox VE 建立 VM
+建議規格：
+
+|設定|建議值|
+|---|---|
+|CPU|12 vCPU|
+|CPU Type|`host`|
+|RAM|24～32 GB|
+|Ballooning|關閉|
+|Disk|150～200 GB|
+|Disk Bus|VirtIO Block 或 SCSI|
+|Network|VirtIO|
+|Bridge|連到 `192.168.8.0/24` 的 Bridge|
+|Machine|q35|
+|BIOS|OVMF 或 SeaBIOS|
+|Installation ISO|對應版本 FCOS ISO|
+
+如果磁碟選 VirtIO Block，通常會是：
+```
+/dev/vda
+```
+如果是 SATA，通常會是：
+```
+/dev/sda
+```
+如果是 NVMe，可能是：
+```
+/dev/nvme0n1
+```
+安裝會清空這顆磁碟。
+
+Step10.、確認 VM 的磁碟名稱
+第一次可以先正常進入 FCOS Live 環境，不要急著安裝。登入後執行：
+```
+lsblk
+```
+例如看到：
+```
+NAME   SIZE TYPE
+vda    200G disk
+sr0    1.1G rom
+```
+代表安裝磁碟是：
+```
+/dev/vda
+```
+如果與 `install-config.yaml` 不一致，必須重新產生 Ignition。
+修改備份：
+```
+cd ~/okd-install
+vi install-config.yaml.backup
+```
+修改：
+```
+bootstrapInPlace:
+  installationDisk: /dev/vda
+```
+清理舊的產出前，建議直接建立新的工作目錄：
+```
+mkdir -p ~/okd-install-new
+cp ~/okd-install/install-config.yaml.backup \
+   ~/okd-install-new/install-config.yaml
+
+openshift-install create single-node-ignition-config \
+  --dir=~/okd-install-new
+```
+然後在新目錄啟動 HTTP Server。
+
+Step11.從 GRUB 載入 SNO Ignition
+重新啟動 VM。
+出現 Fedora CoreOS GRUB 選單時，按：
+```
+E
+```
+找到以 `linux` 或 `linuxefi` 開頭的那一行，在最後面加入：
+```
+coreos.inst.install_dev=/dev/vda coreos.inst.ignition_url=http://192.168.8.83:8080/bootstrap-in-place-for-live-iso.ign coreos.inst.insecure
+```
+
+整段必須在同一行。然後按：
+```
+Ctrl + X
+```
+開始開機和安裝。
+`coreos.inst.insecure` 是因為 Ignition 使用 HTTP，而不是 HTTPS。
+
+Step12.觀察安裝狀態
+在 Rocky Linux 安裝工具主機另外開一個終端：
+```
+cd ~/okd-install
+```
+監控 bootstrap：
+```
+openshift-install wait-for bootstrap-complete \
+  --dir=. \
+  --log-level=debug
+```
+SNO 有時不會像傳統叢集一樣明確完成獨立 bootstrap 階段，更重要的是監控整體安裝：
+```
+openshift-install wait-for install-complete \
+  --dir=. \
+  --log-level=debug
+```
+
+第一次完成可能需要 30～90 分鐘，硬體或網路較慢時會更久。
+
+Step13.SSH 進入 FCOS 查看
+
+安裝後可以使用：
+```
+ssh -i ~/.ssh/okd-sno core@192.168.8.84
+```
+查看服務：
+```
+sudo systemctl status kubelet
+sudo systemctl status crio
+sudo systemctl status bootkube.service
+```
+查看即時日誌：
+```
+sudo journalctl -b -f
+```
+查看 bootstrap 服務：
+```
+sudo journalctl -b -u bootkube.service
+```
+確認時間：
+```
+timedatectl
+chronyc sources -v
+```
+
+DNS 測試：
+```
+getent hosts api.okd-sno.myk8s.local
+getent hosts api-int.okd-sno.myk8s.local
+getent hosts console-openshift-console.apps.okd-sno.myk8s.local
+```
+
+Step14.設定 oc 管理工具
+回到 Rocky Linux：
+```
+cd ~/okd-install
+export KUBECONFIG=$PWD/auth/kubeconfig
+```
+確認連線：
+```
+oc get nodes
+```
+正常應該看到：
+```
+NAME   STATUS   ROLES                  AGE   VERSION
+sno    Ready    control-plane,master   ...   ...
+```
+查看 Cluster Operators：
+```
+oc get clusteroperators
+```
+簡寫：
+```
+oc get co
+```
+理想狀態：
+```
+AVAILABLE=True
+PROGRESSING=False
+DEGRADED=False
+```
+持續觀察：
+```
+watch -n 5 'oc get nodes; echo; oc get co'
+```
+
+Step15.取得登入帳號及 Console 網址
+
+查看 kubeadmin 密碼：
+```
+cat ~/okd-install/auth/kubeadmin-password
+```
+Console 網址：
+```
+https://console-openshift-console.apps.okd-sno.myk8s.local
+```
+取得實際 Console Route：
+```
+oc get route console \
+  -n openshift-console \
+  -o jsonpath='{.spec.host}{"\n"}'
+```
+CLI 登入：
+```
+oc login \
+  -u kubeadmin \
+  -p "$(cat ~/okd-install/auth/kubeadmin-password)" \
+  https://api.okd-sno.myk8s.local:6443
+```
+## 最後的正確流程摘要
+
+```
+準備固定 IP
+    ↓
+建立 api、api-int、*.apps DNS
+    ↓
+下載相同版本 openshift-install 與 oc
+    ↓
+建立含 bootstrapInPlace 的 install-config.yaml
+    ↓
+create single-node-ignition-config
+    ↓
+產生 bootstrap-in-place-for-live-iso.ign
+    ↓
+下載 Installer 指定的 FCOS ISO
+    ↓
+HTTP Server 提供 Ignition
+    ↓
+PVE VM 從 FCOS ISO 開機
+    ↓
+GRUB 加入 ignition_url 與 install_dev
+    ↓
+安裝至本機磁碟並重新啟動
+    ↓
+wait-for install-complete
+    ↓
+oc get nodes / oc get co
+```
+
+這套做法的四個成功關鍵是：`DNS 正確`、`固定 IP`、`FCOS 與 Installer 同版本`、`使用 bootstrap-in-place-for-live-iso.ign`。只要其中一項錯誤，SNO 很容易卡在 Bootstrap、API unavailable 或 Operator degraded。
 
 
-## MicroShift
+
+## 二、MicroShift 安裝
 安裝
 ```
 sudo subscription-manager register
@@ -25,104 +501,7 @@ sudo subscription-manager repos \
   --enable="fast-datapath-for-rhel-9-$(uname -m)-rpms"
 ```
 
-
-
-
-SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk
-
-
-### 1. 下載 OpenShift 核心安裝工具
-
-```
-# 下載 OKD 專用的安裝二進位檔 (以目前的穩定版為例)
-wget https://github.com/okd-project/okd/releases/download/4.13.0-0.okd-2023-06-04-080300/openshift-install-linux-4.13.0-0.okd-2023-06-04-080300.tar.gz
-tar -xvf openshift-install-linux-*.tar.gz
-mv openshift-install /usr/local/bin/
-```
-
-### 2. 下載組態轉換工具（Butane）
-
-紅帽的作業系統不讀 YAML，只讀 JSON 格式的 Ignition。我們需要 `butane` 工具來幫我們做格式轉換：
-```
-wget https://github.com/coreos/butane/releases/download/v0.19.0/butane-amd64 -O /usr/local/bin/butane
-chmod +x /usr/local/bin/butane
-```
-
-## 核心步驟一：編寫並生成本地 Ignition 檔案
-
-### 1. 建立工作目錄並撰寫基礎配置
-
-建立一個 `install-config.yaml` 檔案：
-```
-mkdir okd-install && cd okd-install
-vi install-config.yaml
-```
-貼入以下內容（這是單節點 SNO 最精簡的本地宣告）：
-```yaml
-apiVersion: v1
-baseDomain: myk8s.local
-compute:
-- name: worker
-  replicas: 0 # SNO 模式下 Worker 設為 0
-controlPlane:
-  name: master
-  replicas: 1
-metadata:
-  name: okd-sno
-networking:
-  clusterNetwork:
-  - cidr: 10.128.0.0/14
-    hostPrefix: 23
-  networkType: OVNKubernetes # OKD 預設的 CNI
-  serviceNetwork:
-  - 172.30.0.0/16
-platform:
-  none: {} # 代表生鐵/PVE 裸機環境
-pullSecret: '{"auths":{"fake":{"auth":"ZXlK..."}}}' # 開源版可以放假的 JSON 串
-sshKey: 'ssh-rsa AAAAB3NzaC1yc2E...' # 貼上你 Rocky Linux 的公鑰
-```
-
-### 2. 編譯出本機 Ignition 檔案
-
-執行指令，這個工具會把上面的 YAML 檔案「撕碎」，吐出三個 JSON 檔案：
-```
-openshift-install create ignition-configs --dir=.
-```
-
-執行完後，目錄下會多出 `master.ign`、`worker.ign`、`bootstrap.ign`。因為我們是單節點 (SNO)，我們只需要 **`master.ign`**。
-
-## 核心步驟二：在內網架設 HTTP 伺服器
-
-因為 PVE 的虛擬機開機時，必須透過網路把剛剛生成的 `master.ign` 檔案讀進去。最快的方法是在你的 Rocky Linux 上用 Python 臨時開一個網頁伺服器：
-```
-# 在含有 master.ign 的目錄下執行，啟動一個 8080 埠口的 HTTP 服務
-python3 -m http.server 8080
-```
-
-_這時，你的檔案網址就會是：`http://192.168.8.83:8080/master.ign`_
-
-## 核心步驟三：Proxmox VE 建置與開機（黑客注入法）
-
-1. **下載 FCOS 鏡像**：去 Fedora CoreOS 官網下載標準的 `.iso` 檔並放進 PVE。
-2. **規格配置**：在 PVE 建立 VM（8 vCPU, 16GB RAM, 120GB 磁碟，CPU Type 設為 `host`）。
-3. **開機掛載並攔截**：
-    
-    - 啟動 VM，當畫面上出現 **Fedora CoreOS 的 GRUB 開機選單**時，**立刻按下鍵盤的 `E` 鍵**進入編輯模式。
-    - 找到帶有 `linux` 開頭的那一行字，在該行的最末端，空一格，手動輸入以下**注入指令**，告訴它去哪裡抓你的設定檔：
- 
-```
-coreos.inst.install_dev=vda coreos.inst.ignition_url=http://192.168.8.83:8080/master.ign
-```
-    _(註：`vda` 是你虛擬機的硬碟代號，如果是 SATA 則改 `sda`)_    
-    - 輸完後，按下 **`Ctrl + X`** 啟動。
-
-## 收尾：看著它自我孵化
-
-虛擬機讀取到你的 Python 伺服器上的 `master.ign` 後，就會開始格式化自己的硬碟，並自動下載 OpenShift 全套的 Container 元件。你可以回到 Rocky Linux 跳板機上，敲入這行指令來監控它到底蓋好了沒：
-```
-openshift-install --dir=. wait-for install-complete
-```
-
+## 三、Openshift 教學
 
 
 RBAC（Role-Based Access Control，角色式存取控制）也是 Kubernetes 與 OpenShift 中最核心的權限管理機制
