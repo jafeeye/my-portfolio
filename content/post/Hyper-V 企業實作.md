@@ -1,9 +1,18 @@
 ---
-title: hyper-v 進階功能 WSLg,GPU-PV
+title: hyper-v 企業實作 WSLg,GPU-PV
 date: 2026-03-08
 toc: true
 ---
 ## 前言
+
+## 已知限制
+- 第一代VM 可以掛載實體光碟機，第二代反之不行
+- 第一二代都可以掛載VHD硬碟
+
+
+
+
+
 一些Hyper-V 的進階功能，記得使用主機板BIOS要開啟intel VMX、 SR-IOV、 VT-D
 
 EXHyperV
