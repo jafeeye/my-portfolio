@@ -3,6 +3,14 @@ title: Dashboard 方案
 toc: true
 date: 2026-07-10
 ---
+
+| 軟體/功能    |     | 缺點        |
+| -------- | --- | --------- |
+| Homer    |     |           |
+| Heimdall |     |           |
+| nextDash |     |           |
+| Homarr   |     | 速度太慢且太吃資源 |
+
 ## Homer
 ```
 nano /var/www/html/dashboard/assets/custom.css
