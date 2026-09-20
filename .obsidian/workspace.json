@@ -110,7 +110,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：cmd"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ],
@@ -342,6 +342,4 @@
     "FETCH_HEAD",
     "static/Diagram 13.svg.xml",
     "static/Diagram 12.svg.xml",
-    "content/post/code/compose.yaml"
-  ]
-}
+    "content/post/code/compos
