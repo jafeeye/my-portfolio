@@ -239,8 +239,6 @@ netsh advfirewall firewall add rule name="WDS TFTP" dir=in action=allow protocol
 
 ## 七、參考資料
 
-MDT8456部署Windows系列，[https://blog.51cto.com/jasonhuang/](https://blog.51cto.com/jasonhuang/)
-
-微軟WDS+MDT+WSUS實現系統自動化部署，[https://www.zhihu.com/tardis/zm/art/17319155423?source_id=1003](https://www.zhihu.com/tardis/zm/art/17319155423?source_id=1003)
-
-Microsoft 官方，[https://www.micsorft.com](https://www.micsorft.com)
+- MDT8456部署Windows系列，[https://blog.51cto.com/jasonhuang/](https://blog.51cto.com/jasonhuang/)
+- 微軟WDS+MDT+WSUS實現系統自動化部署，[https://www.zhihu.com/tardis/zm/art/17319155423?source_id=1003](https://www.zhihu.com/tardis/zm/art/17319155423?source_id=1003)
+- Microsoft 官方，[https://www.micsorft.com](https://www.micsorft.com)
