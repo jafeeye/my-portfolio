@@ -22,8 +22,7 @@ Web:https://192.168.8.81:8082/ 授權Port 27000
 ![](static/Pasted%20image%2020260927001158.png)
 
 
-8. XCP-NG 安裝
-![](static/Pasted%20image%2020260927123210.png)
+
 
 相關套件一覽表
 
@@ -81,3 +80,19 @@ XenServer 真正建立並執行 VM
 VDI01 / VDI02 / VDI03 ...
 ```
 
+
+## XCP-NG
+
+1. XCP-NG 安裝
+![](static/Pasted%20image%2020260927123210.png)
+2. 打入IP會進入 XCP-NG XO Lite，可以繼續部屬XOA
+![](static/Pasted%20image%2020260927180717.png)
+3. XCP-NG OXA，實測Current version: 5.112.1 - XOA build: 20251219 可以加入 XenServer 8.2.1 CU1
+![](static/Pasted%20image%2020260927180808.png)
+4. 更新查看
+```
+
+xoa-updater --help
+sudo journalctl -fu xoa-updater.service
+
+```
