@@ -6,7 +6,25 @@ toc: true
 ## 前言
 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整...
 
+## 增加LVM
+建議作法：建立獨立的 LVM-Thin
+```
+1. 先確認硬碟代號
+   到節點 → Disks，確認那顆 1TB 硬碟，例如：
+   /dev/sdb
+   千萬不要選到 Proxmox 系統碟。
+2. 移除原本的 ext4 Storage 設定
+   如果這顆硬碟曾經出現在：
+   Datacenter → Storage
 
+3.去Disk/Director
+
+4.Disk/Wipe Disk
+
+5. 建立 LVM-Thin
+   前往：
+   節點 → Disks → LVM-Thin → Create: Thinpool
+```
 ## 優化: PVE 調整Swap
 預設PVE沒調整狀態下為60
 ```

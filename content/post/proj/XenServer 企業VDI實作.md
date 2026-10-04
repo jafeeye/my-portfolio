@@ -54,23 +54,21 @@ XenServer（XenCenter 管理）
     └─ 要提供給使用者的應用程式
 ```
 
-4. 安裝 CXVD，完成後加入AD
+4. 安裝 CXVD，Delivery Controller，完成後加入AD
 ![](static/Pasted%20image%2020260926003723.png)
 
-golden image
+5. 在XenServer起一台Win10，當成Golden Image母版，安裝完成VM後接著安裝 VirtualDeliveryAgent for WindowsMulti-sessionOS
 ![](static/Pasted%20image%2020260927123658.png)
 
-
-
-7. 設定Citirx Studio
+6. 在CXVD那台電腦設定Citirx Studio
 ![](static/Pasted%20image%2020260927001158.png)
 
 
-Citrix Studio 派發
+7. Citrix Studio 派發
 ![](static/Pasted%20image%2020260927151704.png)
 
 
-5. 發布步驟
+8. 發布步驟
 ```
 Citrix Studio / Delivery Controller
         ↓
