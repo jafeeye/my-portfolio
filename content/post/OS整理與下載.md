@@ -1,5 +1,5 @@
 ---
-title: OS發行版整理
+title: OS整理下載
 toc: true
 date: 2026-05-29
 ---
@@ -38,3 +38,9 @@ TrueNAS
 UnRAID
 OMV
 
+## Windows 
+
+Tiny 11
+Nano 11
+[UnCyler](https://home.gamer.com.tw/eason929623) 優化系統映像檔
+UUP dump https://uupdump.net/
