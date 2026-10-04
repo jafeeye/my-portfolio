@@ -18,9 +18,6 @@ Web:https://192.168.8.81:8082/ 授權Port 27000
 ![](static/Pasted%20image%2020260926202359.png)
 6. 指派授權，舊版的License Server VPX 已經淘汰，Tools/License Manager
 
-7. 設定Citirx Studio
-![](static/Pasted%20image%2020260927001158.png)
-
 
 
 
@@ -57,11 +54,17 @@ XenServer（XenCenter 管理）
     └─ 要提供給使用者的應用程式
 ```
 
-4. 安裝 CXVD
+4. 安裝 CXVD，完成後加入AD
 ![](static/Pasted%20image%2020260926003723.png)
 
 golden image
 ![](static/Pasted%20image%2020260927123658.png)
+
+
+
+7. 設定Citirx Studio
+![](static/Pasted%20image%2020260927001158.png)
+
 
 Citrix Studio 派發
 ![](static/Pasted%20image%2020260927151704.png)
