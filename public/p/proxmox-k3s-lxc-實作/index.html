@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、基本概念 K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server\n什麼是 K3s？ K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。 适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。\nK3s 的核心优势：\n轻量简洁：二进制体积小，依赖少 部署快速：一条命令即可启动 Kubernetes 资源占用低：最低可运行在 512MB 内存设备上 为什么选择 LXC 容器？ 更高效：相比完整虚拟机，占用资源更少 更隔离：提供安全、独立的运行环境 更灵活：在 Proxmox 中便于扩容和管理 通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。 为什么要将 K3s 与 Proxmox 容器结合？ 将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合： 对 Kubernetes 感兴趣的 Homelab 爱好者 资源有限的边缘计算场景 预算有限的中小型企业 Proxmox 容器安装 K3s 已知問題： 目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入.bashrc\n1 2 echo &#39;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&#39; &gt;&gt; /root/.bashrc source /root/.bashrc Step 1：创建 LXC 容器 在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框： (不要在建立好unprivileged=1改回0，權限會大亂) 选择模板，本例使用 Ubuntu 20.04：\n磁盘、CPU、内存，网络根据实际情况设置，并在最后一页，确认你的设置，然后单击“完成”。Proxmox 将创建容器：\n">
+<title>Proxmox K3s LXC 實作</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/proxmox-k3s-lxc-%E5%AF%A6%E4%BD%9C/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Proxmox K3s LXC 實作">
+<meta property='og:description' content="一、基本概念 K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server\n什麼是 K3s？ K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。 适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。\nK3s 的核心优势：\n轻量简洁：二进制体积小，依赖少 部署快速：一条命令即可启动 Kubernetes 资源占用低：最低可运行在 512MB 内存设备上 为什么选择 LXC 容器？ 更高效：相比完整虚拟机，占用资源更少 更隔离：提供安全、独立的运行环境 更灵活：在 Proxmox 中便于扩容和管理 通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。 为什么要将 K3s 与 Proxmox 容器结合？ 将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合： 对 Kubernetes 感兴趣的 Homelab 爱好者 资源有限的边缘计算场景 预算有限的中小型企业 Proxmox 容器安装 K3s 已知問題： 目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入.bashrc\n1 2 echo &#39;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&#39; &gt;&gt; /root/.bashrc source /root/.bashrc Step 1：创建 LXC 容器 在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框： (不要在建立好unprivileged=1改回0，權限會大亂) 选择模板，本例使用 Ubuntu 20.04：\n磁盘、CPU、内存，网络根据实际情况设置，并在最后一页，确认你的设置，然后单击“完成”。Proxmox 将创建容器：\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/proxmox-k3s-lxc-%E5%AF%A6%E4%BD%9C/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='#K8s' /><meta property='article:published_time' content='2026-07-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-10T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Proxmox K3s LXC 實作">
+<meta name="twitter:description" content="一、基本概念 K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server\n什麼是 K3s？ K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。 适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。\nK3s 的核心优势：\n轻量简洁：二进制体积小，依赖少 部署快速：一条命令即可启动 Kubernetes 资源占用低：最低可运行在 512MB 内存设备上 为什么选择 LXC 容器？ 更高效：相比完整虚拟机，占用资源更少 更隔离：提供安全、独立的运行环境 更灵活：在 Proxmox 中便于扩容和管理 通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。 为什么要将 K3s 与 Proxmox 容器结合？ 将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合： 对 Kubernetes 感兴趣的 Homelab 爱好者 资源有限的边缘计算场景 预算有限的中小型企业 Proxmox 容器安装 K3s 已知問題： 目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入.bashrc\n1 2 echo &#39;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&#39; &gt;&gt; /root/.bashrc source /root/.bashrc Step 1：创建 LXC 容器 在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框： (不要在建立好unprivileged=1改回0，權限會大亂) 选择模板，本例使用 Ubuntu 20.04：\n磁盘、CPU、内存，网络根据实际情况设置，并在最后一页，确认你的设置，然后单击“完成”。Proxmox 将创建容器：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一基本概念">一、基本概念</a>
+      <ol>
+        <li><a href="#什麼是-k3s">什麼是 K3s？</a></li>
+        <li><a href="#proxmox-容器安装-k3s">Proxmox 容器安装 K3s</a></li>
+      </ol>
+    </li>
+    <li><a href="#二安裝相關管理套件">二、安裝相關管理套件</a>
+      <ol>
+        <li><a href="#安裝-rancher">安裝 Rancher</a></li>
+        <li><a href="#安裝-headlamp">安裝 Headlamp</a></li>
+        <li><a href="#安裝-kiali">安裝 Kiali</a></li>
+      </ol>
+    </li>
+    <li><a href="#三services-mesh">三、Services Mesh</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/proxmox-k3s-lxc-%E5%AF%A6%E4%BD%9C/">Proxmox K3s LXC 實作</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-07-10T00:00:00Z'>Jul 10, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="一基本概念">一、基本概念
+</h2><p>K8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server</p>
+<h3 id="什麼是-k3s">什麼是 K3s？
+</h3><p><img
+    src="/my-portfolio/2023_06_26_22_41_07_72d1e9e6f582.jpg"
+    alt=""
+    loading="lazy"
+></p>
+<p>K3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。
+适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。</p>
+<p>K3s 的核心优势：</p>
+<ul>
+<li><strong>轻量简洁</strong>：二进制体积小，依赖少</li>
+<li><strong>部署快速</strong>：一条命令即可启动 Kubernetes</li>
+<li><strong>资源占用低</strong>：最低可运行在 512MB 内存设备上
+为什么选择 LXC 容器？</li>
+<li><strong>更高效</strong>：相比完整虚拟机，占用资源更少</li>
+<li><strong>更隔离</strong>：提供安全、独立的运行环境</li>
+<li><strong>更灵活</strong>：在 Proxmox 中便于扩容和管理
+通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。
+为什么要将 K3s 与 Proxmox 容器结合？
+将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合：</li>
+<li>对 Kubernetes 感兴趣的 Homelab 爱好者</li>
+<li>资源有限的边缘计算场景</li>
+<li>预算有限的中小型企业</li>
+</ul>
+<p><img
+    src="/my-portfolio/Kubernetes-k8s-%e5%ae%89%e8%a3%9d%e9%81%b8%e6%93%87%e5%9c%b0%e5%9c%96-1.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="proxmox-容器安装-k3s">Proxmox 容器安装 K3s
+</h3><p><strong>已知問題：</strong>
+目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入<code>.bashrc</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">echo</span> <span class="s1">&#39;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="n">root</span><span class="o">/.</span><span class="n">bashrc</span>
+</span></span><span class="line"><span class="cl"><span class="n">source</span> <span class="o">/</span><span class="n">root</span><span class="o">/.</span><span class="n">bashrc</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step 1：创建 LXC 容器
+在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框：  (不要在建立好unprivileged=1改回0，權限會大亂)
+<img
+    src="https://raw.githubusercontent.com/kingsd041/picture/main/202507102112500.png"
+    alt=""
+    loading="lazy"
+>
+选择模板，本例使用 Ubuntu 20.04：<br>
+<img
+    src="https://raw.githubusercontent.com/kingsd041/picture/main/202507102113959.png"
+    alt=""
+    loading="lazy"
+>
+磁盘、CPU、内存，网络根据实际情况设置，并在最后一页，确认你的设置，然后单击“完成”。Proxmox 将创建容器：<br>
+<img
+    src="https://raw.githubusercontent.com/kingsd041/picture/main/202507102122457.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>Step 2：修改 pve 主机配置
+现在，我们需要进行一些底层调整，赋予容器适当的权限。你需要通过 root 用户 ​ SSH 连接到 Proxmox 主机，在/etc/pve/lxc 目录中，你将找到名为 XXX.conf 的文件，其中 XXX 是我们刚刚创建的容器的 ID 号。修改该文件并添加以下几行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lxc.apparmor.profile: unconfined 
+</span></span><span class="line"><span class="cl">lxc.cgroup.devices.allow: a 
+</span></span><span class="line"><span class="cl">lxc.cap.drop: 
+</span></span><span class="line"><span class="cl">lxc.mount.auto: &#34;proc:rw sys:rw&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>按顺序，这些选项的含义:</p>
+<ol>
+<li>禁用 AppArmor</li>
+<li>允许容器的 cgroup 访问所有设备</li>
+<li>防止丢弃容器的任何功能</li>
+<li>在容器中/proc 以/sys 读写方式挂载。</li>
+</ol>
+<p><strong>Step 3：启动 LXC 容器，并修改容器配置</strong>
+LXC 容器中需要确保 <code>/dev/kmsg</code> 存在。Kubelet 会使用它来实现一些日志记录功能，默认情况下它在容器中是不存在的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat <span class="s">&lt;&lt;EOF &gt; /etc/rc.local
+</span></span></span><span class="line"><span class="cl"><span class="s">#!/bin/sh -e
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">if [ !  -e /dev/kmsg ]; then
+</span></span></span><span class="line"><span class="cl"><span class="s">    ln -s /dev/console /dev/kmsg 
+</span></span></span><span class="line"><span class="cl"><span class="s">fi
+</span></span></span><span class="line"><span class="cl"><span class="s">mount --make-rshared /
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>添加可自行权限并重启容器：<code>chmod +x /etc/rc.local &amp;&amp; reboot</code><br>
+Step 4：准备容器环境，在容器中执行以下命令，安装依赖：
+<code>apt install -y curl iptables</code></p>
+<blockquote>
+<p>个别 lxc 模版缺少 <code>iptables</code> <code>openssh-server</code>，需要手动安装</p>
+</blockquote>
+<p>Step 5：安装 K3s</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">步驟1：裝 k3s Server（停用 Flannel）
+</span></span><span class="line"><span class="cl">  └─ 這裡可以插入：把 kubeconfig 複製到本機
+</span></span><span class="line"><span class="cl">步驟2：裝 Helm
+</span></span><span class="line"><span class="cl">步驟3：裝 Cilium
+</span></span><span class="line"><span class="cl">步驟4：加入另外兩台 Agent
+</span></span><span class="line"><span class="cl">步驟5：裝 Istio
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过安装脚本一键安装：
+停用traefik、停用Flannel</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=&#34;\
+</span></span><span class="line"><span class="cl">  --flannel-backend=none \
+</span></span><span class="line"><span class="cl">  --disable-network-policy \
+</span></span><span class="line"><span class="cl">  --disable-kube-proxy \
+</span></span><span class="line"><span class="cl">  --disable=traefik \
+</span></span><span class="line"><span class="cl">  --disable=servicelb \
+</span></span><span class="line"><span class="cl">  --write-kubeconfig-mode 644&#34; sh -
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>裝完後設定 kubectl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span>/etc/rancher/k3s/k3s.yaml
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 到另一台VM</span>
+</span></span><span class="line"><span class="cl">mkdir -p ~/.kube
+</span></span><span class="line"><span class="cl">scp root@&lt;Server node的IP&gt;:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+</span></span><span class="line"><span class="cl">sed -i <span class="s1">&#39;&#39;</span> <span class="s1">&#39;s/127.0.0.1/&lt;Server node的實際IP&gt;/&#39;</span> ~/.kube/config
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 修改文件中的 IP 地址为容器的实际地址。然后测试连接：</span>
+</span></span><span class="line"><span class="cl">kubectl get pods --all-namespaces
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>這時節點狀態會是 <code>NotReady</code>，這是正常的</strong>——因為還沒有 CNI，先不用管，繼續下一步。
+記下這台主機的 IP（例如 <code>10.0.0.101</code>），以及取得 node token：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo cat /var/lib/rancher/k3s/server/node-token
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>裝 Helm（如果還沒裝）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 <span class="p">|</span> bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>用 Helm 裝 Cilium</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">helm repo add cilium https://helm.cilium.io/
+</span></span><span class="line"><span class="cl">helm repo update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">helm install cilium cilium/cilium <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --namespace kube-system <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --set operator.replicas<span class="o">=</span><span class="m">1</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --set <span class="nv">kubeProxyReplacement</span><span class="o">=</span><span class="nb">true</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --set <span class="nv">k8sServiceHost</span><span class="o">=</span>10.0.0.101 <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --set <span class="nv">k8sServicePort</span><span class="o">=</span><span class="m">6443</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  --set ipam.mode<span class="o">=</span>kubernetes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把 <code>10.0.0.101</code> 換成你第一台主機實際的 IP。
+確認 Cilium 部署完成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl rollout status daemonset/cilium -n kube-system --timeout<span class="o">=</span>120s
+</span></span><span class="line"><span class="cl">kubectl get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這時節點應該變成 <code>Ready</code> 了。</p>
+<p>步驟 4：把另外兩台加入叢集（Agent node）
+在<strong>第二台、第三台</strong>機器上分別執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -sfL https://get.k3s.io <span class="p">|</span> <span class="nv">K3S_URL</span><span class="o">=</span>https://10.0.0.101:6443 <span class="nv">K3S_TOKEN</span><span class="o">=</span>&lt;步驟1取得的token&gt; sh -
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>回到第一台，確認三個節點都加入且都是 <code>Ready</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step 6. 安裝Istio
+下載 istioctl：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -L https://istio.io/downloadIstio <span class="p">|</span> sh -
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> istio-*
+</span></span><span class="line"><span class="cl">sudo cp bin/istioctl /usr/local/bin/
+</span></span><span class="line"><span class="cl">istioctl version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安裝 Istio 控制平面：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">istioctl install --set <span class="nv">profile</span><span class="o">=</span>demo -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認狀態：應該看到 <code>istiod</code>、<code>istio-ingressgateway</code> 都是 <code>Running</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl get pods -n istio-system
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step 8：部署测试应用
+部署一个简单的 Nginx 服务：
+<code>kubectl create deployment nginx --image=nginx kubectl expose deployment nginx --port=80 --type=NodePort</code></p>
+<p>查询服务端口，访问应用：
+<code>kubectl get services</code>
+常见问题排查</p>
+<ul>
+<li><strong>网络不可达</strong>：检查容器网络配置是否正确</li>
+<li><strong>K3s 启动失败</strong>：使用 <code>journalctl -u k3s</code> 查看日志</li>
+<li><strong>kubectl 无法连接</strong>：确认 <code>kubeconfig</code> 文件路径和权限无误
+总结
+将 K3s 部署在 Proxmox 容器中，是一种轻量、灵活、经济的 Kubernetes 实践方式。无论你是个人爱好者，还是中小企业探索容器化落地，这一方案都值得一试。
+拥抱边缘计算，从这一套组合方案开始，让 Kubernetes 部署变得简单、高效！</li>
+</ul>
+<h2 id="二安裝相關管理套件">二、安裝相關管理套件
+</h2><h3 id="安裝-rancher">安裝 Rancher
+</h3><p>架構
+Cilium 取代 kube-proxy
+Istio 取代 Traefik
+ServiceLB 關閉</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">瀏覽器 https://rancher.192.168.8.190.sslip.io:31988
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Istio Ingress Gateway
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Gateway + VirtualService
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Rancher Service:80
+</span></span><span class="line"><span class="cl">        ↓
+</span></span><span class="line"><span class="cl">Rancher Pod
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因為Rancher 要跑在https，因此使用sslip.io這個網域</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nslookup rancher.192.168.8.190.sslip.io
+</span></span><span class="line"><span class="cl">tnc 192.168.8.190 -Port 8080
+</span></span><span class="line"><span class="cl">curl.exe -v http://192.168.8.190:8080/ping
+</span></span><span class="line"><span class="cl">curl.exe -vk http://192.168.8.190:8080/ping
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完成安裝需要以下4步</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1.安裝K3s
+</span></span><span class="line"><span class="cl">2.安裝Helm
+</span></span><span class="line"><span class="cl">3.安裝cert-manager
+</span></span><span class="line"><span class="cl">4.安裝Rancher (確認RAM為8G，不然絕對跑不起來)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>安裝 Cert-Manager</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">helm repo add jetstack https://charts.jetstack.io
+</span></span><span class="line"><span class="cl">helm repo update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">helm install cert-manager jetstack/cert-manager \
+</span></span><span class="line"><span class="cl">  --namespace cert-manager \
+</span></span><span class="line"><span class="cl">  --create-namespace \
+</span></span><span class="line"><span class="cl">  --set crds.enabled=true
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認狀態正常</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">kubectl -n cert-manager rollout status deployment/cert-manager
+</span></span><span class="line"><span class="cl">kubectl -n cert-manager rollout status deployment/cert-manager-webhook
+</span></span><span class="line"><span class="cl">kubectl -n cert-manager rollout status deployment/cert-manager-cainjector
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>安裝 Rancher</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+</span></span><span class="line"><span class="cl">helm repo update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl create namespace cattle-system
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">helm install rancher rancher-stable/rancher \
+</span></span><span class="line"><span class="cl">  --namespace cattle-system \
+</span></span><span class="line"><span class="cl">  --set hostname=rancher.192.168.8.190.sslip.io ort\
+</span></span><span class="line"><span class="cl">  --set bootstrapPassword=&#39;請換成你的強密碼&#39; \
+</span></span><span class="line"><span class="cl">  --set replicas=1
+</span></span><span class="line"><span class="cl">## 如果部屬失敗在重新佈署一次
+</span></span><span class="line"><span class="cl">helm upgrade rancher rancher-stable/rancher \
+</span></span><span class="line"><span class="cl">  --namespace cattle-system \
+</span></span><span class="line"><span class="cl">  --reuse-values \
+</span></span><span class="line"><span class="cl">  --set hostname=rancher.192.168.8.190.sslip.io \
+</span></span><span class="line"><span class="cl">  --set replicas=1  
+</span></span><span class="line"><span class="cl">  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>安裝完可能沒辦法馬上進去，可以使用NodeP用PortForwarding進去</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">rancher.192.168.8.190.sslip.io:31988
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>確認有無開啟LoadBlancing</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl cat k3s | grep -E &#39;servicelb|disable&#39;ble&#39;
+</span></span><span class="line"><span class="cl">cat /etc/rancher/k3s/config.yaml 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">        &#39;--disable-network-policy&#39; \
+</span></span><span class="line"><span class="cl">        &#39;--disable-kube-proxy&#39; \
+</span></span><span class="line"><span class="cl">        &#39;--disable=traefik&#39; \
+</span></span><span class="line"><span class="cl">        &#39;--disable=servicelb&#39; \
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安裝-headlamp">安裝 Headlamp
+</h3><p>用於取代 K8s Dashboard</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
+</span></span><span class="line"><span class="cl">helm repo update
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl create namespace headlamp
+</span></span><span class="line"><span class="cl">helm install headlamp headlamp/headlamp \
+</span></span><span class="line"><span class="cl">  --namespace headlamp
+</span></span><span class="line"><span class="cl">kubectl get pods,svc -n headlamp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl port-forward \
+</span></span><span class="line"><span class="cl">  --address 0.0.0.0 \
+</span></span><span class="line"><span class="cl">  -n headlamp svc/headlamp 8080:80
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>建立Tokens</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 建立管理帳號
+</span></span><span class="line"><span class="cl">kubectl create serviceaccount headlamp-admin \
+</span></span><span class="line"><span class="cl">  -n headlamp
+</span></span><span class="line"><span class="cl">## 授予 cluster-admin
+</span></span><span class="line"><span class="cl">kubectl create clusterrolebinding headlamp-admin \
+</span></span><span class="line"><span class="cl">  --serviceaccount=headlamp:headlamp-admin \
+</span></span><span class="line"><span class="cl">  --clusterrole=cluster-admin  
+</span></span><span class="line"><span class="cl">取得登入 Token
+</span></span><span class="line"><span class="cl">kubectl create token headlamp-admin -n headlamp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最後功能正常改成</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://headlamp.192.168.8.190.sslip.io:31988
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安裝-kiali">安裝 Kiali
+</h3><h2 id="三services-mesh">三、Services Mesh
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>比較項目</th>
+					<th>Sidecar Mode</th>
+					<th>Ambient Mode</th>
+					<th>Ambient + Waypoint</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Proxy 部署位置</td>
+					<td>每個 Pod 一個 Envoy</td>
+					<td>每個 Node 一個 ztunnel</td>
+					<td>每個 Node 有 ztunnel，另外部署共享 Waypoint</td>
+			</tr>
+			<tr>
+					<td>Pod 內是否增加容器</td>
+					<td>會增加 <code>istio-proxy</code></td>
+					<td>不會</td>
+					<td>不會</td>
+			</tr>
+			<tr>
+					<td>L4 TCP 控管</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>mTLS 加密</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>身分驗證</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>L4 Policy</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>L7 HTTP 控管</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>URL／Path 控管</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>HTTP Header／JWT</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>Retry／Timeout／路由</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>HTTP Metrics／Tracing</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+			</tr>
+			<tr>
+					<td>Proxy 數量</td>
+					<td>每個 Pod 一個，最多</td>
+					<td>每個 Node 一個，最少</td>
+					<td>ztunnel 加上需要的 Waypoint</td>
+			</tr>
+			<tr>
+					<td>資源消耗</td>
+					<td>較高</td>
+					<td>最低</td>
+					<td>中等</td>
+			</tr>
+			<tr>
+					<td>更新 Proxy</td>
+					<td>通常需重啟 Pod</td>
+					<td>不用重啟應用 Pod</td>
+					<td>不用重啟應用 Pod</td>
+			</tr>
+			<tr>
+					<td>適合情境</td>
+					<td>每個服務都需要完整 L7</td>
+					<td>只需要加密與 L4 微分段</td>
+					<td>部分服務需要 L7 功能</td>
+			</tr>
+			<tr>
+					<td>是否需要 Istio CNI</td>
+					<td>建議，但不一定必要</td>
+					<td>必要</td>
+					<td>必要</td>
+			</tr>
+			<tr>
+					<td>各別角色關係</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>元件</th>
+					<th>用途</th>
+					<th>白話說法</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Flannel／Calico／Cilium</td>
+					<td>建立 Pod 網路、分配 Pod IP</td>
+					<td>幫 Pod 鋪網路</td>
+			</tr>
+			<tr>
+					<td>Istio CNI</td>
+					<td>攔截並重新導向 Pod 流量</td>
+					<td>把流量抓進 Istio</td>
+			</tr>
+			<tr>
+					<td>ztunnel</td>
+					<td>mTLS、身分辨識、L4 Policy</td>
+					<td>管「誰可以連誰、哪個 Port」</td>
+			</tr>
+			<tr>
+					<td>Waypoint</td>
+					<td>HTTP 路由與 L7 Policy</td>
+					<td>管「連進來後，可以存取哪個 API」</td>
+			</tr>
+			<tr>
+					<td>Sidecar Envoy</td>
+					<td>單一 Pod 的 L4＋L7 處理</td>
+					<td>每個 Pod 自帶一名完整警衛</td>
+			</tr>
+			<tr>
+					<td>Istiod</td>
+					<td>發送憑證、政策與 Proxy 設定</td>
+					<td>Istio 的中央控制中心</td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>模式</th>
+					<th>流量路徑</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Sidecar</td>
+					<td><code>App A → Sidecar A → Sidecar B → App B</code></td>
+			</tr>
+			<tr>
+					<td>Ambient</td>
+					<td><code>App A → ztunnel A → ztunnel B → App B</code></td>
+			</tr>
+			<tr>
+					<td>Ambient + Waypoint</td>
+					<td><code>App A → ztunnel A → Waypoint B → ztunnel B → App B</code></td>
+			</tr>
+	</tbody>
+</table></div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/my-portfolio/tags/%23k8s/">#K8s</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

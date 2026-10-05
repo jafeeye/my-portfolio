@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="拉取同步專案 1 2 3 4 5 6 7 8 9 ## 建立本地 Git 身分 git config --global user.name &#34;你的GitHub名稱&#34; git config --global user.email &#34;你的GitHub Email&#34; ## clone專案 git clone https://github.com/你的帳號/my-project.git git add . git commit -m &#34;update&#34; ## 在這部就會出現github登入畫面 git push VuePress 建立hugo 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 ## 安裝hugo choco install hugo-extended ## 建立新網站 hugo new site my-blog cd my-blog ## 創立新主題 git init git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish 設定blowfish xcopy /E /I themes\\blowfish\\config config config/_default/hugo.toml &gt;&gt; theme = &#34;blowfish&#34; ## 建立新文章 hugo new posts/my-first-post.md ## 文章列表加入網頁選單 config/_default/menus.toml [[main]] name = &#34;全部文章&#34; pageRef = &#34;posts&#34; weight = 10 ## git git add . git commit -m &#34;first commit&#34; git branch -M main git remote add origin https://github.com/你的帳號/你的專案名稱.git 很多公司對於一個人不可以隨意創造分支(通常只有一個),不然會太亂，雲端由管理管專案分支\n">
+<title>Git 同步部落格</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/git-%E5%90%8C%E6%AD%A5%E9%83%A8%E8%90%BD%E6%A0%BC/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Git 同步部落格">
+<meta property='og:description' content="拉取同步專案 1 2 3 4 5 6 7 8 9 ## 建立本地 Git 身分 git config --global user.name &#34;你的GitHub名稱&#34; git config --global user.email &#34;你的GitHub Email&#34; ## clone專案 git clone https://github.com/你的帳號/my-project.git git add . git commit -m &#34;update&#34; ## 在這部就會出現github登入畫面 git push VuePress 建立hugo 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 ## 安裝hugo choco install hugo-extended ## 建立新網站 hugo new site my-blog cd my-blog ## 創立新主題 git init git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish 設定blowfish xcopy /E /I themes\\blowfish\\config config config/_default/hugo.toml &gt;&gt; theme = &#34;blowfish&#34; ## 建立新文章 hugo new posts/my-first-post.md ## 文章列表加入網頁選單 config/_default/menus.toml [[main]] name = &#34;全部文章&#34; pageRef = &#34;posts&#34; weight = 10 ## git git add . git commit -m &#34;first commit&#34; git branch -M main git remote add origin https://github.com/你的帳號/你的專案名稱.git 很多公司對於一個人不可以隨意創造分支(通常只有一個),不然會太亂，雲端由管理管專案分支\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/git-%E5%90%8C%E6%AD%A5%E9%83%A8%E8%90%BD%E6%A0%BC/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-06-18T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-06-18T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Git 同步部落格">
+<meta name="twitter:description" content="拉取同步專案 1 2 3 4 5 6 7 8 9 ## 建立本地 Git 身分 git config --global user.name &#34;你的GitHub名稱&#34; git config --global user.email &#34;你的GitHub Email&#34; ## clone專案 git clone https://github.com/你的帳號/my-project.git git add . git commit -m &#34;update&#34; ## 在這部就會出現github登入畫面 git push VuePress 建立hugo 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 ## 安裝hugo choco install hugo-extended ## 建立新網站 hugo new site my-blog cd my-blog ## 創立新主題 git init git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish 設定blowfish xcopy /E /I themes\\blowfish\\config config config/_default/hugo.toml &gt;&gt; theme = &#34;blowfish&#34; ## 建立新文章 hugo new posts/my-first-post.md ## 文章列表加入網頁選單 config/_default/menus.toml [[main]] name = &#34;全部文章&#34; pageRef = &#34;posts&#34; weight = 10 ## git git add . git commit -m &#34;first commit&#34; git branch -M main git remote add origin https://github.com/你的帳號/你的專案名稱.git 很多公司對於一個人不可以隨意創造分支(通常只有一個),不然會太亂，雲端由管理管專案分支\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#拉取同步專案">拉取同步專案</a></li>
+    <li><a href="#vuepress">VuePress</a></li>
+    <li><a href="#建立hugo">建立hugo</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/git-%E5%90%8C%E6%AD%A5%E9%83%A8%E8%90%BD%E6%A0%BC/">Git 同步部落格</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-18T00:00:00Z'>Jun 18, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="拉取同步專案">拉取同步專案
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 建立本地 Git 身分
+</span></span><span class="line"><span class="cl">git config --global user.name &#34;你的GitHub名稱&#34;
+</span></span><span class="line"><span class="cl">git config --global user.email &#34;你的GitHub Email&#34;
+</span></span><span class="line"><span class="cl">## clone專案
+</span></span><span class="line"><span class="cl">git clone https://github.com/你的帳號/my-project.git
+</span></span><span class="line"><span class="cl">git add .
+</span></span><span class="line"><span class="cl">git commit -m &#34;update&#34;
+</span></span><span class="line"><span class="cl">## 在這部就會出現github登入畫面
+</span></span><span class="line"><span class="cl">git push
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="vuepress">VuePress
+</h2><h2 id="建立hugo">建立hugo
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 安裝hugo
+</span></span><span class="line"><span class="cl">choco install hugo-extended
+</span></span><span class="line"><span class="cl">## 建立新網站
+</span></span><span class="line"><span class="cl">hugo new site my-blog 
+</span></span><span class="line"><span class="cl">cd my-blog
+</span></span><span class="line"><span class="cl">## 創立新主題
+</span></span><span class="line"><span class="cl">git init
+</span></span><span class="line"><span class="cl">git submodule add https://github.com/nunocoracao/blowfish.git themes/blowfish
+</span></span><span class="line"><span class="cl">設定blowfish
+</span></span><span class="line"><span class="cl">xcopy /E /I themes\blowfish\config config
+</span></span><span class="line"><span class="cl">config/_default/hugo.toml &gt;&gt; theme = &#34;blowfish&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## 建立新文章
+</span></span><span class="line"><span class="cl">hugo new posts/my-first-post.md
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## 文章列表加入網頁選單
+</span></span><span class="line"><span class="cl">config/_default/menus.toml
+</span></span><span class="line"><span class="cl">[[main]]
+</span></span><span class="line"><span class="cl">  name = &#34;全部文章&#34; 
+</span></span><span class="line"><span class="cl">  pageRef = &#34;posts&#34; 
+</span></span><span class="line"><span class="cl">  weight = 10
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## git 
+</span></span><span class="line"><span class="cl">git add . 
+</span></span><span class="line"><span class="cl">git commit -m &#34;first commit&#34;
+</span></span><span class="line"><span class="cl">git branch -M main
+</span></span><span class="line"><span class="cl">git remote add origin https://github.com/你的帳號/你的專案名稱.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>很多公司對於一個人不可以隨意創造分支(通常只有一個),不然會太亂，雲端由管理管專案分支</p>
+<p>如果不小心放入300MB大檔案,檔名稱為null,不小心提交要排除
+BFG Repo-Cleaner</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">brew install bfg
+</span></span><span class="line"><span class="cl">## 強制抹除名為 null 的檔案
+</span></span><span class="line"><span class="cl">bfg --delete-files null
+</span></span><span class="line"><span class="cl">## 強制進行垃圾回收（釋放空間）
+</span></span><span class="line"><span class="cl">git reflog expire --expire=now --all
+</span></span><span class="line"><span class="cl">git gc --prune=now --aggressive
+</span></span><span class="line"><span class="cl">## 強制推送
+</span></span><span class="line"><span class="cl">git push origin main -f
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>加入<code>.gitignore</code> 忽略追蹤檔案</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">git rm -r --cached .obsidian/ 
+</span></span><span class="line"><span class="cl">git add . 
+</span></span><span class="line"><span class="cl">git commit -m &#34;Remove .obsidian from tracking&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>分離</p>
+<p>雲端覆蓋本地
+git fetch //抓雲端版本
+git reset &ndash;hard origin/main</p>
+<p>本地推覆蓋雲端(確定雲端舊)
+git push &ndash;force
+改之前commit
+再改之前記得git pull git reset &ndash;hard HEAD^ git pull
+git pull origin main
+git push origin &ndash;delete branch-1 //本地刪除遠端分支</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@linux2:/# git config --global user.name ehur4k
+</span></span><span class="line"><span class="cl">root@linux2:/# git config --global user.email hastggttr@gmail.com
+</span></span><span class="line"><span class="cl">root@linux2:/# pwd
+</span></span><span class="line"><span class="cl">root@linux2:/# cd /root
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git init
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# ls -Ra
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts        //查看檔案狀態
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git add hosts   //加入檔案變成追蹤狀態
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status   
+</span></span><span class="line"><span class="cl">位於分支 master
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">尚無提交
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">要提交的變更：
+</span></span><span class="line"><span class="cl">  （使用 &#34;git rm --cached &lt;檔案&gt;...&#34; 以取消暫存）
+</span></span><span class="line"><span class="cl">	新檔案：   hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v1&#34;     //提交要有檔案說明
+</span></span><span class="line"><span class="cl">[master (根提交) 539c14c] host v1
+</span></span><span class="line"><span class="cl"> 1 file changed, 1 insertion(+)
+</span></span><span class="line"><span class="cl"> create mode 100644 hosts
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 master
+</span></span><span class="line"><span class="cl">沒有要提交的檔案，工作區為乾淨狀態
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 master
+</span></span><span class="line"><span class="cl">尚未暫存以備提交的變更：
+</span></span><span class="line"><span class="cl">  （使用 &#34;git add &lt;檔案&gt;...&#34; 更新要提交的內容）
+</span></span><span class="line"><span class="cl">  （使用 &#34;git restore &lt;檔案&gt;...&#34; 捨棄工作區的改動）
+</span></span><span class="line"><span class="cl">	修改：     hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">修改尚未加入提交（使用 &#34;git add&#34; 和/或 &#34;git commit -a&#34;）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -am &#34;host v2&#34;
+</span></span><span class="line"><span class="cl">[master 4cb0267] host v2
+</span></span><span class="line"><span class="cl"> 1 file changed, 2 insertions(+), 1 deletion(-)
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git log               ;查看分支狀態
+</span></span><span class="line"><span class="cl">commit 4cb02674c03dee6f50b0b7d84e12d987a1d055af (HEAD -&gt; master)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:30:57 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 539c14c6d048412d255543b1c7e863ef75115155
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:25:50 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git diff 4cb0 539c        ;1版跟2版比較差異
+</span></span><span class="line"><span class="cl">diff --git a/hosts b/hosts
+</span></span><span class="line"><span class="cl">index 611d065..0ca1816 100644
+</span></span><span class="line"><span class="cl">--- a/hosts
+</span></span><span class="line"><span class="cl">+++ b/hosts
+</span></span><span class="line"><span class="cl">@@ -1,2 +1 @@
+</span></span><span class="line"><span class="cl">-192.168.80.50 pin.loca
+</span></span><span class="line"><span class="cl">-192,168.80.80 pin2.local
+</span></span><span class="line"><span class="cl">+192.168.80.50 pin.local
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git diff 539c 4cb0      ;2版比1版比較差異
+</span></span><span class="line"><span class="cl">diff --git a/hosts b/hosts
+</span></span><span class="line"><span class="cl">index 0ca1816..611d065 100644
+</span></span><span class="line"><span class="cl">--- a/hosts
+</span></span><span class="line"><span class="cl">+++ b/hosts
+</span></span><span class="line"><span class="cl">@@ -1 +1,2 @@
+</span></span><span class="line"><span class="cl">-192.168.80.50 pin.local
+</span></span><span class="line"><span class="cl">+192.168.80.50 pin.loca
+</span></span><span class="line"><span class="cl">+192,168.80.80 pin2.local
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git remote add origin https://github.com/ehur4k/linuxconf.git
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git remote -v 
+</span></span><span class="line"><span class="cl">origin	https://github.com/ehur4k/linuxconf.git (fetch)
+</span></span><span class="line"><span class="cl">origin	https://github.com/ehur4k/linuxconf.git (push)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git branch
+</span></span><span class="line"><span class="cl">* master
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# gut branch -M main 
+</span></span><span class="line"><span class="cl">bash: gut: 找不到指令...
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git branch -M main 
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git branch
+</span></span><span class="line"><span class="cl">* main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">:: 推上去
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git push -u origin main
+</span></span><span class="line"><span class="cl">Username for &#39;https://github.com&#39;: ehur4k
+</span></span><span class="line"><span class="cl">Password for &#39;https://ehur4k@github.com&#39;: 
+</span></span><span class="line"><span class="cl">枚舉物件: 6, 完成.
+</span></span><span class="line"><span class="cl">物件計數中: 100% (6/6), 完成.
+</span></span><span class="line"><span class="cl">使用 4 個執行緒進行壓縮
+</span></span><span class="line"><span class="cl">壓縮物件中: 100% (2/2), 完成.
+</span></span><span class="line"><span class="cl">寫入物件中: 100% (6/6), 461 位元組 | 461.00 KiB/s, 完成.
+</span></span><span class="line"><span class="cl">總共 6 (差異 0)，復用 0 (差異 0)，重用包 0 (總共 0)
+</span></span><span class="line"><span class="cl">To https://github.com/ehur4k/linuxconf.git
+</span></span><span class="line"><span class="cl"> * [new branch]      main -&gt; main
+</span></span><span class="line"><span class="cl">已將「main」分支設定為追蹤「origin/main」。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">::推上去之前儲存認證免得一直重打
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git config --global credential.helper store
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git push 
+</span></span><span class="line"><span class="cl">Username for &#39;https://github.com&#39;: ehur4k
+</span></span><span class="line"><span class="cl">Password for &#39;https://ehur4k@github.com&#39;: 
+</span></span><span class="line"><span class="cl">Everything up-to-date
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi /etc/hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git add hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v3&#34; 
+</span></span><span class="line"><span class="cl">[main 35bbb4e] host v3
+</span></span><span class="line"><span class="cl"> 1 file changed, 1 insertion(+)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 main
+</span></span><span class="line"><span class="cl">您的分支領先 &#39;origin/main&#39; 共 1 個提交。
+</span></span><span class="line"><span class="cl">  （使用 &#34;git push&#34; 來發布您的本機提交）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">沒有要提交的檔案，工作區為乾淨狀態
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git log
+</span></span><span class="line"><span class="cl">commit 35bbb4ecdccdd5aa40fe38788a166dcfb6cc56b4 (HEAD -&gt; main)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 12:00:49 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 4cb02674c03dee6f50b0b7d84e12d987a1d055af (origin/main)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:30:57 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 539c14c6d048412d255543b1c7e863ef75115155
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:25:50 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v1
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git push
+</span></span><span class="line"><span class="cl">枚舉物件: 5, 完成.
+</span></span><span class="line"><span class="cl">物件計數中: 100% (5/5), 完成.
+</span></span><span class="line"><span class="cl">使用 4 個執行緒進行壓縮
+</span></span><span class="line"><span class="cl">壓縮物件中: 100% (2/2), 完成.
+</span></span><span class="line"><span class="cl">寫入物件中: 100% (3/3), 276 位元組 | 276.00 KiB/s, 完成.
+</span></span><span class="line"><span class="cl">總共 3 (差異 0)，復用 0 (差異 0)，重用包 0 (總共 0)
+</span></span><span class="line"><span class="cl">To https://github.com/ehur4k/linuxconf.git
+</span></span><span class="line"><span class="cl">   4cb0267..35bbb4e  main -&gt; main
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">::檢視log版本
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reflog
+</span></span><span class="line"><span class="cl">35bbb4e (HEAD -&gt; main, origin/main) HEAD@{0}: commit: host v3
+</span></span><span class="line"><span class="cl">4cb0267 HEAD@{1}: Branch: renamed refs/heads/master to refs/heads/main
+</span></span><span class="line"><span class="cl">4cb0267 HEAD@{3}: commit: host v2
+</span></span><span class="line"><span class="cl">539c14c HEAD@{4}: commit (initial): host v1
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git show 4cb0267:hosts
+</span></span><span class="line"><span class="cl">192.168.80.50 pin.loca
+</span></span><span class="line"><span class="cl">192,168.80.80 pin2.local
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">::
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -am &#34;host v4&#34;
+</span></span><span class="line"><span class="cl">[main 9901de2] host v4
+</span></span><span class="line"><span class="cl"> 1 file changed, 1 insertion(+)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git log
+</span></span><span class="line"><span class="cl">commit 9901de2caef4a3b9b2e2f1a4e093caea3c9ba087 (HEAD -&gt; main)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 13:31:11 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 35bbb4ecdccdd5aa40fe38788a166dcfb6cc56b4 (origin/main)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 12:00:49 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 4cb02674c03dee6f50b0b7d84e12d987a1d055af
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:30:57 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 539c14c6d048412d255543b1c7e863ef75115155
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:25:50 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v1
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reset --soft HEAD^
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 main
+</span></span><span class="line"><span class="cl">您的分支與上游分支 &#39;origin/main&#39; 一致。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">要提交的變更：
+</span></span><span class="line"><span class="cl">  （使用 &#34;git restore --staged &lt;檔案&gt;...&#34; 以取消暫存）
+</span></span><span class="line"><span class="cl">	修改：     hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -am &#34;host v4&#34;
+</span></span><span class="line"><span class="cl">[main 7cc90d8] host v4
+</span></span><span class="line"><span class="cl"> 1 file changed, 1 insertion(+)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reflog
+</span></span><span class="line"><span class="cl">7cc90d8 (HEAD -&gt; main) HEAD@{0}: commit: host v4
+</span></span><span class="line"><span class="cl">35bbb4e (origin/main) HEAD@{1}: reset: moving to HEAD^
+</span></span><span class="line"><span class="cl">9901de2 HEAD@{2}: commit: host v4
+</span></span><span class="line"><span class="cl">35bbb4e (origin/main) HEAD@{3}: commit: host v3
+</span></span><span class="line"><span class="cl">4cb0267 HEAD@{4}: Branch: renamed refs/heads/master to refs/heads/main
+</span></span><span class="line"><span class="cl">4cb0267 HEAD@{6}: commit: host v2
+</span></span><span class="line"><span class="cl">539c14c HEAD@{7}: commit (initial): host v1
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v4&#34;
+</span></span><span class="line"><span class="cl">位於分支 main
+</span></span><span class="line"><span class="cl">您的分支領先 &#39;origin/main&#39; 共 1 個提交。
+</span></span><span class="line"><span class="cl">  （使用 &#34;git push&#34; 來發布您的本機提交）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">沒有要提交的檔案，工作區為乾淨狀態
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reset --mixed HEAD^
+</span></span><span class="line"><span class="cl">重設後取消暫存的變更：
+</span></span><span class="line"><span class="cl">M	hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 main
+</span></span><span class="line"><span class="cl">您的分支與上游分支 &#39;origin/main&#39; 一致。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">尚未暫存以備提交的變更：
+</span></span><span class="line"><span class="cl">  （使用 &#34;git add &lt;檔案&gt;...&#34; 更新要提交的內容）
+</span></span><span class="line"><span class="cl">  （使用 &#34;git restore &lt;檔案&gt;...&#34; 捨棄工作區的改動）
+</span></span><span class="line"><span class="cl">	修改：     hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">修改尚未加入提交（使用 &#34;git add&#34; 和/或 &#34;git commit -a&#34;）
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commt -am &#34;host v4&#34;
+</span></span><span class="line"><span class="cl">git：&#39;commt&#39; 不是一個 git 指令。參見 &#39;git --help&#39;。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">最類似的指令有
+</span></span><span class="line"><span class="cl">	commit
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -am &#34;host v4&#34;
+</span></span><span class="line"><span class="cl">[main 156fe77] host v4
+</span></span><span class="line"><span class="cl"> 1 file changed, 1 insertion(+)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reset --hard HEAD^
+</span></span><span class="line"><span class="cl">HEAD 現在位於 35bbb4e host v3
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git log
+</span></span><span class="line"><span class="cl">commit 35bbb4ecdccdd5aa40fe38788a166dcfb6cc56b4 (HEAD -&gt; main, origin/main)
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 12:00:49 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v3
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 4cb02674c03dee6f50b0b7d84e12d987a1d055af
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:30:57 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">commit 539c14c6d048412d255543b1c7e863ef75115155
+</span></span><span class="line"><span class="cl">Author: ehur4k &lt;hastggttr@gmail.com&gt;
+</span></span><span class="line"><span class="cl">Date:   Fri Dec 5 11:25:50 2025 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    host v1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git merge test   //合併分支
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git branch -d test  //合併後刪除分支(用於合併，不合併無法刪)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git branch
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git checkout -b branch1  //創造分支branch1並切換過去
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# cp /etc/NetworkManager/system-connections/ens160.nmconnection /root/linuxconf
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# ls
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git add --all
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v5&#34;
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git checkout -b banch2 
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# cat hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git checkout banch2  //切換至banch2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git add hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v5&#34;
+</span></span><span class="line"><span class="cl">[banch2 d3bd952] host v5
+</span></span><span class="line"><span class="cl"> 1 file changed, 2 insertions(+), 1 deletion(-)
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git checkout main
+</span></span><span class="line"><span class="cl">已切換至分支「main」
+</span></span><span class="line"><span class="cl">您的分支與上游分支 &#39;origin/main&#39; 一致。
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git merge banch2
+</span></span><span class="line"><span class="cl">自動合併 hosts
+</span></span><span class="line"><span class="cl">衝突（內容）：合併衝突於 hosts
+</span></span><span class="line"><span class="cl">自動合併失敗，修正衝突然後提交修正的結果。
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# cat hosts
+</span></span><span class="line"><span class="cl">192.168.80.50 pin.loca
+</span></span><span class="line"><span class="cl">192,168.80.80 pin2.local
+</span></span><span class="line"><span class="cl">192.168.80.30 pin3.local
+</span></span><span class="line"><span class="cl">192.167.46.64 pins.lovsl
+</span></span><span class="line"><span class="cl">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+</span></span><span class="line"><span class="cl">=======
+</span></span><span class="line"><span class="cl">192.166.66.66 pins.local
+</span></span><span class="line"><span class="cl">18.155.32.12 pin.local
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt;&gt;&gt;&gt;&gt; banch2
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# vi hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git add hosts
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git commit -m &#34;host v5 and 6&#34;
+</span></span><span class="line"><span class="cl">[main e64e306] host v5 and 6
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git status
+</span></span><span class="line"><span class="cl">位於分支 main
+</span></span><span class="line"><span class="cl">您的分支領先 &#39;origin/main&#39; 共 5 個提交。
+</span></span><span class="line"><span class="cl">  （使用 &#34;git push&#34; 來發布您的本機提交）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">沒有要提交的檔案，工作區為乾淨狀態
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git push
+</span></span><span class="line"><span class="cl">枚舉物件: 18, 完成.
+</span></span><span class="line"><span class="cl">物件計數中: 100% (18/18), 完成.
+</span></span><span class="line"><span class="cl">使用 4 個執行緒進行壓縮
+</span></span><span class="line"><span class="cl">壓縮物件中: 100% (13/13), 完成.
+</span></span><span class="line"><span class="cl">寫入物件中: 100% (14/14), 1.48 KiB | 1.48 MiB/s, 完成.
+</span></span><span class="line"><span class="cl">總共 14 (差異 3)，復用 0 (差異 0)，重用包 0 (總共 0)
+</span></span><span class="line"><span class="cl">remote: Resolving deltas: 100% (3/3), completed with 1 local object.
+</span></span><span class="line"><span class="cl">To https://github.com/ehur4k/linuxconf.git
+</span></span><span class="line"><span class="cl">   485f88a..e64e306  main -&gt; main
+</span></span><span class="line"><span class="cl">root@linux2:~/linuxconf# git reflog
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

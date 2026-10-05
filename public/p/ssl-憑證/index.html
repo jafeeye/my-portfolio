@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+<title>SSL 憑證</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="SSL 憑證">
+<meta property='og:description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-10T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="SSL 憑證">
+<meta name="twitter:description" content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#常用指令">常用指令</a></li>
+    <li><a href="#憑證簽發流程">憑證簽發流程</a></li>
+    <li><a href="#openssl-二層簽法">OpenSSL 二層簽法</a></li>
+    <li><a href="#openssl-三層簽法">OpenSSL 三層簽法</a></li>
+    <li><a href="#certify-the-web-要付費">Certify The Web (要付費)</a></li>
+    <li><a href="#mtls">mTLS</a></li>
+    <li><a href="#ejbca-community">EJBCA Community</a></li>
+    <li><a href="#step-ca">Step CA</a></li>
+    <li><a href="#hashicorp-vault-pki">HashiCorp Vault PKI</a></li>
+    <li><a href="#openbao-開源版">OpenBao (開源版)</a></li>
+    <li><a href="#windows-adcs">Windows ADCS</a></li>
+    <li><a href="#caddy---本地root憑證做到可以瀏覽local-加密">Caddy - 本地Root憑證做到可以瀏覽.local 加密</a></li>
+    <li><a href="#mkcert-一鍵生成root憑證">mkcert: 一鍵生成root憑證</a></li>
+    <li><a href="#infisical-保管憑證及api-key">infisical ：保管憑證及api key</a></li>
+    <li><a href="#xca">XCA</a></li>
+    <li><a href="#acme-server">ACME Server</a></li>
+    <li><a href="#結論---使用情境">結論 - 使用情境</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/">SSL 憑證</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-07-10T00:00:00Z'>Jul 10, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>軟體</th>
+					<th>開源免費自架</th>
+					<th>Web UI</th>
+					<th>帳密/API Key</th>
+					<th>憑證/私有 CA</th>
+					<th>功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>OpenBao</strong></td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>最接近完整替代</td>
+			</tr>
+			<tr>
+					<td><strong>Smallstep step-ca</strong></td>
+					<td>✅</td>
+					<td>基本功能偏 CLI</td>
+					<td>❌</td>
+					<td>✅ 很強</td>
+					<td>最適合管理三層憑證</td>
+			</tr>
+			<tr>
+					<td><strong>SOPS + age</strong></td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>✅</td>
+					<td>只能當加密檔案保存</td>
+					<td>適合 GitOps/K8s</td>
+			</tr>
+			<tr>
+					<td><strong>Bitwarden Secrets Manager</strong></td>
+					<td>部分限制</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>普通</td>
+					<td>免費自架條件不如 OpenBao</td>
+			</tr>
+			<tr>
+					<td><strong>Infisical CE</strong></td>
+					<td>✅</td>
+					<td>✅ 最漂亮</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>其實你現在用的就是開源版，但部分進階功能收費</td>
+			</tr>
+			<tr>
+					<td>以現在目前大家能通過SSL憑證，不外乎以下幾種</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<ul>
+<li>買網域,有公網憑證去信任本地網址</li>
+<li>使用免費Let&rsquo;s Crypt</li>
+<li>使用免費DuckDNS,後墜為DuckDNS</li>
+<li>反向代理騙過驗證 把lan 又代理成 duckdns
+<img
+    src="/my-portfolio/mtls_image.png"
+    alt=""
+    loading="lazy"
+></li>
+</ul>
+<p><img
+    src="/my-portfolio/Diagram%204.svg"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="常用指令">常用指令
+</h2><ol>
+<li>列出所有憑證PEM Base64、簽發者
+<code>openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260906211240.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>列出憑證所有訊息</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">openssl</span> <span class="n">x509</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="ow">in</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">-</span><span class="n">noout</span> <span class="o">-</span><span class="n">text</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>遠端匯憑證</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 抓下網站SSL憑證
+</span></span><span class="line"><span class="cl">openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | 
+</span></span><span class="line"><span class="cl">openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt
+</span></span><span class="line"><span class="cl">#更新系統信任清單
+</span></span><span class="line"><span class="cl">update-ca-certificates
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="憑證簽發流程">憑證簽發流程
+</h2><p>數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證</p>
+<ul>
+<li><strong>阿公 (根憑證 Root CA)</strong> = 內政部總局
+<ul>
+<li>角色：全台灣最高戶政主管機關。它自己刻了一個「天字第一號中華民國大印」（Root Key）。因為權力太大，這個大印平常鎖在中央銀行的地下保險箱，絕不輕易拿出來。它不直接幫一般民眾辦理業務。</li>
+</ul>
+</li>
+<li><strong>老爸 (中間憑證 Intermediate CA)</strong> = 信義區戶政事務所
+<ul>
+<li>角色：內政部總局不可能每天派人幫全台灣民眾蓋章，所以內政部用大印簽了一張授權書，派發給「信義區戶政事務所」。戶政事務所每天開門營業，用這張授權書證明的合法地位，在現場幫民眾辦理業務。</li>
+</ul>
+</li>
+<li><strong>孫子 (終端憑證 Leaf / Server CRT)</strong> = <strong>你（example.com）的身分證</strong>
+<ul>
+<li>角色：你跑去信義區戶政事務所申請，櫃檯人員審核你的資料後，拿出信義區的印章在你的身分證（<code>server.crt</code>）上蓋章。這張身分證證明了你是誰，但你拿到這張身分證後，<strong>沒辦法</strong>拿它去幫你的朋友再簽發一張身分證。</li>
+</ul>
+</li>
+</ul>
+<p>憑證鏈（Certificate Chain）<img
+    src="/my-portfolio/Diagram%205.svg"
+    alt=""
+    loading="lazy"
+> 完整憑證本身要具備 root.crt (根憑證) + intermediate.crt (中繼憑證)+ server.crt (終端憑證)，有時候為了省事，會直接用 openssl 簽兩張 (根+終端)也可過信任</p>
+<h2 id="openssl-二層簽法">OpenSSL 二層簽法
+</h2><p>因為我們是在實驗室環境（<code>.lab</code>），我們不花錢去跟外面大廠（如 DigiCert）買憑證，所以我們要「<strong>自己開一家戶政事務所（俗稱自簽 CA）</strong>」。</p>
+<ol>
+<li>產生 CA 的私鑰（Private Key）：戶政事務所刻了一個「全天下只有所長知道的官方大印章（私鑰）」。這個印章絕對不能被偷走，因為未來所有發出去的身分證，都要用這個印章來蓋章。<code>4096</code> 代表這個印章的防偽複雜度極高。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl genrsa -out ca.key 4096
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>產生 CA 的公開憑證（Public Certificate）：戶政事務所對外掛牌開張（<code>ca.crt</code>），告訴全天下（<code>-subj</code> 裡面的地區、UUU 組織等欄位）：「我是合法的戶政事務所，我的有效期限是 10 年（<code>3650</code> 天）。」 未來你的瀏覽器或 Docker 用戶端，必須要把這個 <code>ca.crt</code> 檔案匯入到電腦裡，點選「信任它」，這家戶政事務所說的話才算數。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl req -x509 -new -nodes -sha512 -days 3650 \
+</span></span><span class="line"><span class="cl">    -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=UUU/OU=DKL/CN=docker1.training.lab&#34; \
+</span></span><span class="line"><span class="cl">    -key ca.key \
+</span></span><span class="line"><span class="cl">    -out ca.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>伺服器向 CA 申請身分證（憑證）</strong>
+現在戶政事務所蓋好了，你的 Docker 伺服器（<code>docker1.training.lab</code>）要來申請一張證明自己合法身份的證書。</p>
+<ol start="3">
+<li>產生伺服器的私鑰（Private Key）：你（伺服器）自己在家裡，秘密生成了一個「你自己的個人私章」（<code>docker1.training.lab.key</code>）。未來在進行 HTTPS 加密連線時，伺服器要用這個私章來解密資料。這個檔案一樣絕對不能外流！</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl genrsa -out docker1.training.lab.key 4096
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>產生伺服器的「憑證簽發申請書（CSR）」</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl req -sha512 -new \
+</span></span><span class="line"><span class="cl">    -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=UUU/OU=DKL/CN=docker1.training.lab&#34; \
+</span></span><span class="line"><span class="cl">    -key docker1.training.lab.key \
+</span></span><span class="line"><span class="cl">    -out docker1.training.lab.csr
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>白話意思</strong>：你拿著自己的個人私章（<code>-key</code>），填寫了一份「身分證申請書」（<code>docker1.training.lab.csr</code>）。</li>
+<li>申請書上寫明了你的基本資料（<code>-subj</code>），最重要的欄位是 <strong><code>CN=docker1.training.lab</code></strong>，這代表你跟政府宣稱：「我的網址就叫這個名字，請政府幫我驗證！」</li>
+</ul>
+<ol start="5">
+<li>戶政事務所大印一蓋，核發身分證（CRT）</li>
+</ol>
+<ul>
+<li><strong>白話意思</strong>：你把那份申請書（<code>-in ...csr</code>）送到戶政事務所。所長看了一下沒問題，拿出剛才第一步刻好的官方大印章（<code>-CAkey ca.key</code>），對照著政府公告（<code>-CA ca.crt</code>），用力在你的申請書上蓋下去！</li>
+<li>產出的產物就是 <strong><code>docker1.training.lab.crt</code></strong>。這就是你的「實體身分證（數位憑證）」！它的有效期限同樣是 10 年。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl x509 -req -sha512 -days 3650 \
+</span></span><span class="line"><span class="cl">    -CA ca.crt -CAkey ca.key -CAcreateserial \
+</span></span><span class="line"><span class="cl">    -in docker1.training.lab.csr \
+</span></span><span class="line"><span class="cl">    -out docker1.training.lab.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>最終在 Docker / Harbor 上怎麼使用這些檔案？
+當這 5 個指令跑完後，你會得到一堆檔案，最常拿去配置在 Nginx、Harbor 或 Docker 上的有這三個：</li>
+</ol>
+<ul>
+<li><strong><code>docker1.training.lab.key</code>（伺服器私鑰）</strong>：放在伺服器後台（例如 Nginx 的 <code>ssl_certificate_key</code>），用來解密流量，死都不能給別人。</li>
+<li><strong><code>docker1.training.lab.crt</code>（伺服器憑證）</strong>：放在伺服器前台，任何人連進你的網頁時，伺服器會大方地把這張「身分證」亮給瀏覽器看。</li>
+<li><strong><code>ca.crt</code>（根憑證）</strong>：你要把這個檔案派發給你的 GitLab Runner、你的 PVE 主機或是你的個人電腦，讓它們信任這家「自建戶政事務所」。</li>
+</ul>
+<h2 id="openssl-三層簽法">OpenSSL 三層簽法
+</h2><ol>
+<li>阿公開張（建立 Root CA）
+首先，建立最高權力的根憑證，這張是自己簽給自己的（Self-Signed）。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1. 產生阿公的私鑰 (Root Key)
+</span></span><span class="line"><span class="cl">openssl genrsa -out root.key 4096
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 2. 產生阿公的憑證 (Root CRT)
+</span></span><span class="line"><span class="cl">openssl req -x509 -new -nodes -sha512 -days 3650 \
+</span></span><span class="line"><span class="cl">    -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=Lab/CN=My-Root-CA&#34; \
+</span></span><span class="line"><span class="cl">    -key root.key \
+</span></span><span class="line"><span class="cl">    -out root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>老爸出世（建立中間 Intermediate CA）
+這是關鍵！我們要產生一個中間 CA，並且用<strong>阿公的私鑰</strong>幫它蓋章。
+為了讓老爸具有「簽發別人的權力」，我們必須先寫一個超簡單的設定檔，檔名取叫 <code>x509_ext.cnf</code>：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 先用 cat 建立一個暫時的設定檔
+</span></span><span class="line"><span class="cl">cat &lt;&lt;EOF &gt; x509_ext.cnf
+</span></span><span class="line"><span class="cl">[ v3_intermediate_ca ]
+</span></span><span class="line"><span class="cl">subjectKeyIdentifier = hash
+</span></span><span class="line"><span class="cl">authorityKeyIdentifier = keyid:always,issuer
+</span></span><span class="line"><span class="cl">basicConstraints = critical, CA:true, pathlen:0
+</span></span><span class="line"><span class="cl">keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+</span></span><span class="line"><span class="cl">EOF
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>💡 <strong>這段設定的黑魔法：</strong> <code>CA:true</code> 代表這是一張 CA 憑證（可以簽別人）；<code>pathlen:0</code> 代表它只能再往下簽一層（就是孫子輩），孫子不能再簽曾孫。
+接著開始產出老爸：</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 3. 產生老爸的私鑰 (Intermediate Key)
+</span></span><span class="line"><span class="cl">openssl genrsa -out intermediate.key 4096
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 4. 產生老爸的申請書 (Intermediate CSR)
+</span></span><span class="line"><span class="cl">openssl req -sha512 -new \
+</span></span><span class="line"><span class="cl">    -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=Lab/CN=My-Intermediate-CA&#34; \
+</span></span><span class="line"><span class="cl">    -key intermediate.key \
+</span></span><span class="line"><span class="cl">    -out intermediate.csr
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 5. 重頭戲：用「阿公的 Key 和 CRT」去簽老爸，並套用剛剛的 CA 特效設定檔
+</span></span><span class="line"><span class="cl">openssl x509 -req -sha512 -days 1825 \
+</span></span><span class="line"><span class="cl">    -CA root.crt -CAkey root.key -CAcreateserial \
+</span></span><span class="line"><span class="cl">    -in intermediate.csr \
+</span></span><span class="line"><span class="cl">    -out intermediate.crt \
+</span></span><span class="line"><span class="cl">    -extfile x509_ext.cnf -extensions v3_intermediate_ca
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>孫子出生（建立終端憑證 Leaf）
+現在阿公可以回保險箱休息了。我們接下來要用<strong>老爸的私鑰</strong>，去簽發你 Docker 伺服器要用的終端憑證。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 6. 產生孫子的私鑰 (Server Key)
+</span></span><span class="line"><span class="cl">openssl genrsa -out docker1.training.lab.key 4096
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 7. 產生孫子的申請書 (Server CSR)
+</span></span><span class="line"><span class="cl">openssl req -sha512 -new \
+</span></span><span class="line"><span class="cl">    -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=Lab/CN=docker1.training.lab&#34; \
+</span></span><span class="line"><span class="cl">    -key docker1.training.lab.key \
+</span></span><span class="line"><span class="cl">    -out docker1.training.lab.csr
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 8. 最終簽發：用「老爸的 Key 和 CRT」來簽發孫子憑證！
+</span></span><span class="line"><span class="cl">openssl x509 -req -sha512 -days 365 \
+</span></span><span class="line"><span class="cl">    -CA intermediate.crt -CAkey intermediate.key -CAcreateserial \
+</span></span><span class="line"><span class="cl">    -in docker1.training.lab.csr \
+</span></span><span class="line"><span class="cl">    -out docker1.training.lab.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>終點關鍵：如何綁定成「憑證鏈」給 Nginx / Harbor 使用？
+當你走完上面三層，瀏覽器在連線時，它需要同時看到「孫子」和「老爸」。所以業界的標準作法是把<strong>孫子憑證和老爸憑證黏在一起</strong>，做成一個「完整憑證鏈檔案（Full Chain）」：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 把孫子放前面，老爸放後面，合併成一個檔案
+</span></span><span class="line"><span class="cl">cat docker1.training.lab.crt intermediate.crt &gt; fullchain.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最後部署時：</p>
+<ul>
+<li>Nginx / Harbor 的網頁憑證欄位：填這個合併後的 <code>fullchain.crt</code>。</li>
+<li>Nginx / Harbor 的私鑰欄位：填孫子的 <code>docker1.training.lab.key</code>。</li>
+<li>你的電腦 / PVE 信任清單：只需要匯入最頂層的阿公 <code>root.crt</code>。</li>
+</ul>
+<h2 id="certify-the-web-要付費">Certify The Web (要付費)
+</h2><h2 id="mtls">mTLS
+</h2><h2 id="ejbca-community">EJBCA Community
+</h2><h2 id="step-ca">Step CA
+</h2><p><a href="https://koromatech.com/master-ssl-pki-in-your-homelab-build-a-self-hosted-ca-with-step-ca-phase-1-part-1/">https://koromatech.com/master-ssl-pki-in-your-homelab-build-a-self-hosted-ca-with-step-ca-phase-1-part-1/</a></p>
+<h2 id="hashicorp-vault-pki">HashiCorp Vault PKI
+</h2><h2 id="openbao-開源版">OpenBao (開源版)
+</h2><h2 id="windows-adcs">Windows ADCS
+</h2><h2 id="caddy---本地root憑證做到可以瀏覽local-加密">Caddy - 本地Root憑證做到可以瀏覽.local 加密
+</h2><p>有內建本地RootCA，並且會發給子網域證書
+<code>/var/lib/caddy/.local/share/caddy/certificates/local/</code>
+開啟本地acme server 加入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http://:9000 { 
+</span></span><span class="line"><span class="cl">acme_server 
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>systemctl reload caddy
+curl http://192.168.10.9:9000/acme/local/directory 確認是否正常</p>
+<h2 id="mkcert-一鍵生成root憑證">mkcert: 一鍵生成root憑證
+</h2><h2 id="infisical-保管憑證及api-key">infisical ：保管憑證及api key
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260906211656.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="xca">XCA
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260906211924.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="acme-server">ACME Server
+</h2><p>Nginx : Nginx-acme
+Caddy Caddy Docker Proxy</p>
+<p><img
+    src="/my-portfolio/acme_unfurl_org_7df5a14fe8.png"
+    alt=""
+    loading="lazy"
+>
+<img
+    src="/my-portfolio/acme_how_it_works_88d170c87a.avif"
+    alt=""
+    loading="lazy"
+></p>
+<p>HTTP-01 挑戰是一種用於證明網域所有權的自動化方法
+DNSSEC（網域名稱系統安全擴充）</p>
+<p>一篇關於 Caddy Traefik certbot Nginx 怎麼設定acme
+<a href="https://smallstep.com/blog/private-acme-server/">https://smallstep.com/blog/private-acme-server/</a></p>
+<p><img
+    src="/my-portfolio/Pasted%20image%2020260905193356.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="結論---使用情境">結論 - 使用情境
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th><strong>情境</strong></th>
+					<th><strong>憑證層級選擇</strong></th>
+					<th><strong>為什麼？</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>個人 HomeLab / 期末專案測試</strong></td>
+					<td><strong>兩層 (手動 OpenSSL)</strong></td>
+					<td>快速、省事、好除錯。</td>
+			</tr>
+			<tr>
+					<td><strong>企業正式 Production 生產環境</strong></td>
+					<td><strong>三層 (step-ca / 大廠)</strong></td>
+					<td>核心安全考量，避免 Root Key 曝光。</td>
+			</tr>
+			<tr>
+					<td><strong>自動化短命憑證 (ACME) 環境</strong></td>
+					<td><strong>三層 (必須)</strong></td>
+					<td>線上自動更新必須依賴中間 CA 來擋刀。</td>
+			</tr>
+			<tr>
+					<td><strong>封閉式硬體設備維運網頁</strong></td>
+					<td><strong>兩層 (Self-signed)</strong></td>
+					<td>權限不外擴，不需要多此一舉。</td>
+			</tr>
+	</tbody>
+</table></div>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

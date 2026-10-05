@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Oracle VirtualBox 網路模式 VM 上網 VM ↔ VM 主機 ↔ VM 區網設備連入 VM 適合用途 NAT ✅ ❌ 預設不行 主機連 VM 需轉發 ❌ 需 Port Forwarding 單台 VM 單純上網 NAT Network ✅ ✅ 主機連 VM 需轉發 ❌ 需 Port Forwarding 多台 VM 組成可上網的實驗網路 Bridged Adapter 橋接 ✅ ✅ ✅ ✅ 讓 VM 成為實體區網中的一台電腦 Host-only Adapter ❌ ✅ ✅ ❌ 主機與 VM 的封閉實驗網路 Internal Network ❌ ✅ ❌ ❌ 完全隔離的 VM 內部網路 Not Attached ❌ ❌ ❌ ❌ 模擬網路線被拔掉 Generic Driver 視設定 視設定 視設定 視設定 UDP Tunnel、VDE 等特殊用途 Cloud Network 視雲端設定 視設定 視設定 視設定 將本機 VM 接到 Oracle Cloud 只想讓一台 VM 上網：選 NAT 多台 VM 要互通又要上網：選 NAT Network VM 要直接出現在家裡的 192.168.8.0/24：選 Bridged Adapter 只有主機和 VM 需要互通：選 Host-only Adapter 建立完全封閉的多台 VM 實驗室：選 Internal Network 做完整路由器／防火牆 Lab：使用 NAT + Internal Network 雙網卡 特色功能 VM 畫面與聲音直接錄製 VRDP：不用依賴 Guest 的 RDP UDP Tunnel:跨兩台主機建立虛擬網路 VISO：不用真正建立 ISO 快速Clone 純軟體模擬KVM Hyper-V 功能 Hyper-V 的特點 相較 VirtualBox／一般 KVM Type-1 Hypervisor 啟用後 Hyper-V 直接控制硬體，原本的 Windows 變成 Root Partition VirtualBox 是 Hosted 架構；KVM則同樣接近 Type-1 Dynamic Memory VM 執行中依需求自動增加或回收記憶體 VirtualBox 沒有同等完整機制；KVM ballooning 能做到但策略較分散 Production Checkpoint 透過 VSS／檔案系統凍結建立應用程式一致快照 比一般「直接保存記憶體狀態」更適合正式伺服器 Hyper-V Replica 不需要共享儲存，直接將 VM 非同步複寫到另一台主機 VirtualBox 幾乎沒有；Proxmox 可用 replication，但通常依賴 ZFS/叢集 Windows Failover Cluster VM 故障後可在其他節點自動啟動 企業版核心優勢，VirtualBox 不具備 Shared-nothing Live Migration 不使用共用 SAN，也能在線遷移 VM KVM 也能做到，VirtualBox Teleporting 沒這麼完整 Storage Live Migration VM 執行中移動 VHDX 到其他儲存位置 比 VirtualBox 的儲存遷移成熟 Shielded VM vTPM、磁碟加密、Host Guardian，連主機管理者也不一定能讀 VM Hyper-V 很有代表性的企業安全功能 Enhanced Session Mode VMConnect 可轉送剪貼簿、磁碟、USB、印表機、音訊及解析度 類似 VirtualBox Guest Additions，但對 Windows Guest 整合特別好 PowerShell 完整管理 幾乎所有 VM、網路、儲存與叢集功能都能腳本化 很適合大量建立 Windows Lab Windows 平台共用 WSL2、Windows Sandbox、VBS、Credential Guard、Hyper-V Containers 共用 Hyper-V 架構 是其他桌面 Hypervisor 沒有的生態整合 Hyper-V Virtual Switch Windows Server 才是完整企業版：\n">
+<title>虛擬機器比較</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E8%99%9B%E6%93%AC%E6%A9%9F%E5%99%A8%E6%AF%94%E8%BC%83/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="虛擬機器比較">
+<meta property='og:description' content="Oracle VirtualBox 網路模式 VM 上網 VM ↔ VM 主機 ↔ VM 區網設備連入 VM 適合用途 NAT ✅ ❌ 預設不行 主機連 VM 需轉發 ❌ 需 Port Forwarding 單台 VM 單純上網 NAT Network ✅ ✅ 主機連 VM 需轉發 ❌ 需 Port Forwarding 多台 VM 組成可上網的實驗網路 Bridged Adapter 橋接 ✅ ✅ ✅ ✅ 讓 VM 成為實體區網中的一台電腦 Host-only Adapter ❌ ✅ ✅ ❌ 主機與 VM 的封閉實驗網路 Internal Network ❌ ✅ ❌ ❌ 完全隔離的 VM 內部網路 Not Attached ❌ ❌ ❌ ❌ 模擬網路線被拔掉 Generic Driver 視設定 視設定 視設定 視設定 UDP Tunnel、VDE 等特殊用途 Cloud Network 視雲端設定 視設定 視設定 視設定 將本機 VM 接到 Oracle Cloud 只想讓一台 VM 上網：選 NAT 多台 VM 要互通又要上網：選 NAT Network VM 要直接出現在家裡的 192.168.8.0/24：選 Bridged Adapter 只有主機和 VM 需要互通：選 Host-only Adapter 建立完全封閉的多台 VM 實驗室：選 Internal Network 做完整路由器／防火牆 Lab：使用 NAT + Internal Network 雙網卡 特色功能 VM 畫面與聲音直接錄製 VRDP：不用依賴 Guest 的 RDP UDP Tunnel:跨兩台主機建立虛擬網路 VISO：不用真正建立 ISO 快速Clone 純軟體模擬KVM Hyper-V 功能 Hyper-V 的特點 相較 VirtualBox／一般 KVM Type-1 Hypervisor 啟用後 Hyper-V 直接控制硬體，原本的 Windows 變成 Root Partition VirtualBox 是 Hosted 架構；KVM則同樣接近 Type-1 Dynamic Memory VM 執行中依需求自動增加或回收記憶體 VirtualBox 沒有同等完整機制；KVM ballooning 能做到但策略較分散 Production Checkpoint 透過 VSS／檔案系統凍結建立應用程式一致快照 比一般「直接保存記憶體狀態」更適合正式伺服器 Hyper-V Replica 不需要共享儲存，直接將 VM 非同步複寫到另一台主機 VirtualBox 幾乎沒有；Proxmox 可用 replication，但通常依賴 ZFS/叢集 Windows Failover Cluster VM 故障後可在其他節點自動啟動 企業版核心優勢，VirtualBox 不具備 Shared-nothing Live Migration 不使用共用 SAN，也能在線遷移 VM KVM 也能做到，VirtualBox Teleporting 沒這麼完整 Storage Live Migration VM 執行中移動 VHDX 到其他儲存位置 比 VirtualBox 的儲存遷移成熟 Shielded VM vTPM、磁碟加密、Host Guardian，連主機管理者也不一定能讀 VM Hyper-V 很有代表性的企業安全功能 Enhanced Session Mode VMConnect 可轉送剪貼簿、磁碟、USB、印表機、音訊及解析度 類似 VirtualBox Guest Additions，但對 Windows Guest 整合特別好 PowerShell 完整管理 幾乎所有 VM、網路、儲存與叢集功能都能腳本化 很適合大量建立 Windows Lab Windows 平台共用 WSL2、Windows Sandbox、VBS、Credential Guard、Hyper-V Containers 共用 Hyper-V 架構 是其他桌面 Hypervisor 沒有的生態整合 Hyper-V Virtual Switch Windows Server 才是完整企業版：\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E8%99%9B%E6%93%AC%E6%A9%9F%E5%99%A8%E6%AF%94%E8%BC%83/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-04T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-04T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="虛擬機器比較">
+<meta name="twitter:description" content="Oracle VirtualBox 網路模式 VM 上網 VM ↔ VM 主機 ↔ VM 區網設備連入 VM 適合用途 NAT ✅ ❌ 預設不行 主機連 VM 需轉發 ❌ 需 Port Forwarding 單台 VM 單純上網 NAT Network ✅ ✅ 主機連 VM 需轉發 ❌ 需 Port Forwarding 多台 VM 組成可上網的實驗網路 Bridged Adapter 橋接 ✅ ✅ ✅ ✅ 讓 VM 成為實體區網中的一台電腦 Host-only Adapter ❌ ✅ ✅ ❌ 主機與 VM 的封閉實驗網路 Internal Network ❌ ✅ ❌ ❌ 完全隔離的 VM 內部網路 Not Attached ❌ ❌ ❌ ❌ 模擬網路線被拔掉 Generic Driver 視設定 視設定 視設定 視設定 UDP Tunnel、VDE 等特殊用途 Cloud Network 視雲端設定 視設定 視設定 視設定 將本機 VM 接到 Oracle Cloud 只想讓一台 VM 上網：選 NAT 多台 VM 要互通又要上網：選 NAT Network VM 要直接出現在家裡的 192.168.8.0/24：選 Bridged Adapter 只有主機和 VM 需要互通：選 Host-only Adapter 建立完全封閉的多台 VM 實驗室：選 Internal Network 做完整路由器／防火牆 Lab：使用 NAT + Internal Network 雙網卡 特色功能 VM 畫面與聲音直接錄製 VRDP：不用依賴 Guest 的 RDP UDP Tunnel:跨兩台主機建立虛擬網路 VISO：不用真正建立 ISO 快速Clone 純軟體模擬KVM Hyper-V 功能 Hyper-V 的特點 相較 VirtualBox／一般 KVM Type-1 Hypervisor 啟用後 Hyper-V 直接控制硬體，原本的 Windows 變成 Root Partition VirtualBox 是 Hosted 架構；KVM則同樣接近 Type-1 Dynamic Memory VM 執行中依需求自動增加或回收記憶體 VirtualBox 沒有同等完整機制；KVM ballooning 能做到但策略較分散 Production Checkpoint 透過 VSS／檔案系統凍結建立應用程式一致快照 比一般「直接保存記憶體狀態」更適合正式伺服器 Hyper-V Replica 不需要共享儲存，直接將 VM 非同步複寫到另一台主機 VirtualBox 幾乎沒有；Proxmox 可用 replication，但通常依賴 ZFS/叢集 Windows Failover Cluster VM 故障後可在其他節點自動啟動 企業版核心優勢，VirtualBox 不具備 Shared-nothing Live Migration 不使用共用 SAN，也能在線遷移 VM KVM 也能做到，VirtualBox Teleporting 沒這麼完整 Storage Live Migration VM 執行中移動 VHDX 到其他儲存位置 比 VirtualBox 的儲存遷移成熟 Shielded VM vTPM、磁碟加密、Host Guardian，連主機管理者也不一定能讀 VM Hyper-V 很有代表性的企業安全功能 Enhanced Session Mode VMConnect 可轉送剪貼簿、磁碟、USB、印表機、音訊及解析度 類似 VirtualBox Guest Additions，但對 Windows Guest 整合特別好 PowerShell 完整管理 幾乎所有 VM、網路、儲存與叢集功能都能腳本化 很適合大量建立 Windows Lab Windows 平台共用 WSL2、Windows Sandbox、VBS、Credential Guard、Hyper-V Containers 共用 Hyper-V 架構 是其他桌面 Hypervisor 沒有的生態整合 Hyper-V Virtual Switch Windows Server 才是完整企業版：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#oracle-virtualbox">Oracle VirtualBox</a>
+      <ol>
+        <li><a href="#特色功能">特色功能</a></li>
+      </ol>
+    </li>
+    <li><a href="#hyper-v">Hyper-V</a></li>
+    <li><a href="#wsl">WSL</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E8%99%9B%E6%93%AC%E6%A9%9F%E5%99%A8%E6%AF%94%E8%BC%83/">虛擬機器比較</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-08-04T00:00:00Z'>Aug 04, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="oracle-virtualbox">Oracle VirtualBox
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>網路模式</th>
+					<th>VM 上網</th>
+					<th>VM ↔ VM</th>
+					<th>主機 ↔ VM</th>
+					<th>區網設備連入 VM</th>
+					<th>適合用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>NAT</td>
+					<td>✅</td>
+					<td>❌ 預設不行</td>
+					<td>主機連 VM 需轉發</td>
+					<td>❌ 需 Port Forwarding</td>
+					<td>單台 VM 單純上網</td>
+			</tr>
+			<tr>
+					<td>NAT Network</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>主機連 VM 需轉發</td>
+					<td>❌ 需 Port Forwarding</td>
+					<td>多台 VM 組成可上網的實驗網路</td>
+			</tr>
+			<tr>
+					<td>Bridged Adapter 橋接</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>讓 VM 成為實體區網中的一台電腦</td>
+			</tr>
+			<tr>
+					<td>Host-only Adapter</td>
+					<td>❌</td>
+					<td>✅</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>主機與 VM 的封閉實驗網路</td>
+			</tr>
+			<tr>
+					<td>Internal Network</td>
+					<td>❌</td>
+					<td>✅</td>
+					<td>❌</td>
+					<td>❌</td>
+					<td>完全隔離的 VM 內部網路</td>
+			</tr>
+			<tr>
+					<td>Not Attached</td>
+					<td>❌</td>
+					<td>❌</td>
+					<td>❌</td>
+					<td>❌</td>
+					<td>模擬網路線被拔掉</td>
+			</tr>
+			<tr>
+					<td>Generic Driver</td>
+					<td>視設定</td>
+					<td>視設定</td>
+					<td>視設定</td>
+					<td>視設定</td>
+					<td>UDP Tunnel、VDE 等特殊用途</td>
+			</tr>
+			<tr>
+					<td>Cloud Network</td>
+					<td>視雲端設定</td>
+					<td>視設定</td>
+					<td>視設定</td>
+					<td>視設定</td>
+					<td>將本機 VM 接到 Oracle Cloud</td>
+			</tr>
+	</tbody>
+</table></div>
+<ul>
+<li>只想讓一台 VM 上網：選 <code>NAT</code></li>
+<li>多台 VM 要互通又要上網：選 <code>NAT Network</code></li>
+<li>VM 要直接出現在家裡的 <code>192.168.8.0/24</code>：選 <code>Bridged Adapter</code></li>
+<li>只有主機和 VM 需要互通：選 <code>Host-only Adapter</code></li>
+<li>建立完全封閉的多台 VM 實驗室：選 <code>Internal Network</code></li>
+<li>做完整路由器／防火牆 Lab：使用 <code>NAT + Internal Network</code> 雙網卡</li>
+</ul>
+<h3 id="特色功能">特色功能
+</h3><ul>
+<li>VM 畫面與聲音直接錄製</li>
+<li>VRDP：不用依賴 Guest 的 RDP</li>
+<li>UDP Tunnel:跨兩台主機建立虛擬網路</li>
+<li>VISO：不用真正建立 ISO</li>
+<li>快速Clone</li>
+<li>純軟體模擬KVM</li>
+</ul>
+<h2 id="hyper-v">Hyper-V
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>功能</th>
+					<th>Hyper-V 的特點</th>
+					<th>相較 VirtualBox／一般 KVM</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Type-1 Hypervisor</td>
+					<td>啟用後 Hyper-V 直接控制硬體，原本的 Windows 變成 Root Partition</td>
+					<td>VirtualBox 是 Hosted 架構；KVM則同樣接近 Type-1</td>
+			</tr>
+			<tr>
+					<td>Dynamic Memory</td>
+					<td>VM 執行中依需求自動增加或回收記憶體</td>
+					<td>VirtualBox 沒有同等完整機制；KVM ballooning 能做到但策略較分散</td>
+			</tr>
+			<tr>
+					<td>Production Checkpoint</td>
+					<td>透過 VSS／檔案系統凍結建立應用程式一致快照</td>
+					<td>比一般「直接保存記憶體狀態」更適合正式伺服器</td>
+			</tr>
+			<tr>
+					<td>Hyper-V Replica</td>
+					<td>不需要共享儲存，直接將 VM 非同步複寫到另一台主機</td>
+					<td>VirtualBox 幾乎沒有；Proxmox 可用 replication，但通常依賴 ZFS/叢集</td>
+			</tr>
+			<tr>
+					<td>Windows Failover Cluster</td>
+					<td>VM 故障後可在其他節點自動啟動</td>
+					<td>企業版核心優勢，VirtualBox 不具備</td>
+			</tr>
+			<tr>
+					<td>Shared-nothing Live Migration</td>
+					<td>不使用共用 SAN，也能在線遷移 VM</td>
+					<td>KVM 也能做到，VirtualBox Teleporting 沒這麼完整</td>
+			</tr>
+			<tr>
+					<td>Storage Live Migration</td>
+					<td>VM 執行中移動 VHDX 到其他儲存位置</td>
+					<td>比 VirtualBox 的儲存遷移成熟</td>
+			</tr>
+			<tr>
+					<td>Shielded VM</td>
+					<td>vTPM、磁碟加密、Host Guardian，連主機管理者也不一定能讀 VM</td>
+					<td>Hyper-V 很有代表性的企業安全功能</td>
+			</tr>
+			<tr>
+					<td>Enhanced Session Mode</td>
+					<td>VMConnect 可轉送剪貼簿、磁碟、USB、印表機、音訊及解析度</td>
+					<td>類似 VirtualBox Guest Additions，但對 Windows Guest 整合特別好</td>
+			</tr>
+			<tr>
+					<td>PowerShell 完整管理</td>
+					<td>幾乎所有 VM、網路、儲存與叢集功能都能腳本化</td>
+					<td>很適合大量建立 Windows Lab</td>
+			</tr>
+			<tr>
+					<td>Windows 平台共用</td>
+					<td>WSL2、Windows Sandbox、VBS、Credential Guard、Hyper-V Containers 共用 Hyper-V 架構</td>
+					<td>是其他桌面 Hypervisor 沒有的生態整合</td>
+			</tr>
+			<tr>
+					<td>Hyper-V Virtual Switch</td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>Windows Server 才是完整企業版：</p>
+<ul>
+<li>Hyper-V Replica</li>
+<li>Failover Clustering</li>
+<li>Live Migration</li>
+<li>Storage Migration</li>
+<li>Shielded VM／Guarded Fabric</li>
+<li>大型 NUMA 與硬體擴充</li>
+<li>SR-IOV、RDMA、DDA 等伺服器功能</li>
+</ul>
+<h2 id="wsl">WSL
+</h2>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

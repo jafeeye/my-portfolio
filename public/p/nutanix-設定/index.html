@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、Nutanix 基本安裝 使用單節點安裝，最低需求如下:\n32GB memory minimum ; I recommend at least 64GB as 32GB will give you no space to run virtual machines; 4 CPU Cores minimum; 64GB Boot Disk minimum; 200GB Hot Tier Disk minimum; 500GB Cold Tier Disk minimum. 架構 Node 1: AHV 10.0.0.81：放置開機/更新一些root/acropolis_modules py腳本，沒有其他檔案 CVM 10.0.0.82： Netmask 255.0.0.0 Gateway: 10.0.0.254 調整設備情形\n類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type e1000 VirtIO SCSI 編輯/etc/pve/nodes/&lt;proxmox server name&gt;/qemu-server/&lt;vm id&gt;.conf，加入args: -cpu host,+svm、serial=&lt;somerandomserial&gt; 安裝的時候使用對應方式安裝，第一顆50G當Hypervisor，兩個硬碟200G，C (CVM boot)、D(data)、H(Hypervisor boot) 進到這個畫面代表安裝完成，按Y重新開機，到開機登入畫面,帳號root密碼nutanix/4u 過10分鐘初始化後直接使用CVM IP 登入畫面,帳號nutanix密碼nutanix/4u，執行 watch genesis status，確認有看到這兩個服務在跑 確認之後Ctrl+C 執行 cluster -s &lt;cvm-ip&gt; --redundancy_factor=1 -dns_servers 1.1.1.1 create ，如果有三個節點執行 cluster -s &lt;cvm-ip-node-1&gt;,&lt;cvm-ip-node-2&gt;,&lt;cvm-ip-node-3&gt; –dns_servers 1.1.1.1 create，出現success代表安裝成功 (可省略)設定叢集名稱及IP\n">
+<title>Nutanix 設定</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/nutanix-%E8%A8%AD%E5%AE%9A/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Nutanix 設定">
+<meta property='og:description' content="一、Nutanix 基本安裝 使用單節點安裝，最低需求如下:\n32GB memory minimum ; I recommend at least 64GB as 32GB will give you no space to run virtual machines; 4 CPU Cores minimum; 64GB Boot Disk minimum; 200GB Hot Tier Disk minimum; 500GB Cold Tier Disk minimum. 架構 Node 1: AHV 10.0.0.81：放置開機/更新一些root/acropolis_modules py腳本，沒有其他檔案 CVM 10.0.0.82： Netmask 255.0.0.0 Gateway: 10.0.0.254 調整設備情形\n類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type e1000 VirtIO SCSI 編輯/etc/pve/nodes/&lt;proxmox server name&gt;/qemu-server/&lt;vm id&gt;.conf，加入args: -cpu host,+svm、serial=&lt;somerandomserial&gt; 安裝的時候使用對應方式安裝，第一顆50G當Hypervisor，兩個硬碟200G，C (CVM boot)、D(data)、H(Hypervisor boot) 進到這個畫面代表安裝完成，按Y重新開機，到開機登入畫面,帳號root密碼nutanix/4u 過10分鐘初始化後直接使用CVM IP 登入畫面,帳號nutanix密碼nutanix/4u，執行 watch genesis status，確認有看到這兩個服務在跑 確認之後Ctrl+C 執行 cluster -s &lt;cvm-ip&gt; --redundancy_factor=1 -dns_servers 1.1.1.1 create ，如果有三個節點執行 cluster -s &lt;cvm-ip-node-1&gt;,&lt;cvm-ip-node-2&gt;,&lt;cvm-ip-node-3&gt; –dns_servers 1.1.1.1 create，出現success代表安裝成功 (可省略)設定叢集名稱及IP\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/nutanix-%E8%A8%AD%E5%AE%9A/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-09-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-12T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Nutanix 設定">
+<meta name="twitter:description" content="一、Nutanix 基本安裝 使用單節點安裝，最低需求如下:\n32GB memory minimum ; I recommend at least 64GB as 32GB will give you no space to run virtual machines; 4 CPU Cores minimum; 64GB Boot Disk minimum; 200GB Hot Tier Disk minimum; 500GB Cold Tier Disk minimum. 架構 Node 1: AHV 10.0.0.81：放置開機/更新一些root/acropolis_modules py腳本，沒有其他檔案 CVM 10.0.0.82： Netmask 255.0.0.0 Gateway: 10.0.0.254 調整設備情形\n類型 設定 Processors Type Host BIOS Type SeaBIOS Network Type e1000 VirtIO SCSI 編輯/etc/pve/nodes/&lt;proxmox server name&gt;/qemu-server/&lt;vm id&gt;.conf，加入args: -cpu host,+svm、serial=&lt;somerandomserial&gt; 安裝的時候使用對應方式安裝，第一顆50G當Hypervisor，兩個硬碟200G，C (CVM boot)、D(data)、H(Hypervisor boot) 進到這個畫面代表安裝完成，按Y重新開機，到開機登入畫面,帳號root密碼nutanix/4u 過10分鐘初始化後直接使用CVM IP 登入畫面,帳號nutanix密碼nutanix/4u，執行 watch genesis status，確認有看到這兩個服務在跑 確認之後Ctrl+C 執行 cluster -s &lt;cvm-ip&gt; --redundancy_factor=1 -dns_servers 1.1.1.1 create ，如果有三個節點執行 cluster -s &lt;cvm-ip-node-1&gt;,&lt;cvm-ip-node-2&gt;,&lt;cvm-ip-node-3&gt; –dns_servers 1.1.1.1 create，出現success代表安裝成功 (可省略)設定叢集名稱及IP\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一nutanix-基本安裝">一、Nutanix 基本安裝</a></li>
+    <li><a href="#二執行更新">二、執行更新</a></li>
+    <li><a href="#三相關指令">三、相關指令</a></li>
+    <li><a href="#四nfs位置">四、NFS位置</a></li>
+    <li><a href="#五參考資料">五、參考資料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/nutanix-%E8%A8%AD%E5%AE%9A/">Nutanix 設定</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-09-12T00:00:00Z'>Sep 12, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="一nutanix-基本安裝">一、Nutanix 基本安裝
+</h2><p>使用單節點安裝，最低需求如下:</p>
+<ul>
+<li>32GB memory minimum ;
+<ul>
+<li>I recommend at least 64GB as 32GB will give you no space to run virtual machines;</li>
+</ul>
+</li>
+<li>4 CPU Cores minimum;</li>
+<li>64GB Boot Disk minimum;</li>
+<li>200GB Hot Tier Disk minimum;</li>
+<li>500GB Cold Tier Disk minimum.
+架構</li>
+<li>Node 1:
+<ul>
+<li>AHV 10.0.0.81：放置開機/更新一些<code>root/acropolis_modules</code> py腳本，沒有其他檔案</li>
+<li>CVM 10.0.0.82：</li>
+</ul>
+</li>
+<li>Netmask 255.0.0.0</li>
+<li>Gateway: 10.0.0.254</li>
+</ul>
+<p>調整設備情形</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>類型</th>
+					<th>設定</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Processors Type</td>
+					<td><strong>Host</strong></td>
+			</tr>
+			<tr>
+					<td>BIOS Type</td>
+					<td><strong>SeaBIOS</strong></td>
+			</tr>
+			<tr>
+					<td>Network Type</td>
+					<td>e1000</td>
+			</tr>
+			<tr>
+					<td></td>
+					<td>VirtIO SCSI</td>
+			</tr>
+	</tbody>
+</table></div>
+<ol>
+<li>
+<p>編輯<code>/etc/pve/nodes/&lt;proxmox server name&gt;/qemu-server/&lt;vm id&gt;.conf</code>，加入<code>args: -cpu host,+svm</code>、<code>serial=&lt;somerandomserial&gt;</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260912204148.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>安裝的時候使用對應方式安裝，第一顆50G當Hypervisor，兩個硬碟200G，C (CVM boot)、D(data)、H(Hypervisor boot)
+<img
+    src="/my-portfolio/Pasted%20image%2020260912204309.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>進到這個畫面代表安裝完成，按Y重新開機，到開機登入畫面,帳號<code>root</code>密碼<code>nutanix/4u</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260509162455.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>過10分鐘初始化後直接使用CVM IP 登入畫面,帳號nutanix密碼<code>nutanix/4u</code>，執行 <code>watch genesis status</code>，確認有看到這兩個服務在跑
+<img
+    src="/my-portfolio/Pasted%20image%2020260912204550.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>確認之後Ctrl+C 執行 <code>cluster -s &lt;cvm-ip&gt; --redundancy_factor=1 -dns_servers 1.1.1.1 create</code> ，如果有三個節點執行 <code>cluster -s &lt;cvm-ip-node-1&gt;,&lt;cvm-ip-node-2&gt;,&lt;cvm-ip-node-3&gt; –dns_servers 1.1.1.1 create</code>，出現success代表安裝成功
+<img
+    src="/my-portfolio/Pasted%20image%2020260912204753.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>(可省略)設定叢集名稱及IP</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ncli cluster edit-params new-name=CENUC
+</span></span><span class="line"><span class="cl">ncli cluster set-external-ip-address external-ip-address=192.168.8.72
+</span></span><span class="line"><span class="cl">ncli cluster get-name-servers
+</span></span><span class="line"><span class="cl">ncli cluster get-ntp-servers
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260509170959.png"
+    alt=""
+    loading="lazy"
+></p>
+<ol start="7">
+<li>登入畫面  <code>https://&lt;cvm-ip&gt;:9440</code> 預設帳號及密碼<code>admin</code>、 <code>nutanix/4u</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260509165853.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="二執行更新">二、執行更新
+</h2><p>在執行Update之前，必須將LCM Inventory更到最新版</p>
+<ol>
+<li>SSH 登入任一台 CVM，用genesis status 確認是否服務都起來</li>
+<li>Prism → Life Cycle Management（LCM）→ Inventory，Perform Inventory</li>
+<li>在Updates可以看到更新，可以先執行 NCC Check，結束後再按 View Upgrade Plan
+(有<a href="https://www.jeroentielen.nl/upgrade-nutanix-community-edition-to-the-latest-versions/">文章</a>提到消費級硬體有相容性問題，不要貿然升級)</li>
+<li>升級不能一次升，在Updates可以選AOS先升後升AHV，不然會故障，也可以到DirectUpload直接上傳更新包
+可針對不同計畫進升級相關元件
+<img
+    src="/my-portfolio/Pasted%20image%2020260510210903.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="三相關指令">三、相關指令
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ecli task.list include_completed=false
+</span></span><span class="line"><span class="cl">genesis status # 檢查狀態
+</span></span><span class="line"><span class="cl">genesis restart # 重啟服務管理員
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cluster status #檢查叢集
+</span></span><span class="line"><span class="cl">ecli task.list include_completed=false #檢查目前工作狀態
+</span></span><span class="line"><span class="cl">ecli task.get ce19a0c6-ee5d-4d87-4926-2ea308779e84 | grep error #查詢子工作狀態
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">grep -Ei \
+</span></span><span class="line"><span class="cl">&gt; &#39;pre.?upgrade|4e508ed9|error|failed|exception|timeout|traceback&#39; \
+</span></span><span class="line"><span class="cl">&gt; /home/nutanix/data/logs/genesis.out | tail -n 200
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="四nfs位置">四、NFS位置
+</h2><p>要確認NFS底下資料，可以用putty登入 CVMIP:22 位置，下指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 語法
+</span></span><span class="line"><span class="cl">nfs_dd 可以在容器之間複製檔案，而且來源會保留在回收筒
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">nfs_dd -i nfs://127.0.0.1/NutanixManagementShare/.nutanix_recycle_bin/30159791-6704-402d-8020-edb0e69f35ca -o nfs://127.0.0.1/default-container-98138029484826/recovered-30159791-6704-402d-8020-edb0e69f35ca -m create
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用WinSCP，連線到NFS位置 <code>CVMIP:2222</code> ，進入後會看到 <code>default-container-98138029484826</code> 裡面，如果資料進回收桶在SCP是看不到，必須執行</p>
+<p><img
+    src="/my-portfolio/Pasted%20image%2020260926130534.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="五參考資料">五、參考資料
+</h2><p><a href="https://www.jeroentielen.nl/upgrade-nutanix-community-edition-to-the-latest-versions/">https://www.jeroentielen.nl/upgrade-nutanix-community-edition-to-the-latest-versions/</a>
+<a href="https://www.jeroentielen.nl/install-nutanix-community-edition-on-proxmox/">https://www.jeroentielen.nl/install-nutanix-community-edition-on-proxmox/</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

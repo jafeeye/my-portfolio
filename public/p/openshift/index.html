@@ -1,0 +1,3697 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 單機環境 -&gt; 有的，裝\u00a0Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)\u00a0/ 以前的名字叫做 CRC &hellip; 現在叫做 OpenShift Local。 自建免費叢集 -&gt; 社群版\u00a0OKD。 自建試用叢集 -&gt; 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。 一、單節點部屬 SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk 可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 master.ign、缺少 DNS 和 bootstrapInPlace 的問題。\n以下假設：\n安裝工具主機：192.168.8.83 OKD SNO：192.168.8.84 Cluster Name：okd-sno Base Domain：myk8s.local 磁碟：/dev/vda Gateway：192.168.8.1 DNS：使用你現有的 PowerDNS OKD 版本：4.13.0-0.okd-2023-06-04-080300 Step1.準備 DNS 在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：\n類型 名稱 IP A api.okd-sno.myk8s.test 192.168.8.24 A api-int.okd-sno.myk8s.test 192.168.8.24 A *.apps.okd-sno.myk8s.test 192.168.8.24 A sno.okd-sno.myk8s.test 192.168.8.24 最好也建立 PTR：\n">
+<title>OpenShift</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/openshift/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="OpenShift">
+<meta property='og:description' content=" 單機環境 -&gt; 有的，裝\u00a0Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)\u00a0/ 以前的名字叫做 CRC &hellip; 現在叫做 OpenShift Local。 自建免費叢集 -&gt; 社群版\u00a0OKD。 自建試用叢集 -&gt; 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。 一、單節點部屬 SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk 可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 master.ign、缺少 DNS 和 bootstrapInPlace 的問題。\n以下假設：\n安裝工具主機：192.168.8.83 OKD SNO：192.168.8.84 Cluster Name：okd-sno Base Domain：myk8s.local 磁碟：/dev/vda Gateway：192.168.8.1 DNS：使用你現有的 PowerDNS OKD 版本：4.13.0-0.okd-2023-06-04-080300 Step1.準備 DNS 在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：\n類型 名稱 IP A api.okd-sno.myk8s.test 192.168.8.24 A api-int.okd-sno.myk8s.test 192.168.8.24 A *.apps.okd-sno.myk8s.test 192.168.8.24 A sno.okd-sno.myk8s.test 192.168.8.24 最好也建立 PTR：\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/openshift/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-05-23T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="OpenShift">
+<meta name="twitter:description" content=" 單機環境 -&gt; 有的，裝\u00a0Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)\u00a0/ 以前的名字叫做 CRC &hellip; 現在叫做 OpenShift Local。 自建免費叢集 -&gt; 社群版\u00a0OKD。 自建試用叢集 -&gt; 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。 一、單節點部屬 SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk 可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 master.ign、缺少 DNS 和 bootstrapInPlace 的問題。\n以下假設：\n安裝工具主機：192.168.8.83 OKD SNO：192.168.8.84 Cluster Name：okd-sno Base Domain：myk8s.local 磁碟：/dev/vda Gateway：192.168.8.1 DNS：使用你現有的 PowerDNS OKD 版本：4.13.0-0.okd-2023-06-04-080300 Step1.準備 DNS 在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：\n類型 名稱 IP A api.okd-sno.myk8s.test 192.168.8.24 A api-int.okd-sno.myk8s.test 192.168.8.24 A *.apps.okd-sno.myk8s.test 192.168.8.24 A sno.okd-sno.myk8s.test 192.168.8.24 最好也建立 PTR：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一單節點部屬">一、單節點部屬</a></li>
+    <li><a href="#最後的正確流程摘要">最後的正確流程摘要</a></li>
+    <li><a href="#二microshift-安裝">二、MicroShift 安裝</a></li>
+    <li><a href="#三openshift-教學">三、Openshift 教學</a></li>
+    <li><a href="#daemonset">DaemonSet</a>
+      <ol>
+        <li><a href="#常見的-daemonset">常見的 DaemonSet</a></li>
+        <li><a href="#避免-node-被植入-daemonset-的方法">避免 Node 被植入 DaemonSet 的方法</a></li>
+      </ol>
+    </li>
+    <li><a href="#stateless-和-stateful-的比較">Stateless 和 Stateful 的比較</a>
+      <ol>
+        <li><a href="#stateless">Stateless</a></li>
+        <li><a href="#stateful">Stateful</a></li>
+        <li><a href="#pod-命名方式">Pod 命名方式</a></li>
+        <li><a href="#pvc--pv">PVC / PV</a></li>
+        <li><a href="#存取模式">存取模式</a></li>
+        <li><a href="#pvc-的生命週期管理">PVC 的生命週期管理</a></li>
+        <li><a href="#小結-pvc-的特色">小結 PVC 的特色</a></li>
+        <li><a href="#statefulset-的特色">StatefulSet 的特色</a></li>
+      </ol>
+    </li>
+    <li><a href="#結論">結論</a></li>
+    <li><a href="#istio">Istio</a>
+      <ol>
+        <li><a href="#主要功能">主要功能</a></li>
+      </ol>
+    </li>
+    <li><a href="#離線安裝">離線安裝</a>
+      <ol>
+        <li><a href="#準備映像">準備映像</a></li>
+        <li><a href="#建立-catalogsource">建立 CatalogSource：</a></li>
+        <li><a href="#安裝並配置-istio-smcp--smmr">安裝並配置 Istio (SMCP + SMMR)：</a></li>
+      </ol>
+    </li>
+    <li><a href="#工具介紹">工具介紹</a>
+      <ol>
+        <li><a href="#quay">Quay</a></li>
+        <li><a href="#oc-mirror">oc mirror</a></li>
+      </ol>
+    </li>
+    <li><a href="#詳細做法">詳細做法</a>
+      <ol>
+        <li><a href="#pull-secret">pull secret</a></li>
+        <li><a href="#catalog-同步">catalog 同步</a></li>
+        <li><a href="#建立-catalogsource-1">建立 CatalogSource</a></li>
+        <li><a href="#安裝-operator">安裝 Operator</a></li>
+      </ol>
+    </li>
+    <li><a href="#結論-1">結論</a></li>
+    <li><a href="#可觀測性的三大支柱three-pillars-of-observability">可觀測性的三大支柱（Three Pillars of Observability）</a></li>
+    <li><a href="#sre-關鍵觀念--名詞">SRE 關鍵觀念 / 名詞</a>
+      <ol>
+        <li><a href="#可觀測性ocp-內建監控完整">可觀測性：OCP 內建監控完整</a></li>
+        <li><a href="#slo-管理以服務為中心">SLO 管理：以服務為中心</a></li>
+        <li><a href="#incident-responseocp--gitops-實現快速恢復">Incident Response：OCP + GitOps 實現快速恢復</a></li>
+      </ol>
+    </li>
+    <li><a href="#指令">指令</a></li>
+    <li><a href="#sre--ocp-元件">SRE &lt;&ndash;&gt; OCP 元件</a></li>
+    <li><a href="#1-在-worker-node-掛載儲存資源">1. 在 Worker Node 掛載儲存資源</a></li>
+    <li><a href="#2-將實體儲存資源抽象化--建立-pv">2. 將實體儲存資源抽象化 / 建立 PV</a>
+      <ol>
+        <li><a href="#建立-pv-設定">建立 PV 設定</a></li>
+        <li><a href="#建立-nfs-pv-的範例">建立 NFS PV 的範例</a></li>
+        <li><a href="#建立-本地磁碟-pv-的範例">建立 本地磁碟 PV 的範例</a></li>
+      </ol>
+    </li>
+    <li><a href="#3-使用者向叢集取用儲存資源--建立-pvc">3. 使用者向叢集取用儲存資源 / 建立 PVC</a>
+      <ol>
+        <li><a href="#建立-pvc">建立 PVC</a></li>
+        <li><a href="#deployment--pod-掛載-pvc">Deployment / Pod 掛載 PVC</a></li>
+      </ol>
+    </li>
+    <li><a href="#比較表">比較表</a></li>
+    <li><a href="#結論-2">結論</a></li>
+    <li><a href="#簡介">簡介</a>
+      <ol>
+        <li><a href="#重點觀念">重點觀念</a></li>
+        <li><a href="#建立原則">建立原則</a></li>
+        <li><a href="#podselector-範例">podSelector 範例</a></li>
+      </ol>
+    </li>
+    <li><a href="#範例">範例</a>
+      <ol>
+        <li><a href="#build-lab">Build Lab</a></li>
+        <li><a href="#連線測試">連線測試</a></li>
+      </ol>
+    </li>
+    <li><a href="#設定-networkpolicy">設定 NetworkPolicy</a>
+      <ol>
+        <li><a href="#步驟一把後端的進出全部擋起來">步驟一：把後端的進出，全部擋起來！</a></li>
+        <li><a href="#步驟二允許特定來源可以與後端溝通">步驟二：允許特定來源可以與後端溝通</a></li>
+        <li><a href="#驗證連線">驗證連線</a></li>
+      </ol>
+    </li>
+    <li><a href="#常見的場景">常見的場景</a>
+      <ol>
+        <li><a href="#允許同-namespace-連線">允許同 Namespace 連線</a></li>
+        <li><a href="#允許指定-namespace-的哪個-pod-連線">允許指定 Namespace 的哪個 Pod 連線</a></li>
+        <li><a href="#允出指定-ip--禁止指定-ip">允出指定 IP / 禁止指定 IP</a></li>
+        <li><a href="#指定允出協定">指定允出協定</a></li>
+      </ol>
+    </li>
+    <li><a href="#ocp-特有-egressfirewall-與-egressip">OCP 特有： 「EgressFirewall」 與 「EgressIP」</a>
+      <ol>
+        <li><a href="#egressfirewallnamespace-級別的對外規則支援-fqdn">EgressFirewall（Namespace 級別的對外規則，支援 FQDN）</a></li>
+        <li><a href="#egressip固定對外來源-ip">EgressIP（固定對外來源 IP）</a></li>
+      </ol>
+    </li>
+    <li><a href="#結論-3">結論</a>
+      <ol>
+        <li><a href="#招式一使用-agent-based-installer目前社群最推的單機-vmware-玩法">招式一：使用 Agent-based Installer（目前社群最推的單機 VMware 玩法）</a>
+          <ol>
+            <li><a href="#1-準備-openshift-install-工具">1. 準備 <code>openshift-install</code> 工具</a></li>
+            <li><a href="#2-建立-agent-configyaml設定網路與-vsphere-節點">2. 建立 <code>agent-config.yaml</code>（設定網路與 vSphere 節點）</a></li>
+            <li><a href="#3-建立-install-configyaml指定-vsphere-整合">3. 建立 <code>install-config.yaml</code>（指定 vSphere 整合）</a></li>
+            <li><a href="#4-產生-iso-並丟進-vmware-開機">4. 產生 ISO 並丟進 VMware 開機</a></li>
+          </ol>
+        </li>
+        <li><a href="#招式二硬用-ipi-偽裝修改-manifests-檔案">招式二：硬用 IPI 偽裝（修改 Manifests 檔案）</a>
+          <ol>
+            <li><a href="#1-建立標準的-install-configyaml">1. 建立標準的 <code>install-config.yaml</code></a></li>
+            <li><a href="#2-先不要安裝只產生-manifests-檔案">2. 先不要安裝，只產生 Manifests 檔案</a></li>
+            <li><a href="#3-手動修正-scheduler-設定關鍵步驟">3. 手動修正 Scheduler 設定（關鍵步驟）</a></li>
+            <li><a href="#4-真正啟動-vsphere-ipi-安裝">4. 真正啟動 vSphere IPI 安裝</a></li>
+          </ol>
+        </li>
+        <li><a href="#-總結建議">💡 總結建議</a></li>
+      </ol>
+    </li>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/openshift/">OpenShift</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-05-23T00:00:00Z'>May 23, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    20 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <ol>
+<li>單機環境 -&gt; 有的，裝 <a href="https://www.redhat.com/en/blog/codeready-containers">Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)</a> / 以前的名字叫做 CRC &hellip; 現在叫做 OpenShift Local。</li>
+<li>自建<strong>免費叢集</strong> -&gt; 社群版 <a href="https://github.com/okd-project/okd">OKD</a>。</li>
+<li>自建<strong>試用叢集</strong> -&gt; 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。</li>
+</ol>
+<h2 id="一單節點部屬">一、單節點部屬
+</h2><p>SNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk
+可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 <code>master.ign</code>、缺少 DNS 和 <code>bootstrapInPlace</code> 的問題。</p>
+<blockquote>
+<p>以下假設：</p>
+<ul>
+<li>安裝工具主機：<code>192.168.8.83</code></li>
+<li>OKD SNO：<code>192.168.8.84</code></li>
+<li>Cluster Name：<code>okd-sno</code></li>
+<li>Base Domain：<code>myk8s.local</code></li>
+<li>磁碟：<code>/dev/vda</code></li>
+<li>Gateway：<code>192.168.8.1</code></li>
+<li>DNS：使用你現有的 PowerDNS</li>
+<li>OKD 版本：<code>4.13.0-0.okd-2023-06-04-080300</code></li>
+</ul>
+</blockquote>
+<p>Step1.準備 DNS
+在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>類型</th>
+					<th>名稱</th>
+					<th>IP</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>A</td>
+					<td><code>api.okd-sno.myk8s.test</code></td>
+					<td><code>192.168.8.24</code></td>
+			</tr>
+			<tr>
+					<td>A</td>
+					<td><code>api-int.okd-sno.myk8s.test</code></td>
+					<td><code>192.168.8.24</code></td>
+			</tr>
+			<tr>
+					<td>A</td>
+					<td><code>*.apps.okd-sno.myk8s.test</code></td>
+					<td><code>192.168.8.24</code></td>
+			</tr>
+			<tr>
+					<td>A</td>
+					<td><code>sno.okd-sno.myk8s.test</code></td>
+					<td><code>192.168.8.24</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>最好也建立 PTR：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">192.168.8.24 → sno.okd-sno.myk8s.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在安裝工具主機測試：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dig api.okd-sno.myk8s.test
+</span></span><span class="line"><span class="cl">dig api-int.okd-sno.myk8s.test
+</span></span><span class="line"><span class="cl">dig console-openshift-console.apps.okd-sno.myk8s.test
+</span></span><span class="line"><span class="cl">dig -x 192.168.8.84
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>前三筆都應解析到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">192.168.8.24
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>特別是 wildcard 測試不能省略：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dig test.apps.okd-sno.myk8s.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step2.準備固定 IP
+最簡單穩定的方法，是在 MikroTik 或現有 DHCP Server 建立 DHCP Reservation，讓 OKD VM 的 MAC Address 永遠取得：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">IP：192.168.8.24
+</span></span><span class="line"><span class="cl">Gateway：192.168.8.1
+</span></span><span class="line"><span class="cl">DNS：你的 PowerDNS IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不要讓它每次開機取得不同 IP，否則 DNS 會全部失效。
+在 PVE 建立 VM 後，先記下 VM 網卡 MAC Address，再到 DHCP Server 綁定 IP。</p>
+<p>Step3.下載 OKD Installer 與 OC
+在 Rocky Linux <code>192.168.8.83</code> 執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf install -y wget tar jq bind-utils python3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>建立工具目錄：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">okd</span><span class="o">-</span><span class="n">tools</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">~/</span><span class="n">okd</span><span class="o">-</span><span class="n">tools</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下載 Installer：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">okd</span><span class="o">-</span><span class="n">project</span><span class="o">/</span><span class="n">okd</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="mf">4.22</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">okd</span><span class="o">-</span><span class="n">scos</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">openshift</span><span class="o">-</span><span class="n">install</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="mf">4.22</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">okd</span><span class="o">-</span><span class="n">scos</span><span class="o">.</span><span class="mf">0.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下載 OpenShift CLI：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">okd</span><span class="o">-</span><span class="n">project</span><span class="o">/</span><span class="n">okd</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="mf">4.22</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">okd</span><span class="o">-</span><span class="n">scos</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">openshift</span><span class="o">-</span><span class="n">client</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="mf">4.22</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">okd</span><span class="o">-</span><span class="n">scos</span><span class="o">.</span><span class="mf">0.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解壓縮：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">tar -xvf openshift-install-linux-4.13.0-0.okd-2023-06-04-080300.tar.gz
+</span></span><span class="line"><span class="cl">tar -xvf openshift-client-linux-4.13.0-0.okd-2023-06-04-080300.tar.gz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安裝工具：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo install -m 0755 openshift-install /usr/local/bin/openshift-install
+</span></span><span class="line"><span class="cl">sudo install -m 0755 oc /usr/local/bin/oc
+</span></span><span class="line"><span class="cl">sudo install -m 0755 kubectl /usr/local/bin/kubectl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install version
+</span></span><span class="line"><span class="cl">oc version --client
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>兩者必須是相同的 OKD 4.13 release。這個流程不需要 Butane。</p>
+<p>Step4.產生 SSH Key
+如果尚未有 SSH Key：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ssh-keygen -t ed25519 -f ~/.ssh/okd-sno -N &#34;&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看公鑰：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat ~/.ssh/okd-sno.pub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把完整輸出保留下來，稍後放入 <code>install-config.yaml</code>。</p>
+<p>Step5.建立安裝目錄</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p ~/okd-install
+</span></span><span class="line"><span class="cl">cd ~/okd-install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>建立：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vi install-config.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>填入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">baseDomain: myk8s.local
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: okd-sno
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">compute:
+</span></span><span class="line"><span class="cl">- name: worker
+</span></span><span class="line"><span class="cl">  replicas: 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">controlPlane:
+</span></span><span class="line"><span class="cl">  name: master
+</span></span><span class="line"><span class="cl">  replicas: 1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">networking:
+</span></span><span class="line"><span class="cl">  networkType: OVNKubernetes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  machineNetwork:
+</span></span><span class="line"><span class="cl">  - cidr: 192.168.8.0/24
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  clusterNetwork:
+</span></span><span class="line"><span class="cl">  - cidr: 10.128.0.0/14
+</span></span><span class="line"><span class="cl">    hostPrefix: 23
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  serviceNetwork:
+</span></span><span class="line"><span class="cl">  - 172.30.0.0/16
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">platform:
+</span></span><span class="line"><span class="cl">  none: {}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">bootstrapInPlace:
+</span></span><span class="line"><span class="cl">  installationDisk: /dev/vda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pullSecret: &#39;{&#34;auths&#34;:{&#34;fake&#34;:{&#34;auth&#34;:&#34;ZmFrZTpmYWtl&#34;}}}&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sshKey: &#39;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把最後一行換成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat ~/.ssh/okd-sno.pub
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>顯示的完整公鑰。
+注意：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bootstrapInPlace:
+</span></span><span class="line"><span class="cl">  installationDisk: /dev/vda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>必須和 PVE VM 裡真正的磁碟名稱一致。</p>
+<p>Step6.備份 install-config.yaml
+<code>openshift-install</code> 產生 Ignition 時，會吃掉原本的 <code>install-config.yaml</code>，所以先備份：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cp install-config.yaml install-config.yaml.backup
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install create manifests --dir=.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不過這個指令也會消耗 <code>install-config.yaml</code>。若要直接產生 SNO Ignition，比較簡單的做法是先還原：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cp install-config.yaml.backup install-config.yaml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install create single-node-ignition-config --dir=.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完成後檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>應該看到類似：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bootstrap-in-place-for-live-iso.ign
+</span></span><span class="line"><span class="cl">auth/
+</span></span><span class="line"><span class="cl">metadata.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>關鍵檔案是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bootstrap-in-place-for-live-iso.ign
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不是 <code>master.ign</code>。</p>
+<p>Step7.下載相容的 FCOS ISO
+不要直接抓 FCOS 官網最新版本，先讓 OKD Installer 告訴你搭配的 CoreOS 版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install coreos print-stream-json &gt; ~/okd-install/stream.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>取得 ISO URL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">jq -r \
+</span></span><span class="line"><span class="cl">&#39;.architectures.x86_64.artifacts.metal.formats.iso.disk.location&#39; \
+</span></span><span class="line"><span class="cl">~/okd-install/stream.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>直接下載：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">FCOS_ISO_URL=$(jq -r \
+</span></span><span class="line"><span class="cl">&#39;.architectures.x86_64.artifacts.metal.formats.iso.disk.location&#39; \
+</span></span><span class="line"><span class="cl">~/okd-install/stream.json)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">wget &#34;$FCOS_ISO_URL&#34; -O ~/okd-install/fedora-coreos-okd.iso
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh ~/okd-install/fedora-coreos-okd.iso
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接著將 ISO 上傳到 PVE 的 ISO Storage。</p>
+<p>Step8.啟動 Ignition HTTP Server
+進入安裝目錄：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd ~/okd-install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認檔案存在：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh bootstrap-in-place-for-live-iso.ign
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>啟動 HTTP Server：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">python3 -m http.server 8080 --bind 0.0.0.0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 Rocky Linux 開啟 firewalld：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">permanent</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="o">/</span><span class="n">tcp</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>從其他主機測試：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -I http://192.168.8.83:8080/bootstrap-in-place-for-live-iso.ign
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>應該看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HTTP/1.0 200 OK
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安裝過程中這個終端不要關閉。</p>
+<p>Step9.在 Proxmox VE 建立 VM
+建議規格：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>設定</th>
+					<th>建議值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>CPU</td>
+					<td>12 vCPU</td>
+			</tr>
+			<tr>
+					<td>CPU Type</td>
+					<td><code>host</code></td>
+			</tr>
+			<tr>
+					<td>RAM</td>
+					<td>24～32 GB</td>
+			</tr>
+			<tr>
+					<td>Ballooning</td>
+					<td>關閉</td>
+			</tr>
+			<tr>
+					<td>Disk</td>
+					<td>150～200 GB</td>
+			</tr>
+			<tr>
+					<td>Disk Bus</td>
+					<td>VirtIO Block 或 SCSI</td>
+			</tr>
+			<tr>
+					<td>Network</td>
+					<td>VirtIO</td>
+			</tr>
+			<tr>
+					<td>Bridge</td>
+					<td>連到 <code>192.168.8.0/24</code> 的 Bridge</td>
+			</tr>
+			<tr>
+					<td>Machine</td>
+					<td>q35</td>
+			</tr>
+			<tr>
+					<td>BIOS</td>
+					<td>OVMF 或 SeaBIOS</td>
+			</tr>
+			<tr>
+					<td>Installation ISO</td>
+					<td>對應版本 FCOS ISO</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>如果磁碟選 VirtIO Block，通常會是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/dev/vda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果是 SATA，通常會是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/dev/sda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果是 NVMe，可能是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/dev/nvme0n1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安裝會清空這顆磁碟。</p>
+<p>Step10.、確認 VM 的磁碟名稱
+第一次可以先正常進入 FCOS Live 環境，不要急著安裝。登入後執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsblk
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>例如看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME   SIZE TYPE
+</span></span><span class="line"><span class="cl">vda    200G disk
+</span></span><span class="line"><span class="cl">sr0    1.1G rom
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>代表安裝磁碟是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/dev/vda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果與 <code>install-config.yaml</code> 不一致，必須重新產生 Ignition。
+修改備份：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd ~/okd-install
+</span></span><span class="line"><span class="cl">vi install-config.yaml.backup
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>修改：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bootstrapInPlace:
+</span></span><span class="line"><span class="cl">  installationDisk: /dev/vda
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>清理舊的產出前，建議直接建立新的工作目錄：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p ~/okd-install-new
+</span></span><span class="line"><span class="cl">cp ~/okd-install/install-config.yaml.backup \
+</span></span><span class="line"><span class="cl">   ~/okd-install-new/install-config.yaml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">openshift-install create single-node-ignition-config \
+</span></span><span class="line"><span class="cl">  --dir=~/okd-install-new
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後在新目錄啟動 HTTP Server。</p>
+<p>Step11.從 GRUB 載入 SNO Ignition
+重新啟動 VM。
+出現 Fedora CoreOS GRUB 選單時，按：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">E
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>找到以 <code>linux</code> 或 <code>linuxefi</code> 開頭的那一行，在最後面加入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">coreos.inst.install_dev=/dev/vda coreos.inst.ignition_url=http://192.168.8.83:8080/bootstrap-in-place-for-live-iso.ign coreos.inst.insecure
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>整段必須在同一行。然後按：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Ctrl + X
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>開始開機和安裝。
+<code>coreos.inst.insecure</code> 是因為 Ignition 使用 HTTP，而不是 HTTPS。</p>
+<p>Step12.觀察安裝狀態
+在 Rocky Linux 安裝工具主機另外開一個終端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd ~/okd-install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>監控 bootstrap：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install wait-for bootstrap-complete \
+</span></span><span class="line"><span class="cl">  --dir=. \
+</span></span><span class="line"><span class="cl">  --log-level=debug
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>SNO 有時不會像傳統叢集一樣明確完成獨立 bootstrap 階段，更重要的是監控整體安裝：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openshift-install wait-for install-complete \
+</span></span><span class="line"><span class="cl">  --dir=. \
+</span></span><span class="line"><span class="cl">  --log-level=debug
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>第一次完成可能需要 30～90 分鐘，硬體或網路較慢時會更久。</p>
+<p>Step13.SSH 進入 FCOS 查看</p>
+<p>安裝後可以使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ssh -i ~/.ssh/okd-sno core@192.168.8.84
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看服務：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status kubelet
+</span></span><span class="line"><span class="cl">sudo systemctl status crio
+</span></span><span class="line"><span class="cl">sudo systemctl status bootkube.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看即時日誌：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -b -f
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看 bootstrap 服務：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -b -u bootkube.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認時間：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">timedatectl
+</span></span><span class="line"><span class="cl">chronyc sources -v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>DNS 測試：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">getent hosts api.okd-sno.myk8s.local
+</span></span><span class="line"><span class="cl">getent hosts api-int.okd-sno.myk8s.local
+</span></span><span class="line"><span class="cl">getent hosts console-openshift-console.apps.okd-sno.myk8s.local
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step14.設定 oc 管理工具
+回到 Rocky Linux：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">~/</span><span class="n">okd</span><span class="o">-</span><span class="n">install</span>
+</span></span><span class="line"><span class="cl"><span class="k">export</span> <span class="n">KUBECONFIG</span><span class="o">=$</span><span class="n">PWD</span><span class="o">/</span><span class="n">auth</span><span class="o">/</span><span class="n">kubeconfig</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認連線：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正常應該看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME   STATUS   ROLES                  AGE   VERSION
+</span></span><span class="line"><span class="cl">sno    Ready    control-plane,master   ...   ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看 Cluster Operators：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get clusteroperators
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>簡寫：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get co
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>理想狀態：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">AVAILABLE=True
+</span></span><span class="line"><span class="cl">PROGRESSING=False
+</span></span><span class="line"><span class="cl">DEGRADED=False
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>持續觀察：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">watch -n 5 &#39;oc get nodes; echo; oc get co&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Step15.取得登入帳號及 Console 網址</p>
+<p>查看 kubeadmin 密碼：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat ~/okd-install/auth/kubeadmin-password
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Console 網址：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://console-openshift-console.apps.okd-sno.myk8s.local
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>取得實際 Console Route：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get route console \
+</span></span><span class="line"><span class="cl">  -n openshift-console \
+</span></span><span class="line"><span class="cl">  -o jsonpath=&#39;{.spec.host}{&#34;\n&#34;}&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>CLI 登入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc login \
+</span></span><span class="line"><span class="cl">  -u kubeadmin \
+</span></span><span class="line"><span class="cl">  -p &#34;$(cat ~/okd-install/auth/kubeadmin-password)&#34; \
+</span></span><span class="line"><span class="cl">  https://api.okd-sno.myk8s.local:6443
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="最後的正確流程摘要">最後的正確流程摘要
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">準備固定 IP
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">建立 api、api-int、*.apps DNS
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">下載相同版本 openshift-install 與 oc
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">建立含 bootstrapInPlace 的 install-config.yaml
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">create single-node-ignition-config
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">產生 bootstrap-in-place-for-live-iso.ign
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">下載 Installer 指定的 FCOS ISO
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">HTTP Server 提供 Ignition
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">PVE VM 從 FCOS ISO 開機
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">GRUB 加入 ignition_url 與 install_dev
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">安裝至本機磁碟並重新啟動
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">wait-for install-complete
+</span></span><span class="line"><span class="cl">    ↓
+</span></span><span class="line"><span class="cl">oc get nodes / oc get co
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這套做法的四個成功關鍵是：<code>DNS 正確</code>、<code>固定 IP</code>、<code>FCOS 與 Installer 同版本</code>、<code>使用 bootstrap-in-place-for-live-iso.ign</code>。只要其中一項錯誤，SNO 很容易卡在 Bootstrap、API unavailable 或 Operator degraded。</p>
+<h2 id="二microshift-安裝">二、MicroShift 安裝
+</h2><p>安裝</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo subscription-manager register
+</span></span><span class="line"><span class="cl">sudo subscription-manager refresh
+</span></span><span class="line"><span class="cl">sudo subscription-manager identity
+</span></span><span class="line"><span class="cl">sudo subscription-manager status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo subscription-manager repos \
+</span></span><span class="line"><span class="cl">  --enable=&#34;rhel-9-for-$(uname -m)-baseos-rpms&#34; \
+</span></span><span class="line"><span class="cl">  --enable=&#34;rhel-9-for-$(uname -m)-appstream-rpms&#34; \
+</span></span><span class="line"><span class="cl">  --enable=&#34;rhocp-4.22-for-rhel-9-$(uname -m)-rpms&#34; \
+</span></span><span class="line"><span class="cl">  --enable=&#34;fast-datapath-for-rhel-9-$(uname -m)-rpms&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="三openshift-教學">三、Openshift 教學
+</h2><p>RBAC（Role-Based Access Control，角色式存取控制）也是 Kubernetes 與 OpenShift 中最核心的權限管理機制</p>
+<ol>
+<li>
+<p><strong>Pod IP</strong></p>
+<ul>
+<li>
+<p><strong>說明：</strong> 每個 Pod 啟動時，會由 CNI（Container Network Interface）分配一個獨立 IP，這個 IP 只在叢集中有效。</p>
+</li>
+<li>
+<p><strong>用途：</strong> Pod 之間直接通訊（例如 curl http://:8080）。</p>
+</li>
+<li>
+<p><strong>指令：</strong> <code>oc get pod &lt;pod_name&gt; -o wide</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME            IP             NODE
+</span></span><span class="line"><span class="cl">mypod           10.128.54.87   worker-1
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<blockquote>
+<p>誰可持有？ Pod。<br>
+誰看得到？ 同一座叢集中的 Pod。<br>
+Pod 可以跨不同 namespace 和別的 Pod 溝通。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>Service IP (Cluster IP)</strong></p>
+<ul>
+<li>
+<p><strong>說明：</strong> K8s Service 會建立一個「虛擬 IP」，供其他 Pod 存取，用於負載平衡 + 提供穩定接口。</p>
+</li>
+<li>
+<p><strong>用途：</strong> Pod → Service 通訊時使用，例如 <code>curl http://my-service:8080</code></p>
+</li>
+<li>
+<p><strong>指令：</strong> <code>oc get svc my-service</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME         CLUSTER-IP      PORT(S)
+</span></span><span class="line"><span class="cl">my-service   172.30.94.87    8080/TCP
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<blockquote>
+<p>誰可持有？ Service。<br>
+誰看得到？ 同一 namespace 的 Pod。 / 同一座叢集中的 Pod。</p>
+<blockquote>
+<p>相同 namespace 的 Pod 可直接訪問： <code>http://my-service</code><br>
+不同 namespace 的 Pod 要透過完整 DNS 存取： <code>http://&lt;service-name&gt;.&lt;namespace&gt;.svc.cluster.local</code><br>
+跨 namespace 的連線，需要透過 Kubernetes 中內建 DNS（如 CoreDNS）進行域名解析</p>
+</blockquote>
+</blockquote>
+<ul>
+<li>補充：</li>
+</ul>
+</li>
+</ol>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>名稱格式</th>
+					<th>說明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>my-svc</code></td>
+					<td>同 namespace 使用</td>
+			</tr>
+			<tr>
+					<td><code>my-svc.my-namespace</code></td>
+					<td>不同 namespace 使用</td>
+			</tr>
+			<tr>
+					<td><code>my-svc.my-namespace.svc</code></td>
+					<td>更完整</td>
+			</tr>
+			<tr>
+					<td><code>my-svc.my-namespace.svc.cluster.local</code></td>
+					<td>完整 FQDN（fully qualified domain name）</td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">* 不過有例外 (不能訪問)
+</span></span><span class="line"><span class="cl">    1. 有設定 NetworkPolicy 限制跨 namespace 流量
+</span></span><span class="line"><span class="cl">    2. Service 沒有 selector（headless）
+</span></span><span class="line"><span class="cl">    3. Service port 沒有打開或錯誤
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>
+<p><strong>Node IP</strong></p>
+<ul>
+<li>
+<p><strong>說明：</strong> 執行 Pod 的 Node（實體主機或 VM）的 IP。</p>
+</li>
+<li>
+<p><strong>用途：</strong> 使用了 <code>NodePort 類型的 Service</code> / Debug 時需要知道（SSH、檢查網路）</p>
+</li>
+<li>
+<p><strong>指令：</strong> <code>oc get nodes -o wide</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME          INTERNAL-IP     EXTERNAL-IP
+</span></span><span class="line"><span class="cl">worker-1      192.168.1.101   &lt;none&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<blockquote>
+<p>誰可持有？ 各個節點 / Master Node / Worker Node<br>
+誰看得到？ 在允許的情況下&hellip;Pod 可以直接和節點溝通。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>External IP</strong></p>
+<ul>
+<li>
+<p><strong>說明：</strong> Service 可綁定一個外部 IP（例如某台外部機器或網段的 IP），讓外部能直接連線。</p>
+</li>
+<li>
+<p><strong>用途：</strong> 指定 <code>External IP</code> 做為出口。 比較常見的是，使用了多個 Pod 處理了請求後，要讓請求者看起來，都是從特定 IP 丟回來的這樣的目的。</p>
+</li>
+<li>
+<p><strong>配置方式</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: Service
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: my-service
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  type: ClusterIP
+</span></span><span class="line"><span class="cl">  selector:
+</span></span><span class="line"><span class="cl">    app: myapp
+</span></span><span class="line"><span class="cl">  externalIPs:
+</span></span><span class="line"><span class="cl">    - 203.0.113.50
+</span></span><span class="line"><span class="cl">  ports:
+</span></span><span class="line"><span class="cl">    - port: 80
+</span></span><span class="line"><span class="cl">      targetPort: 8080
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p><strong>LoadBalancer IP</strong></p>
+<ul>
+<li><strong>說明：</strong> 當 Service type 設為 LoadBalancer，K8s 會請雲平台（如 AWS, GCP）建立一個對外的 Load Balancer 並分配 IP。</li>
+<li><strong>用途：</strong> 讓外部用戶從網際網路存取服務。</li>
+<li><strong>指令：</strong> <code>kubectl get svc my-service</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME         TYPE           EXTERNAL-IP     PORT(S)
+</span></span><span class="line"><span class="cl">my-service   LoadBalancer   35.201.45.22    80:32112/TCP
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Ingress / Route IP</strong></p>
+<ul>
+<li>
+<p><strong>Ingress 說明：</strong> Ingress 是一種 K8s 對外 HTTP 路由機制。</p>
+</li>
+<li>
+<p><strong>Route 說明：</strong> OpenShift 雖然也可以用 Ingress，但通常會直接使用 OCP 的 Route，透過 <code>*.apps.cluster.com</code> 之類的網域轉發。</p>
+</li>
+<li>
+<p><strong>用途：</strong> 將外部流量導向特定 Service（多路由、多 path）</p>
+</li>
+<li>
+<p><strong>Ingress 指令：</strong> <code>kubectl get ingress my-ingress</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME         HOSTS                     ADDRESS         PORTS
+</span></span><span class="line"><span class="cl">my-ingress   myapp.example.com         34.123.45.6     80
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>OCP 指令：</strong> <code>oc get route myapp</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NAME    HOST/PORT                                SERVICE
+</span></span><span class="line"><span class="cl">myapp   myapp.apps.cluster.local                 my-service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>對應到某個 Node 或 Router IP。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Public IP</strong></p>
+<ul>
+<li><strong>說明：</strong> 實際可從外部網際網路（如你用電腦的 Chrome）存取的 IP，通常透過：LoadBalancer IP（雲平台自動分配）、Route 對應的 DNS（再指向 Node IP）、Ingress Controller 的 LB IP</li>
+<li><strong>用途：</strong> 讓用戶、瀏覽器、第三方系統能存取你的服務。</li>
+<li><strong>指令：</strong> <code>nslookup myapp.apps.cluster.local</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="daemonset">DaemonSet
+</h2><ul>
+<li>顧名思義，拿來作為 <strong>Daemon (守護程序)</strong>。</li>
+<li>是 Kubernetes 的一種工作負載（Workload）資源，用來確保 <strong>「每一個 Node 上都會執行一份指定的 Pod」</strong>。</li>
+<li>在叢集中，如果加入了「新的節點」，那麼叢集會自動、在這些節點中長出新的守程 Pod，刪除節點時自動移除。</li>
+</ul>
+<h3 id="常見的-daemonset">常見的 DaemonSet
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>用途</th>
+					<th>說明</th>
+					<th>範例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>📋 日誌收集</td>
+					<td>在每台機器收集 container logs</td>
+					<td><code>Fluentd</code>, <code>Filebeat</code>, <code>Logstash</code></td>
+			</tr>
+			<tr>
+					<td>📊 監控代理</td>
+					<td>安裝監控 agent 到每個 Node</td>
+					<td><code>Prometheus Node Exporter</code>, <code>Datadog Agent</code></td>
+			</tr>
+			<tr>
+					<td>🔐 安全守衛</td>
+					<td>防火牆、容器安全工具</td>
+					<td><code>Falco</code>, <code>Sysdig</code></td>
+			</tr>
+			<tr>
+					<td>🌐 網路管理</td>
+					<td>管理 CNI、設定 overlay network</td>
+					<td><code>Cilium</code>, <code>Weave Net</code></td>
+			</tr>
+			<tr>
+					<td>🧪 節點健診</td>
+					<td>定時檢查 Node 健康狀況</td>
+					<td><code>Node Problem Detector</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="避免-node-被植入-daemonset-的方法">避免 Node 被植入 DaemonSet 的方法
+</h3><ul>
+<li>
+<p>這個需求是因為，加入新的節點時，DaemonSet 慢慢地長出來的過程時，Pod 狀態肯定不會瞬間開好。 如果有一些監控告警機制，便有可能在這時候發出告警。 會嚇到人喔！</p>
+</li>
+<li>
+<p>所以使用 <code>Taints + Tolerations</code> 機制，並改寫 <strong>DaemonSet</strong> 來避免直接被植入，是個好方法。</p>
+<blockquote>
+<p>之後再補充。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="stateless-和-stateful-的比較">Stateless 和 Stateful 的比較
+</h2><h3 id="stateless">Stateless
+</h3><ul>
+<li>前面提到，容器因為是 ephemeral 的關係，所以每次<strong>生成容器</strong>、<strong>運行容器</strong>直到 <strong>關閉容器</strong>；再次用相同的參數重啟後，還是回得到一模一樣的結果。 我們可以把它當成 <strong>無狀態(Stateless)</strong>。</li>
+</ul>
+<h3 id="stateful">Stateful
+</h3><ul>
+<li>如果要把容器拿來作為 <strong>有狀態(Stateful)</strong> 的應用，那需要克服容器中斷後資料揮發掉的情況。 他需要一個適當管理的永久儲存。</li>
+<li>在 K8s 叢集，透過 <strong>StatefulSet</strong> 來管理，因為並不是把它當作「免洗筷」來使用，所以在命名上，理當依照使用目的，按照有序的方式將 Pod 取名，方便後續維運人員操作及管理。</li>
+</ul>
+<h3 id="pod-命名方式">Pod 命名方式
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>資源類型</th>
+					<th>Pod 命名規則</th>
+					<th>範例</th>
+					<th>是否包含隨機字串</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>Deployment</code> / <code>ReplicaSet</code></td>
+					<td><code>&lt;deployment-name&gt;-&lt;replicaset-hash&gt;-&lt;pod-id&gt;</code></td>
+					<td><code>nginx-7d8b9c6f8b-4m2xl</code></td>
+					<td>✅ 是（hash + 隨機）</td>
+			</tr>
+			<tr>
+					<td><code>StatefulSet</code></td>
+					<td><code>&lt;statefulset-name&gt;-&lt;ordinal&gt;</code></td>
+					<td><code>mysql-0</code>, <code>mysql-1</code></td>
+					<td>❌ 否（固定、有序）</td>
+			</tr>
+			<tr>
+					<td><code>Job</code></td>
+					<td><code>&lt;job-name&gt;-&lt;random-suffix&gt;</code></td>
+					<td><code>batch-job-5z2kp</code></td>
+					<td>✅ 是（為避免重複）</td>
+			</tr>
+			<tr>
+					<td><code>CronJob</code></td>
+					<td><code>&lt;cronjob-name&gt;-&lt;timestamp&gt;</code></td>
+					<td><code>backup-1689253040</code></td>
+					<td>✅ 是（根據時間戳）</td>
+			</tr>
+			<tr>
+					<td><code>DaemonSet</code></td>
+					<td><code>&lt;daemonset-name&gt;-&lt;pod-template-hash&gt;-&lt;random&gt;</code></td>
+					<td><code>log-agent-fd89s</code></td>
+					<td>✅ 是（帶 hash）</td>
+			</tr>
+			<tr>
+					<td><code>Pod</code>（手動建立）</td>
+					<td>自己定義</td>
+					<td><code>my-pod</code></td>
+					<td>❌ 否（自己命名）</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="pvc--pv">PVC / PV
+</h3><ul>
+<li><strong>PVC</strong> 是 <code>PersistentVolumeClaim</code> 的縮寫，用來向叢集申請儲存空間的資源，具有「請求者（Claim）」的概念，它代表 Pod 向儲存系統提出的「我要空間」的需求。</li>
+<li><strong>PV</strong> 則是 <code>PersistentVolume</code>，由叢集管理的永久儲存。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: PersistentVolumeClaim
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: mypvc
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  accessModes:
+</span></span><span class="line"><span class="cl">    - ReadWriteOnce
+</span></span><span class="line"><span class="cl">  storageClassName: standard
+</span></span><span class="line"><span class="cl">  resources:
+</span></span><span class="line"><span class="cl">    requests:
+</span></span><span class="line"><span class="cl">      storage: 10Gi
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="存取模式">存取模式
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>模式</th>
+					<th>說明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>ReadWriteOnce</code> (RWO)</td>
+					<td><strong>單一 Node 可讀寫</strong>，常見於 AWS EBS 等</td>
+			</tr>
+			<tr>
+					<td><code>ReadOnlyMany</code> (ROX)</td>
+					<td>多個 Node 可<strong>唯讀</strong></td>
+			</tr>
+			<tr>
+					<td><code>ReadWriteMany</code> (RWX)</td>
+					<td>多個 Node 可<strong>同時讀寫</strong>，如 NFS、CephFS</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="pvc-的生命週期管理">PVC 的生命週期管理
+</h3><ol>
+<li>PVC 先建立 → Kubernetes 尋找符合的 PV（或用 StorageClass 建）</li>
+<li>綁定後，Pod 可以使用 volumeMounts 掛載</li>
+<li>刪除 Pod 不會刪 PVC</li>
+<li>如果 StorageClass 有 reclaimPolicy: Delete，刪 PVC 也會刪 PV</li>
+</ol>
+<h3 id="小結-pvc-的特色">小結 PVC 的特色
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>類別</th>
+					<th>特點</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>抽象性</td>
+					<td>與儲存設備解耦，Pod 只認 PVC</td>
+			</tr>
+			<tr>
+					<td>安全性</td>
+					<td>資料與應用分離，不因重建 Pod 而遺失</td>
+			</tr>
+			<tr>
+					<td>可配置性</td>
+					<td>支援多種儲存後端與自動配置</td>
+			</tr>
+			<tr>
+					<td>彈性擴展</td>
+					<td>可搭配 StatefulSet、自動擴容（某些 CSI 支援）</td>
+			</tr>
+			<tr>
+					<td>適用場景</td>
+					<td>DB、ElasticSearch、持久型快取、備份空間等</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="statefulset-的特色">StatefulSet 的特色
+</h3><ul>
+<li>每個 Pod 有穩定的名稱與儲存（例如 db-0, db-1）</li>
+<li>每個 Pod 有獨立 PVC</li>
+<li>Pod 的啟動與停止順序（有序）</li>
+<li>但是它 <strong>不會處理資料同步、複寫、選主（leader election）、failover。</strong> 這些都必須由你部署的資料庫來負責。</li>
+</ul>
+<h2 id="結論">結論
+</h2><p>先確認情境，選擇合適的做法吧！</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>情境</th>
+					<th>建議資源</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>每台 Node 都要跑一個守護程式（Log、Agent）</td>
+					<td>DaemonSet</td>
+			</tr>
+			<tr>
+					<td>系統級背景任務或 CNI 插件</td>
+					<td>DaemonSet</td>
+			</tr>
+			<tr>
+					<td>每個 Pod 都有獨立儲存與固定身份</td>
+					<td>StatefulSet</td>
+			</tr>
+			<tr>
+					<td>想確保有序升級 / 移轉 / 故障恢復</td>
+					<td>StatefulSet</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="istio">Istio
+</h2><ul>
+<li><a href="https://istio.io/"><strong>Istio</strong></a> 是一個 開源 Service Mesh 平台。
+<ul>
+<li>連結： <a href="https://istio.io/">https://istio.io/</a></li>
+</ul>
+</li>
+<li>核心概念是透過 <strong>sidecar proxy（通常是 Envoy） 攔截 Pod 的進出流量</strong>，並將流量控制、憑證驗證、加密、監控等功能下放給 Mesh 層來處理，而不是讓應用程式自己處理。</li>
+</ul>
+<h3 id="主要功能">主要功能
+</h3><ol>
+<li>
+<p>流量管理 (Traffic Management)</p>
+<ul>
+<li>輕鬆實現藍綠部署、金絲雀發布、A/B 測試。</li>
+<li>支援流量分流、重試、熔斷、故障注入。</li>
+</ul>
+<blockquote>
+<p>就是分流</p>
+</blockquote>
+</li>
+<li>
+<p>安全性 (Security)</p>
+<ul>
+<li>預設支援 mTLS（雙向 TLS），保護服務之間通訊。</li>
+<li>透過 Policy 控制服務之間的存取權限。</li>
+</ul>
+<blockquote>
+<p>mutual TLS<br>
+是零信任架構的一種，因為叢集內，可以透過 Cluster IP 去訪問別的容器。<br>
+透過 mutual TLS 避免被別叛徒偷聽。</p>
+</blockquote>
+</li>
+<li>
+<p>可觀測性 (Observability)</p>
+<ul>
+<li>自動收集遙測資料，包含流量統計、延遲、失敗率。</li>
+<li>整合 Prometheus、Grafana、Jaeger、Kiali 等工具，提供全鏈路追蹤與拓撲視覺化。</li>
+</ul>
+</li>
+<li>
+<p>平台整合性</p>
+<ul>
+<li>不只支援 Kubernetes，也可以延伸到 VM 或多雲環境。</li>
+</ul>
+</li>
+</ol>
+<p>在 OpenShift 裡，Red Hat 基於 Istio 提供了一個更容易安裝與維運的版本，稱為 <strong>OpenShift Service Mesh (OSSM)</strong>。</p>
+<h2 id="離線安裝">離線安裝
+</h2><p>在有連上網際網路的 OCP 環境中，要安裝這些玩意兒，就是進到 OCP console 找到 <strong>OperatorHub</strong> 按一按就裝好了。 而大多情況，使用 OCP 的企業，很多都把叢集藏在內部網路，嚴加控管。 接下來會說明，無網路安裝的方法。</p>
+<p>符合離線安裝的要素：</p>
+<ul>
+<li>無法直接從 registry.redhat.io 下載 Operator 與相關映像。</li>
+<li>OCP OperatorHub 無法連線到 Red Hat 官方 Catalog。</li>
+<li>需要部署 <strong>QUAY</strong> 或其他種 <strong>Private Registry</strong>。</li>
+</ul>
+<h3 id="準備映像">準備映像
+</h3><ul>
+<li>從有外網的環境，使用 <code>oc adm catalog mirror</code> 將 Red Hat Operator Catalog（包含 Service Mesh、Jaeger、Elasticsearch）鏡像到內部 Quay (quay.xxx.com)。</li>
+</ul>
+<h3 id="建立-catalogsource">建立 CatalogSource：
+</h3><ul>
+<li>在 disconnected OCP 裡建立一個 <strong>CatalogSource</strong>，指向內部 Quay registry 的 Operator Catalog。</li>
+</ul>
+<h3 id="安裝並配置-istio-smcp--smmr">安裝並配置 Istio (SMCP + SMMR)：
+</h3><ul>
+<li>使用 <strong>ServiceMeshControlPlane (SMCP)</strong> 部署 Istio 控制平面。</li>
+<li>使用 <strong>ServiceMeshMemberRoll (SMMR)</strong> 將應用 namespace 加入 mesh。</li>
+</ul>
+<p>延續前一回的安裝話題，在 <strong>Disconnected OCP - 離線 OCP 叢集</strong>中，安裝與更新套件，是一個經典的場景。 由於無法直接從 <code>registry.redhat.io</code> 或 <code>quay.io</code> 抓取 Operator 或映像，必須要搭建私有 Quay registry 來解決離島的補給問題。</p>
+<h2 id="工具介紹">工具介紹
+</h2><h3 id="quay">Quay
+</h3><ol>
+<li>
+<p>可以解決離線環境的映像 <strong>來源問題</strong></p>
+<ul>
+<li><strong>OCP 安裝</strong> 與 <strong>OperatorHub</strong> 都依賴外部 registry</li>
+<li>Disconnected 叢集需要替代方案。</li>
+</ul>
+</li>
+<li>
+<p>建立企業 <strong>內部映像倉庫</strong></p>
+<ul>
+<li>Quay 提供企業級的 registry，支援<strong>權限控管、Robot Account、鏡像管理</strong>。</li>
+</ul>
+<blockquote>
+<p>類似 Harbor <a href="https://goharbor.io/">https://goharbor.io/</a><br>
+還是 ECR 這種 <a href="https://aws.amazon.com/tw/ecr/">https://aws.amazon.com/tw/ecr/</a><br>
+但是咧，業主就是有錢，買買買！通通擺進來不要那麼囉唆。<br>
+管理不費心，還不用什麼雲地網路串接，通通離線讓稽核人員不要找麻煩。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="oc-mirror">oc mirror
+</h3><ul>
+<li>
+<p>指令 <code>oc adm catalog mirror</code> 可以把 Red Hat Operator Catalog（或自訂 Operator）整包抓下來，再推送到私有 Quay。</p>
+<blockquote>
+<p>網管人員先在自己的聯網設備上，把東西拉下來，再拖進機房裡面，擺到倉庫。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="詳細做法">詳細做法
+</h2><h3 id="pull-secret">pull secret
+</h3><ul>
+<li>需要準備 <strong>Red Hat OpenShift 的 pull secret</strong>，前往 Red Hat OpenShift Cluster Manager 下載 pull-secret.json。
+<ul>
+<li>連結： <a href="https://console.redhat.com/openshift/install/pull-secret">https://console.redhat.com/openshift/install/pull-secret</a></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">jq -c &#39;.auths += {&#34;quay.xxx.com&#34;: {&#34;auth&#34;:&#34;&lt;base64-username:password&gt;&#34;}}&#39; pull-secret.json &gt; merged-pull-secret.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="catalog-同步">catalog 同步
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc adm catalog mirror \
+</span></span><span class="line"><span class="cl">  registry.redhat.io/redhat/redhat-operator-index:v4.14 \
+</span></span><span class="line"><span class="cl">  quay.xxx.com/olm/redhat-operator-index:v4.14 \
+</span></span><span class="line"><span class="cl">  --registry-config=merged-pull-secret.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="建立-catalogsource-1">建立 CatalogSource
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: operators.coreos.com/v1alpha1
+</span></span><span class="line"><span class="cl">kind: CatalogSource
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: redhat-operators-disconnected
+</span></span><span class="line"><span class="cl">  namespace: openshift-marketplace
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  sourceType: grpc
+</span></span><span class="line"><span class="cl">  image: quay.xxx.com/olm/redhat-operator-index:v4.14
+</span></span><span class="line"><span class="cl">  displayName: &#34;Red Hat Operators (Disconnected)&#34;
+</span></span><span class="line"><span class="cl">  publisher: quay.xxx.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="安裝-operator">安裝 Operator
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: operators.coreos.com/v1alpha1
+</span></span><span class="line"><span class="cl">kind: Subscription
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: servicemeshoperator
+</span></span><span class="line"><span class="cl">  namespace: openshift-operators
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  channel: stable
+</span></span><span class="line"><span class="cl">  name: servicemeshoperator
+</span></span><span class="line"><span class="cl">  source: redhat-operators-disconnected
+</span></span><span class="line"><span class="cl">  sourceNamespace: openshift-marketplace
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="結論-1">結論
+</h2><ul>
+<li>建議先測試單一映像 push/pull，確認 Quay registry 認證沒問題，再進行大規模 oc mirror。</li>
+<li><code>oc adm catalog mirror</code> 會抓下整個 Catalog，體積可能非常大，若只需要特定 Operator，可以改用 <code>oc mirror plugin</code> 搭配 imageSetConfig 精準選取。</li>
+<li>Robot Account 很好用，可以給 CI/CD 或自動化腳本專用。</li>
+<li>若遇到 unauthorized 錯誤，多半是 Quay repo 沒建好，或帳號缺少 Write 權限。</li>
+</ul>
+<p>SRE，全名是 Site Reliability Engineering，最早由 Google 提出，目的是 用軟體工程的方法解決系統運維問題。 SRE 最大的特色，就是將 DevOps 精神具體化、系統化，透過工程技術提高服務可靠性，同時保留創新速度。 在 SRE 領域中，監控（Monitoring） 與 可觀測性（Observability） 是確保系統穩定運行的關鍵核心。</p>
+<h2 id="可觀測性的三大支柱three-pillars-of-observability">可觀測性的三大支柱（Three Pillars of Observability）
+</h2><blockquote>
+<ul>
+<li>延伸閱讀： <a href="https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html">Distributed Systems Observability<br>
+by Cindy Sridharan</a></li>
+<li>連結：https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html</li>
+</ul>
+</blockquote>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>支柱</th>
+					<th>定義</th>
+					<th>實例</th>
+					<th>常用工具</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>Metrics</strong></td>
+					<td>數值型資料，系統/服務健康狀態的 KPI</td>
+					<td>CPU 使用率、QPS、錯誤率</td>
+					<td>Prometheus, InfluxDB</td>
+			</tr>
+			<tr>
+					<td><strong>Logs</strong></td>
+					<td>時間序列的事件訊息，用來還原現場</td>
+					<td>應用錯誤日誌、Nginx 訪問紀錄</td>
+					<td>ELK Stack, Loki</td>
+			</tr>
+			<tr>
+					<td><strong>Tracing</strong></td>
+					<td>分散式系統的請求追蹤，知道請求去哪了</td>
+					<td>A → B → C 的延遲、瓶頸點</td>
+					<td>Jaeger, Zipkin, Tempo</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="sre-關鍵觀念--名詞">SRE 關鍵觀念 / 名詞
+</h2><ul>
+<li>常見的名詞縮寫，還有代表的意思，一定要記起來，才聽得懂別人在說什麼術語。</li>
+</ul>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>名稱</th>
+					<th>說明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>SLI（Service Level Indicator）</strong></td>
+					<td>可以量測的服務指標（如延遲 &lt; 500ms）</td>
+			</tr>
+			<tr>
+					<td><strong>SLO（Service Level Objective）</strong></td>
+					<td>希望達到的目標（如 99.9% 成功率）</td>
+			</tr>
+			<tr>
+					<td><strong>SLA（Service Level Agreement）</strong></td>
+					<td>與客戶簽約的服務水準（有法律效力）</td>
+			</tr>
+			<tr>
+					<td><strong>Error Budget</strong></td>
+					<td>容許的錯誤餘額（SLO - 實際表現）</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="可觀測性ocp-內建監控完整">可觀測性：OCP 內建監控完整
+</h3><ul>
+<li>使用 Prometheus Operator 收集指標</li>
+<li>透過 Grafana Dashboards 可視化</li>
+<li>整合 Elasticsearch + Kibana + Fluentd (EFK) 做日誌管理</li>
+<li>使用 Jaeger/Tempo 追蹤 Service Mesh 請求路徑</li>
+</ul>
+<h3 id="slo-管理以服務為中心">SLO 管理：以服務為中心
+</h3><ul>
+<li>在 OCP 上部署服務時，可定義 Probe 來標記服務健康</li>
+<li>使用 Prometheus 計算 Error Rate</li>
+<li>用 Alertmanager 設定 SLO 達不到時通知</li>
+</ul>
+<h3 id="incident-responseocp--gitops-實現快速恢復">Incident Response：OCP + GitOps 實現快速恢復
+</h3><ul>
+<li>使用 ArgoCD / GitOps 管理配置</li>
+<li>當設定異動時出現故障，Git revert 一鍵 Rollback</li>
+<li>透過 <code>oc describe</code>, <code>oc logs</code>, <code>oc adm</code> 等指令快速調查原因</li>
+</ul>
+<h2 id="指令">指令
+</h2><ol>
+<li>
+<p>查看節點用量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc adm top nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NAME                        CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+</span></span><span class="line"><span class="cl">infra-1.xxxx.zzzzzzz.tw     1357m        38%    11288Mi         75%
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>查看 Pods 資源用量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc adm top pods -n &lt;namespace&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NAME          CPU(cores)   MEMORY(bytes)
+</span></span><span class="line"><span class="cl">aaa-xxx       10m          80Mi
+</span></span><span class="line"><span class="cl">bbb-zzz       15m          3684Mi
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>查看所有指標</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get --raw /api/v1/nodes/&lt;node-name&gt;/proxy/metrics
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>透過 Prometheus 儀表板查看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">oc get route -n openshift-monitoring
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h2 id="sre--ocp-元件">SRE &lt;&ndash;&gt; OCP 元件
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>🔑 <strong>SRE 核心知識點</strong></th>
+					<th>💡 <strong>概念說明</strong></th>
+					<th>🔧 <strong>常見對應工具/服務</strong></th>
+					<th>📦 <strong>在 OCP 的對應元件/方法</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>Metrics 指標監控</strong></td>
+					<td>可量測的數據，如 QPS、延遲、錯誤率</td>
+					<td>Prometheus、InfluxDB</td>
+					<td><code>openshift-monitoring</code> 的 Prometheus</td>
+			</tr>
+			<tr>
+					<td><strong>Logging 日誌收集</strong></td>
+					<td>結構化紀錄系統事件，便於查錯</td>
+					<td>EFK (Elasticsearch + Fluentd + Kibana)、Loki</td>
+					<td>OpenShift Logging stack (<code>openshift-logging</code> Project)</td>
+			</tr>
+			<tr>
+					<td><strong>Tracing 追蹤請求流程</strong></td>
+					<td>跨服務追蹤，找出瓶頸和延遲來源</td>
+					<td>Jaeger、Zipkin、Tempo、OpenTelemetry</td>
+					<td>OpenShift Distributed Tracing (<code>jaeger-all-in-one</code>)</td>
+			</tr>
+			<tr>
+					<td><strong>Alerting 警示系統</strong></td>
+					<td>根據指標與規則發送通知</td>
+					<td>Prometheus Alertmanager、PagerDuty、Opsgenie</td>
+					<td><code>Alertmanager</code> 內建於 <code>openshift-monitoring</code></td>
+			</tr>
+			<tr>
+					<td><strong>SLO / SLI / SLA</strong></td>
+					<td>設定並監控服務水準目標</td>
+					<td>SLO 計算器、Grafana SLO panels</td>
+					<td>可用 PromQL 查詢、Grafana 呈現、結合 Alerts</td>
+			</tr>
+			<tr>
+					<td><strong>Error Budget</strong></td>
+					<td>容錯空間（1 - SLO）範圍內允許的錯誤</td>
+					<td>結合 SLI 計算公式，Grafana 顯示</td>
+					<td>使用 Prometheus rule 設定 + SLA dashboard</td>
+			</tr>
+			<tr>
+					<td><strong>Runbook / Playbook</strong></td>
+					<td>事先規劃好的故障排查 SOP</td>
+					<td>Confluence、Notion、Git repo 文字檔</td>
+					<td>儲存在 GitOps Repo / configmap / ConsoleLink</td>
+			</tr>
+			<tr>
+					<td><strong>Incident Management</strong></td>
+					<td>異常處理流程，包含通知、處置、回報</td>
+					<td>PagerDuty、Statuspage、Jira Incident</td>
+					<td>可整合 webhook 通知工具，或接收告警</td>
+			</tr>
+			<tr>
+					<td><strong>Postmortem 報告</strong></td>
+					<td>RCA 根因分析與後續行動方案</td>
+					<td>Google Docs、Markdown 模板、Incident.io</td>
+					<td>作為 CI/CD 的一部分或納入 GitOps flow</td>
+			</tr>
+			<tr>
+					<td><strong>Capacity Planning 容量預估</strong></td>
+					<td>根據歷史數據預測資源使用</td>
+					<td>Prometheus + Grafana + Forecast plugin</td>
+					<td>OpenShift Console 中資源圖表，或自建儀表板</td>
+			</tr>
+			<tr>
+					<td><strong>自動化修復</strong></td>
+					<td>系統異常時自動 rollback 或重啟服務</td>
+					<td>K8s Liveness/Readiness Probe、Argo Rollouts</td>
+					<td>OCP 中 Deployment 自動重啟、ArgoCD auto sync</td>
+			</tr>
+			<tr>
+					<td><strong>可用性設計</strong></td>
+					<td>多副本、容錯、冗餘、Failover</td>
+					<td>K8s HPA, Multi-zone Deploy, LoadBalancer</td>
+					<td>OCP 的 Route + HAProxy + HPA + readinessProbe</td>
+			</tr>
+			<tr>
+					<td><strong>Blackbox Monitoring</strong></td>
+					<td>從用戶端模擬請求驗證服務是否可用</td>
+					<td>Blackbox Exporter、curl script</td>
+					<td>安裝 blackbox-exporter 並用 ServiceMonitor 掛上</td>
+			</tr>
+			<tr>
+					<td><strong>Change Management</strong></td>
+					<td>控制部署頻率、管理風險</td>
+					<td>GitOps、Canary、Blue/Green Deploy</td>
+					<td>OpenShift GitOps (ArgoCD)、Route shifting</td>
+			</tr>
+			<tr>
+					<td><strong>Chaos Engineering</strong></td>
+					<td>故障演練、驗證系統韌性</td>
+					<td>Chaos Mesh、Gremlin、LitmusChaos</td>
+					<td>可於 dev 環境實作，或整合 K8s Job 模擬故障</td>
+			</tr>
+			<tr>
+					<td>前面提到，要使用容器作為服務的基礎設施，必須考慮資料儲存的形式。 常見的就是寫資料庫，或是存在 <strong>永久儲存</strong>中 (永久的相對是揮發性儲存，像是記憶體或是容器本身)。 而 PV (PersistentVolume) 和 PVC (PersistentVolumeClaim) 常常一起出現，以下將對比兩者間的差異，以及如何使用。</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="1-在-worker-node-掛載儲存資源">1. 在 Worker Node 掛載儲存資源
+</h2><p>從安裝硬碟在 Worker Node 之後，還有些設定要進行，才能使用</p>
+<ol>
+<li>查看叢集中節點 <code>oc get no</code></li>
+<li>連到該節點上 <code>oc debug node/某worker-node名稱</code>
+<ul>
+<li>這會啟用一個臨時的 Pod 來當作偵錯環境使用</li>
+<li>提示文字會告訴你如果要使用宿主主機上的命令，要用 <code>chroot /host</code></li>
+</ul>
+</li>
+<li>在該節點上 <code>chroot /host</code> 後， <code>lsblk</code> 確認新掛載的儲存設備有出現</li>
+</ol>
+<h2 id="2-將實體儲存資源抽象化--建立-pv">2. 將實體儲存資源抽象化 / 建立 PV
+</h2><p>就是在叢集中，建立 PV。 讓叢集取用。</p>
+<h3 id="建立-pv-設定">建立 PV 設定
+</h3><ul>
+<li>指定容量 (capacity)：可用的大小，例如 10Gi</li>
+<li>存取模式 (accessModes)：
+<ul>
+<li>ReadWriteOnce (RWO) → 單 Node 可讀寫</li>
+<li>ReadOnlyMany (ROX) → 多 Node 可讀</li>
+<li>ReadWriteMany (RWX) → 多 Node 可讀寫</li>
+</ul>
+</li>
+<li>儲存來源 (storage backend)：
+<ul>
+<li>本地目錄 (Local Path)</li>
+<li>NFS</li>
+<li>iSCSI</li>
+<li>Ceph RBD / CephFS</li>
+<li>雲端磁碟（AWS EBS、GCP PD、Azure Disk）</li>
+</ul>
+</li>
+<li>回收策略 (reclaimPolicy)：PVC 釋放後 PV 的命運
+<ul>
+<li>Retain → 保留資料，管理員手動處理</li>
+<li>Recycle → 清空再利用（K8s 新版不建議）</li>
+<li>Delete → 直接刪除底層磁碟（常用於雲端動態配置）</li>
+</ul>
+</li>
+</ul>
+<h3 id="建立-nfs-pv-的範例">建立 NFS PV 的範例
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">apiVersion</span><span class="p">:</span> <span class="n">v1</span>
+</span></span><span class="line"><span class="cl"><span class="n">kind</span><span class="p">:</span> <span class="n">PersistentVolume</span>
+</span></span><span class="line"><span class="cl"><span class="n">metadata</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">name</span><span class="p">:</span> <span class="n">pv</span><span class="o">-</span><span class="n">nfs</span>
+</span></span><span class="line"><span class="cl"><span class="n">spec</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">capacity</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">storage</span><span class="p">:</span> <span class="mi">5</span><span class="n">Gi</span>
+</span></span><span class="line"><span class="cl">  <span class="n">accessModes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-</span> <span class="n">ReadWriteMany</span>
+</span></span><span class="line"><span class="cl">  <span class="n">persistentVolumeReclaimPolicy</span><span class="p">:</span> <span class="n">Retain</span>
+</span></span><span class="line"><span class="cl">  <span class="n">nfs</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">exports</span><span class="o">/</span><span class="n">data</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server</span><span class="p">:</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.100</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="建立-本地磁碟-pv-的範例">建立 本地磁碟 PV 的範例
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: PersistentVolume
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: pv-local
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  capacity:
+</span></span><span class="line"><span class="cl">    storage: 20Gi
+</span></span><span class="line"><span class="cl">  accessModes:
+</span></span><span class="line"><span class="cl">    - ReadWriteOnce
+</span></span><span class="line"><span class="cl">  storageClassName: local-storage
+</span></span><span class="line"><span class="cl">  persistentVolumeReclaimPolicy: Retain
+</span></span><span class="line"><span class="cl">  local:
+</span></span><span class="line"><span class="cl">    path: /mnt/data
+</span></span><span class="line"><span class="cl">  nodeAffinity:
+</span></span><span class="line"><span class="cl">    required:
+</span></span><span class="line"><span class="cl">      nodeSelectorTerms:
+</span></span><span class="line"><span class="cl">      - matchExpressions:
+</span></span><span class="line"><span class="cl">        - key: kubernetes.io/hostname
+</span></span><span class="line"><span class="cl">          operator: In
+</span></span><span class="line"><span class="cl">          values:
+</span></span><span class="line"><span class="cl">          - worker-1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="3-使用者向叢集取用儲存資源--建立-pvc">3. 使用者向叢集取用儲存資源 / 建立 PVC
+</h2><ul>
+<li>開發者撰寫下列配置，或者利用 OCP console 在網頁介面上按按按。</li>
+</ul>
+<h3 id="建立-pvc">建立 PVC
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: PersistentVolumeClaim
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: mypvc
+</span></span><span class="line"><span class="cl">  namespace: myproject
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  accessModes:
+</span></span><span class="line"><span class="cl">    - ReadWriteOnce
+</span></span><span class="line"><span class="cl">  resources:
+</span></span><span class="line"><span class="cl">    requests:
+</span></span><span class="line"><span class="cl">      storage: 10Gi
+</span></span><span class="line"><span class="cl">  storageClassName: local-storage
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="deployment--pod-掛載-pvc">Deployment / Pod 掛載 PVC
+</h3><ul>
+<li>需要再 spec.volumes 中加入 pvc ，如下面範例：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">kind: Pod
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: nginx-pvc
+</span></span><span class="line"><span class="cl">  namespace: demo
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  containers:
+</span></span><span class="line"><span class="cl">  - name: nginx
+</span></span><span class="line"><span class="cl">    image: nginx:1.21
+</span></span><span class="line"><span class="cl">    ports:
+</span></span><span class="line"><span class="cl">    - containerPort: 80
+</span></span><span class="line"><span class="cl">    volumeMounts:
+</span></span><span class="line"><span class="cl">    - mountPath: /usr/share/nginx/html   # 容器內目錄
+</span></span><span class="line"><span class="cl">      name: nginx-storage
+</span></span><span class="line"><span class="cl">  volumes:
+</span></span><span class="line"><span class="cl">  - name: nginx-storage
+</span></span><span class="line"><span class="cl">    persistentVolumeClaim:
+</span></span><span class="line"><span class="cl">      claimName: mypvc   # 指向剛建立的 PVC
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>最後要驗證的話，可以用 <code>oc rsh -n &lt;所在命名空間&gt; &lt;pod名稱&gt;</code> 連入 Pod 後，用 <code>df -h</code> 查看儲存。</li>
+</ul>
+<h2 id="比較表">比較表
+</h2><ul>
+<li><strong>PersistentVolume</strong> 字面上意思就是 <strong>「永久儲存」</strong>，以下簡稱 <strong>PV</strong>。</li>
+<li>
+<ul>
+<li><strong>PersistentVolumeClaim</strong> 字面上意思就是 <strong>「永久儲存的宣告」</strong>，以下簡稱 <strong>PVC</strong>。</li>
+</ul>
+</li>
+<li>兩者主要被設計出來的差異，在於 PV 通常都是叢集管理者建立出來，可以在整座叢集中流通； PVC 則通常由開發者向叢集要儲存資源，並且只能在相同 namespace 中流通。</li>
+</ul>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>項目</th>
+					<th>PV (PersistentVolume)</th>
+					<th>PVC (PersistentVolumeClaim)</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>角色</strong></td>
+					<td>叢集管理員提供的儲存資源</td>
+					<td>使用者向叢集申請的儲存需求</td>
+			</tr>
+			<tr>
+					<td><strong>建立者</strong></td>
+					<td>系統管理員手動建立，或由 StorageClass 動態建立</td>
+					<td>開發者 / 使用者在 Pod/Deployment 中宣告</td>
+			</tr>
+			<tr>
+					<td><strong>範疇</strong></td>
+					<td>Cluster-level（全叢集可用）</td>
+					<td>Namespace-level（限該命名空間使用）</td>
+			</tr>
+			<tr>
+					<td><strong>生命週期</strong></td>
+					<td>與實際儲存資源綁定（NFS、EBS、Ceph …）</td>
+					<td>與 Pod 相關，PVC 綁定後可重複使用</td>
+			</tr>
+			<tr>
+					<td><strong>容量</strong></td>
+					<td>PV 宣告可提供的大小（ex: 10Gi）</td>
+					<td>PVC 申請需要的大小（ex: 1Gi）</td>
+			</tr>
+			<tr>
+					<td><strong>存取模式</strong></td>
+					<td>定義存取方式（ReadWriteOnce, ReadOnlyMany, ReadWriteMany）</td>
+					<td>申請時需符合 PV 的模式</td>
+			</tr>
+			<tr>
+					<td><strong>綁定方式</strong></td>
+					<td>被 PVC 消費（Bound）後即被佔用</td>
+					<td>綁定到某個 PV 後才算可用</td>
+			</tr>
+			<tr>
+					<td><strong>刪除影響</strong></td>
+					<td>刪除 PV → 可能會釋放或保留底層資料（依 ReclaimPolicy）</td>
+					<td>刪除 PVC → 是否刪底層資料取決於 PV 的 ReclaimPolicy</td>
+			</tr>
+			<tr>
+					<td><strong>ReclaimPolicy</strong></td>
+					<td>Retain（保留資料）、Recycle（清空再利用）、Delete（直接刪除）</td>
+					<td>不直接控制，受 PV 的策略影響</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="結論-2">結論
+</h2><ul>
+<li>針對各種形態的儲存設備，有各自的特性。 在速度，價格，容錯，聯網能力等，進行取捨。</li>
+<li>PVC 的三種存取模式，如下表呈現。
+<ul>
+<li>RWO 就是模擬成裝載機器上的儲存設備，允許單一寫入單一讀取。</li>
+<li>ROX 是為了避免資料不同步，所以單一節點可寫入，但是多個節點可同時掛載讀取。</li>
+<li>RWX 都是網路儲存，大家可以同時讀寫這個網路磁帶。</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>AccessMode</th>
+					<th>縮寫</th>
+					<th>說明</th>
+					<th>適用場景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>ReadWriteOnce</strong></td>
+					<td>RWO</td>
+					<td>允許單一 Node 掛載，且可讀寫</td>
+					<td>最常見，像 AWS EBS、Azure Disk、GCP PD 都是這種模式</td>
+			</tr>
+			<tr>
+					<td><strong>ReadOnlyMany</strong></td>
+					<td>ROX</td>
+					<td>允許多個 Node 掛載，但只能讀取</td>
+					<td>多 Pod 共用資料但不需要寫入</td>
+			</tr>
+			<tr>
+					<td><strong>ReadWriteMany</strong></td>
+					<td>RWX</td>
+					<td>允許多個 Node 同時掛載且可讀寫</td>
+					<td>NFS、CephFS、GlusterFS、ODF CephFS</td>
+			</tr>
+			<tr>
+					<td>一座叢集中，會部署很多應用，然而在叢集內，彼此<strong>預設是互通的</strong>。 我們不能假設每個在使用叢集的程式、人都會乖乖地待在自己被允許的 <strong>namespace</strong> 中。 有些時候不安分的流量會掃描、試探 Cluster IP 去偷襲別人。 接著來理解 NetworkPolicy 核心觀念、常見範本、以及OCP 特有資源（EgressFirewall/EgressIP）。</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<p><img
+    src="https://ithelp.ithome.com.tw/upload/images/20250909/2013014911w4kpXi7h.jpg"
+    alt="https://ithelp.ithome.com.tw/upload/images/20250909/2013014911w4kpXi7h.jpg"
+    loading="lazy"
+></p>
+<h2 id="簡介">簡介
+</h2><ul>
+<li><strong>容器網路介面（OVN-Kubernetes CNI）</strong>，是預設「完全開放」，Pod 與 Pod 之間，沒有限制沒有阻擋。這對研發人員很爽，但隱含了極高的資安風險。</li>
+<li>NetworkPolicy 的本質就是「白名單」：只有被允許的流量可通過，其餘全擋。</li>
+</ul>
+<h3 id="重點觀念">重點觀念
+</h3><ol>
+<li>
+<p>被 <strong>podSelector</strong> 選到的 Pod 才會被 NetworkPolicy 隔離；沒選到不管他。</p>
+<ul>
+<li>沒被列管的 Pod，就隨便他進出。</li>
+<li>有被選中列管的 Pod，只有被 <strong>明確允許</strong> 的連線會通過，沒提到的通通默認擋掉！</li>
+</ul>
+</li>
+<li>
+<p>在 <strong>NetworkPolicy</strong> 中，<strong>Ingress/Egress</strong> 是分管理的。</p>
+<ul>
+<li>不寫 ingress，就不會限制入口</li>
+<li>不寫 egress，就不會限制出口。</li>
+</ul>
+</li>
+<li>
+<p>規則是疊加的 Allow：多個 policy 可以一起放行更多路徑。</p>
+<ul>
+<li>沒有「顯性 Deny」(因為沒被允許的規則，就是禁止，所以不用特別禁他)。</li>
+</ul>
+<blockquote>
+<p>多個 Policy 疊加時：允許的規則會合併成 聯集（Union），也就是「誰放行，就能通過」。<br>
+但是 你不能寫一條規則來明確拒絕某來源，因為 NetworkPolicy 沒有 deny 語法。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="建立原則">建立原則
+</h3><ul>
+<li>podSelector：要列管的目標 Pod 群</li>
+<li>ingress / egress：描述誰可以進來、可以連去哪裡。</li>
+<li>from / to 常用條件：
+<ul>
+<li>podSelector：同 Namespace 內、帶某些 labels 的 Pod。</li>
+<li>namespaceSelector：指定哪一些 Namespace（可搭配 labels）。</li>
+<li>ipBlock：CIDR（支援 except 排除段）。</li>
+</ul>
+</li>
+<li>ports：TCP/UDP/ SCTP 服務埠（建議明確列出）。</li>
+</ul>
+<h3 id="podselector-範例">podSelector 範例
+</h3><ul>
+<li>假設 <code>api</code> <strong>Pod</strong> 被以下兩條 policy 選中：</li>
+</ul>
+<ol>
+<li>
+<p><strong>Policy A：</strong> 允許 <code>web</code> <strong>Pod</strong> 連進來</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ingress:
+</span></span><span class="line"><span class="cl">  - from:
+</span></span><span class="line"><span class="cl">      - podSelector:
+</span></span><span class="line"><span class="cl">          matchLabels:
+</span></span><span class="line"><span class="cl">            app: web
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>Policy B：</strong> 允許 debug Pod 連進來</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ingress:
+</span></span><span class="line"><span class="cl">  - from:
+</span></span><span class="line"><span class="cl">      - podSelector:
+</span></span><span class="line"><span class="cl">          matchLabels:
+</span></span><span class="line"><span class="cl">            app: debug
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<ul>
+<li>效果：
+<ul>
+<li><code>web</code> 可以連</li>
+<li><code>debug</code> 可以連</li>
+<li><code>db</code>（資料庫 Pod）不能連，因為沒被任何 policy 放行</li>
+<li>不能寫一條「顯性禁止 db」的 policy，因為語法不支援</li>
+</ul>
+</li>
+</ul>
+<h2 id="範例">範例
+</h2><p>以下範例，假設存在某前端、後端的 Pod 在某 namespace 中，各自都帶上 label 了。 根據下列範本建立 Lab 吧。</p>
+<h3 id="build-lab">Build Lab
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 建兩個專案（Namespace）
+</span></span><span class="line"><span class="cl">oc new-project team-a
+</span></span><span class="line"><span class="cl">oc new-project team-b
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在 team-a 部署兩個角色：api 與 web
+</span></span><span class="line"><span class="cl">oc -n team-a create deploy api --image=ghcr.io/jmalloc/echo-server:latest --port=8080
+</span></span><span class="line"><span class="cl">oc -n team-a expose deploy/api --port=8080 --target-port=8080
+</span></span><span class="line"><span class="cl">oc -n team-a label deploy api app=api tier=backend --overwrite=true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oc -n team-a create deploy web --image=nginx:alpine
+</span></span><span class="line"><span class="cl">oc -n team-a label deploy web app=web tier=frontend --overwrite=true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在 team-b 放一個 busybox 當「外人」
+</span></span><span class="line"><span class="cl">oc -n team-b run dbg --image=busybox:1.36 --restart=Never --command -- sh -c &#39;sleep 1d&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="連線測試">連線測試
+</h3><p>設定 NetworkPolicy 前，來測測看什麼叫做暢行無阻。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 先找出 team-a 內部服務的 ClusterIP 與 Port
+</span></span><span class="line"><span class="cl">oc -n team-a get svc api
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 從 team-a 的 web Pod 嘗試連 api
+</span></span><span class="line"><span class="cl">WEB_POD=$(oc -n team-a get po -l app=web -o jsonpath=&#39;{.items[0].metadata.name}&#39;)
+</span></span><span class="line"><span class="cl">oc -n team-a exec -ti $WEB_POD -- wget -qO- http://api:8080
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 從 team-b 的 dbg 嘗試連 team-a 的 api（預期成功，因為還沒隔離）
+</span></span><span class="line"><span class="cl">oc -n team-b exec -ti dbg -- wget -qO- http://api.team-a.svc.cluster.local:8080
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="設定-networkpolicy">設定 NetworkPolicy
+</h2><h3 id="步驟一把後端的進出全部擋起來">步驟一：把後端的進出，全部擋起來！
+</h3><ul>
+<li>
+<p>我們在部署三層是架構的服務時，前端面對普羅大眾，後端因為要配合 API 承接前端的請求，增刪修查資料庫或是其他處理。 不希望無關人士進來搗亂。</p>
+<blockquote>
+<ul>
+<li>前端，可以類比成餐館的用餐區，有外場服務生服務客人，客人可以依照菜單上提供的項目點餐，或者是當一個奧客搞破壞。</li>
+<li>後端，可以類比成餐館的廚房，和內場廚師。 餐飲業稱這個叫做後場或是內場。</li>
+<li>資料庫，可類比成食材庫房和倉庫。</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p>所以，對 tier=backend 的 Pod 上 Ingress/Egress 全拒絕（選到才開始隔離）</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># deny-all-backend.yaml
+</span></span><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: deny-all-backend
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      tier: backend
+</span></span><span class="line"><span class="cl">  policyTypes:
+</span></span><span class="line"><span class="cl">    - Ingress
+</span></span><span class="line"><span class="cl">    - Egress
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>寫完 yaml 記得套用</p>
+</blockquote>
+<h3 id="步驟二允許特定來源可以與後端溝通">步驟二：允許特定來源可以與後端溝通
+</h3><ul>
+<li>後端有開放 8080 port 的話，下列設定允許同為 <code>team-a</code> namespace 的 Pod 訪問 8080 port</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># allow-frontend-to-backend-8080.yaml
+</span></span><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: allow-frontend-to-backend-8080
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      tier: backend
+</span></span><span class="line"><span class="cl">  policyTypes:
+</span></span><span class="line"><span class="cl">    - Ingress
+</span></span><span class="line"><span class="cl">  ingress:
+</span></span><span class="line"><span class="cl">    - from:
+</span></span><span class="line"><span class="cl">        - podSelector:
+</span></span><span class="line"><span class="cl">            matchLabels:
+</span></span><span class="line"><span class="cl">              tier: frontend
+</span></span><span class="line"><span class="cl">      ports:
+</span></span><span class="line"><span class="cl">        - protocol: TCP
+</span></span><span class="line"><span class="cl">          port: 8080
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>寫完 yaml 之後也要套用</p>
+</blockquote>
+<h3 id="驗證連線">驗證連線
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 同 NS 前端打後端 -&gt; 成功
+</span></span><span class="line"><span class="cl">oc -n team-a exec -ti $WEB_POD -- wget -qO- http://api:8080
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># team-b 外部打後端 -&gt; 失敗
+</span></span><span class="line"><span class="cl">oc -n team-b exec -ti dbg -- wget -qO- http://api.team-a.svc.cluster.local:8080 || echo &#34;blocked&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常見的場景">常見的場景
+</h2><h3 id="允許同-namespace-連線">允許同 Namespace 連線
+</h3><ul>
+<li>允許同 Namespace 內全部 Pod 訪問我（但擋跨 Namespace）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: allow-same-namespace
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector: {}  # 選到本 NS 所有 Pod → 都開始被隔離
+</span></span><span class="line"><span class="cl">  policyTypes: [Ingress]
+</span></span><span class="line"><span class="cl">  ingress:
+</span></span><span class="line"><span class="cl">    - from:
+</span></span><span class="line"><span class="cl">        - podSelector: {}  # 同 NS 內任何 Pod
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="允許指定-namespace-的哪個-pod-連線">允許指定 Namespace 的哪個 Pod 連線
+</h3><ul>
+<li>允許特定 Namespace（加了 label）的 Pod 訪問我</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: allow-partner-ns
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      app: api
+</span></span><span class="line"><span class="cl">  policyTypes: [Ingress]
+</span></span><span class="line"><span class="cl">  ingress:
+</span></span><span class="line"><span class="cl">    - from:
+</span></span><span class="line"><span class="cl">        - namespaceSelector:
+</span></span><span class="line"><span class="cl">            matchLabels:
+</span></span><span class="line"><span class="cl">              access: partner
+</span></span><span class="line"><span class="cl">      ports:
+</span></span><span class="line"><span class="cl">        - protocol: TCP
+</span></span><span class="line"><span class="cl">          port: 8080
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="允出指定-ip--禁止指定-ip">允出指定 IP / 禁止指定 IP
+</h3><ul>
+<li><strong>明確允許</strong> 連出的 IP</li>
+<li><strong>明確排除</strong> 連出的 IP</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: egress-to-cidr
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      app: api
+</span></span><span class="line"><span class="cl">  policyTypes: [Egress]
+</span></span><span class="line"><span class="cl">  egress:
+</span></span><span class="line"><span class="cl">    - to:
+</span></span><span class="line"><span class="cl">        - ipBlock:
+</span></span><span class="line"><span class="cl">            cidr: 10.0.0.0/8
+</span></span><span class="line"><span class="cl">            except:
+</span></span><span class="line"><span class="cl">              - 10.10.0.0/16
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="指定允出協定">指定允出協定
+</h3><ul>
+<li>只放行特定 Port（HTTP/HTTPS），其他一律擋</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: networking.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: NetworkPolicy
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: allow-80-443-only
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  podSelector:
+</span></span><span class="line"><span class="cl">    matchLabels:
+</span></span><span class="line"><span class="cl">      app: web
+</span></span><span class="line"><span class="cl">  policyTypes: [Ingress]
+</span></span><span class="line"><span class="cl">  ingress:
+</span></span><span class="line"><span class="cl">    - ports:
+</span></span><span class="line"><span class="cl">        - protocol: TCP
+</span></span><span class="line"><span class="cl">          port: 80
+</span></span><span class="line"><span class="cl">        - protocol: TCP
+</span></span><span class="line"><span class="cl">          port: 443
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ocp-特有-egressfirewall-與-egressip">OCP 特有： 「EgressFirewall」 與 「EgressIP」
+</h2><ul>
+<li>NetworkPolicy 的 egress.to 只能寫 CIDR，不能寫 FQDN。</li>
+<li>OCP 上使用 OVN-Kubernetes，有兩個方便的 OCP CRD 可以拿來用。</li>
+</ul>
+<h3 id="egressfirewallnamespace-級別的對外規則支援-fqdn">EgressFirewall（Namespace 級別的對外規則，支援 FQDN）
+</h3><ul>
+<li>在某個 Namespace 內，集中定義**「往外」的允許/拒絕**，且可用 <code>dnsName</code>。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: k8s.ovn.org/v1
+</span></span><span class="line"><span class="cl">kind: EgressFirewall
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: default
+</span></span><span class="line"><span class="cl">  namespace: team-a
+</span></span><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  egress:
+</span></span><span class="line"><span class="cl">    - type: Allow
+</span></span><span class="line"><span class="cl">      to:
+</span></span><span class="line"><span class="cl">        dnsName: api.github.com
+</span></span><span class="line"><span class="cl">    - type: Allow
+</span></span><span class="line"><span class="cl">      to:
+</span></span><span class="line"><span class="cl">        cidrSelector: 0.0.0.0/0
+</span></span><span class="line"><span class="cl">      ports:
+</span></span><span class="line"><span class="cl">        - protocol: TCP
+</span></span><span class="line"><span class="cl">          port: 443
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>備註一： EgressFirewall 設定的目標是 namespace，不是 pod<br>
+備注二： 通常會先一條允許特定 FQDN，再用第二條收斂到 443，剩下由 DNS 名稱控管。</p>
+</blockquote>
+<h3 id="egressip固定對外來源-ip">EgressIP（固定對外來源 IP）
+</h3><p>為了讓某些 Namespace 的對外連線，NAT 成指定的 Egress IP（給防火牆白名單或第三方 API 綁定）。 在 Namespace 打上 k8s.ovn.org/egress-ips annotation，並在叢集層配置可用 Egress IP 與負載承載節點（此段通常由叢集管理員配置）。</p>
+<h2 id="結論-3">結論
+</h2><ul>
+<li>
+<p>關於管理的訣竅</p>
+<ul>
+<li>怎麼驗證 PodSelector 寫得對不對？</li>
+<li>用指令 <code>oc describe networkpolicy</code> 看 PodSelector 是否真的覆蓋到你的 Pod。</li>
+<li><img
+    src="https://ithelp.ithome.com.tw/upload/images/20250909/20130149xaqiygmlhP.png"
+    alt="https://ithelp.ithome.com.tw/upload/images/20250909/20130149xaqiygmlhP.png"
+    loading="lazy"
+></li>
+</ul>
+</li>
+<li>
+<p>「可以解析域名」，和「可以訪問域名」是兩回事。 多得是你知道主機在哪裡，但你到不了。</p>
+</li>
+<li>
+<p>連 Service / 連 Pod 的差異</p>
+<ul>
+<li>Network Policy 是檢查 Pod 之間的 Layer 3 和 Layer4 連線 (IP、Port、Protocol)，無關你是用什麼樣的 Service 名稱進行訪問。</li>
+<li>用 Service 名稱連線時，<strong>DNS 先解析成 ClusterIP</strong> → <strong>iptables/OVN-Kubernetes 負載</strong> 分流 → 最後實際<strong>連到 Pod IP</strong>。</li>
+</ul>
+<blockquote>
+<p>NetworkPolicy 就是在上述的最後一段，判斷要不要放行。<br>
+解得出 Service Name 不代表有被允許連線喔！！</p>
+</blockquote>
+</li>
+</ul>
+<p>要在 VMware vSphere 上使用 <strong>IPI（Installer-Provisioned Infrastructure，自動化安裝）</strong> 來部署 <strong>SNO（Single Node OpenShift，單節點 OKD）</strong>，情況會變得有點微妙。</p>
+<p>這裡有一個關鍵的架構限制必須先讓你知道：</p>
+<blockquote>
+<p>⚠️ <strong>紅帽官方在 vSphere 平台上的 IPI 安裝程式，預設「不支援」直接長出單節點 (SNO)。</strong></p>
+<p>官方的 vSphere IPI 設計初衷是為了企業的高可用性（HA），所以它的安裝程式硬性規定底層<strong>至少要生出 3 台 Master 節點</strong>。如果你直接執行常規的 IPI 指令，它是沒辦法只蓋 1 台 VM 的。</p>
+</blockquote>
+<p>不過，身為維運工程師，我們有兩種變通的解決招式可以達成你的目標（單機、VMware、自動化）：</p>
+<h3 id="招式一使用-agent-based-installer目前社群最推的單機-vmware-玩法">招式一：使用 Agent-based Installer（目前社群最推的單機 VMware 玩法）
+</h3><p>這是最符合你想要「單機部署在 VMware」又想要「自動化」的官方推薦解法。它結合了 IPI 的自動化（幫你配置好所有內建設定）與 SNO 的輕量化。</p>
+<h4 id="1-準備-openshift-install-工具">1. 準備 <code>openshift-install</code> 工具
+</h4><p>到 OKD 官網或 GitHub 下載最新版的 <code>openshift-install</code> 與 <code>oc</code> 工具。</p>
+<h4 id="2-建立-agent-configyaml設定網路與-vsphere-節點">2. 建立 <code>agent-config.yaml</code>（設定網路與 vSphere 節點）
+</h4><p>在本地資料夾內建立這個檔案，用來指定你要把這台單機裝在 VMware 的哪個位置：</p>
+<p>YAML</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">alpha: true
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: okd-sno
+</span></span><span class="line"><span class="cl">rendezvousIP: 192.168.1.100 # 你預留給這台 SNO 的固定 IP
+</span></span><span class="line"><span class="cl">hosts:
+</span></span><span class="line"><span class="cl">  - hostname: sno-node
+</span></span><span class="line"><span class="cl">    interfaces:
+</span></span><span class="line"><span class="cl">      - name: eth0
+</span></span><span class="line"><span class="cl">        macAddress: &#34;00:50:56:xx:xx:xx&#34; # 預先在 VMware 幫這台 VM 產生的 MAC 位址
+</span></span><span class="line"><span class="cl">    networkConfig:
+</span></span><span class="line"><span class="cl">      interfaces:
+</span></span><span class="line"><span class="cl">        - name: eth0
+</span></span><span class="line"><span class="cl">          type: ethernet
+</span></span><span class="line"><span class="cl">          state: up
+</span></span><span class="line"><span class="cl">          ipv4:
+</span></span><span class="line"><span class="cl">            enabled: true
+</span></span><span class="line"><span class="cl">            address:
+</span></span><span class="line"><span class="cl">              - ip: 192.168.1.100
+</span></span><span class="line"><span class="cl">                prefixLength: 24
+</span></span><span class="line"><span class="cl">      dns-resolver:
+</span></span><span class="line"><span class="cl">        config:
+</span></span><span class="line"><span class="cl">          server:
+</span></span><span class="line"><span class="cl">            - 192.168.1.1 # 你的 DNS 伺服器
+</span></span><span class="line"><span class="cl">      routes:
+</span></span><span class="line"><span class="cl">        config:
+</span></span><span class="line"><span class="cl">          - destination: 0.0.0.0/0
+</span></span><span class="line"><span class="cl">            next-hop-interface: eth0
+</span></span><span class="line"><span class="cl">            next-hop-address: 192.168.1.254 # 你的 Gateway
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="3-建立-install-configyaml指定-vsphere-整合">3. 建立 <code>install-config.yaml</code>（指定 vSphere 整合）
+</h4><p>YAML</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
+</span></span><span class="line"><span class="cl">baseDomain: yourdomain.com
+</span></span><span class="line"><span class="cl">compute:
+</span></span><span class="line"><span class="cl">- name: worker
+</span></span><span class="line"><span class="cl">  replicas: 0 # 單機部署，Worker 設為 0
+</span></span><span class="line"><span class="cl">controlPlane:
+</span></span><span class="line"><span class="cl">  name: master
+</span></span><span class="line"><span class="cl">  replicas: 1 # 單機部署，Master 設為 1
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  name: okd-sno
+</span></span><span class="line"><span class="cl">platform:
+</span></span><span class="line"><span class="cl">  vsphere:
+</span></span><span class="line"><span class="cl">    vCenter: vcenter.yourdomain.com
+</span></span><span class="line"><span class="cl">    username: administrator@vsphere.local
+</span></span><span class="line"><span class="cl">    password: YourPassword
+</span></span><span class="line"><span class="cl">    datacenter: MyDatacenter
+</span></span><span class="line"><span class="cl">    defaultDatastore: vsanDatastore
+</span></span><span class="line"><span class="cl">    cluster: MyCluster
+</span></span><span class="line"><span class="cl">    network: &#34;VM Network&#34;
+</span></span><span class="line"><span class="cl">pullSecret: &#39;{&#34;auths&#34;:{&#34;fake&#34;:{&#34;auth&#34;:&#34;aWQ6cGFzcwo=&#34;}}}&#39;
+</span></span><span class="line"><span class="cl">sshKey: &#39;ssh-ed25519 AAAA...&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="4-產生-iso-並丟進-vmware-開機">4. 產生 ISO 並丟進 VMware 開機
+</h4><p>在資料夾下執行指令，讓它把上述兩個設定檔結合成一個專屬的「特製引導 ISO」：</p>
+<p>Bash</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./openshift-install agent create image --dir=./my-cluster
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這時會產生一個 <code>agent.iso</code>。 你只需要去 vSphere <strong>手動建一台 VM</strong>（規格符合剛才指定的 MAC Address，至少 4 vCPU / 16GB RAM），掛載這個 ISO 開機。開機後，它會自動對接 vSphere 的 API，自己把所有儲存（CSI）和單節點 OKD 灌好。</p>
+<h3 id="招式二硬用-ipi-偽裝修改-manifests-檔案">招式二：硬用 IPI 偽裝（修改 Manifests 檔案）
+</h3><p>如果你堅持連「手動在 vSphere 建立 1 台 VM」都不想做，希望完全由 <code>openshift-install</code> 去 vCenter 幫你長出那台單機，那你必須在中間「攔截」安裝程式的設定：</p>
+<h4 id="1-建立標準的-install-configyaml">1. 建立標準的 <code>install-config.yaml</code>
+</h4><p>內容與招式一的 <code>install-config.yaml</code> 相同，確保 <code>replicas</code> 數量設定為：</p>
+<ul>
+<li>
+<p><strong>controlPlane.replicas: 1</strong></p>
+</li>
+<li>
+<p><strong>compute.replicas: 0</strong></p>
+</li>
+</ul>
+<h4 id="2-先不要安裝只產生-manifests-檔案">2. 先不要安裝，只產生 Manifests 檔案
+</h4><p>在終端機執行：</p>
+<p>Bash</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./openshift-install create manifests --dir=./my-cluster
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這時候安裝程式不會去 vCenter 蓋虛擬機，而是會在 <code>./my-cluster/manifests/</code> 資料夾下長出一堆 K8s 的 YAML 設定檔。</p>
+<h4 id="3-手動修正-scheduler-設定關鍵步驟">3. 手動修正 Scheduler 設定（關鍵步驟）
+</h4><p>因為單節點（SNO）上只有一台 Master，預設情況下，OpenShift 是不允許把一般應用程式（Pod）派送到 Master 上的。我們必須修改設定，允許 Pod 可以在 Master 上執行。</p>
+<p>打開 <code>manifests/cluster-scheduler-02-config.yml</code>，將 <code>mastersSchedulable</code> 的值從 <code>false</code> 改為 <code>true</code>：</p>
+<p>YAML</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">spec:
+</span></span><span class="line"><span class="cl">  mastersSchedulable: true
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="4-真正啟動-vsphere-ipi-安裝">4. 真正啟動 vSphere IPI 安裝
+</h4><p>修正完 Manifest 後，執行以下指令：</p>
+<p>Bash</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./openshift-install create cluster --dir=./my-cluster
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這時，IPI 安裝程式就會讀取你修改後的設定，連線到你的 vCenter，自動幫你只開<strong>正好 1 台 Master VM</strong>，並且把整個 OKD 塞進去。</p>
+<h3 id="-總結建議">💡 總結建議
+</h3><ul>
+<li>
+<p>如果你希望<strong>最省事、成功率最高</strong>，推薦用 <strong>招式一 (Agent-based)</strong>。雖然你要自己去 vSphere 點一下「建立虛擬機」，但網路和節點配置非常穩定，這也是紅帽目前推行地端單機部署的主流方式。</p>
+</li>
+<li>
+<p>如果你希望<strong>完全自動化、連 VM 都不想手動點</strong>，那就用 <strong>招式二 (IPI 修改 Manifests)</strong>，用欺騙安裝程式的方式強行讓 vSphere IPI 只生出一台主機。</p>
+</li>
+</ul>
+<h2 id="參考資料">參考資料
+</h2><ul>
+<li><a href="https://blog.csdn.net/networken/article/details/123953256">OpenShift 容器平台社区版 OKD 4.10.0部署</a></li>
+<li><a href="https://blog.51cto.com/u_15301988/3127858">OpenShift — 部署 OKD 4.5</a></li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

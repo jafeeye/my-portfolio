@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PVE上安裝 關掉use table point，至少滑鼠不會飄太過去 將硬碟設定SATA\n安裝步驟 安裝畫面-1 安裝畫面-2 安裝畫面-3 Solaris CDE（Common Desktop Environment） 從CDE切去JDS 網路 先建議弄成static，DHCP好像會怪怪無法取得IP\nvi Solaris所使用vi跟現代Linux所用vi不同，現代vi快速鍵高度相容vim，舊的vi有特殊作法\n1 2 3 4 5 6 7 8 9 10 先按下 Esc 然後執行以下操作 x 刪除游標目前的字 X 刪除游標左邊的字 dd 刪除整行 D 從游標刪到行尾 i 從游標前開始輸入 a 從游標後開始輸入 A 跳到行尾開始輸入 o 下一行新增一行 u Undo 1 2 3 4 5 6 7 8 9 ifconfig e1000g0 192.168.8.50 netmask 255.255.255.0 up route add default 192.168.8.1 ## 檢查 ifconfig e1000g0 ping 192.168.8.1 ## 設定hostname vi /etc/defaultrouter vi /etc/nodename ssh 1 2 3 4 5 6 mv /etc/dhcp.e1000g0 /etc/dhcp.e1000g0.bak 2&gt;/dev/null svcadm enable svc:/network/ssh:default svcadm enable -r svc:/network/ssh:default svcs network/physical svcadm restart svc:/network/ssh:default #重啟ssh服務 svcs ssh #確認目前服務狀態 VNC 1 2 3 4 5 6 which vncserver find /usr -name &#39;vncserver&#39; -o -name &#39;Xvnc&#39; 2&gt;/dev/null vncpasswd export PATH=$PATH:/usr/openwin/bin which xauth 安裝VEN 1 2 3 4 5 6 7 8 9 10 11 12 13 zoneadm list -cv ## 預設只有global zone，global zone不能修改，需要創另一個zone zonecfg -z ven-zone ##建立ven-zone zonecfg:ven-zone&gt; create zonecfg:ven-zone&gt; set zonepath=/zones/ven-zone zonecfg:ven-zone&gt; set ip-type=exclusive zonecfg:ven-zone&gt; verify zonecfg:ven-zone&gt; commit zonecfg:ven-zone&gt; exit zoneadm list -cv zoneadm -z ven-zone install zoneadm -z ven-zone boot 在exclusive IP stack等於一個global zone底下有nic跟vnic\n">
+<title>Solaris</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/solaris/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Solaris">
+<meta property='og:description' content="PVE上安裝 關掉use table point，至少滑鼠不會飄太過去 將硬碟設定SATA\n安裝步驟 安裝畫面-1 安裝畫面-2 安裝畫面-3 Solaris CDE（Common Desktop Environment） 從CDE切去JDS 網路 先建議弄成static，DHCP好像會怪怪無法取得IP\nvi Solaris所使用vi跟現代Linux所用vi不同，現代vi快速鍵高度相容vim，舊的vi有特殊作法\n1 2 3 4 5 6 7 8 9 10 先按下 Esc 然後執行以下操作 x 刪除游標目前的字 X 刪除游標左邊的字 dd 刪除整行 D 從游標刪到行尾 i 從游標前開始輸入 a 從游標後開始輸入 A 跳到行尾開始輸入 o 下一行新增一行 u Undo 1 2 3 4 5 6 7 8 9 ifconfig e1000g0 192.168.8.50 netmask 255.255.255.0 up route add default 192.168.8.1 ## 檢查 ifconfig e1000g0 ping 192.168.8.1 ## 設定hostname vi /etc/defaultrouter vi /etc/nodename ssh 1 2 3 4 5 6 mv /etc/dhcp.e1000g0 /etc/dhcp.e1000g0.bak 2&gt;/dev/null svcadm enable svc:/network/ssh:default svcadm enable -r svc:/network/ssh:default svcs network/physical svcadm restart svc:/network/ssh:default #重啟ssh服務 svcs ssh #確認目前服務狀態 VNC 1 2 3 4 5 6 which vncserver find /usr -name &#39;vncserver&#39; -o -name &#39;Xvnc&#39; 2&gt;/dev/null vncpasswd export PATH=$PATH:/usr/openwin/bin which xauth 安裝VEN 1 2 3 4 5 6 7 8 9 10 11 12 13 zoneadm list -cv ## 預設只有global zone，global zone不能修改，需要創另一個zone zonecfg -z ven-zone ##建立ven-zone zonecfg:ven-zone&gt; create zonecfg:ven-zone&gt; set zonepath=/zones/ven-zone zonecfg:ven-zone&gt; set ip-type=exclusive zonecfg:ven-zone&gt; verify zonecfg:ven-zone&gt; commit zonecfg:ven-zone&gt; exit zoneadm list -cv zoneadm -z ven-zone install zoneadm -z ven-zone boot 在exclusive IP stack等於一個global zone底下有nic跟vnic\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/solaris/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' />
+<meta name="twitter:title" content="Solaris">
+<meta name="twitter:description" content="PVE上安裝 關掉use table point，至少滑鼠不會飄太過去 將硬碟設定SATA\n安裝步驟 安裝畫面-1 安裝畫面-2 安裝畫面-3 Solaris CDE（Common Desktop Environment） 從CDE切去JDS 網路 先建議弄成static，DHCP好像會怪怪無法取得IP\nvi Solaris所使用vi跟現代Linux所用vi不同，現代vi快速鍵高度相容vim，舊的vi有特殊作法\n1 2 3 4 5 6 7 8 9 10 先按下 Esc 然後執行以下操作 x 刪除游標目前的字 X 刪除游標左邊的字 dd 刪除整行 D 從游標刪到行尾 i 從游標前開始輸入 a 從游標後開始輸入 A 跳到行尾開始輸入 o 下一行新增一行 u Undo 1 2 3 4 5 6 7 8 9 ifconfig e1000g0 192.168.8.50 netmask 255.255.255.0 up route add default 192.168.8.1 ## 檢查 ifconfig e1000g0 ping 192.168.8.1 ## 設定hostname vi /etc/defaultrouter vi /etc/nodename ssh 1 2 3 4 5 6 mv /etc/dhcp.e1000g0 /etc/dhcp.e1000g0.bak 2&gt;/dev/null svcadm enable svc:/network/ssh:default svcadm enable -r svc:/network/ssh:default svcs network/physical svcadm restart svc:/network/ssh:default #重啟ssh服務 svcs ssh #確認目前服務狀態 VNC 1 2 3 4 5 6 which vncserver find /usr -name &#39;vncserver&#39; -o -name &#39;Xvnc&#39; 2&gt;/dev/null vncpasswd export PATH=$PATH:/usr/openwin/bin which xauth 安裝VEN 1 2 3 4 5 6 7 8 9 10 11 12 13 zoneadm list -cv ## 預設只有global zone，global zone不能修改，需要創另一個zone zonecfg -z ven-zone ##建立ven-zone zonecfg:ven-zone&gt; create zonecfg:ven-zone&gt; set zonepath=/zones/ven-zone zonecfg:ven-zone&gt; set ip-type=exclusive zonecfg:ven-zone&gt; verify zonecfg:ven-zone&gt; commit zonecfg:ven-zone&gt; exit zoneadm list -cv zoneadm -z ven-zone install zoneadm -z ven-zone boot 在exclusive IP stack等於一個global zone底下有nic跟vnic\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#安裝步驟">安裝步驟</a></li>
+    <li><a href="#網路">網路</a></li>
+    <li><a href="#vi">vi</a></li>
+    <li><a href="#ssh">ssh</a></li>
+    <li><a href="#vnc">VNC</a></li>
+    <li><a href="#安裝ven">安裝VEN</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/solaris/">Solaris</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>PVE上安裝
+關掉use table point，至少滑鼠不會飄太過去
+將硬碟設定SATA</p>
+<h2 id="安裝步驟">安裝步驟
+</h2><p>安裝畫面-1
+<img
+    src="/my-portfolio/PixPin_2026-08-23_00-00-43.png"
+    alt=""
+    loading="lazy"
+>
+安裝畫面-2
+<img
+    src="/my-portfolio/PixPin_2026-08-23_00-07-26.png"
+    alt=""
+    loading="lazy"
+>
+安裝畫面-3
+<img
+    src="/my-portfolio/PixPin_2026-08-23_00-24-43.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>Solaris CDE（Common Desktop Environment）
+<img
+    src="/my-portfolio/Pasted%20image%2020260823095859.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>從CDE切去JDS
+<img
+    src="/my-portfolio/Pasted%20image%2020260823100158.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="網路">網路
+</h2><p>先建議弄成static，DHCP好像會怪怪無法取得IP</p>
+<h2 id="vi">vi
+</h2><p>Solaris所使用vi跟現代Linux所用vi不同，現代vi快速鍵高度相容vim，舊的vi有特殊作法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">先按下 Esc 然後執行以下操作
+</span></span><span class="line"><span class="cl">x     刪除游標目前的字
+</span></span><span class="line"><span class="cl">X     刪除游標左邊的字
+</span></span><span class="line"><span class="cl">dd    刪除整行
+</span></span><span class="line"><span class="cl">D     從游標刪到行尾
+</span></span><span class="line"><span class="cl">i     從游標前開始輸入
+</span></span><span class="line"><span class="cl">a     從游標後開始輸入
+</span></span><span class="line"><span class="cl">A     跳到行尾開始輸入
+</span></span><span class="line"><span class="cl">o     下一行新增一行
+</span></span><span class="line"><span class="cl">u     Undo
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ifconfig e1000g0 192.168.8.50 netmask 255.255.255.0 up
+</span></span><span class="line"><span class="cl">route add default 192.168.8.1
+</span></span><span class="line"><span class="cl">## 檢查
+</span></span><span class="line"><span class="cl">ifconfig e1000g0
+</span></span><span class="line"><span class="cl">ping 192.168.8.1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## 設定hostname
+</span></span><span class="line"><span class="cl">vi /etc/defaultrouter
+</span></span><span class="line"><span class="cl">vi /etc/nodename
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ssh">ssh
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mv /etc/dhcp.e1000g0 /etc/dhcp.e1000g0.bak 2&gt;/dev/null
+</span></span><span class="line"><span class="cl">svcadm enable svc:/network/ssh:default
+</span></span><span class="line"><span class="cl">svcadm enable -r svc:/network/ssh:default
+</span></span><span class="line"><span class="cl">svcs network/physical
+</span></span><span class="line"><span class="cl">svcadm restart svc:/network/ssh:default   #重啟ssh服務
+</span></span><span class="line"><span class="cl">svcs ssh                                  #確認目前服務狀態
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="vnc">VNC
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">which</span> <span class="n">vncserver</span>
+</span></span><span class="line"><span class="cl"><span class="n">find</span> <span class="o">/</span><span class="n">usr</span> <span class="o">-</span><span class="n">name</span> <span class="s1">&#39;vncserver&#39;</span> <span class="o">-</span><span class="n">o</span> <span class="o">-</span><span class="n">name</span> <span class="s1">&#39;Xvnc&#39;</span> <span class="mi">2</span><span class="o">&gt;/</span><span class="n">dev</span><span class="o">/</span><span class="n">null</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">vncpasswd</span>
+</span></span><span class="line"><span class="cl"><span class="k">export</span> <span class="n">PATH</span><span class="o">=$</span><span class="n">PATH</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">openwin</span><span class="o">/</span><span class="n">bin</span>
+</span></span><span class="line"><span class="cl"><span class="n">which</span> <span class="n">xauth</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安裝ven">安裝VEN
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">zoneadm list -cv  ## 預設只有global zone，global zone不能修改，需要創另一個zone
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">zonecfg -z ven-zone    ##建立ven-zone
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; create
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; set zonepath=/zones/ven-zone
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; set ip-type=exclusive
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; verify
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; commit
+</span></span><span class="line"><span class="cl">zonecfg:ven-zone&gt; exit
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">zoneadm list -cv
+</span></span><span class="line"><span class="cl">zoneadm -z ven-zone install
+</span></span><span class="line"><span class="cl">zoneadm -z ven-zone boot
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在exclusive IP stack等於一個global zone底下有nic跟vnic</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Proxmox VM
+</span></span><span class="line"><span class="cl"> |
+</span></span><span class="line"><span class="cl"> +-- e1000g0
+</span></span><span class="line"><span class="cl">      |
+</span></span><span class="line"><span class="cl">      Global Zone
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> +-- e1000g1
+</span></span><span class="line"><span class="cl">      |
+</span></span><span class="line"><span class="cl">      ven-zone
+</span></span><span class="line"><span class="cl">      ip-type=exclusive
+</span></span><span class="line"><span class="cl">      VEN
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN (1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server VPN Server 串接Radius Sever 容易有bug，記得在VPN Server 改 RADIUS Secret 後要切回 Windows Auth 再改回 RADIUS (原因在於RRAS 使用 RADIUS 會快取 Shared Secret，舊的 Secret 不會被清掉)\n">
 <title>Radius 企業驗證伺服器架設 </title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.251f3ec0f39ebd44d95dd207e9b0dcc836d6d90402c29976db4b9bb39f8143fb.css"><meta property='og:title' content="Radius 企業驗證伺服器架設 ">
-<meta property='og:description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Radius 企業驗證伺服器架設 ">
+<meta property='og:description' content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN (1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server VPN Server 串接Radius Sever 容易有bug，記得在VPN Server 改 RADIUS Secret 後要切回 Windows Auth 再改回 RADIUS (原因在於RRAS 使用 RADIUS 會快取 Shared Secret，舊的 Secret 不會被清掉)\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-05T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Radius 企業驗證伺服器架設 ">
-<meta name="twitter:description" content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN\r(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X\r條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server\r">
+<meta name="twitter:description" content="VM 環境\nAD+CA：192.168.80.10 VMNet8 NAT 192.168.80.0/24 RADIUS：192.168.80.11 VMNet8 NAT 192.168.80.0/24 VPN：192.168.80.13 VMNet9 Host-Only 192.168.90.0/24 Host IP 乙太網路：192.168.8.6 測試端口轉發 VM：ncat -u -l 2300 -u 為發出udp，無指定為tcp Host: ncat 192.168.8.50 2300\n※有時候VMware Workstation 端口轉發會失敗，重新啟動服務\n設定802.1X Wireless AP及VPN (1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好 (3) 連線要求原則\nVPN 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n802.1X 條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他 設定:驗證方法為空不能打勾\n(4) 網路原則\n設定VPN Server VPN Server 串接Radius Sever 容易有bug，記得在VPN Server 改 RADIUS Secret 後要切回 Windows Auth 再改回 RADIUS (原因在於RRAS 使用 RADIUS 會快取 Shared Secret，舊的 Secret 不會被清掉)\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -373,35 +373,17 @@ Host IP 乙太網路：192.168.8.6
 </ul>
 <p><code>VM：ncat -u -l 2300</code>  -u 為發出udp，無指定為tcp
 <code>Host: ncat 192.168.8.50 2300</code></p>
-<p><img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image.png"
-	width="2110"
-	height="976"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_b3aa2ef45b2f92a2.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image_hu_4f38a24352202859.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="216"
-		data-flex-basis="518px"
-	
+<p><img
+    src="/my-portfolio/content/post/proj/radius/image.png"
+    alt="image.png"
+    loading="lazy"
 >
 ※有時候VMware Workstation 端口轉發會失敗，重新啟動服務</p>
 <h2 id="設定8021x-wireless-ap及vpn">設定802.1X Wireless AP及VPN
-</h2><p><img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1.png"
-	width="1197"
-	height="1022"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_51052adfc886116d.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image1_hu_fead0cf764ba0393.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="117"
-		data-flex-basis="281px"
-	
+</h2><p><img
+    src="/my-portfolio/content/post/proj/radius/image1.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 <p>(1) 連線要求原則及網路原則都有順序，要把安全無線跟VPN處理順序放置在最上方
 (2) NPS(主機)/標準設定/802.1X或VPN進入精靈畫面設定，使用精靈畫面設定結束有時會出現2個用戶端，刪掉一個重複就好
@@ -409,38 +391,20 @@ Host IP 乙太網路：192.168.8.6
 <h3 id="vpn">VPN
 </h3><p>條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他
 設定:驗證方法為空不能打勾</p>
-<p><img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2.png"
-	width="2096"
-	height="850"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_3adcc3a56972d477.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image2_hu_e78cdebdc0e6232c.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="246"
-		data-flex-basis="591px"
-	
+<p><img
+    src="/my-portfolio/content/post/proj/radius/image2.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 <h3 id="8021x">802.1X
 </h3><p>條件:NAS連接，802.1X為無線-IEEE 802.11,無線-其他
 設定:驗證方法為空不能打勾</p>
 <p>(4) 網路原則</p>
 <h2 id="設定vpn-server">設定VPN Server
-</h2><p><img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3.png"
-	width="1318"
-	height="801"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_e5fb29cc30151537.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image3_hu_de8ef4c49b16b6cc.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="164"
-		data-flex-basis="394px"
-	
+</h2><p><img
+    src="/my-portfolio/content/post/proj/radius/image3.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 <p>VPN Server 串接Radius Sever 容易有bug，記得在VPN Server <code>改 RADIUS Secret 後要切回 Windows Auth 再改回 RADIUS</code> (原因在於RRAS 使用 RADIUS 會快取 Shared Secret，舊的 Secret 不會被清掉)</p>
 <div class="highlight"><div class="chroma">
@@ -453,50 +417,23 @@ Host IP 乙太網路：192.168.8.6
 </span></span><span class="line"><span class="cl">net stop remoteaccess &amp; net start remoteaccess
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4.png"
-	width="691"
-	height="598"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_cc9081ea5b239c78.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image4_hu_209b65ea71f70a2.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="115"
-		data-flex-basis="277px"
-	
+</div><p><img
+    src="/my-portfolio/content/post/proj/radius/image4.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 <h2 id="設定連線">設定連線
 </h2><p>1.802.1X Wireless AP
-<img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5.png"
-	width="2610"
-	height="1141"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_ea428b7f505acd55.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image5_hu_b2b68afec6918f9a.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="228"
-		data-flex-basis="548px"
-	
+<img
+    src="/my-portfolio/content/post/proj/radius/image5.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 <p>2.VPN連線
-<img src="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6.png"
-	width="570"
-	height="943"
-	srcset="/my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_7b90b4e12d9753ca.png 480w, /my-portfolio/p/radius-%E4%BC%81%E6%A5%AD%E9%A9%97%E8%AD%89%E4%BC%BA%E6%9C%8D%E5%99%A8%E6%9E%B6%E8%A8%AD/image6_hu_85e4ba9355d8881f.png 1024w"
-	loading="lazy"
-	
-		alt="image.png"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="60"
-		data-flex-basis="145px"
-	
+<img
+    src="/my-portfolio/content/post/proj/radius/image6.png"
+    alt="image.png"
+    loading="lazy"
 ></p>
 
 </section>
@@ -549,8 +486,9 @@ Host IP 乙太網路：192.168.8.6
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
 </div>
 
 <style>
@@ -675,7 +613,7 @@ Host IP 乙太網路：192.168.8.6
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.85e7929d27bb4982f674d65e2410f785f79a0a4ebbb9ce1a741df2750e18aff0.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

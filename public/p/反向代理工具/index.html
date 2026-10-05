@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="反向代理工具 工具 主要定位 設定與服務發現 HTTPS／ACME 管理介面 Nginx 通用 Web Server、反向代理與負載平衡器 主要以設定檔手動管理；彈性高、相關資料多 支援 TLS；憑證申請與續期通常搭配 Certbot、acme.sh 等外部工具 開源版沒有內建管理 Dashboard Nginx Proxy Manager（NPM） 以 Nginx 為核心的圖形化反向代理管理工具 透過 Web UI 建立 Proxy Host；不以自動探索容器為主 內建 Let&rsquo;s Encrypt 憑證申請與續期，也可匯入自有憑證 有完整 Web 管理介面 Envoy 雲端原生 L4／L7 Proxy，常作為 Service Mesh 的 Data Plane 可使用靜態 YAML，或透過 xDS 控制平面動態下發設定 支援 TLS 與 SDS；ACME 簽發通常交由外部憑證系統 有 Admin／統計端點，但不是一般操作型 GUI Caddy 設定簡潔的 Web Server 與反向代理 使用 Caddyfile 或 API；少量設定即可啟用代理 內建 Automatic HTTPS，能透過 ACME 自動申請與續期憑證 沒有內建完整管理 Dashboard Traefik 面向容器與編排平台的 Edge Router 原生 Provider 可探索 Docker、Kubernetes 等服務，常以 Label／CRD 設定 內建 ACME Certificate Resolver，可自動管理憑證 內建 Dashboard 與 API GoDoxy 以 Docker 與 HomeLab 為主的智慧反向代理 自動偵測 Docker 容器並建立路由 支援 Let&rsquo;s Encrypt 自動 HTTPS 內建 WebUI、服務首頁與主機監控 [!note] 快速選擇\n介面操作、集中管理憑證：Nginx Proxy Manager 設定最精簡、快速取得 HTTPS：Caddy Docker／Kubernetes 自動探索：Traefik 大型微服務或 Service Mesh：Envoy Docker HomeLab 一站式管理：GoDoxy 細緻調校與通用性優先：Nginx ">
+<title>反向代理工具</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="反向代理工具">
+<meta property='og:description' content="反向代理工具 工具 主要定位 設定與服務發現 HTTPS／ACME 管理介面 Nginx 通用 Web Server、反向代理與負載平衡器 主要以設定檔手動管理；彈性高、相關資料多 支援 TLS；憑證申請與續期通常搭配 Certbot、acme.sh 等外部工具 開源版沒有內建管理 Dashboard Nginx Proxy Manager（NPM） 以 Nginx 為核心的圖形化反向代理管理工具 透過 Web UI 建立 Proxy Host；不以自動探索容器為主 內建 Let&rsquo;s Encrypt 憑證申請與續期，也可匯入自有憑證 有完整 Web 管理介面 Envoy 雲端原生 L4／L7 Proxy，常作為 Service Mesh 的 Data Plane 可使用靜態 YAML，或透過 xDS 控制平面動態下發設定 支援 TLS 與 SDS；ACME 簽發通常交由外部憑證系統 有 Admin／統計端點，但不是一般操作型 GUI Caddy 設定簡潔的 Web Server 與反向代理 使用 Caddyfile 或 API；少量設定即可啟用代理 內建 Automatic HTTPS，能透過 ACME 自動申請與續期憑證 沒有內建完整管理 Dashboard Traefik 面向容器與編排平台的 Edge Router 原生 Provider 可探索 Docker、Kubernetes 等服務，常以 Label／CRD 設定 內建 ACME Certificate Resolver，可自動管理憑證 內建 Dashboard 與 API GoDoxy 以 Docker 與 HomeLab 為主的智慧反向代理 自動偵測 Docker 容器並建立路由 支援 Let&rsquo;s Encrypt 自動 HTTPS 內建 WebUI、服務首頁與主機監控 [!note] 快速選擇\n介面操作、集中管理憑證：Nginx Proxy Manager 設定最精簡、快速取得 HTTPS：Caddy Docker／Kubernetes 自動探索：Traefik 大型微服務或 Service Mesh：Envoy Docker HomeLab 一站式管理：GoDoxy 細緻調校與通用性優先：Nginx ">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-15T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-15T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="反向代理工具">
+<meta name="twitter:description" content="反向代理工具 工具 主要定位 設定與服務發現 HTTPS／ACME 管理介面 Nginx 通用 Web Server、反向代理與負載平衡器 主要以設定檔手動管理；彈性高、相關資料多 支援 TLS；憑證申請與續期通常搭配 Certbot、acme.sh 等外部工具 開源版沒有內建管理 Dashboard Nginx Proxy Manager（NPM） 以 Nginx 為核心的圖形化反向代理管理工具 透過 Web UI 建立 Proxy Host；不以自動探索容器為主 內建 Let&rsquo;s Encrypt 憑證申請與續期，也可匯入自有憑證 有完整 Web 管理介面 Envoy 雲端原生 L4／L7 Proxy，常作為 Service Mesh 的 Data Plane 可使用靜態 YAML，或透過 xDS 控制平面動態下發設定 支援 TLS 與 SDS；ACME 簽發通常交由外部憑證系統 有 Admin／統計端點，但不是一般操作型 GUI Caddy 設定簡潔的 Web Server 與反向代理 使用 Caddyfile 或 API；少量設定即可啟用代理 內建 Automatic HTTPS，能透過 ACME 自動申請與續期憑證 沒有內建完整管理 Dashboard Traefik 面向容器與編排平台的 Edge Router 原生 Provider 可探索 Docker、Kubernetes 等服務，常以 Label／CRD 設定 內建 ACME Certificate Resolver，可自動管理憑證 內建 Dashboard 與 API GoDoxy 以 Docker 與 HomeLab 為主的智慧反向代理 自動偵測 Docker 容器並建立路由 支援 Let&rsquo;s Encrypt 自動 HTTPS 內建 WebUI、服務首頁與主機監控 [!note] 快速選擇\n介面操作、集中管理憑證：Nginx Proxy Manager 設定最精簡、快速取得 HTTPS：Caddy Docker／Kubernetes 自動探索：Traefik 大型微服務或 Service Mesh：Envoy Docker HomeLab 一站式管理：GoDoxy 細緻調校與通用性優先：Nginx ">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#反向代理工具">反向代理工具</a></li>
+    <li><a href="#步驟一理解-powerdns-與-doh-的關鍵橋樑dnsdist">步驟一：理解 PowerDNS 與 DoH 的關鍵橋樑：<code>dnsdist</code></a></li>
+    <li><a href="#步驟二設定-dnsdist-接收-doh-流量">步驟二：設定 <code>dnsdist</code> 接收 DoH 流量</a></li>
+    <li><a href="#步驟三在-npm-設定反向代理與-ssl-憑證">步驟三：在 NPM 設定反向代理與 SSL 憑證</a></li>
+    <li><a href="#步驟四在-powerdns-內設定自己解析自己">步驟四：在 PowerDNS 內設定「自己解析自己」</a>
+      <ol>
+        <li><a href="#1-為什麼只用-powerdns-轉址會失敗">1. 為什麼「只用 PowerDNS 轉址」會失敗？</a></li>
+        <li><a href="#2-完美的解決方案讓所有的網址全部集中經過-npm">2. 完美的解決方案：讓所有的網址「全部集中經過 NPM」</a>
+          <ol>
+            <li><a href="#運作流程">運作流程：</a></li>
+          </ol>
+        </li>
+        <li><a href="#這樣做為什麼一定會成功">這樣做為什麼一定會成功？</a></li>
+        <li><a href="#-核心架構設計流量走向">🌐 核心架構設計（流量走向）</a></li>
+      </ol>
+    </li>
+    <li><a href="#第一步powerdns-設定雙向解析split-horizon">第一步：PowerDNS 設定「雙向解析（Split-Horizon）」</a></li>
+    <li><a href="#第二步部署與設定-dnsdistdoh-的靈魂橋樑">第二步：部署與設定 <code>dnsdist</code>（DoH 的靈魂橋樑）</a></li>
+    <li><a href="#第三步在-npm-中配置doh-反向代理">第三步：在 NPM 中配置「DoH 反向代理」</a></li>
+    <li><a href="#第四步在-npm-中配置netbox-反向代理">第四步：在 NPM 中配置「NetBox 反向代理」</a>
+      <ol>
+        <li><a href="#-最終達成的完美效果">🎯 最終達成的完美效果</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/">反向代理工具</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-07-15T00:00:00Z'>Jul 15, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="反向代理工具">反向代理工具
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>工具</th>
+					<th>主要定位</th>
+					<th>設定與服務發現</th>
+					<th>HTTPS／ACME</th>
+					<th>管理介面</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="https://nginx.org/en/docs/">Nginx</a></td>
+					<td>通用 Web Server、反向代理與負載平衡器</td>
+					<td>主要以設定檔手動管理；彈性高、相關資料多</td>
+					<td>支援 TLS；憑證申請與續期通常搭配 Certbot、acme.sh 等外部工具</td>
+					<td>開源版沒有內建管理 Dashboard</td>
+			</tr>
+			<tr>
+					<td><a href="https://nginxproxymanager.com/guide/">Nginx Proxy Manager（NPM）</a></td>
+					<td>以 Nginx 為核心的圖形化反向代理管理工具</td>
+					<td>透過 Web UI 建立 Proxy Host；不以自動探索容器為主</td>
+					<td>內建 Let&rsquo;s Encrypt 憑證申請與續期，也可匯入自有憑證</td>
+					<td>有完整 Web 管理介面</td>
+			</tr>
+			<tr>
+					<td><a href="https://www.envoyproxy.io/docs/envoy/latest/">Envoy</a></td>
+					<td>雲端原生 L4／L7 Proxy，常作為 Service Mesh 的 Data Plane</td>
+					<td>可使用靜態 YAML，或透過 xDS 控制平面動態下發設定</td>
+					<td>支援 TLS 與 SDS；ACME 簽發通常交由外部憑證系統</td>
+					<td>有 Admin／統計端點，但不是一般操作型 GUI</td>
+			</tr>
+			<tr>
+					<td><a href="https://caddyserver.com/docs/">Caddy</a></td>
+					<td>設定簡潔的 Web Server 與反向代理</td>
+					<td>使用 Caddyfile 或 API；少量設定即可啟用代理</td>
+					<td>內建 Automatic HTTPS，能透過 ACME 自動申請與續期憑證</td>
+					<td>沒有內建完整管理 Dashboard</td>
+			</tr>
+			<tr>
+					<td><a href="https://doc.traefik.io/traefik/">Traefik</a></td>
+					<td>面向容器與編排平台的 Edge Router</td>
+					<td>原生 Provider 可探索 Docker、Kubernetes 等服務，常以 Label／CRD 設定</td>
+					<td>內建 ACME Certificate Resolver，可自動管理憑證</td>
+					<td>內建 Dashboard 與 API</td>
+			</tr>
+			<tr>
+					<td><a href="https://docs.godoxy.dev/">GoDoxy</a></td>
+					<td>以 Docker 與 HomeLab 為主的智慧反向代理</td>
+					<td>自動偵測 Docker 容器並建立路由</td>
+					<td>支援 Let&rsquo;s Encrypt 自動 HTTPS</td>
+					<td>內建 WebUI、服務首頁與主機監控</td>
+			</tr>
+	</tbody>
+</table></div>
+<blockquote>
+<p>[!note] 快速選擇</p>
+<ul>
+<li><strong>介面操作、集中管理憑證</strong>：Nginx Proxy Manager</li>
+<li><strong>設定最精簡、快速取得 HTTPS</strong>：Caddy</li>
+<li><strong>Docker／Kubernetes 自動探索</strong>：Traefik</li>
+<li><strong>大型微服務或 Service Mesh</strong>：Envoy</li>
+<li><strong>Docker HomeLab 一站式管理</strong>：GoDoxy</li>
+<li><strong>細緻調校與通用性優先</strong>：Nginx</li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update apt install -y lsb-release ca-certificates gnupg2 curl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>要讓NPM正常解析
+hosts -&gt; NPM -&gt; 再轉網域名</p>
+<p>將 <strong>PowerDNS</strong>、<strong>DoH (DNS over HTTPS)</strong>、與 <strong>Nginx Proxy Manager (NPM)</strong> 整合起來，其實是一個非常漂亮且標準的「高安全度內網 DNS 架構」。</p>
+<p>只要架構理清楚，一步步來做，就不會覺得複雜。我們把整體流量拆解開來：</p>
+<blockquote>
+<p><strong>DoH 運作路徑：</strong></p>
+<p>你的設備 (發出 DoH 請求)</p>
+<p>$\rightarrow$ <strong>NPM (監聽 443，負責掛載 deSEC 的 SSL 憑證並解密)</strong> &gt; $\rightarrow$ <strong>DNS 代理/轉發器 (如 dnsdist)</strong> &gt; $\rightarrow$ <strong>PowerDNS (處理實際 DNS 解析)</strong></p>
+</blockquote>
+<p>以下是為你規劃的<strong>四步整合指南</strong>：</p>
+<h2 id="步驟一理解-powerdns-與-doh-的關鍵橋樑dnsdist">步驟一：理解 PowerDNS 與 DoH 的關鍵橋樑：<code>dnsdist</code>
+</h2><p>因為 PowerDNS 授權伺服器（PowerDNS Authoritative）本體<strong>不支援</strong>直接處理 DoH (HTTPS) 協定。PowerDNS 官方最推薦、也是業界標準的做法，是在 PowerDNS 前面擋一台 <strong><code>dnsdist</code></strong>（這是 PowerDNS 家族的超強大 DNS 負載均衡與代理器）。</p>
+<ul>
+<li><strong>NPM</strong>：負責把外面的 <code>https://dns.yourdomain.dedyn.io/dns-query</code> 接收進來，處理好 SSL 憑證（安全鎖頭），然後把乾淨的 DNS 流量用 HTTP 丟給 <code>dnsdist</code>。</li>
+<li><strong>dnsdist</strong>：接收來自 NPM 的 DoH 請求，並將它轉化為標準的 DNS 查詢（Port 53），丟給後端的 <strong>PowerDNS</strong>。</li>
+</ul>
+<h2 id="步驟二設定-dnsdist-接收-doh-流量">步驟二：設定 <code>dnsdist</code> 接收 DoH 流量
+</h2><p>你可以把 <code>dnsdist</code> 架設在 Docker 或是獨立的 Linux（例如與 PowerDNS 同一台實體機/LXC 內）。</p>
+<p>編輯 <code>dnsdist</code> 的設定檔（通常在 <code>/etc/dnsdist/dnsdist.conf</code>）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">--</span> <span class="mf">1.</span> <span class="err">監聽本地的</span> <span class="mi">8080</span> <span class="n">Port</span> <span class="err">接收來自</span> <span class="n">NPM</span> <span class="err">的「未加密</span> <span class="n">DoH</span> <span class="err">流量」</span>
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="err">這裡我們把</span> <span class="n">SSL</span> <span class="err">卸載（</span><span class="n">SSL</span> <span class="n">Offloading</span><span class="err">）交給</span> <span class="n">NPM</span> <span class="err">處理，所以</span> <span class="n">dnsdist</span> <span class="err">端不用設定憑證</span>
+</span></span><span class="line"><span class="cl"><span class="n">addDOHLocal</span><span class="p">(</span><span class="s2">&#34;0.0.0.0:8080&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;/dns-query&#34;</span><span class="p">,</span> <span class="p">{</span> <span class="n">reusePort</span><span class="o">=</span><span class="bp">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">--</span> <span class="mf">2.</span> <span class="err">設定後端實際進行解析的</span> <span class="n">PowerDNS</span> <span class="err">伺服器</span> <span class="ne">IP</span> <span class="p">(</span><span class="err">假設是</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">1.254</span><span class="p">:</span><span class="mi">53</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">newServer</span><span class="p">({</span><span class="n">address</span><span class="o">=</span><span class="s2">&#34;192.168.1.254:53&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;pdns-backend&#34;</span><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>設定完成後，重啟 dnsdist 服務。此時，只要有 HTTP 流量打到 <code>http://dnsdist-IP:8080/dns-query</code>，它就會幫你送去 PowerDNS 解析。</em></p>
+<h2 id="步驟三在-npm-設定反向代理與-ssl-憑證">步驟三：在 NPM 設定反向代理與 SSL 憑證
+</h2><p>現在，我們要讓 NPM 來當對外的門神，掛上你透過 deSEC 申請的合法憑證。</p>
+<ol>
+<li>
+<p><strong>登入 NPM 面板</strong>，新增一個 <strong>Proxy Host</strong>：</p>
+<ul>
+<li><strong>Domain Names</strong>：填寫你的 DoH 專用網域，例如 <code>dns.yourdomain.dedyn.io</code>。</li>
+<li><strong>Scheme</strong>：選擇 <strong><code>http</code></strong>（因為 NPM 連到 <code>dnsdist</code> 不需要再加密）。</li>
+<li><strong>Forward Hostname/IP</strong>：填寫 <strong><code>dnsdist</code> 的內網 IP</strong>。</li>
+<li><strong>Forward Port</strong>：填寫 <strong><code>8080</code></strong>（對應剛才 dnsdist 設定的 DoH Port）。</li>
+</ul>
+</li>
+<li>
+<p><strong>切換到 SSL 頁籤</strong>：</p>
+<ul>
+<li><strong>SSL Certificate</strong>：選取你用 Certbot + deSEC 拿到的合法憑證。</li>
+<li>勾選 <strong>Force SSL</strong> 與 <strong>HTTP/2 Support</strong>（DoH 強烈依賴 HTTP/2，這點非常重要）。</li>
+</ul>
+</li>
+<li>
+<p><strong>切換到 Advanced（進階）頁籤</strong>：
+為了確保 DoH 的標頭（Headers）與大封包能順利傳遞，請貼上以下 Nginx 優化設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 針對 DoH/Websocket 傳輸優化
+</span></span><span class="line"><span class="cl">proxy_set_header Host $host;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Real-IP $remote_addr;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-Proto $scheme;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 調整 Buffer，避免大體積的 DNS 紀錄被 Nginx 截斷
+</span></span><span class="line"><span class="cl">proxy_buffers 8 16k;
+</span></span><span class="line"><span class="cl">proxy_buffer_size 32k;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>點選 <strong>Save</strong> 儲存。</em></p>
+</li>
+</ol>
+<h2 id="步驟四在-powerdns-內設定自己解析自己">步驟四：在 PowerDNS 內設定「自己解析自己」
+</h2><p>為了讓這個架構完美閉環，你在內網的 PowerDNS 裡，必須新增一筆紀錄，讓 <code>dns.yourdomain.dedyn.io</code> 解析指向 <strong>NPM 的內網 IP</strong>。
+在 PowerDNS 內新增紀錄：</p>
+<ul>
+<li><strong>Zone</strong>: <code>yourdomain.dedyn.io</code></li>
+<li><strong>Record</strong>: <code>dns</code> (A 紀錄) $\rightarrow$ 指向 <strong>NPM 的內網 IP</strong>（例如 <code>192.168.1.110</code>）。</li>
+</ul>
+<p>這是一個非常好的盲點，也是許多人在初學 DNS、反向代理與 HTTPS 時最容易感到困惑的地方！</p>
+<p>答案是：<strong>沒錯，如果只做 PowerDNS 轉址，其他的網頁（如 NetBox）確實是「無法」直接用 HTTPS 成功連線的。</strong></p>
+<p>為了讓你完全理解為什麼，我們必須把 <strong>「DNS（PowerDNS）」</strong>、<strong>「反向代理（NPM）」</strong>、與 <strong>「網頁服務（NetBox / 其他 LinuX 服務）」</strong> 三者的工作分工看得一清二楚。</p>
+<h3 id="1-為什麼只用-powerdns-轉址會失敗">1. 為什麼「只用 PowerDNS 轉址」會失敗？
+</h3><p>DNS（包含你的 PowerDNS）的工作非常單純，它只負責<strong>翻譯地址</strong>。</p>
+<ul>
+<li>
+<p>當你輸入 <code>netbox.yourdomain.dedyn.io</code> 時，PowerDNS 告訴瀏覽器：「這個人在內網的 IP 是 <code>192.168.1.120</code>（NetBox LXC 的實體 IP）」。</p>
+</li>
+<li>
+<p>於是，你的瀏覽器會跳過 NPM，<strong>直接</strong>把流量送去 NetBox LXC 的 Port 443。</p>
+</li>
+</ul>
+<p><strong>這時就會發生你一開始遇到的慘劇：</strong></p>
+<ol>
+<li>
+<p>因為流量直接進了 NetBox LXC，沒有經過 NPM，所以 NPM 上設定的合法 deSEC 憑證<strong>完全派不上用場</strong>。</p>
+</li>
+<li>
+<p>NetBox LXC 只能拿出自己身上那張自簽的 <code>localhost</code> 憑證。</p>
+</li>
+<li>
+<p>你的瀏覽器一看，網址是 <code>netbox.yourdomain.dedyn.io</code>，但憑證上寫著 <code>localhost</code>，兩者不符合，立刻跳出「憑證不安全」或「連線失敗」。</p>
+</li>
+</ol>
+<h3 id="2-完美的解決方案讓所有的網址全部集中經過-npm">2. 完美的解決方案：讓所有的網址「全部集中經過 NPM」
+</h3><p>要讓 NetBox 和其他所有內網網頁都能成功套用 deSEC 憑證，我們必須做一件事：<strong>不論你輸入什麼網址，在 PowerDNS 裡通通都指向 NPM 的 IP！</strong></p>
+<p>這就是所謂的 <strong>「反向代理集中管理（Reverse Proxy Centrally Managed）」</strong>：</p>
+<h4 id="運作流程">運作流程：
+</h4><ol>
+<li>
+<p><strong>設定 PowerDNS（通通指向 NPM）</strong>： 在 PowerDNS 內，把你所有的服務網址（不論是 NetBox、DoH、還是其他服務），A 紀錄<strong>全部填寫 NPM 的內網 IP</strong>（例如 <code>192.168.1.110</code>）。</p>
+<ul>
+<li>
+<p><code>netbox.yourdomain.dedyn.io</code> → 指向 <code>192.168.1.110</code> (NPM)</p>
+</li>
+<li>
+<p><code>dns.yourdomain.dedyn.io</code> → 指向 <code>192.168.1.110</code> (NPM)</p>
+</li>
+<li>
+<p><code>other.yourdomain.dedyn.io</code> → 指向 <code>192.168.1.110</code> (NPM)</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>在 NPM 裡做「分流與憑證掛載」</strong>： 因為所有的網址都送到了 NPM，NPM 就會像一個高明的交通警察。它會看瀏覽器要求的網域名稱（Domain Name）是什麼，來決定要掛哪張憑證、轉發到哪裡：</p>
+<ul>
+<li>
+<p><strong>如果收到 <code>netbox.yourdomain.dedyn.io</code></strong>： NPM 掛上合法 deSEC 憑證 → 將流量轉發給後端 <strong>NetBox LXC (<code>192.168.1.120:443</code>)</strong>（搭配我們之前寫的忽略自簽憑證進階設定）。</p>
+</li>
+<li>
+<p><strong>如果收到 <code>dns.yourdomain.dedyn.io</code></strong>： NPM 掛上合法 deSEC 憑證 → 將流量轉發給後端 <strong>dnsdist (<code>192.168.1.115:8080</code>)</strong>。</p>
+</li>
+<li>
+<p><strong>如果收到 <code>other.yourdomain.dedyn.io</code></strong>： NPM 掛上合法 deSEC 憑證 → 將流量轉發給後端 <strong>其他服務 (<code>192.168.1.130:80</code>)</strong>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="這樣做為什麼一定會成功">這樣做為什麼一定會成功？
+</h3><p>透過這種「PowerDNS 導向 NPM → NPM 再分流轉發」的架構，你可以得到以下巨大好處：</p>
+<ol>
+<li>
+<p><strong>憑證完美解決</strong>：你只需要在 NPM 這一台機器上管理 deSEC 憑證。後端那堆 NetBox、Proxmox、或是其他亂七八糟的 LXC 容器，不管它們是用 HTTP 還是帶有自簽憑證的 HTTPS，<strong>通通都不用再去改它們的憑證了</strong>。NPM 會在最前線幫你包裝成漂亮的、瀏覽器信任的合法 HTTPS。</p>
+</li>
+<li>
+<p><strong>不用記 Port 號</strong>：你以後連內網任何服務，都不用在網址後面打 <code>:8000</code>、<code>:8443</code> 或 <code>:8080</code>。因為只要輸入對應的網域，NPM 就會自動幫你轉發到正確的 Port。</p>
+</li>
+<li>
+<p><strong>安全加密的 DoH</strong>：你的 DoH 機制也可以無縫融入這個體系，同樣享有合法的安全憑證。</p>
+</li>
+</ol>
+<p>所以，你之前的直覺是非常敏銳且正確的！光靠 PowerDNS 轉址絕對無法解決 NetBox 的憑證問題。我們<strong>必須</strong>把所有的網域 A 紀錄在 PowerDNS 裡都指向 NPM，並在 NPM 裡為 NetBox 新增一筆 Proxy Host 設定，這樣整個系統才會真正成功運作！</p>
+<p>要同時完美實現 <strong>DoH (DNS over HTTPS)</strong>、<strong>PowerDNS</strong> 以及 <strong>Nginx Proxy Manager (NPM)</strong> 的整合，國外大神和企業最推崇的最佳實踐（Best Practice）是採用 <strong>「前置代理與 SSL 卸載」</strong> 的分層架構。</p>
+<p>這個架構既能讓你用 NPM 統一管理 deSEC 的 SSL 憑證，又能保持 PowerDNS 作為內網唯一權威解析的純潔性，同時解決 DoH 所需的高效傳輸。</p>
+<p>以下為你整理出最優雅、最不容易出錯的<strong>四步實作指南</strong>：</p>
+<h3 id="-核心架構設計流量走向">🌐 核心架構設計（流量走向）
+</h3><p>Plaintext</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">【設備端】(手機/電腦) ──發送 DoH 請求 (https://dns.yourdomain.dedyn.io/dns-query)──&gt;
+</span></span><span class="line"><span class="cl">      │
+</span></span><span class="line"><span class="cl">      ▼
+</span></span><span class="line"><span class="cl">【Nginx Proxy Manager】(192.168.1.110) &lt;--- 負責外網/內網 SSL 解密 (deSEC 憑證)
+</span></span><span class="line"><span class="cl">      │
+</span></span><span class="line"><span class="cl">      ▼ (轉為純 HTTP 流量送往同主機或內網的 dnsdist)
+</span></span><span class="line"><span class="cl">【dnsdist (DoH 轉接器)】(192.168.1.115:8080) &lt;--- 負責處理 DoH 協定，轉為標準 DNS
+</span></span><span class="line"><span class="cl">      │
+</span></span><span class="line"><span class="cl">      ▼ (發送標準 Port 53 查詢)
+</span></span><span class="line"><span class="cl">【PowerDNS Authoritative】(192.168.1.254) &lt;--- 負責內網域名解析與 A 紀錄
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="第一步powerdns-設定雙向解析split-horizon">第一步：PowerDNS 設定「雙向解析（Split-Horizon）」
+</h2><p>在你的 PowerDNS（假設 IP 是 <code>192.168.1.254</code>）中，我們建立一個 Zone，並利用 <strong>CNAME</strong> 進行優雅的分流：</p>
+<ol>
+<li>
+<p><strong>建立主網域的 A 紀錄</strong>，指向你的 <strong>NPM IP</strong>（假設 NPM 是 <code>192.168.1.110</code>）：</p>
+<ul>
+<li><code>npm.yourdomain.dedyn.io</code> $\rightarrow$ <strong>A</strong> $\rightarrow$ <code>192.168.1.110</code></li>
+</ul>
+</li>
+<li>
+<p><strong>為其他服務（包括 DoH 與 NetBox）設定 CNAME</strong>，全部指向 <code>npm</code>：</p>
+<ul>
+<li>
+<p><code>dns.yourdomain.dedyn.io</code> $\rightarrow$ <strong>CNAME</strong> $\rightarrow$ <code>npm.yourdomain.dedyn.io</code></p>
+</li>
+<li>
+<p><code>netbox.yourdomain.dedyn.io</code> $\rightarrow$ <strong>CNAME</strong> $\rightarrow$ <code>npm.yourdomain.dedyn.io</code></p>
+</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>💡 <strong>大神的思維</strong>：</p>
+<p>這樣做最優雅！未來不論增加多少服務，DNS 紀錄一律 CNAME 到 <code>npm</code>。如果 NPM 更換內網 IP，你只需要修改 <code>npm</code> 的那一筆 A 紀錄，全內網的服務就自動同步過去了。</p>
+</blockquote>
+<h2 id="第二步部署與設定-dnsdistdoh-的靈魂橋樑">第二步：部署與設定 <code>dnsdist</code>（DoH 的靈魂橋樑）
+</h2><p>因為 PowerDNS 本身<strong>不支援</strong>直接接收 HTTPS（DoH）請求。在業界，我們一定會在 PowerDNS 前面放一台 <strong><code>dnsdist</code></strong>（PowerDNS 官方開發的超強大 DNS 負載均衡器）來當「翻譯官」。</p>
+<p>你可以在 Docker 或單獨的 LXC 中安裝 <code>dnsdist</code>（假設 IP 為 <code>192.168.1.115</code>），並編輯其設定檔 <code>/etc/dnsdist/dnsdist.conf</code>：</p>
+<p>Lua</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- 1. 監聽本地的 8080 埠口，接收來自 NPM 解密後的「純 HTTP DoH 流量」
+</span></span><span class="line"><span class="cl">-- (路徑設為標準的 /dns-query)
+</span></span><span class="line"><span class="cl">addDOHLocal(&#34;0.0.0.0:8080&#34;, &#34;&#34;, &#34;&#34;, &#34;/dns-query&#34;, { reusePort=true })
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 2. 設定後端實際進行解析的 PowerDNS 伺服器
+</span></span><span class="line"><span class="cl">newServer({address=&#34;192.168.1.254:53&#34;, name=&#34;powerdns-backend&#34;})
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>設定完後啟動 <code>dnsdist</code>。此時，如果有 HTTP 請求打到 <code>http://192.168.1.115:8080/dns-query</code>，它就會自動轉成標準 DNS 向 PowerDNS 查詢。</em></p>
+<h2 id="第三步在-npm-中配置doh-反向代理">第三步：在 NPM 中配置「DoH 反向代理」
+</h2><p>現在，我們要讓 NPM 來當最前端的防線，掛上你申請好的 deSEC 合法憑證：</p>
+<ol>
+<li>
+<p><strong>新增 Proxy Host</strong>：</p>
+<ul>
+<li>
+<p><strong>Domain Names</strong>：<code>dns.yourdomain.dedyn.io</code></p>
+</li>
+<li>
+<p><strong>Scheme</strong>：選擇 <strong><code>http</code></strong></p>
+</li>
+<li>
+<p><strong>Forward Hostname/IP</strong>：填入 <code>dnsdist</code> 的 IP（<code>192.168.1.115</code>）</p>
+</li>
+<li>
+<p><strong>Forward Port</strong>：填入 <code>8080</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>SSL 頁籤設定</strong>：</p>
+<ul>
+<li>
+<p>選擇你的 <strong>deSEC SSL 憑證</strong>。</p>
+</li>
+<li>
+<p>務必勾選 <strong>Force SSL</strong>（強制 HTTPS）。</p>
+</li>
+<li>
+<p>務必勾選 <strong>HTTP/2 Support</strong>（<strong>極重要！</strong> DoH 協定強制要求必須在 HTTP/2 或更高版本上運行）。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Advanced（進階設定）頁籤</strong>：</p>
+<p>貼上以下優化 Nginx 緩衝與標頭的參數，避免大型 DNS 解析封包被 Nginx 阻擋：</p>
+<p>Nginx</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">proxy_set_header Host $host;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Real-IP $remote_addr;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-Proto $scheme;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 針對 DoH 大流量優化快取緩衝區
+</span></span><span class="line"><span class="cl">proxy_buffers 8 16k;
+</span></span><span class="line"><span class="cl">proxy_buffer_size 32k;
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h2 id="第四步在-npm-中配置netbox-反向代理">第四步：在 NPM 中配置「NetBox 反向代理」
+</h2><p>既然 DNS 已經把 <code>netbox.yourdomain.dedyn.io</code> CNAME 到 NPM 了，我們順便把 NetBox 也一起收進來：</p>
+<ol>
+<li>
+<p><strong>新增 Proxy Host</strong>：</p>
+<ul>
+<li>
+<p><strong>Domain Names</strong>：<code>netbox.yourdomain.dedyn.io</code></p>
+</li>
+<li>
+<p><strong>Scheme</strong>：選擇 <strong><code>https</code></strong>（因為你的 NetBox LXC 預設強制自簽 HTTPS）</p>
+</li>
+<li>
+<p><strong>Forward Hostname/IP</strong>：NetBox LXC 的實際 IP（<code>192.168.1.120</code>）</p>
+</li>
+<li>
+<p><strong>Forward Port</strong>：<code>443</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>SSL 頁籤設定</strong>：</p>
+<ul>
+<li>選擇你的 <strong>deSEC SSL 憑證</strong>，勾選 <strong>Force SSL</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>Advanced（進階設定）頁籤</strong>：</p>
+<p>貼上我們之前研究出、能完美忽略後端自簽憑證報錯的設定：</p>
+<p>Nginx</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">proxy_ssl_verify off;
+</span></span><span class="line"><span class="cl">proxy_ssl_server_name on;
+</span></span><span class="line"><span class="cl">proxy_ssl_name $host;
+</span></span><span class="line"><span class="cl">proxy_ssl_protocols TLSv1.2 TLSv1.3;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">proxy_set_header Host $host;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Real-IP $remote_addr;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+</span></span><span class="line"><span class="cl">proxy_set_header X-Forwarded-Proto $scheme;
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h3 id="-最終達成的完美效果">🎯 最終達成的完美效果
+</h3><p>完成這四個步驟後，你就建立起了一套極其標準、安全的「HomeLab 邊緣閘道架構」：</p>
+<ul>
+<li>
+<p><strong>連線 NetBox</strong>：</p>
+<p>你在網址列打 <code>https://netbox.yourdomain.dedyn.io</code> $\rightarrow$ 流量走到 NPM $\rightarrow$ NPM 掛載合法憑證（瀏覽器顯示安全鎖頭） $\rightarrow$ NPM 安全地中繼給 NetBox LXC。<strong>完全不會再出現 502 或是 localhost 憑證錯誤！</strong></p>
+</li>
+<li>
+<p><strong>連線 DoH</strong>：</p>
+<p>你在手機或瀏覽器設定 DoH 伺服器為 <code>https://dns.yourdomain.dedyn.io/dns-query</code> $\rightarrow$ 手機發起加密 DNS 請求 $\rightarrow$ NPM 解密後丟給 dnsdist $\rightarrow$ PowerDNS 執行解析。<strong>全家設備都能享有安全、無警告、完全不洩漏隱私的自建加密 DNS 服務！</strong></p>
+</li>
+</ul>
+<p>![[static/Diagram 6.svg]]</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

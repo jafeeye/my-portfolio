@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="假設環境 可能錯誤\n換一個IP 在不同vlan 上 Port被擋 host解析錯誤 基本上遇到10.100.100.x，就要確認4台機器是不是都在vlan 100 上，並可以互相連線\n1 2 3 4 5 6 7 8 9 10 11 Core / Distribution │ ┌────────────┴────────────┐ │ │ Firewall / NSX L3 Switch ACL │ │ ┌────────┼────────┐ │ │ │ VLAN 100 VLAN 25 VLAN 130 Server Illumio Management 10.100.100 10.100.25 10.100.130 切出來的Vlan\n">
+<title>illumio Debug</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/illumio-debug/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="illumio Debug">
+<meta property='og:description' content="假設環境 可能錯誤\n換一個IP 在不同vlan 上 Port被擋 host解析錯誤 基本上遇到10.100.100.x，就要確認4台機器是不是都在vlan 100 上，並可以互相連線\n1 2 3 4 5 6 7 8 9 10 11 Core / Distribution │ ┌────────────┴────────────┐ │ │ Firewall / NSX L3 Switch ACL │ │ ┌────────┼────────┐ │ │ │ VLAN 100 VLAN 25 VLAN 130 Server Illumio Management 10.100.100 10.100.25 10.100.130 切出來的Vlan\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/illumio-debug/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-22T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="illumio Debug">
+<meta name="twitter:description" content="假設環境 可能錯誤\n換一個IP 在不同vlan 上 Port被擋 host解析錯誤 基本上遇到10.100.100.x，就要確認4台機器是不是都在vlan 100 上，並可以互相連線\n1 2 3 4 5 6 7 8 9 10 11 Core / Distribution │ ┌────────────┴────────────┐ │ │ Firewall / NSX L3 Switch ACL │ │ ┌────────┼────────┐ │ │ │ VLAN 100 VLAN 25 VLAN 130 Server Illumio Management 10.100.100 10.100.25 10.100.130 切出來的Vlan\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#假設環境">假設環境</a></li>
+    <li><a href="#調整">調整</a></li>
+    <li><a href="#資料倒回-異地dr">資料倒回 (異地DR)</a></li>
+    <li><a href="#負載平衡">負載平衡</a></li>
+    <li><a href="#反向代理負載平衡">反向代理+負載平衡</a></li>
+    <li><a href="#升版">升版</a></li>
+    <li><a href="#防火牆阻擋測試">防火牆阻擋測試</a></li>
+    <li><a href="#安裝agent-測試">安裝Agent 測試</a></li>
+    <li><a href="#測試iops">測試IOPS</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/illumio-debug/">illumio Debug</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-08-22T00:00:00Z'>Aug 22, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="假設環境">假設環境
+</h2><p>可能錯誤</p>
+<ul>
+<li>換一個IP</li>
+<li>在不同vlan 上</li>
+<li>Port被擋</li>
+<li>host解析錯誤</li>
+</ul>
+<p>基本上遇到10.100.100.x，就要確認4台機器是不是都在vlan 100 上，並可以互相連線</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">                    Core / Distribution
+</span></span><span class="line"><span class="cl">                           │
+</span></span><span class="line"><span class="cl">              ┌────────────┴────────────┐
+</span></span><span class="line"><span class="cl">              │                         │
+</span></span><span class="line"><span class="cl">         Firewall / NSX            L3 Switch ACL
+</span></span><span class="line"><span class="cl">              │                         │
+</span></span><span class="line"><span class="cl">     ┌────────┼────────┐
+</span></span><span class="line"><span class="cl">     │        │        │
+</span></span><span class="line"><span class="cl"> VLAN 100  VLAN 25  VLAN 130
+</span></span><span class="line"><span class="cl"> Server    Illumio    Management
+</span></span><span class="line"><span class="cl">10.100.100 10.100.25 10.100.130
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>切出來的Vlan</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">10.100.101.0/24  VMware
+</span></span><span class="line"><span class="cl">10.100.102.0/24  Hyper-V
+</span></span><span class="line"><span class="cl">10.100.103.0/24  Nutanix
+</span></span><span class="line"><span class="cl">10.100.104.0/24  Illumio / Security
+</span></span><span class="line"><span class="cl">10.100.110.0/24  Windows Servers
+</span></span><span class="line"><span class="cl">10.100.120.0/24  Management
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查網路指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip route get 10.100.104.216
+</span></span><span class="line"><span class="cl">ip neigh show 10.100.104.216
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>叢集檢查指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env check
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-status
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-members
+</span></span><span class="line"><span class="cl">## 叢集停止
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-stop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Log 所有檔案</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">ls</span> <span class="o">-</span><span class="n">lah</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>憑證問題
+自簽2層在snc0或2x2都可以順利安裝</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">illumio-pce-env setup --test 5 --list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260822170931.png"
+    alt=""
+    loading="lazy"
+>
+修掉下面錯誤
+<img
+    src="/my-portfolio/Pasted%20image%2020260822170003.png"
+    alt=""
+    loading="lazy"
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#改擁有者</span>
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span><span class="p">:</span><span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#改執行權限</span>
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">400</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#改runtime.yml 權限</span>
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">640</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">runtime_env</span><span class="o">.</span><span class="n">yml</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260822170723.png"
+    alt=""
+    loading="lazy"
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">沒有三層憑證的意思，指令自簽不用理他，只要下面pass一樣可以啟動
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>換憑證</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">ca</span><span class="o">-</span><span class="n">trust</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">anchors</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">                   core0 PARTIAL
+</span></span><span class="line"><span class="cl">                         │
+</span></span><span class="line"><span class="cl">              cluster-members alive?
+</span></span><span class="line"><span class="cl">                    /          \
+</span></span><span class="line"><span class="cl">                  YES           NO
+</span></span><span class="line"><span class="cl">                   │             │
+</span></span><span class="line"><span class="cl">            查 core0 service    查網路/Consul
+</span></span><span class="line"><span class="cl">                   │
+</span></span><span class="line"><span class="cl">          哪個 required service 缺？
+</span></span><span class="line"><span class="cl">                   │
+</span></span><span class="line"><span class="cl">          ┌────────┼────────┐
+</span></span><span class="line"><span class="cl">        port      bind IP    config
+</span></span><span class="line"><span class="cl">       衝突       /NIC       /殘留資料
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>連線測試
+dig、nslookup 本身不能查hosts裡面檔案,ping會去讀hosts</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 先確認 OS 現在解析正確
+</span></span><span class="line"><span class="cl">hostname -f
+</span></span><span class="line"><span class="cl">getent hosts sandra-data1
+</span></span><span class="line"><span class="cl">getent hosts sandra-data1.dpdns.org
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 再確認四台名稱
+</span></span><span class="line"><span class="cl">getent hosts sandra-core0.dpdns.org
+</span></span><span class="line"><span class="cl">getent hosts sandra-core1.dpdns.org
+</span></span><span class="line"><span class="cl">getent hosts sandra-data0.dpdns.org
+</span></span><span class="line"><span class="cl">getent hosts sandra-data1.dpdns.org
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>調整特殊閥值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">illumio-pce-env metrics -h
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="調整">調整
+</h2><p>換IP ：不能直接改yml然後runlevel1到runlevel5，因為consul.json會殘留紀錄</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 1.stop
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl stop
+</span></span><span class="line"><span class="cl">## 2.reset (全部重置包括db)
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl reset
+</span></span><span class="line"><span class="cl">## 3.env check
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env check
+</span></span><span class="line"><span class="cl">## 4.cert check
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-env setup --test 5 --list
+</span></span><span class="line"><span class="cl">## 5.start runlvel 1
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl start --runlevel 1
+</span></span><span class="line"><span class="cl">## 6. 確認跑到running
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl cluster-status -w
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## ------------只有第一台要貼完，分隔線上面貼另外三台
+</span></span><span class="line"><span class="cl">## 7. 重建db
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management setup
+</span></span><span class="line"><span class="cl">## 8. 跑到runlvel 5
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl start --runlevel 5
+</span></span><span class="line"><span class="cl">## 9. 設帳號
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-db-management create-domain --user-name admin@bd1.dev --full-name &#39;admin&#39; --org-name &#39;Office.&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="mf">1.4</span><span class="err">台執行</span> <span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">stop</span>
+</span></span><span class="line"><span class="cl"><span class="mf">2.</span><span class="err">改完</span><span class="n">yml的ip執行確認env</span> <span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">env</span> <span class="n">check</span>
+</span></span><span class="line"><span class="cl"><span class="mf">3.</span><span class="err">確認憑證無問題</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">env</span> <span class="n">setup</span> <span class="o">--</span><span class="n">test</span> <span class="mi">5</span> <span class="o">--</span><span class="n">list</span>
+</span></span><span class="line"><span class="cl"><span class="mf">4.</span><span class="err">在隨便其中一台執行</span> <span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">cluster</span><span class="o">-</span><span class="n">join</span> <span class="o">&lt;</span><span class="ne">IP</span><span class="o">&gt;</span><span class="err">，然後那台被加入</span><span class="n">IP那台啟動sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">start</span> <span class="o">--</span><span class="n">runlevel</span> <span class="mi">1</span><span class="err">，並依序加入多台</span>
+</span></span><span class="line"><span class="cl"><span class="mf">5.</span><span class="err">確認</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">runtime</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">consul</span><span class="o">/</span><span class="n">consul</span><span class="o">.</span><span class="n">json</span> <span class="err">的</span><span class="n">IP是否更新</span>
+</span></span><span class="line"><span class="cl"><span class="mf">6.</span><span class="err">使用</span><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">cluster</span><span class="o">-</span><span class="n">members</span> <span class="err">確認各台狀況</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">*</span><span class="err">如果單純改</span><span class="n">yml切去runlevel1是會出錯的</span><span class="err">，因為</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">runtime</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">consul</span><span class="o">/</span><span class="n">consul</span><span class="o">.</span><span class="n">json</span> <span class="err">殘留舊叢集</span><span class="ne">IP</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>sh快速重置整台PCE</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 1.stop
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl stop
+</span></span><span class="line"><span class="cl">## 2.reset (全部重置包括db)
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce /opt/illumio-pce/illumio-pce-ctl reset
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>sh快速重置db  (用於snc0快速初始化帳號)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">start</span> <span class="o">--</span><span class="n">runlevel</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">cluster</span><span class="o">-</span><span class="n">status</span> <span class="o">-</span><span class="n">w</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">drop</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">setup</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">start</span> <span class="o">--</span><span class="n">runlevel</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">cluster</span><span class="o">-</span><span class="n">status</span> <span class="o">-</span><span class="n">w</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">create</span><span class="o">-</span><span class="n">domain</span> <span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">name</span> <span class="n">admin</span><span class="err">@</span><span class="n">illumio</span><span class="o">-</span><span class="n">kevin</span><span class="o">.</span><span class="n">bd1</span><span class="o">.</span><span class="n">dev</span> <span class="o">--</span><span class="n">full</span><span class="o">-</span><span class="n">name</span> <span class="s1">&#39;admin&#39;</span> <span class="o">--</span><span class="n">org</span><span class="o">-</span><span class="n">name</span> <span class="s1">&#39;GSS.&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">ven</span><span class="o">-</span><span class="n">software</span><span class="o">-</span><span class="n">install</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">ven</span><span class="o">-</span><span class="n">bundle</span><span class="o">-</span><span class="mf">25.2</span><span class="o">.</span><span class="mi">20</span><span class="o">-</span><span class="mf">2018.</span><span class="n">tar</span><span class="o">.</span><span class="n">bz2</span> <span class="o">--</span><span class="n">compatibility</span><span class="o">-</span><span class="n">matrix</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">release</span><span class="o">-</span><span class="n">compatibility</span><span class="o">-</span><span class="mi">81</span><span class="o">-</span><span class="mf">494.</span><span class="n">tar</span><span class="o">.</span><span class="n">bz2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>更換憑證</p>
+<p>解除安裝</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">## 1.移除</span>
+</span></span><span class="line"><span class="cl"><span class="n">rpm</span> <span class="o">-</span><span class="n">e</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span>
+</span></span><span class="line"><span class="cl"><span class="n">rpm</span> <span class="o">-</span><span class="n">e</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ui</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## 2.刪除目錄</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一開始部屬</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">記得一開始裝英文版rockylinux
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="資料倒回-異地dr">資料倒回 (異地DR)
+</h2><p>假設兩台不同域名
+舊 SNC：illumio-kevin.dev
+新 SNC：illumio-test.bd1.dev</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">新 SNC 建好
+</span></span><span class="line"><span class="cl">→ runlevel 1
+</span></span><span class="line"><span class="cl">→ database setup
+</span></span><span class="line"><span class="cl">→ restore policy DB
+</span></span><span class="line"><span class="cl">→ migrate
+</span></span><span class="line"><span class="cl">→ restore traffic DB（如果有）
+</span></span><span class="line"><span class="cl">→ runlevel 5
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>先確認新舊 PCE 版本 <code>rpm -qa | grep '^illumio-pce'</code></li>
+<li>舊 SNC 備份 Policy DB</li>
+<li>舊SNC  備份 Traffic DB</li>
+<li>停止新SNC，啟動到 Runlevel 1</li>
+<li>Setup 新 SNC Database</li>
+<li>Restore Policy DB</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">restore</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">file</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">restore</span><span class="o">/</span><span class="n">policy</span><span class="o">-</span><span class="n">db</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">update</span><span class="o">-</span><span class="n">fqdn</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>sudo -u ilo-pce illumio-pce-db-management migrate</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl req -x509 -newkey rsa:4096 \
+</span></span><span class="line"><span class="cl">  -sha256 \
+</span></span><span class="line"><span class="cl">  -days 3650 \
+</span></span><span class="line"><span class="cl">  -nodes \
+</span></span><span class="line"><span class="cl">  -keyout bd1-dev.key \
+</span></span><span class="line"><span class="cl">  -out bd1-dev.crt \
+</span></span><span class="line"><span class="cl">  -subj &#34;/C=TW/ST=Taiwan/L=Taipei/O=Lab/OU=Illumio/CN=*.bd1.dev&#34; \
+</span></span><span class="line"><span class="cl">  -addext &#34;subjectAltName=DNS:*.bd1.dev,DNS:bd1.dev&#34; \
+</span></span><span class="line"><span class="cl">  -addext &#34;keyUsage=critical,digitalSignature,keyEncipherment&#34; \
+</span></span><span class="line"><span class="cl">  -addext &#34;extendedKeyUsage=serverAuth&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">cp</span> <span class="n">bd1</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">crt</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl"><span class="n">cp</span> <span class="n">bd1</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">key</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="n">root</span><span class="p">:</span><span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span><span class="p">:</span><span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">400</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">key</span>
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">444</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">ca</span><span class="o">-</span><span class="n">trust</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">anchors</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl"><span class="n">update</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">trust</span> <span class="n">extract</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">openssl</span> <span class="n">x509</span> <span class="o">-</span><span class="ow">in</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span> <span class="o">-</span><span class="n">out</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">illumio_ca</span><span class="o">.</span><span class="n">pem</span>
+</span></span><span class="line"><span class="cl"><span class="n">cp</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">cert</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">ca</span><span class="o">-</span><span class="n">trust</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">anchors</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">crt</span>
+</span></span><span class="line"><span class="cl"><span class="n">update</span><span class="o">-</span><span class="n">ca</span><span class="o">-</span><span class="n">trust</span> <span class="n">extract</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">env</span> <span class="n">check</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>腳本</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">stop</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">env</span> <span class="n">check</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">start</span> <span class="o">--</span><span class="n">runlevel</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">setup</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">restore</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">file</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">restore</span><span class="o">/</span><span class="n">policy</span><span class="o">-</span><span class="n">db</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">--</span><span class="n">update</span><span class="o">-</span><span class="n">fqdn</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">db</span><span class="o">-</span><span class="n">management</span> <span class="n">migrate</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">set</span><span class="o">-</span><span class="n">runlevel</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="o">-</span><span class="n">u</span> <span class="n">ilo</span><span class="o">-</span><span class="n">pce</span> <span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">-</span><span class="n">ctl</span> <span class="n">status</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="負載平衡">負載平衡
+</h2><p>DNS Load Balancing (DNS round-robin)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pce_fqdn: xxx.dpdns.org
+</span></span><span class="line"><span class="cl">service_discovery_fqdn: xxx.dpdns.org
+</span></span><span class="line"><span class="cl">cluster_public_ips:
+</span></span><span class="line"><span class="cl">  cluster_fqdn:
+</span></span><span class="line"><span class="cl">  - 192.168.8.25
+</span></span><span class="line"><span class="cl">  - 192.168.8.26
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>HAProxy</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">                    DNS
+</span></span><span class="line"><span class="cl">                     │
+</span></span><span class="line"><span class="cl">		        illumio.bd1.dev
+</span></span><span class="line"><span class="cl">                     │
+</span></span><span class="line"><span class="cl">                     ▼
+</span></span><span class="line"><span class="cl">              HAProxy VIP
+</span></span><span class="line"><span class="cl">            192.168.8.20
+</span></span><span class="line"><span class="cl">                     │
+</span></span><span class="line"><span class="cl">             ┌───────┴───────┐
+</span></span><span class="line"><span class="cl">             │               │
+</span></span><span class="line"><span class="cl">          core0             core1
+</span></span><span class="line"><span class="cl">      192.168.8.25      192.168.8.26
+</span></span><span class="line"><span class="cl">          :8443             :8443
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        data0             data1
+</span></span><span class="line"><span class="cl">    192.168.8.27      192.168.8.28
+</span></span><span class="line"><span class="cl">        不進 LB            不進 LB
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">xxx.pdn.dpdns.org.   A   192.168.8.20
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="反向代理負載平衡">反向代理+負載平衡
+</h2><h2 id="升版">升版
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl stop --wait 
+</span></span><span class="line"><span class="cl">rpm -Uvh illumio-pce-26.2.10-3013.el9.x86_64.rpm illumio-pce-ui-26.2.10.UI1-3247.x86_64.rpm
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl check-env 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl start --runlevel 1 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl status -svw 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl get-runlevel 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-db-management migrate 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl set-runlevel 5 
+</span></span><span class="line"><span class="cl">sudo -u ilo-pce illumio-pce-ctl status -svw
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="防火牆阻擋測試">防火牆阻擋測試
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260823124613.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>pve的放火牆無法立即阻斷，要等原本連線斷掉才生效
+測試一定要兩台雙方測試 因為可以只擋一邊</p>
+<h2 id="安裝agent-測試">安裝Agent 測試
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">8443這邊代替443 port功能
+</span></span><span class="line"><span class="cl">ipconfig /flushdns
+</span></span><span class="line"><span class="cl">Test-NetConnection test.dpdns.org -Port 8443
+</span></span><span class="line"><span class="cl">curl.exe -vk https://test.dpdns.org:8443
+</span></span><span class="line"><span class="cl">Resolve-DnsName test.dpdns.org
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">resolvectl flush-caches
+</span></span><span class="line"><span class="cl">ip -br addr
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>core0 (結束用pkill ncat)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-open-ports.sh" data-lang="open-ports.sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">PORTS</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>seq <span class="m">3100</span> 3600<span class="k">)</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="k">$(</span>seq <span class="m">5100</span> 6300<span class="k">)</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="k">$(</span>seq <span class="m">8000</span> 8400<span class="k">)</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">8443
+</span></span></span><span class="line"><span class="cl"><span class="k">$(</span>seq <span class="m">11200</span> 11300<span class="k">)</span><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="k">$(</span>seq <span class="m">24200</span> 25300<span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> port in <span class="nv">$PORTS</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    ncat -lk <span class="s2">&#34;</span><span class="nv">$port</span><span class="s2">&#34;</span> &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Fake TCP listeners started.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Processes: </span><span class="k">$(</span>pgrep -c ncat<span class="k">)</span><span class="s2">&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>core1</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nmap -Pn -n \
+</span></span><span class="line"><span class="cl">  -p 3100-3600,5100-6300,8000-8400,8443,11200-11300,24200-25300 \
+</span></span><span class="line"><span class="cl">  192.168.8.25
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>nc 快速測試</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">雙向 nc -lvp 8300 / nc &lt;ip&gt; &lt;port&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">conntrack -D -p tcp -d 192.168.8.26 --dport 8300
+</span></span><span class="line"><span class="cl">conntrack -D -p tcp -d 192.168.8.26
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>stateful firewall 有狀態防火牆，會記住之前流量放行</p>
+<h2 id="測試iops">測試IOPS
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">dnf</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">fio</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fio</span> <span class="o">--</span><span class="n">name</span><span class="o">=</span><span class="n">illumio</span><span class="o">-</span><span class="n">iops</span><span class="o">-</span><span class="n">test</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">filename</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">illumio</span><span class="o">-</span><span class="n">pce</span><span class="o">/</span><span class="n">fio</span><span class="o">-</span><span class="n">test</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="n">G</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">bs</span><span class="o">=</span><span class="mi">8</span><span class="n">k</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">rw</span><span class="o">=</span><span class="n">randwrite</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">iodepth</span><span class="o">=</span><span class="mi">32</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">direct</span><span class="o">=</span><span class="mi">1</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">runtime</span><span class="o">=</span><span class="mi">60</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">time_based</span> \
+</span></span><span class="line"><span class="cl">    <span class="o">--</span><span class="n">group_reporting</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

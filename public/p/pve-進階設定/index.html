@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+<title>PVE 進階設定</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/pve-%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="PVE 進階設定">
+<meta property='og:description' content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/pve-%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-28T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="PVE 進階設定">
+<meta name="twitter:description" content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#增加lvm">增加LVM</a></li>
+    <li><a href="#優化-pve-調整swap">優化: PVE 調整Swap</a></li>
+    <li><a href="#優化-e1000斷線問題">優化: E1000斷線問題</a></li>
+    <li><a href="#優化-刪除local-lvm">優化: 刪除local-lvm</a></li>
+    <li><a href="#優化-固定網卡名稱">優化: 固定網卡名稱</a></li>
+    <li><a href="#usb-網卡優化設定">USB 網卡優化設定</a></li>
+    <li><a href="#使用nvme開機">使用NVME開機</a></li>
+    <li><a href="#驅動安裝">驅動安裝</a></li>
+    <li><a href="#網路">網路</a>
+      <ol>
+        <li><a href="#sdn取得ip">SDN取得IP</a></li>
+        <li><a href="#sdn取得dnscloud-init">SDN取得DNS+cloud-init</a></li>
+        <li><a href="#sdn-fabrics">SDN Fabrics</a></li>
+        <li><a href="#opnsense--切vlan">OPNSense + 切Vlan</a></li>
+        <li><a href="#pve網口設定">PVE網口設定</a></li>
+        <li><a href="#bond">BOND</a></li>
+        <li><a href="#ospf">OSPF</a></li>
+        <li><a href="#網路路由">網路路由</a></li>
+        <li><a href="#openvswtch">OpenVSwtch</a></li>
+      </ol>
+    </li>
+    <li><a href="#去虛擬化">去虛擬化</a></li>
+    <li><a href="#ha功能">HA功能</a></li>
+    <li><a href="#oci功能">OCI功能</a></li>
+    <li><a href="#ceph">ceph</a></li>
+    <li><a href="#lxc">LXC</a>
+      <ol>
+        <li><a href="#編輯lxc容器檔案">編輯LXC容器檔案</a></li>
+        <li><a href="#建立lxc容器">建立LXC容器</a></li>
+        <li><a href="#修改lxc設定">修改LXC設定</a></li>
+        <li><a href="#lxc-設定">LXC 設定</a></li>
+      </ol>
+    </li>
+    <li><a href="#addons-olivetin">Addons: Olivetin</a></li>
+    <li><a href="#addons--microvm">Addons : MicroVM</a></li>
+    <li><a href="#硬碟修改">硬碟修改</a>
+      <ol>
+        <li><a href="#匯入vm硬碟">匯入VM硬碟</a></li>
+        <li><a href="#修改vm硬碟大小">修改VM硬碟大小</a></li>
+        <li><a href="#轉換vm硬碟">轉換VM硬碟</a></li>
+        <li><a href="#lvm-擴容處理">LVM 擴容處理</a></li>
+      </ol>
+    </li>
+    <li><a href="#遷移">遷移</a>
+      <ol>
+        <li><a href="#遷移-從esxi">遷移: 從ESXi</a></li>
+        <li><a href="#遷移-p2v">遷移: P2V</a></li>
+        <li><a href="#遷移-migrate">遷移: Migrate</a></li>
+        <li><a href="#遷移-轉換至esxi">遷移: 轉換至ESXi</a></li>
+      </ol>
+    </li>
+    <li><a href="#啟用防火牆">啟用防火牆</a></li>
+    <li><a href="#增加本機額外儲存設備">增加本機額外儲存設備</a></li>
+    <li><a href="#pve-tools-9">PVE Tools 9</a></li>
+    <li><a href="#不同虛擬機下硬碟掛載到目前vm">不同虛擬機下硬碟掛載到目前VM</a></li>
+    <li><a href="#pve-使用vdsm掛載-iscsi">PVE 使用vDSM掛載 iSCSI</a></li>
+    <li><a href="#直通技術">直通技術</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#hyper-v-遷移至pve">Hyper-V 遷移至PVE</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#顯卡直通">顯卡直通</a></li>
+    <li><a href="#常用位置">常用位置</a></li>
+    <li><a href="#pve-共享目錄">PVE 共享目錄</a></li>
+    <li><a href="#正確刪除節點">正確刪除節點</a></li>
+    <li><a href="#全部退出節點">全部退出節點</a></li>
+    <li><a href="#叢集設定">叢集設定</a></li>
+    <li><a href="#建立ws-server-範本">建立WS Server 範本</a></li>
+    <li><a href="#安裝ｗin11">安裝Ｗin11</a></li>
+    <li><a href="#lxc-安裝cockit開啟共享">LXC 安裝cockit開啟共享</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
+    <li><a href="#匯入ova">匯入OVA</a></li>
+    <li><a href="#救援pve">救援PVE</a></li>
+    <li><a href="#模擬非x86-machines">模擬非x86 machines</a></li>
+    <li><a href="#使用xtermjs">使用xterm.js</a></li>
+    <li><a href="#更新pve">更新PVE</a></li>
+    <li><a href="#pve-高-io-delay">PVE 高 io delay</a>
+      <ol>
+        <li><a href="#6-確認是不是備份工作造成的">6. 確認是不是備份工作造成的</a></li>
+        <li><a href="#7-檢查是否有大量-swap-使用">7. 檢查是否有大量 Swap 使用</a></li>
+        <li><a href="#先確認實體磁碟現況">先確認實體磁碟現況</a></li>
+        <li><a href="#解法方向確認磁碟資訊後可以動手做">解法方向(確認磁碟資訊後可以動手做)</a></li>
+        <li><a href="#還需要確認的資訊">還需要確認的資訊</a></li>
+        <li><a href="#為什麼會這樣">為什麼會這樣</a></li>
+        <li><a href="#影響程度">影響程度</a></li>
+        <li><a href="#建議">建議</a></li>
+      </ol>
+    </li>
+    <li><a href="#進階功能">進階功能</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/pve-%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/">PVE 進階設定</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-02-28T00:00:00Z'>Feb 28, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    13 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="前言">前言
+</h2><p>PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;</p>
+<h2 id="增加lvm">增加LVM
+</h2><p>建議作法：建立獨立的 LVM-Thin</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1. 先確認硬碟代號
+</span></span><span class="line"><span class="cl">   到節點 → Disks，確認那顆 1TB 硬碟，例如：
+</span></span><span class="line"><span class="cl">   /dev/sdb
+</span></span><span class="line"><span class="cl">   千萬不要選到 Proxmox 系統碟。
+</span></span><span class="line"><span class="cl">2. 移除原本的 ext4 Storage 設定
+</span></span><span class="line"><span class="cl">   如果這顆硬碟曾經出現在：
+</span></span><span class="line"><span class="cl">   Datacenter → Storage
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">3.去Disk/Director
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4.Disk/Wipe Disk
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">5. 建立 LVM-Thin
+</span></span><span class="line"><span class="cl">   前往：
+</span></span><span class="line"><span class="cl">   節點 → Disks → LVM-Thin → Create: Thinpool
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="優化-pve-調整swap">優化: PVE 調整Swap
+</h2><p>預設PVE沒調整狀態下為60</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 強制清除目前所有高swap
+</span></span><span class="line"><span class="cl">swapoff -a &amp;&amp; swapon -a
+</span></span><span class="line"><span class="cl">## 查看目前swap狀態,預設沒調整為60
+</span></span><span class="line"><span class="cl">cat /proc/sys/vm/swappiness
+</span></span><span class="line"><span class="cl">## 臨時關閉swap為0
+</span></span><span class="line"><span class="cl">sysctl vm.swappiness=0
+</span></span><span class="line"><span class="cl">## 永久調整,swap都為0
+</span></span><span class="line"><span class="cl">nano /etc/sysctl.conf &gt;&gt; vm.swappiness=0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><a href="https://blog.welain.com/articles/2023/notes-about-pve/">排障笔记-解决PVE中节点SWAP占用过高问题&amp;一些关于PVE宿主硬盘的题外话</a></li>
+</ul>
+<h2 id="優化-e1000斷線問題">優化: E1000斷線問題
+</h2><p>通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
+除錯顯示log</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">journalctl -b -1 -e 
+</span></span><span class="line"><span class="cl">journalctl --until &#34;2026-02-27 11:00:00&#34; -n 100 -r
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>發現這條，懷疑是驅動出現 <code>Detected Hardware Unit Hang</code>，關閉電源休眠可解決問題
+<code>Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 關閉卸載功能 Hardware Unit Hang</span>
+</span></span><span class="line"><span class="cl"><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">enx00e01c680083</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span> 
+</span></span><span class="line"><span class="cl"><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">eno1</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 重新啟動網卡服務 </span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">restart</span> <span class="n">networking</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Proxmox 重啟後 <code>ethtool</code> 的設定會消失，請編輯網路設定檔：</p>
+<ol>
+<li>在 <code>iface eno1 inet manual</code> 下方增加一行： <code>post-up /usr/sbin/ethtool -K eno1 tso off gso off</code></li>
+</ol>
+<h2 id="優化-刪除local-lvm">優化: 刪除local-lvm
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lvremove pve/data
+</span></span><span class="line"><span class="cl">lvextend -l +100%FREE -r pve/root
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="優化-固定網卡名稱">優化: 固定網卡名稱
+</h2><p>实现方案(pve9)</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th><strong>網卡名稱範例</strong></th>
+					<th><strong>命名類型</strong></th>
+					<th><strong>實際代表的硬體意義</strong></th>
+					<th><strong>常見出現場景</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong><code>eno1</code></strong></td>
+					<td>板載 (Onboard)</td>
+					<td>主機板內建的有線網卡</td>
+					<td>實體伺服器、PC 主機板原生網口</td>
+			</tr>
+			<tr>
+					<td><strong><code>ens18</code></strong></td>
+					<td>插槽 (Slot)</td>
+					<td>虛擬或實體熱插拔插槽第 18 號</td>
+					<td><strong>PVE 虛擬機 (VM) 內部</strong></td>
+			</tr>
+			<tr>
+					<td><strong><code>enp1s0</code></strong></td>
+					<td>匯流排 (PCIe)</td>
+					<td>PCIe Bus 1, Slot 0 的實體網卡</td>
+					<td>實體機補插的獨立網卡、擴充卡</td>
+			</tr>
+			<tr>
+					<td><strong><code>nic0</code> / <code>eth0</code></strong></td>
+					<td>自訂 / 傳統</td>
+					<td>人為綁定 MAC 或老舊核心隨機分配</td>
+					<td>經維運優化後的環境、老舊 Linux</td>
+			</tr>
+			<tr>
+					<td>注意：在 Proxmox VE 9（基于 Debian 13）中，固定网卡名称的方式与 PVE 8（基于 Debian 12）有所不同，主要是因为 Debian 13 对 udev 规则的处理逻辑做了调整，传统的 70-persistent-net.rules 方式可能不再生效。</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>在 PVE 9 中，推荐通过 systemd 的 .link 配置文件 来固定网卡名称，这是更现代且兼容的方式。</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>步骤如下：</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<ol>
+<li>找出需要固定的网卡 MAC 地址</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ ip addr
+</span></span><span class="line"><span class="cl">2: eno1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">link/ether 04:d4:c4:57:af:9d brd ff:ff:ff:ff:ff:ff
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>创建 .link 配置文件<code>vi /etc/systemd/network/10-static-en219v.link</code> 内容为</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match] 
+</span></span><span class="line"><span class="cl">MACAddress=04:d4:c4:57:af:9d
+</span></span><span class="line"><span class="cl">[Link] 
+</span></span><span class="line"><span class="cl">Name=en219v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>修改 vmbr0 的配置
+因为一般都是远程操作，为了安全起见，重命名前后的两个网卡名字都加入到 vmbr0，以防万一出错时无法连接管理网络：<code>nano /etc/network/interfaces</code>内容为：</li>
+</ol>
+<p>目前对设备名称使用以下命名约定：</p>
+<ul>
+<li>以太网设备：en*，systemd 网络接口名称。此命名方案用于自版本 5.0 以来的新 Proxmox VE 安装。</li>
+<li>以太网设备：eth[N]，其中 0 ≤ N （eth0， eth1， …）此命名方案用于在5.0版本之前安装的Proxmox VE主机。升级到 5.0 时，名称将保持原样。</li>
+<li>网桥名称：vmbr[N]，其中 0 ≤ N ≤ 4094 （vmbr0 - vmbr4094）</li>
+<li>bond：bond[N]，其中 0 ≤ N （bond0， bond1， …）</li>
+<li>VLAN：只需将 VLAN 编号添加到设备名称中，用句点分隔（eno1.50、bond1.30）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">iface en219v inet manual
+</span></span><span class="line"><span class="cl">iface eno1 inet manual
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto vmbr0
+</span></span><span class="line"><span class="cl">iface vmbr0 inet static
+</span></span><span class="line"><span class="cl">       ......
+</span></span><span class="line"><span class="cl">       bridge-ports eno1 en219v
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>更新<code>update-initramfs -u -k all</code> 重启<code>reboot</code>之后查看网卡名称发现已经固定：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ ip addr 
+</span></span><span class="line"><span class="cl">2: en100g1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000 link/ether 8c:3a:8e:88:7d:5a brd ff:ff:ff:ff:ff:ff altname enx8c2a8e886d5a
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>修复 vmbr0 的 bridge-ports，把改名之前的网卡名字去掉。
+对于只有多个网卡的情况，操作要复杂一下，主要是需要区分是哪些网卡。如我这里有一台机器上有 100g 和 25g 两块双头网卡， 提供四个网口，其中 100g 网卡提供两个网口，25g 网卡提供两个网口。需要通过下面两个命令找出哪些网卡是 100g 网卡，哪些网卡是 25g 网卡， 记录好 mac 地址，然后再逐个网口进行操作：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip addr
+</span></span><span class="line"><span class="cl">lspci | grep Ethernet
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en25g1.link
+</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en25g2.link
+</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en100g1.link
+</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en100g2.link
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="usb-網卡優化設定">USB 網卡優化設定
+</h2><p>想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">auto</span> <span class="n">lo</span>
+</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">lo</span> <span class="n">inet</span> <span class="n">loopback</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">nic0</span> <span class="n">inet</span> <span class="n">manual</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">auto</span> <span class="n">vmbr0</span>
+</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">vmbr0</span> <span class="n">inet</span> <span class="k">static</span>
+</span></span><span class="line"><span class="cl">        <span class="n">address</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">8.90</span><span class="o">/</span><span class="mi">24</span>
+</span></span><span class="line"><span class="cl">        <span class="n">gateway</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">8.1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">ports</span> <span class="n">nic0</span> <span class="n">enx00e01c680083</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">stp</span> <span class="n">off</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">fd</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">post</span><span class="o">-</span><span class="n">up</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">enx00e01c680083</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">nic1</span> <span class="n">inet</span> <span class="n">manual</span>
+</span></span><span class="line"><span class="cl"><span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">interfaces</span><span class="o">.</span><span class="n">d</span><span class="o">/*</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡</li>
+<li>post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能</li>
+</ul>
+<h2 id="使用nvme開機">使用NVME開機
+</h2><ol>
+<li>在VM中Hardware增加PCI Device，勾選ROM-Bar</li>
+<li>Options中把Boot Order加入hostpci</li>
+<li>檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /sys/module/kvm_intel/parameters/nested   //檢查輸出為Y
+</span></span><span class="line"><span class="cl">qm set &lt;vmid&gt; --cpu host
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="驅動安裝">驅動安裝
+</h2><p>雖然安裝包有提供setup.exe可一鍵安裝，但必須去系統管理員檢查，把有缺的驅動補上</p>
+<p><code>Etherent</code> 控制裝置：<code>/NetKVM/OS類型</code> : VirtIO Net 網路驅動
+PCI 控制器裝置 、<code>PCI\VEN_1AF4&amp;DEV_1003</code>：<strong>VirtIO Console Driver</strong> <code>D:\vioserial\w10\amd64</code>
+大型存放控制器、PCI\VEN_1AF4&amp;DEV_105A：VirtIO Balloon Driver
+SCSI 控制器
+Virtiofs</p>
+<ul>
+<li><code>VEN_1AF4&amp;DEV_1002</code> or <code>VEN_1AF4&amp;DEV_1045</code>, the balloon device.</li>
+<li><code>VEN_1AF4&amp;DEV_1003</code> or <code>VEN_1AF4&amp;DEV_1043</code>, the paravirtual serial port device.</li>
+<li><code>VEN_1AF4&amp;DEV_1000</code> or <code>VEN_1AF4&amp;DEV_1041</code>, the network device.</li>
+<li><code>VEN_1AF4&amp;DEV_1001</code> or <code>VEN_1AF4&amp;DEV_1042</code>, the block device.</li>
+<li><code>VEN_1AF4&amp;DEV_1004</code> or <code>VEN_1AF4&amp;DEV_1048</code>, the SCSI block device.</li>
+<li><code>VEN_1AF4&amp;DEV_1005</code> or <code>VEN_1AF4&amp;DEV_1044</code>, the entropy source device.</li>
+<li><code>VEN_1B36&amp;DEV_0002</code>, the emulated PCI serial driver.</li>
+<li><code>VEN_1B36&amp;DEV_0100</code>, the video device.</li>
+<li><code>VEN_QEMU&amp;DEV_0001</code>, the guest panic device.</li>
+</ul>
+<h2 id="網路">網路
+</h2><h3 id="sdn取得ip">SDN取得IP
+</h3><ol>
+<li>先在Node的Shell 安裝dnsmasq，才能在IPAM正常發DHCP，並且安裝完停用dnsmasq服務 ，PVE會啟動專屬實例。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt install dnsmasq
+</span></span><span class="line"><span class="cl"># disable default instance
+</span></span><span class="line"><span class="cl">systemctl disable --now dnsmasq
+</span></span><span class="line"><span class="cl"># 檢查dnsmasq是否啟用
+</span></span><span class="line"><span class="cl">ps aux | grep dnsmasq
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>
+<p>目前SDN功能還算測試階段，在此按圖新增一個vnet
+<img
+    src="/my-portfolio/pvesdn20260228.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>在VM或LXC網路選擇vnet，當在虛擬機內有順利取得IP即完成</p>
+</li>
+<li>
+<p>在環境中實際是分配 <code>192.168.8.0/24</code> ，IPAM分配 <code>192.168.10.0/24</code>，如果想讓外面.8網段的設備順利連入.10網段，需做以下任一設定</p>
+<ul>
+<li>Windows 加入路由表
+<code>route -p add 192.168.10.0 mask 255.255.255.0 192.168.8.14</code>
+<code>route print</code></li>
+<li>路由器加入路由表</li>
+</ul>
+</li>
+<li>
+<p>現在PVE內部雖然不同網段虛擬機可以互通，但是遇到自訂iptables規則，客製化NAT規則要開啟流量轉發</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 檢查PVE封包轉發
+</span></span><span class="line"><span class="cl">cat /proc/sys/net/ipv4/ip_forward
+</span></span><span class="line"><span class="cl"># 開啟PVE封包轉發
+</span></span><span class="line"><span class="cl">sysctl -w net.ipv4.ip_forward=1
+</span></span><span class="line"><span class="cl"># 永久化
+</span></span><span class="line"><span class="cl">vi /etc/sysctl.conf 中加入 net.ipv4.ip_forward=1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="sdn取得dnscloud-init">SDN取得DNS+cloud-init
+</h3><ol>
+<li>編輯 <code>nano /etc/pve/sdn/subnets.cfg</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">subnet: local-192.168.10.0-24 
+</span></span><span class="line"><span class="cl">        vnet vnet0 
+</span></span><span class="line"><span class="cl">        dhcp-range start-address=192.168.10.150,end-address=192.168.10.250 
+</span></span><span class="line"><span class="cl">        gateway 192.168.10.1 
+</span></span><span class="line"><span class="cl">        snat 1
+</span></span><span class="line"><span class="cl">        dhcp-dns-server 192.168.10.123 
+</span></span><span class="line"><span class="cl">        reversednszone 10.168.192.in-addr.arpa.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>重啟SDN服務 <code>pvesh set /cluster/sdn</code></li>
+</ol>
+<p><a href="https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90">https://qiita.com/marokiki/items/38195892d0b1775c2385#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E7%94%A8%E3%81%84%E3%81%9Fvm%E3%81%AE%E4%BD%9C%E6%88%90</a></p>
+<h3 id="sdn-fabrics">SDN Fabrics
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">update</span>
+</span></span><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">install</span> <span class="n">frr</span> <span class="n">frr</span><span class="o">-</span><span class="n">pythontools</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">frr</span><span class="o">.</span><span class="n">service</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="opnsense--切vlan">OPNSense + 切Vlan
+</h3><ol>
+<li>Node/System/Network 在橋接網口開啟vlan aware</li>
+<li>建立VM那邊vlan填上設定的數值</li>
+</ol>
+<h3 id="pve網口設定">PVE網口設定
+</h3><p>在banner會放上IP位置是從檔案去改的 nano /etc/issue
+修改主機ip</p>
+<ol>
+<li>nano /etc/network/interfaces</li>
+<li>nano /etc/hosts
+<img
+    src="/my-portfolio/default-network-setup-bridge.svg"
+    alt=""
+    loading="lazy"
+>
+如果硬碟拔去新機器，無法進入畫面去檢查 <code>/etc/network/interfaces</code> ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可</li>
+</ol>
+<p>在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
+預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
+nano /etc/network/interfaces</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auto lo iface lo inet loopback 
+</span></span><span class="line"><span class="cl">iface enp1s0 inet manual 
+</span></span><span class="line"><span class="cl">iface enp2s0 inet manual 
+</span></span><span class="line"><span class="cl">iface enp3s0 inet manual 
+</span></span><span class="line"><span class="cl">auto vmbr0 
+</span></span><span class="line"><span class="cl">iface vmbr0 inet static 
+</span></span><span class="line"><span class="cl">address 192.168.1.100/24 
+</span></span><span class="line"><span class="cl">gateway 192.168.1.1 
+</span></span><span class="line"><span class="cl">bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
+</span></span><span class="line"><span class="cl">bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
+</span></span><span class="line"><span class="cl">bridge-fd 2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以指定不同vmbr 其他Ip 這樣就是雙管理口</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auto lo
+</span></span><span class="line"><span class="cl">iface lo inet loopback
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto nic0
+</span></span><span class="line"><span class="cl">iface nic0 inet manual
+</span></span><span class="line"><span class="cl">auto nic1
+</span></span><span class="line"><span class="cl">iface nic1 inet manual
+</span></span><span class="line"><span class="cl">auto nic2
+</span></span><span class="line"><span class="cl">iface nic2 inet manual
+</span></span><span class="line"><span class="cl">auto nic3
+</span></span><span class="line"><span class="cl">iface nic3 inet manual
+</span></span><span class="line"><span class="cl">iface wlp4s0 inet manual
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto vmbr0
+</span></span><span class="line"><span class="cl">iface vmbr0 inet static
+</span></span><span class="line"><span class="cl">        address 192.168.1.5/24
+</span></span><span class="line"><span class="cl">        gateway 192.168.1.1
+</span></span><span class="line"><span class="cl">        bridge-ports nic2
+</span></span><span class="line"><span class="cl">        bridge-stp on
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto vmbr1
+</span></span><span class="line"><span class="cl">iface vmbr1 inet manual
+</span></span><span class="line"><span class="cl">        address 192.168.8.49/24
+</span></span><span class="line"><span class="cl">        gateway 192.168.8.1
+</span></span><span class="line"><span class="cl">        bridge-ports nic1
+</span></span><span class="line"><span class="cl">        bridge-stp off
+</span></span><span class="line"><span class="cl">        bridge-fd 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">source /etc/network/interfaces.d/*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>關閉USB網卡 tso gso <code>post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260524123306.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>修改 hosts
+<img
+    src="/my-portfolio/Pasted%20image%2020260524125131.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="bond">BOND
+</h3><h3 id="ospf">OSPF
+</h3><h3 id="網路路由">網路路由
+</h3><p><img
+    src="/my-portfolio/default-network-setup-routed.svg"
+    alt=""
+    loading="lazy"
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">种常见情况是，你有一个公共 IP（在本例中假定为 198.51.100.5），以及一个用于 VM 的额外 IP 块 （203.0.113.16/28）。对于此类情况，我们建议进行以下设置：
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto lo
+</span></span><span class="line"><span class="cl">iface lo inet loopback
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto eno0
+</span></span><span class="line"><span class="cl">iface eno0 inet static
+</span></span><span class="line"><span class="cl">        address  198.51.100.5/29
+</span></span><span class="line"><span class="cl">        gateway  198.51.100.1
+</span></span><span class="line"><span class="cl">        post-up echo 1 &gt; /proc/sys/net/ipv4/ip_forward
+</span></span><span class="line"><span class="cl">        post-up echo 1 &gt; /proc/sys/net/ipv4/conf/eno0/proxy_arp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">auto vmbr0
+</span></span><span class="line"><span class="cl">iface vmbr0 inet static
+</span></span><span class="line"><span class="cl">        address  203.0.113.17/28
+</span></span><span class="line"><span class="cl">        bridge-ports none
+</span></span><span class="line"><span class="cl">        bridge-stp off
+</span></span><span class="line"><span class="cl">        bridge-fd 0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="openvswtch">OpenVSwtch
+</h3><p><a href="https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/">https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/</a></p>
+<h2 id="去虛擬化">去虛擬化
+</h2><h2 id="ha功能">HA功能
+</h2><h2 id="oci功能">OCI功能
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260524123542.png"
+    alt=""
+    loading="lazy"
+>
+目前功能還是有缺陷</p>
+<ul>
+<li><strong>映像相容性</strong>：非完整 OS 映像無法產生系統容器，需自行包裝或選擇更完整的映像 (Proxmox 官方說明)。</li>
+<li><strong>init 系統缺失</strong>：應用容器無 init，若需使用 systemd 等服務管理，必須手動安裝或改用系統容器。</li>
+<li><strong>網路與存儲設定</strong>：OCI 映像不包含 Proxmox 的網路或存儲設定，必須在容器建立後手動調整。</li>
+<li><strong>安全設定</strong>：在 9.1 版本中，OCI 容器仍缺少完整的 AppArmor 或 SELinux 支援，容器內部的安全策略需自行配置。</li>
+<li><strong>性能差異</strong>：LXC 直接使用 OCI 映像時，若映像體積過大，容器啟動時間可能延長；此外，某些映像使用的壓縮格式不受 LXC 支援，導致解壓失敗。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 下載並安裝最新 pveam pveam update # 直接拉取 OCI 映像 pveam add lxc --from-oci docker.io/library/redis:7.2 # 建立容器實例 pct create 100 /var/lib/vz/template/cache/lxc/redis-7.2.tar.gz --rootfs local-lvm:10 --net0 name=eth0,bridge=vmbr0,ip=dhcp</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ceph">ceph
+</h2><h2 id="lxc">LXC
+</h2><h3 id="編輯lxc容器檔案">編輯LXC容器檔案
+</h3><h3 id="建立lxc容器">建立LXC容器
+</h3><ol>
+<li>這邊使用PromCenter 示範
+<img
+    src="/my-portfolio/Pasted%20image%2020260519205443.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>apt update &amp;&amp; apt install -y curl</li>
+<li>apt update &amp;&amp; apt install -y sudo</li>
+<li>curl -fsSL <a href="https://proxcenter.io/install/community">https://proxcenter.io/install/community</a> | bash</li>
+<li>加入 API,Privilege Separation打勾取消
+<img
+    src="/my-portfolio/Pasted%20image%2020260519210337.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h3 id="修改lxc設定">修改LXC設定
+</h3><p>nano /etc/pve/lxc</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 10:232 rwm
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file 0 0
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/kvm dev/kvm none bind,create=file 0 0
+</span></span><span class="line"><span class="cl">lxc.cgroup.devices.allow: c 10:200 rwm # for compatibility
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 10:200 rwm
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/vhost-net dev/vhost-net none bind,create=file 0 0
+</span></span><span class="line"><span class="cl">lxc.apparmor.profile: unconfined
+</span></span><span class="line"><span class="cl">lxc.cap.drop:
+</span></span><span class="line"><span class="cl">------如果要加入共享核顯要加以下代碼--------
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 226:0 rwm
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 226:128 rwm
+</span></span><span class="line"><span class="cl">lxc.cgroup2.devices.allow: c 29:0 rwm
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
+</span></span><span class="line"><span class="cl">lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="lxc-設定">LXC 設定
+</h3><p>nesting=1 # 啟用容器嵌套,可在裡面跑docker</p>
+<h2 id="addons-olivetin">Addons: Olivetin
+</h2><p>找到下面路徑修改下面資料</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">root</span><span class="err">@</span><span class="n">pve</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="o">~</span><span class="c1"># find / -name &#34;*olivetin*&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">olivetin</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">conffiles</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">md5sums</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">info</span><span class="o">/</span><span class="n">olivetin</span><span class="o">.</span><span class="n">list</span>
+</span></span><span class="line"><span class="cl"><span class="n">find</span><span class="p">:</span> <span class="err">‘</span><span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">task</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">net</span><span class="err">’</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">argument</span>
+</span></span><span class="line"><span class="cl"><span class="n">find</span><span class="p">:</span> <span class="err">‘</span><span class="o">/</span><span class="n">proc</span><span class="o">/</span><span class="mi">12645</span><span class="o">/</span><span class="n">net</span><span class="err">’</span><span class="p">:</span> <span class="n">Invalid</span> <span class="n">argument</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">start</span> <span class="n">OliveTin</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">OliveTin</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl"><span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">OliveTin</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>無法登入可能是Datacenter的防火牆打開,LXC預設沒通過防火牆規則</p>
+<h2 id="addons--microvm">Addons : MicroVM
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">curl</span> <span class="o">-</span><span class="n">sLO</span> <span class="o">$</span><span class="p">(</span><span class="n">curl</span> <span class="o">-</span><span class="n">s</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">api</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">repos</span><span class="o">/</span><span class="n">rcarmo</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">microvm</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">latest</span> <span class="o">|</span> <span class="n">grep</span> <span class="n">browser_download_url</span> <span class="o">|</span> <span class="n">grep</span> <span class="s1">&#39;.deb&#39;</span> <span class="o">|</span> <span class="n">cut</span> <span class="o">-</span><span class="n">d</span><span class="s1">&#39;&#34;&#39;</span> <span class="o">-</span><span class="n">f4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">dpkg</span> <span class="o">-</span><span class="n">i</span> <span class="n">pve</span><span class="o">-</span><span class="n">microvm_</span><span class="o">*.</span><span class="n">deb</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260711232519.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="硬碟修改">硬碟修改
+</h2><h3 id="匯入vm硬碟">匯入VM硬碟
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">importdisk</span> <span class="o">&lt;</span><span class="n">VMID</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">虛擬機硬碟檔</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="err">匯入放置位置</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">format</span> <span class="o">&lt;</span><span class="err">格式</span><span class="o">&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">importdisk</span> <span class="mi">149</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="n">WIN</span><span class="o">-</span><span class="mi">8</span><span class="n">B2EOR9COIE</span><span class="o">.</span><span class="n">qcow2</span> <span class="n">local</span> <span class="o">--</span><span class="n">format</span> <span class="n">qcow2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>匯入成vmdk、raw不能做快照</li>
+<li>匯入放置位置如果在LVM，因為會轉成raw如果原VM硬碟大小為500G(實際占用可能為10G)，但會轉換時LVM真實大小小於500G直接報錯</li>
+<li>硬碟雖然可以不跟預設vm-101.qcow2 但是檔名不能有空白</li>
+<li>搬移qcow 至 /var/lib/vz/images/VMID編號  ，qm rescan &ndash;vmid 149</li>
+</ul>
+<h3 id="修改vm硬碟大小">修改VM硬碟大小
+</h3><p>當範本使用vmdk磁碟，Clone出來的大小為已配額大小，而且vmdk格式使用縮減指令，盡量使用qcow2
+縮減磁碟方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#1.使用GParted 開機移動磁區</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#2.當要Shrink虛擬磁碟，需透過指令縮減指令</span>
+</span></span><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="n">resize</span> <span class="o">--</span><span class="n">shrink</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">148</span><span class="o">/</span><span class="n">vm</span><span class="o">-</span><span class="mi">148</span><span class="o">-</span><span class="n">disk</span><span class="o">-</span><span class="mf">0.</span><span class="n">qcow2</span> <span class="mi">50</span><span class="n">G</span>
+</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">rescan</span> <span class="o">--</span><span class="n">vmid</span> <span class="mi">148</span>  <span class="o">//</span><span class="err">重新偵測硬碟大小</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#3.qemu-img info 可以檢查真實大小</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果還是沒有壓縮進去Windows能不能做最佳化,不行先修復磁碟錯誤,在最佳化磁碟就會變壓縮下來</p>
+<h3 id="轉換vm硬碟">轉換VM硬碟
+</h3><p>如果使用qcow+discard+ssd emulation+SCSI 較能隨時回收空間
+vmdk qcow 互轉
+cd /var/lib/vz/images/147/
+qemu-img convert -f vmdk -O qcow2 -c vm-147-disk-0.vmdk vm-147-disk-0.qcow2
+WEBGUI/Move disk 可以做轉換格式動作
+<img
+    src="/my-portfolio/Pasted%20image%2020260530180758.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="lvm-擴容處理">LVM 擴容處理
+</h3><p>常用幾種格式
+LVM:放光碟檔及一些不重要檔案，大概切16 GB ~ 32 GB
+LVM-thin:跑VM核心，剩下全部都給他
+Zfs-pool</p>
+<p>Vda：ioblock
+<img
+    src="/my-portfolio/Pasted%20image%2020260530181126.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>刪除Local-LVM (適用軟路由)
+預設PVE的儲存路徑如下，LVM 與LVM-Thin 預設是不一樣儲存區</p>
+<ul>
+<li><strong><code>local</code> (Directory 檔案系統)：</strong> 專門用來放 ISO 鏡像、LXC 範本、備份檔（Backup），它的實體路徑在 Debian 的 <code>/var/lib/vz</code>。</li>
+<li><strong><code>local-lvm</code> (LVM-Thin 區塊儲存)：</strong> 專門用來分配給虛擬機或容器當作硬碟（也就是你剛才砍掉的那個空間）。
+但其實有小技巧可以將兩個空間合併，這樣local才可以取回原本local-Lvm的容量</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vgs
+</span></span><span class="line"><span class="cl">## 將自由空間「全數塞給」根目錄（pve-root）
+</span></span><span class="line"><span class="cl">lvextend -l +100%FREE /dev/pve/root
+</span></span><span class="line"><span class="cl">## 重整檔案系統
+</span></span><span class="line"><span class="cl">resize2fs /dev/pve/root
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>系統合併Local-lvm後又要差分LVM分區</p>
+<ol>
+<li>因為整塊硬碟都是Ext4了，所以要使用GParted進入命令列</li>
+<li>輸入命令列</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1.檢查磁碟狀態
+</span></span><span class="line"><span class="cl">df -Th /
+</span></span><span class="line"><span class="cl">pvs
+</span></span><span class="line"><span class="cl">lvs 
+</span></span><span class="line"><span class="cl">vgs
+</span></span><span class="line"><span class="cl">vgscan 
+</span></span><span class="line"><span class="cl">vgchange -ay 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$lvs
+</span></span><span class="line"><span class="cl">LV   VG  Attr       LSize
+</span></span><span class="line"><span class="cl">root pve -wi-a----- &lt;944.87g
+</span></span><span class="line"><span class="cl">swap pve -wi-a-----    8.00g
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#確保分區沒被掛載，不然資料會損毀
+</span></span><span class="line"><span class="cl">$mount | grep pve-root
+</span></span><span class="line"><span class="cl">#檢查檔案系統有無問題
+</span></span><span class="line"><span class="cl">e2fsck -f /dev/pve/root
+</span></span><span class="line"><span class="cl">#縮小Ext4檔案系統
+</span></span><span class="line"><span class="cl">resize2fs /dev/pve/root 250G
+</span></span><span class="line"><span class="cl">#縮小LV (這邊為255g)
+</span></span><span class="line"><span class="cl">lvreduce -L 255G /dev/pve/root
+</span></span><span class="line"><span class="cl">#保險對齊一次檔案系統
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>LVM-Thin Pool 建立</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#看出目前剩餘空間
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$vgs
+</span></span><span class="line"><span class="cl">VG  #PV #LV #SN Attr   VSize    VFree
+</span></span><span class="line"><span class="cl">pve   1   2   0 wz--n- &lt;952.87g &lt;689.87g
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#建立LVM-Thin
+</span></span><span class="line"><span class="cl">$lvcreate -l 100%FREE --thinpool pve/data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#看現在系統所有lvs
+</span></span><span class="line"><span class="cl">$lvs
+</span></span><span class="line"><span class="cl">LV   VG  Attr       LSize    Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+</span></span><span class="line"><span class="cl">data pve twi-a-tz-- &lt;689.70g             0.00   10.42
+</span></span><span class="line"><span class="cl">root pve -wi-ao----  255.00g
+</span></span><span class="line"><span class="cl">swap pve -wi-ao----    8.00g
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>把剛剛創立的lvs掛載上去就完成LVM-thin建立
+<img
+    src="/my-portfolio/Pasted%20image%2020260718223625.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="遷移">遷移
+</h2><h3 id="遷移-從esxi">遷移: 從ESXi
+</h3><p>會有驅動問題，在Windows不能開機就選SATA
+<img
+    src="/my-portfolio/260404-pve.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="遷移-p2v">遷移: P2V
+</h3><ol>
+<li>把目前開機的作業系統,使用對應軟體可直接熱轉換</li>
+</ol>
+<ul>
+<li>Disk2vhd</li>
+<li>StarWind V2V</li>
+</ul>
+<ol start="2">
+<li>先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+<img
+    src="/my-portfolio/260404-v2v.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h3 id="遷移-migrate">遷移: Migrate
+</h3><p>在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
+最大影響快照在CT 模式做不了</p>
+<ul>
+<li>403 Permission check failed (changing feature flags (except nesting) is only allowed for root@pam)：LXC 打開 <code>features: nesting=1,keyctl=1</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020260711175052.png"
+    alt=""
+    loading="lazy"
+>
+如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow</li>
+</ul>
+<h3 id="遷移-轉換至esxi">遷移: 轉換至ESXi
+</h3><p><img
+    src="/my-portfolio/PixPin_2026-05-02_00-17-16.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="啟用防火牆">啟用防火牆
+</h2><ol>
+<li><code>Datacenter/Firewall/Option</code> 選項Firewall切換成Yes</li>
+<li><code>Node/Firewall</code> 選項Firewall切換成Yes</li>
+<li>VM選項Firewall切換成Yes</li>
+</ol>
+<h2 id="增加本機額外儲存設備">增加本機額外儲存設備
+</h2><ol>
+<li><code>Node/Disks/Directory</code> 在Create Directory 可將空磁碟格式化成Ext4</li>
+<li><code>Datacenter/Storage</code> 按add/Directory 可以選擇要掛載存放檔案類型 iso、虛擬硬碟等用途
+* ISO檔可以直接掛載NAS 存放區域節省本機空間</li>
+</ol>
+<h2 id="pve-tools-9">PVE Tools 9
+</h2><p>工具地址 <code>https://github.com/Mapleawaa/PVE-Tools-9</code></p>
+<h2 id="不同虛擬機下硬碟掛載到目前vm">不同虛擬機下硬碟掛載到目前VM
+</h2><p>正常的思路是把目前VMID做Detach，然後再把VM硬碟改名成目前使用VM，但對於想暫時掛載不方便，直接使用指令直接掛載</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">qm config 104 | grep disk
+</span></span><span class="line"><span class="cl"># 假設目標是 VM 101，且你要掛載為 scsi1
+</span></span><span class="line"><span class="cl">qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pve-使用vdsm掛載-iscsi">PVE 使用vDSM掛載 iSCSI
+</h2><ol>
+<li>
+<p>先在Node/VM的Hardware 新增一塊 Hard Disk (sata3)
+<img
+    src="/my-portfolio/Pasted-img-20260406141556.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>建立儲存集區
+![[Pasted-img-20260406142129.png]]</p>
+</li>
+<li>
+<p>在DSM 硬碟格式化成儲存空間
+![[Pasted-img-20260406142351.png]]</p>
+</li>
+<li>
+<p>SAN Manager 建立LUN及Target
+![[Pasted-img-20260406142723.png]]</p>
+</li>
+<li>
+<p>Windows 掛載iSCSi，選探索入口輸入Synology IP 位置，按下進階，連線方式跟啟動IP絕對不要用預設值不然會導致逾時無法連線，本機介面卡選ISCSI Inititaor、啟動器IP選擇自己本機電腦位置(有出現多個IP是因為電腦本身有多個網路介面)，如果iSCSI有設定密碼要勾選CHAP登入
+![[Pasted-img-20260406143049.png]]</p>
+</li>
+<li>
+<p>都設定正確就會在目標自動出現target，按連線即可
+![[Pasted-img-20260406143515.png]]</p>
+</li>
+</ol>
+<h2 id="直通技術">直通技術
+</h2><p>SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術</p>
+<p>ACS Patch
+Iommu group
+Gvt-g
+Io-pathrough
+ASUS BIOS 可開啟項目
+Iommu group
+SR-IOV
+VT-d
+進階/VMX
+Advanced/System Agent(SA)/VT-d
+PCH-FW Configuration/PTT，PTT Enable
+AMD RESET BUG</p>
+<p>使用SPICE 虛擬視窗+noVNC不偏移安裝方法<a href="https://pvecli.xuan2host.com/spice-novnc/">https://pvecli.xuan2host.com/spice-novnc/</a></p>
+<h4 id="hyper-v-遷移至pve">Hyper-V 遷移至PVE
+</h4><ol>
+<li>將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳</li>
+<li>輸入以下指令</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
+</span></span><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="nb">convert</span> <span class="o">-</span><span class="n">O</span> <span class="n">qcow2</span> <span class="n">WIN10</span><span class="o">.</span><span class="n">vhdx</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span>
+</span></span><span class="line"><span class="cl"><span class="n">mv</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">103</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">rescan</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>BIOS 選擇<strong>OVMF(UEFI)</strong>、<strong>q35</strong>，網路選擇<strong>E1000</strong></li>
+<li>最後要安裝Vitro-win驅動</li>
+</ol>
+<h2 id="顯卡直通">顯卡直通
+</h2><ol>
+<li>開啟主機板對應功能</li>
+</ol>
+<ul>
+<li>intel vt-d</li>
+<li>amd IOMMU SVM</li>
+</ul>
+<ol start="2">
+<li>追加grub
+nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet&rdquo; 後面打上 <code>intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream</code></li>
+</ol>
+<ul>
+<li>intel_iommu 和 amd_iommu=on 為開啟IOMMU</li>
+<li>video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）</li>
+<li>pcie_acs_override=downstream 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）</li>
+</ul>
+<ol start="2">
+<li>
+<p>更新grub
+update-grub</p>
+</li>
+<li>
+<p>增加vfio</p>
+</li>
+</ol>
+<p>屏蔽顯卡
+nano /etc/modprobe.d/pve-blacklist.conf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># nvidia
+</span></span><span class="line"><span class="cl">blacklist nouveau
+</span></span><span class="line"><span class="cl">blacklist nvidia
+</span></span><span class="line"><span class="cl">blacklist nvidiafb
+</span></span><span class="line"><span class="cl"># amd
+</span></span><span class="line"><span class="cl">blacklist amdgpu
+</span></span><span class="line"><span class="cl">blacklist radeon
+</span></span><span class="line"><span class="cl"># intel
+</span></span><span class="line"><span class="cl">blacklist snd_hda_codec_hdmi
+</span></span><span class="line"><span class="cl">blacklist snd_hda_intel
+</span></span><span class="line"><span class="cl">blacklist snd_hda_codec
+</span></span><span class="line"><span class="cl">blacklist snd_hda_core
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>無法正常關機Deadlock有時是開源驅動對顯卡的 <strong>電源狀態切換 (D3 state)</strong> 記得沒直通需求也要屏蔽nouveau
+GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet intel_iommu=on pcie_aspm=off acpi=force&rdquo;</p>
+</blockquote>
+<p>針對nvidia
+/etc/modprobe.d/kvm.conf</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">options kvm ignore_msrs=1 report_ignored_msrs=0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新編譯內核
+update-initramfs -u -k all</p>
+<p>如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會</p>
+<ol start="6">
+<li><code>VM/Hardwares/Display</code> 選擇none,關閉虛擬螢幕顯示</li>
+</ol>
+<h2 id="常用位置">常用位置
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="err">查看所有位置</span>
+</span></span><span class="line"><span class="cl"><span class="n">cat</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pve</span><span class="o">/</span><span class="n">storage</span><span class="o">.</span><span class="n">cfg</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">光碟映像檔</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">template</span><span class="o">/</span><span class="n">iso</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pve-共享目錄">PVE 共享目錄
+</h2><p><img
+    src="/my-portfolio/PixPin_2026-04-05_22-57-21.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>顯卡直通：增加PCI裝置/<strong>所有功能</strong>、 <strong>ROM-Bar</strong> 、 <strong>PCI-Express</strong>、<strong>主要GPU</strong></p>
+<blockquote>
+<p>主要GPU勾選會讓終端不顯示畫面，可以再安裝完驅動再勾</p>
+</blockquote>
+<h2 id="正確刪除節點">正確刪除節點
+</h2><p>因為會有<code>corosync.conf</code> 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C (<strong>此方法適用只退一台</strong>)</p>
+<ol>
+<li>先把Node C 關機 (用意為不送出Corosync 叢集廣播)</li>
+<li>在Node A或Node B 其中一台下指令 (A,B其中一台做完設定會自動同步)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1.先切去看節點名稱並記下
+</span></span><span class="line"><span class="cl">ls -la /etc/pve/nodes/
+</span></span><span class="line"><span class="cl"># 2. 透過官方指令，將C節點的開會投票名單中移除
+</span></span><span class="line"><span class="cl">pvecm delnode C節點名稱 
+</span></span><span class="line"><span class="cl"># 3. 透過官方指令，徹底清除C節點在網頁UI殘留問號資料夾 
+</span></span><span class="line"><span class="cl">rm -rf /etc/pve/nodes/C節點名稱
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>Node C重開機 (要真的安全就把Node A跟B 都先關了)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 停止 C 機器殘留的叢集通訊服務 
+</span></span><span class="line"><span class="cl">systemctl stop corosync.service 
+</span></span><span class="line"><span class="cl"># 刪除舊的通訊錄檔案 
+</span></span><span class="line"><span class="cl">rm -f /etc/pve/corosync.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="全部退出節點">全部退出節點
+</h2><ol>
+<li>前面那個方法適用只退其中一台，如果一次20台退群用下面方法</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#1. 在20台一次下停止叢集服務 
+</span></span><span class="line"><span class="cl">systemctl stop pve-cluster.service 
+</span></span><span class="line"><span class="cl">systemctl stop corosync.service
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#2. 在20台將系統設置為本地模式，刪除corosync
+</span></span><span class="line"><span class="cl">pmxcfs -l  # 強制解鎖成本地模式
+</span></span><span class="line"><span class="cl">rm /etc/pve/corosync.conf
+</span></span><span class="line"><span class="cl">rm -rf /etc/corosync/*
+</span></span><span class="line"><span class="cl">killall pmxcfs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#3. 重啟節點服務
+</span></span><span class="line"><span class="cl">systemctl start pve-cluster.service 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 4.重啟服務後,在webui並不會刪除,所以要再刪除自己以外節點 (千萬不要刪自己)
+</span></span><span class="line"><span class="cl">ls -la /etc/pve/nodes
+</span></span><span class="line"><span class="cl">rm -rf /etc/pve/nodes/自己以外節點名稱
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="叢集設定">叢集設定
+</h2><p>如果單純要以一個WebUI 管理把多台機器做叢集，這樣是不好的，光是一個SMB服務就會卡死
+PVE HA兩個群集設定
+<a href="https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he">https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he</a></p>
+<h2 id="建立ws-server-範本">建立WS Server 範本
+</h2><ol>
+<li>先建立VM,在安裝畫面去找Vitro 驅動使用Vitro iSCSi硬碟，並安裝完WS Server</li>
+<li>調整時區以及安裝必要驅動及軟體或更新</li>
+<li>執行Sysprep 後關機</li>
+<li>轉換成範本</li>
+</ol>
+<h2 id="安裝ｗin11">安裝Ｗin11
+</h2><p>一定要選UEFI 才能安裝
+登入Shift+F10 start ms-cxh:localonly</p>
+<h2 id="lxc-安裝cockit開啟共享">LXC 安裝cockit開啟共享
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#安裝Cockpit</span>
+</span></span><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">install</span> <span class="n">cockpit</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#安裝File Sharing之前需要的東西</span>
+</span></span><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">install</span> <span class="n">samba</span> <span class="n">make</span> <span class="n">curl</span> <span class="n">unzip</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#下載 </span>
+</span></span><span class="line"><span class="cl"><span class="n">curl</span> <span class="o">-</span><span class="n">LO</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="mi">45</span><span class="n">Drives</span><span class="o">/</span><span class="n">cockpit</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">sharing</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="n">v3</span><span class="o">.</span><span class="mf">2.0</span><span class="o">/</span><span class="n">cockpit</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">sharing_3</span><span class="o">.</span><span class="mf">2.0</span><span class="n">_generic</span><span class="o">.</span><span class="n">zip</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#解壓縮</span>
+</span></span><span class="line"><span class="cl"><span class="n">unzip</span> <span class="n">cockpit</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">sharing_3</span><span class="o">.</span><span class="mf">2.0</span><span class="n">_generic</span><span class="o">.</span><span class="n">zip</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#進入資料夾</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="n">cockpit</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">sharing_3</span><span class="o">.</span><span class="mf">2.0</span><span class="n">_generic</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#安裝</span>
+</span></span><span class="line"><span class="cl"><span class="n">make</span> <span class="n">install</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#停用root登入</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">cockpit</span><span class="o">/</span><span class="n">disallowed</span><span class="o">-</span><span class="n">users</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 選用安裝cockpit-identities</span>
+</span></span><span class="line"><span class="cl"><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="mi">45</span><span class="n">drives</span><span class="o">/</span><span class="n">cockpit</span><span class="o">-</span><span class="n">identities</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260514224035.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="參考資料">參考資料
+</h2><ul>
+<li><a href="https://wiki.freedomstu.com/">BUBU 知識庫 &amp; 秉迅資訊.Studio</a></li>
+<li><a href="https://ithelp.ithome.com.tw/2020-12th-ironman">第 12 屆 iThome 鐵人賽 DevOps with Proxmox</a></li>
+</ul>
+<p>lspci -vv | grep BAR</p>
+<h2 id="匯入ova">匯入OVA
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260829123053.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="救援pve">救援PVE
+</h2><p>如果SSD面臨Read-Only無法快掛前兆,可使用隨身碟進行快速救援</p>
+<ol>
+<li>使用Paragon Disk Manager或類似軟體把隨身碟格式化成EXT4</li>
+<li>插入PVE掛載</li>
+</ol>
+<ul>
+<li>重要路徑
+<ul>
+<li>/var/lib/vz/template/</li>
+<li>/var/lib/vz/images/</li>
+<li>/etc/pve/qemu-server/</li>
+<li>/etc/pve/lxc/</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsblk   //偵測掛載區(這邊是偵測到,但掛載還要下指令)
+</span></span><span class="line"><span class="cl">mount -t ext4 /dev/sdb1 /run  //把隨身碟掛載到run上
+</span></span><span class="line"><span class="cl">// 救援檔案
+</span></span><span class="line"><span class="cl">cp /etc/pve/qemu-server/*.conf /run/
+</span></span><span class="line"><span class="cl">cp /etc/pve/lxc/*.conf /run/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">umount /run
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>重新匯入,匯入<code>/var/lib/vz/images/</code> 的相關LXC跟VM硬碟檔,最後再匯入conf檔即可出現虛擬機</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">images</span>  <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">cp</span> <span class="o">*.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">pve</span><span class="o">/</span><span class="n">nodes</span><span class="o">/</span><span class="n">hp</span><span class="o">-</span><span class="n">pve</span><span class="o">/</span><span class="n">lxc</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">root</span><span class="err">@</span><span class="n">hp</span><span class="o">-</span><span class="n">pve</span><span class="p">:</span><span class="o">/</span><span class="c1"># cp *.conf /etc/pve/nodes/hp-pve/qemu-server/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>如果出現錯誤修復硬碟(lxc118為例)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">lxc</span><span class="o">-</span><span class="n">start</span> <span class="o">-</span><span class="n">n</span> <span class="mi">118</span> <span class="o">-</span><span class="n">F</span> <span class="o">-</span><span class="n">lDEBUG</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">lxc</span><span class="o">-</span><span class="mi">118</span><span class="o">-</span><span class="n">debug</span><span class="o">.</span><span class="n">log</span>
+</span></span><span class="line"><span class="cl"><span class="n">tail</span> <span class="o">-</span><span class="n">n</span> <span class="mi">50</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">lxc</span><span class="o">-</span><span class="mi">118</span><span class="o">-</span><span class="n">debug</span><span class="o">.</span><span class="n">log</span>
+</span></span><span class="line"><span class="cl"><span class="n">pct</span> <span class="n">stop</span> <span class="mi">118</span>
+</span></span><span class="line"><span class="cl"><span class="n">losetup</span> <span class="o">-</span><span class="n">fP</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">118</span><span class="o">/</span><span class="n">vm</span><span class="o">-</span><span class="mi">118</span><span class="o">-</span><span class="n">disk</span><span class="o">-</span><span class="mf">0.</span><span class="n">raw</span>
+</span></span><span class="line"><span class="cl"><span class="n">losetup</span> <span class="o">-</span><span class="n">a</span>
+</span></span><span class="line"><span class="cl"><span class="n">fsck</span> <span class="o">-</span><span class="n">y</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">loop0</span>
+</span></span><span class="line"><span class="cl"><span class="n">losetup</span> <span class="o">-</span><span class="n">d</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">loop0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>Migration會因為LXC容器預設會放去local-lvm，搬移的時候要去選
+因此要手動scp把檔案般回原位即可，LXC硬碟的rootfs檔又會有指派問題，直接去改 <code>nano /etc/pve/lxc/118.conf</code> 比較快</li>
+</ol>
+<p><img
+    src="/my-portfolio/Pasted%20image%2020260530172644.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>開機磁區被GRUB改名字 (initramfs：發生兩塊硬碟都安裝PVE情形)</p>
+<ul>
+<li><strong><code>Found volume group &quot;pve-OLD-3001C008&quot; ... 2 logical volume(s) now active</code></strong> （系統成功抓到了 LVM 磁碟群組，但它的名字叫 <code>pve-OLD-3001C008</code>）</li>
+<li><strong><code>ALERT! /dev/mapper/pve-root does not exist. Dropping to a shell!</code></strong> （系統崩潰大喊：我找不到當初寫死在引導設定檔裡的 <code>/dev/mapper/pve-root</code>！）</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lvm vgrename pve-OLD-3001C008 pve
+</span></span><span class="line"><span class="cl">lvm vgchange -ay pve
+</span></span><span class="line"><span class="cl">exit
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="模擬非x86-machines">模擬非x86 machines
+</h2><p><a href="https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/">https://forum.proxmox.com/threads/qemu-for-proxmox-pve-qemu-with-all-supported-kvm-and-emulated-cpus-debug-and-release-dep-builds-available.66486/</a>
+<a href="https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/">https://www.nicksherlock.com/2024/09/emulating-mips-guests-in-proxmox-8/</a></p>
+<h2 id="使用xtermjs">使用xterm.js
+</h2><ul>
+<li>CT容器預設開箱即用，不用特別做設定
+VM做法 <a href="https://pve.proxmox.com/wiki/Serial_Terminal">官網說明文件</a></li>
+</ul>
+<ol>
+<li>qm set 101 -serial0 socket</li>
+<li>編輯grub，加入下面這串，做<code>update-grub</code> 或<code>grub2-mkconfig --output=/boot/grub2/grub.cfg</code>
+<code>GRUB_CMDLINE_LINUX=&quot;quiet console=tty0 console=ttyS0,115200&quot;</code></li>
+</ol>
+<h2 id="更新pve">更新PVE
+</h2><p>免費版作法
+<img
+    src="/my-portfolio/Pasted%20image%2020260712124046.png"
+    alt=""
+    loading="lazy"
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 讓系統用新軟體源刷新清單，並用 pveupgrade 啟動升級
+</span></span><span class="line"><span class="cl">apt-get update
+</span></span><span class="line"><span class="cl">pveupgrade
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>無訂閱源比企業源更新還快</p>
+<h2 id="pve-高-io-delay">PVE 高 io delay
+</h2><p>籌劃提供診斷命令與結果解讀方法。以下是實際排查步驟,照順序做下去就能抓出問題出在哪:</p>
+<ol>
+<li>先看整體 IO Delay 走勢</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">top
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>看右上角 <code>%wa</code>(wait)這欄,或用:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sar -u <span class="m">1</span> <span class="m">5</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認目前 IO delay 是持續高還是偶發尖峰(例如備份時才會飆高)。
+2. 查是哪顆實體磁碟在拖慢</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">iostat -x <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重點看:</p>
+<ul>
+<li><strong><code>%util</code></strong>:接近 100% 表示這顆碟已經滿載</li>
+<li><strong><code>await</code></strong>:平均等待時間(ms),數字越大越慢。HDD 正常約在 10ms 內,SSD/NVMe 應該在 1ms 以內,超過 20-50ms 就有問題</li>
+<li><strong><code>r/s</code> <code>w/s</code></strong>:每秒讀寫次數,配合 <code>%util</code> 看是不是硬碟被操爆</li>
+</ul>
+<ol start="3">
+<li>檢查磁碟健康狀態</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">smartctl -a /dev/sdX
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重點看:</p>
+<ul>
+<li><code>Reallocated_Sector_Ct</code>(重新配置磁區數,越多代表硬碟開始壞了)</li>
+<li><code>Current_Pending_Sector</code></li>
+<li>SSD 的話看 <code>Media_Wearout_Indicator</code> 或 <code>Percentage Used</code>(NVMe)</li>
+</ul>
+<ol start="4">
+<li>如果是用 ZFS</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">zpool iostat -v <span class="m">1</span>
+</span></span><span class="line"><span class="cl">zpool status
+</span></span><span class="line"><span class="cl">arc_summary <span class="p">|</span> head -30
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>zpool status</code> 看有沒有 DEGRADED 或 resilvering 中</li>
+<li><code>arc_summary</code> 看 ARC 命中率(Hit % 太低代表記憶體不夠)</li>
+</ul>
+<p>5.如果是 Ceph</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ceph -s
+</span></span><span class="line"><span class="cl">ceph osd perf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>看 <code>ceph osd perf</code> 裡每個 OSD 的 <code>apply_latency</code> / <code>commit_latency</code>,異常高的那顆 OSD 就是兇手。</p>
+<h3 id="6-確認是不是備份工作造成的">6. 確認是不是備份工作造成的
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /var/log/pve/tasks/index <span class="p">|</span> grep vzdump
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或直接看 PVE 網頁介面的 Tasks 紀錄,對照 IO delay 飆高的時間點是否吻合。</p>
+<h3 id="7-檢查是否有大量-swap-使用">7. 檢查是否有大量 Swap 使用
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">free -h
+</span></span><span class="line"><span class="cl">vmstat <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>si</code> <code>so</code> 欄位(swap in/out)如果持續非 0,代表記憶體不足導致額外磁碟 IO。</p>
+<p><strong>建議做法</strong>:先跑 <code>iostat -x 1 10</code>,把結果貼給我(或截圖),我可以幫你直接判讀是哪顆磁碟、哪個環節出問題。
+Analyzed storage migration from directory-based to ZFS pools
+現在配置很清楚了。你有 <strong><code>local</code>(dir 類型)</strong> 儲存,以及兩個 <strong>ZFS pool 儲存</strong>(<code>local_images</code>、<code>rpool-2</code>)可用。問題是這 19 個 VM/CT 全部都存在 <code>local</code> 這個 dir 儲存上,用 raw 檔案 + loop device 的方式運作,而你其實已經有 ZFS pool 可以用區塊裝置(zvol)的方式跑,效能會好很多。</p>
+<h3 id="先確認實體磁碟現況">先確認實體磁碟現況
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">iostat -x <span class="m">1</span> <span class="m">5</span>
+</span></span><span class="line"><span class="cl">zpool status
+</span></span><span class="line"><span class="cl">zpool list
+</span></span><span class="line"><span class="cl">df -h /var/lib/vz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這樣可以確認:</p>
+<ol>
+<li><code>local</code>(dir)背後掛的實體磁碟是什麼、目前 <code>%util</code>/<code>await</code> 多高</li>
+<li><code>local_images</code> 和 <code>rpool-2</code> 這兩個 ZFS pool 是不是用不同的實體磁碟(如果是,遷移過去才有意義;如果 <code>local</code> 跟 ZFS pool 其實共用同一組實體磁碟,那遷移只能減少 loop device 開銷,底層磁碟瓶頸還是存在)</li>
+</ol>
+<h3 id="解法方向確認磁碟資訊後可以動手做">解法方向(確認磁碟資訊後可以動手做)
+</h3><p><strong>把這些 VM/CT 的磁碟從 <code>local</code> 搬到 <code>local_images</code> 或 <code>rpool-2</code></strong>,這樣會變成 ZFS zvol(區塊裝置),不再需要 loop device。</p>
+<ul>
+<li><strong>VM</strong>:在 PVE 網頁介面 → 選 VM → Hardware → 選中磁碟 → <strong>Disk Action → Move Storage</strong>,選目標為 <code>local_images</code> 或 <code>rpool-2</code>,可以線上不關機做(前提是原本磁碟格式支援)</li>
+<li><strong>CT</strong>:同樣在 Resources 裡選 rootfs → <strong>Volume Action → Move Storage</strong></li>
+</ul>
+<p>也可以用指令批次做,例如:</p>
+<p>bash</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">qm move-disk &lt;VMID&gt; scsi0 local_images
+</span></span><span class="line"><span class="cl"><span class="c1"># 或 CT:</span>
+</span></span><span class="line"><span class="cl">pct move-volume &lt;CTID&gt; rootfs local_images
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由於你有 19 個要搬,建議先搬 1-2 個測試效果,確認 IO delay 有沒有下降,再決定要不要全部搬,同時要注意搬移過程本身會消耗 IO,建議挑離峰時間、一個一個慢慢搬,不要同時搬多個。</p>
+<p>先麻煩貼一下上面那幾個指令的結果,我再幫你確認底層磁碟狀況跟遷移的優先順序。</p>
+<p>root@isbdtester03:~# zpool list NAME SIZE ALLOC FREE CKPOINT EXPANDSZ FRAG CAP DEDUP HEALTH ALTROOT rpool-2 928G 18.6G 909G - - 10% 2% 1.00x ONLINE -</p>
+<p>Investigated missing storage pool and plotted diagnostic strategy</p>
+<p>看起來 <code>local_images</code> 這個 pool 在這台 <code>isbdtester03</code> 上並不存在(storage.cfg 裡它是設定給 <code>nodes: isbdtester</code> 這個節點用的,不是 <code>isbdtester03</code>),所以你這台機器目前只有 <strong><code>rpool-2</code></strong>(928G,只用了 18.6G)可以用,而且看起來空間還很充裕。</p>
+<p>這代表:你這台機器上有一個幾乎全空的 ZFS pool(<code>rpool-2</code>),卻沒有拿來用,19 個 VM/CT 全部擠在 <code>local</code>(dir,raw+loop)上運作 — 這基本上就是問題的核心。</p>
+<h3 id="還需要確認的資訊">還需要確認的資訊
+</h3><p>麻煩貼一下:</p>
+<p>bash</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">zpool status rpool-2
+</span></span><span class="line"><span class="cl">iostat -x <span class="m">1</span> <span class="m">5</span>
+</span></span><span class="line"><span class="cl">df -h /var/lib/vz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>想確認:</p>
+<ol>
+<li><code>rpool-2</code> 背後是什麼硬碟(HDD/SSD/NVMe),以及是不是跟 <code>/var/lib/vz</code>(local)所在的磁碟是<strong>不同一組實體硬碟</strong></li>
+<li>目前 <code>iostat</code> 顯示哪顆磁碟 <code>%util</code> 最高、<code>await</code> 最誇張</li>
+</ol>
+<p>如果 <code>rpool-2</code> 跟 <code>local</code> 是接在不同實體硬碟上,那把這 19 個 VM 搬去 <code>rpool-2</code> 會有立竿見影的效果 —— 既去掉了 loop device 開銷,又把負載分散到目前幾乎閒置的磁碟上。</p>
+<p>這樣說起來 我在家裡刪除local-lvm 把ct容器放在local 裡面跑是不是也會發生這個問題</p>
+<p>分析了刪除本地儲存後仍會遭遇相同問題。</p>
+<p>是的,會發生一模一樣的問題,而且原理完全相同。</p>
+<h3 id="為什麼會這樣">為什麼會這樣
+</h3><p><code>local-lvm</code> 是 <strong>LVM-thin</strong>,幫每個 CT/VM 分配獨立的 <strong>Logical Volume(LV)</strong>,LV 本質上就是一個區塊裝置,容器可以直接掛載使用,不需要額外轉一層。</p>
+<p>如果改成把 CT 放在 <code>local</code>(dir 類型儲存),PVE 對 CT 的處理方式是:</p>
+<ol>
+<li>在 <code>/var/lib/vz/images/&lt;CTID&gt;/</code> 底下建立一個 <strong><code>.raw</code> 檔案</strong>當作這個容器的磁碟映像</li>
+<li>因為容器需要「掛載」一個檔案系統才能跑,而 <code>.raw</code> 檔案本身只是普通檔案,不能直接掛載</li>
+<li>所以 PVE 會透過 <strong>loop device</strong> 把這個 raw 檔案「包裝」成一個假的區塊裝置,再掛載給容器用</li>
+</ol>
+<p>這樣就會多一層開銷:「容器 IO → 檔案系統 → loop device 轉換 → 底層檔案系統 → 實體磁碟」,比起 LVM-thin 的「容器 IO → LV(區塊裝置)→ 實體磁碟」多繞了一大圈。</p>
+<h3 id="影響程度">影響程度
+</h3><ul>
+<li>如果只有 1-2 個 CT,可能感覺不明顯</li>
+<li>但只要 CT 數量一多(像你這台伺服器有 19 個),loop device 的管理開銷(<code>kworker/u*:*+loopN</code> 那種核心執行緒)就會疊加起來,IO delay 就會明顯竄升,跟你現在遇到的狀況一樣</li>
+</ul>
+<h3 id="建議">建議
+</h3><p>家裡如果也打算跑多個 CT,建議:</p>
+<ul>
+<li><strong>保留 LVM-thin</strong>(不要刪),或</li>
+<li>改用 <strong>ZFS</strong>(建立一個 zfspool 儲存,CT 磁碟會變成 zvol,一樣是區塊裝置,沒有 loop device 問題)</li>
+</ul>
+<p>只要是能提供「區塊裝置」的儲存類型(LVM-thin、ZFS zvol、Ceph RBD),CT 都不會用到 loop device;只要是 <code>dir</code> 類型(檔案系統目錄)存 CT 的 raw 磁碟,就一定會有 loop device 開銷。VM 的話因為 QEMU 本身就是用檔案模擬磁碟(不透過 loop device),所以 VM 放 <code>dir</code> 存 raw 檔案不會有這個問題,只有 CT 才會受影響。</p>
+<h2 id="進階功能">進階功能
+</h2><p>保護 - 可保護虛擬機器設定值不被更動</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

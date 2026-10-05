@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PDF 貼魔王：將多頁PDF快速貼入ID工具 常用： 底部壓個色塊（放在最後） 出血都是3mm 文字/複合字體 字形搭配中英混合襯線字體 中英混合非襯線 正常排版強調字元是用粗黑體，除非是財務報表、國外翻譯、小說 在排版書籍括弧實現方式為 表格+手工括弧 通常用心智圖軟體呈現在輸出 Word 要做出血方法是在紙張大小各加上3mm 21.6 Word 讀入項目符號一開始設定明體+Times符合字體就會檢少排版錯亂問他 Word VBA 製作參考線方法\n#列印模板 #模板\nID 置入多頁PDF *(可考慮非官方腳本Cooldtp，快速置入多頁PDF)\n*Illustrator CC v2018.3：新增多頁PDF置入功能\nStep.1 新建一個空白圖層，並將圖層1鎖定(圖層2放置匯入的PDF) Step.2 按下Ctrl+Alt+F11出現指令碼視窗，點選Sample資料夾/PlaceMultiPagePDF.jsx Step.3 打開pdf出現Choose a Document 視窗，選擇目前indd專案(ex.未命名-1.indd)，然後出現 Choose a Page 視窗，為選擇indd專案第幾頁開始置入，選擇完成後開始置入。 Step.4 置入完成後，須調整置入多頁跑掉的PDF版面邊界，先建立一個空白對象樣式(對象樣式1) Step 5. Ctrl+F出現尋找更改視窗，將圖層2套入剛才新建對象樣式按確定。 Step.6 按版面/邊界和欄，檢視文件邊界大小。 Step.7 在對象樣式中，設定文件邊界、版芯。 Step 8.若要裁減匯入PDF的頁碼，在裁切量調整。 ID 製作書背封面 首先開啟新文件，先輸入主要頁面大小，並且記得取消勾選「對頁」功能，然後按下「邊界和欄」來設定上下邊界，這裡有個關鍵是要把邊界都設定為零。 在「頁面」面板中，按下主版頁面「A-主版」圖示，按右鍵將「允許移動文件頁面」取消選擇，再接著按右鍵選擇「新增主版」。 我們要新增書背用的主版頁面，名稱設定為“書背”，寬度設定為16.6公釐（依實際情形設定）。設定完成後就可以在主版頁面上看到細長的主版圖示。 同樣的方式再來新增一個折頁用的主版頁面，名稱設定為“折頁” 接下來我們到一般頁面上，先新增一個頁面，然後將「B-書背」的主版套用到這個新頁面上，會出警告視窗，請按下「使用主版頁面大小」，接下來把新頁面拖曳到第1頁的右邊來產生跨頁，這樣就先完成封面（其實是封底）與書背的跨頁合成。 利用「建立新頁面」按鈕來新增頁面，拖曳「B-書背」主版到頁面上 按下「使用主版頁面大小」，將更換主版的頁面拖曳到第1頁的右邊來產生跨頁，請注意滑鼠游標的圖示要跟上圖一樣才會產生跨頁，初步完成封面與書背的跨頁合成 依照前一步驟的方式，新增一個頁面並套用上「A-主版」，然後將新頁面移到[1-2]頁的右邊來形成跨頁。 同樣依照前一步驟的方式，新增一個頁面並套用上「C-折頁」，然後將新頁面移到[1-3]頁的左邊來形成跨頁。 最後再新增一個頁面，然後將新頁面移到[1-4]頁的右邊來形成跨頁。如此，封面的主要結構就完成了 完成後輸出怎麼辦？當然很簡單啦，只要在輸出選項中，勾選「跨頁」 完成後的封面PDF就會有出血、裁切⋯⋯等等印刷用標記，就連書背與折頁的折線也會標示出來喔 Affinity ">
+<title>InDesign Affinity 排版</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/indesign-affinity-%E6%8E%92%E7%89%88/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="InDesign Affinity 排版">
+<meta property='og:description' content="PDF 貼魔王：將多頁PDF快速貼入ID工具 常用： 底部壓個色塊（放在最後） 出血都是3mm 文字/複合字體 字形搭配中英混合襯線字體 中英混合非襯線 正常排版強調字元是用粗黑體，除非是財務報表、國外翻譯、小說 在排版書籍括弧實現方式為 表格+手工括弧 通常用心智圖軟體呈現在輸出 Word 要做出血方法是在紙張大小各加上3mm 21.6 Word 讀入項目符號一開始設定明體+Times符合字體就會檢少排版錯亂問他 Word VBA 製作參考線方法\n#列印模板 #模板\nID 置入多頁PDF *(可考慮非官方腳本Cooldtp，快速置入多頁PDF)\n*Illustrator CC v2018.3：新增多頁PDF置入功能\nStep.1 新建一個空白圖層，並將圖層1鎖定(圖層2放置匯入的PDF) Step.2 按下Ctrl+Alt+F11出現指令碼視窗，點選Sample資料夾/PlaceMultiPagePDF.jsx Step.3 打開pdf出現Choose a Document 視窗，選擇目前indd專案(ex.未命名-1.indd)，然後出現 Choose a Page 視窗，為選擇indd專案第幾頁開始置入，選擇完成後開始置入。 Step.4 置入完成後，須調整置入多頁跑掉的PDF版面邊界，先建立一個空白對象樣式(對象樣式1) Step 5. Ctrl+F出現尋找更改視窗，將圖層2套入剛才新建對象樣式按確定。 Step.6 按版面/邊界和欄，檢視文件邊界大小。 Step.7 在對象樣式中，設定文件邊界、版芯。 Step 8.若要裁減匯入PDF的頁碼，在裁切量調整。 ID 製作書背封面 首先開啟新文件，先輸入主要頁面大小，並且記得取消勾選「對頁」功能，然後按下「邊界和欄」來設定上下邊界，這裡有個關鍵是要把邊界都設定為零。 在「頁面」面板中，按下主版頁面「A-主版」圖示，按右鍵將「允許移動文件頁面」取消選擇，再接著按右鍵選擇「新增主版」。 我們要新增書背用的主版頁面，名稱設定為“書背”，寬度設定為16.6公釐（依實際情形設定）。設定完成後就可以在主版頁面上看到細長的主版圖示。 同樣的方式再來新增一個折頁用的主版頁面，名稱設定為“折頁” 接下來我們到一般頁面上，先新增一個頁面，然後將「B-書背」的主版套用到這個新頁面上，會出警告視窗，請按下「使用主版頁面大小」，接下來把新頁面拖曳到第1頁的右邊來產生跨頁，這樣就先完成封面（其實是封底）與書背的跨頁合成。 利用「建立新頁面」按鈕來新增頁面，拖曳「B-書背」主版到頁面上 按下「使用主版頁面大小」，將更換主版的頁面拖曳到第1頁的右邊來產生跨頁，請注意滑鼠游標的圖示要跟上圖一樣才會產生跨頁，初步完成封面與書背的跨頁合成 依照前一步驟的方式，新增一個頁面並套用上「A-主版」，然後將新頁面移到[1-2]頁的右邊來形成跨頁。 同樣依照前一步驟的方式，新增一個頁面並套用上「C-折頁」，然後將新頁面移到[1-3]頁的左邊來形成跨頁。 最後再新增一個頁面，然後將新頁面移到[1-4]頁的右邊來形成跨頁。如此，封面的主要結構就完成了 完成後輸出怎麼辦？當然很簡單啦，只要在輸出選項中，勾選「跨頁」 完成後的封面PDF就會有出血、裁切⋯⋯等等印刷用標記，就連書背與折頁的折線也會標示出來喔 Affinity ">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/indesign-affinity-%E6%8E%92%E7%89%88/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-25T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="InDesign Affinity 排版">
+<meta name="twitter:description" content="PDF 貼魔王：將多頁PDF快速貼入ID工具 常用： 底部壓個色塊（放在最後） 出血都是3mm 文字/複合字體 字形搭配中英混合襯線字體 中英混合非襯線 正常排版強調字元是用粗黑體，除非是財務報表、國外翻譯、小說 在排版書籍括弧實現方式為 表格+手工括弧 通常用心智圖軟體呈現在輸出 Word 要做出血方法是在紙張大小各加上3mm 21.6 Word 讀入項目符號一開始設定明體+Times符合字體就會檢少排版錯亂問他 Word VBA 製作參考線方法\n#列印模板 #模板\nID 置入多頁PDF *(可考慮非官方腳本Cooldtp，快速置入多頁PDF)\n*Illustrator CC v2018.3：新增多頁PDF置入功能\nStep.1 新建一個空白圖層，並將圖層1鎖定(圖層2放置匯入的PDF) Step.2 按下Ctrl+Alt+F11出現指令碼視窗，點選Sample資料夾/PlaceMultiPagePDF.jsx Step.3 打開pdf出現Choose a Document 視窗，選擇目前indd專案(ex.未命名-1.indd)，然後出現 Choose a Page 視窗，為選擇indd專案第幾頁開始置入，選擇完成後開始置入。 Step.4 置入完成後，須調整置入多頁跑掉的PDF版面邊界，先建立一個空白對象樣式(對象樣式1) Step 5. Ctrl+F出現尋找更改視窗，將圖層2套入剛才新建對象樣式按確定。 Step.6 按版面/邊界和欄，檢視文件邊界大小。 Step.7 在對象樣式中，設定文件邊界、版芯。 Step 8.若要裁減匯入PDF的頁碼，在裁切量調整。 ID 製作書背封面 首先開啟新文件，先輸入主要頁面大小，並且記得取消勾選「對頁」功能，然後按下「邊界和欄」來設定上下邊界，這裡有個關鍵是要把邊界都設定為零。 在「頁面」面板中，按下主版頁面「A-主版」圖示，按右鍵將「允許移動文件頁面」取消選擇，再接著按右鍵選擇「新增主版」。 我們要新增書背用的主版頁面，名稱設定為“書背”，寬度設定為16.6公釐（依實際情形設定）。設定完成後就可以在主版頁面上看到細長的主版圖示。 同樣的方式再來新增一個折頁用的主版頁面，名稱設定為“折頁” 接下來我們到一般頁面上，先新增一個頁面，然後將「B-書背」的主版套用到這個新頁面上，會出警告視窗，請按下「使用主版頁面大小」，接下來把新頁面拖曳到第1頁的右邊來產生跨頁，這樣就先完成封面（其實是封底）與書背的跨頁合成。 利用「建立新頁面」按鈕來新增頁面，拖曳「B-書背」主版到頁面上 按下「使用主版頁面大小」，將更換主版的頁面拖曳到第1頁的右邊來產生跨頁，請注意滑鼠游標的圖示要跟上圖一樣才會產生跨頁，初步完成封面與書背的跨頁合成 依照前一步驟的方式，新增一個頁面並套用上「A-主版」，然後將新頁面移到[1-2]頁的右邊來形成跨頁。 同樣依照前一步驟的方式，新增一個頁面並套用上「C-折頁」，然後將新頁面移到[1-3]頁的左邊來形成跨頁。 最後再新增一個頁面，然後將新頁面移到[1-4]頁的右邊來形成跨頁。如此，封面的主要結構就完成了 完成後輸出怎麼辦？當然很簡單啦，只要在輸出選項中，勾選「跨頁」 完成後的封面PDF就會有出血、裁切⋯⋯等等印刷用標記，就連書背與折頁的折線也會標示出來喔 Affinity ">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#id-置入多頁pdf">ID 置入多頁PDF</a></li>
+    <li><a href="#id-製作書背封面">ID 製作書背封面</a></li>
+    <li><a href="#affinity">Affinity</a></li>
+    <li><a href="#列印模板">列印模板</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/indesign-affinity-%E6%8E%92%E7%89%88/">InDesign Affinity 排版</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-04-25T00:00:00Z'>Apr 25, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>PDF 貼魔王：將多頁PDF快速貼入ID工具
+常用：
+底部壓個色塊（放在最後）
+出血都是3mm
+文字/複合字體
+字形搭配中英混合襯線字體 中英混合非襯線
+正常排版強調字元是用<code>粗黑體</code>，除非是財務報表、國外翻譯、小說
+在排版書籍括弧實現方式為 <strong><code>表格+手工括弧</code></strong> 通常用心智圖軟體呈現在輸出
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201851.png"
+    alt=""
+    loading="lazy"
+></p>
+<p><img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1742655189000gd6yi3.png"
+    alt="gh"
+    loading="lazy"
+></p>
+<p>Word 要做出血方法是在紙張大小各加上3mm
+21.6
+Word 讀入項目符號一開始設定明體+Times符合字體就會檢少排版錯亂問他
+Word VBA 製作參考線方法</p>
+<p>#列印模板 #模板</p>
+<h2 id="id-置入多頁pdf">ID 置入多頁PDF
+</h2><p>*(可考慮非官方腳本Cooldtp，快速置入多頁PDF)</p>
+<p>*Illustrator CC v2018.3：新增多頁PDF置入功能</p>
+<p>Step.1 新建一個空白圖層，並將圖層1鎖定(圖層2放置匯入的PDF)
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201611.png"
+    alt=""
+    loading="lazy"
+>
+Step.2 按下Ctrl+Alt+F11出現指令碼視窗，點選Sample資料夾/PlaceMultiPagePDF.jsx
+Step.3 打開pdf出現Choose a Document 視窗，選擇目前indd專案(ex.未命名-1.indd)，然後出現 Choose a Page 視窗，為選擇indd專案第幾頁開始置入，選擇完成後開始置入。
+Step.4 置入完成後，須調整置入多頁跑掉的PDF版面邊界，先建立一個空白對象樣式(對象樣式1)
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201628.png"
+    alt=""
+    loading="lazy"
+>
+Step 5. Ctrl+F出現尋找更改視窗，將圖層2套入剛才新建對象樣式按確定。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201707.png"
+    alt=""
+    loading="lazy"
+>
+Step.6 按版面/邊界和欄，檢視文件邊界大小。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201719.png"
+    alt=""
+    loading="lazy"
+>
+Step.7 在對象樣式中，設定文件邊界、版芯。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201805.png"
+    alt=""
+    loading="lazy"
+>
+Step 8.若要裁減匯入PDF的頁碼，在裁切量調整。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621201825.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="id-製作書背封面">ID 製作書背封面
+</h2><ol>
+<li>
+<p>首先開啟新文件，先輸入主要頁面大小，並且記得取消勾選「對頁」功能，然後按下「邊界和欄」來設定上下邊界，這裡有個關鍵是要把邊界都設定為零。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621184509.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>在「頁面」面板中，按下主版頁面「A-主版」圖示，按右鍵將「允許移動文件頁面」取消選擇，再接著按右鍵選擇「新增主版」。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621184538.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>我們要新增書背用的主版頁面，名稱設定為“書背”，寬度設定為16.6公釐（依實際情形設定）。設定完成後就可以在主版頁面上看到細長的主版圖示。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621184610.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>同樣的方式再來新增一個折頁用的主版頁面，名稱設定為“折頁”
+<img
+    src="/my-portfolio/Pasted%20image%2020260621192747.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>接下來我們到一般頁面上，先新增一個頁面，然後將「B-書背」的主版套用到這個新頁面上，會出警告視窗，請按下「使用主版頁面大小」，接下來把新頁面拖曳到第1頁的右邊來產生跨頁，這樣就先完成封面（其實是封底）與書背的跨頁合成。
+利用「建立新頁面」按鈕來新增頁面，拖曳「B-書背」主版到頁面上
+<img
+    src="/my-portfolio/Pasted%20image%2020260621192849.png"
+    alt=""
+    loading="lazy"
+>
+按下「使用主版頁面大小」，將更換主版的頁面拖曳到第1頁的右邊來產生跨頁，請注意滑鼠游標的圖示要跟上圖一樣才會產生跨頁，初步完成封面與書背的跨頁合成
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193223.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>依照前一步驟的方式，新增一個頁面並套用上「A-主版」，然後將新頁面移到[1-2]頁的右邊來形成跨頁。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193406.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>同樣依照前一步驟的方式，新增一個頁面並套用上「C-折頁」，然後將新頁面移到[1-3]頁的左邊來形成跨頁。
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193417.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>最後再新增一個頁面，然後將新頁面移到[1-4]頁的右邊來形成跨頁。如此，封面的主要結構就完成了
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193426.png"
+    alt=""
+    loading="lazy"
+>
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193458.png"
+    alt=""
+    loading="lazy"
+>
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193508.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>完成後輸出怎麼辦？當然很簡單啦，只要在輸出選項中，勾選「跨頁」
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193523.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>完成後的封面PDF就會有出血、裁切⋯⋯等等印刷用標記，就連書背與折頁的折線也會標示出來喔
+<img
+    src="/my-portfolio/Pasted%20image%2020260621193530.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+</ol>
+<h2 id="affinity">Affinity
+</h2><p><img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1753278034000mncu7k.png"
+    alt="gh"
+    loading="lazy"
+></p>
+<h2 id="列印模板">列印模板
+</h2><p>模板下載
+<a href="https://www.herwood.com.tw/download/category/visiting_cards_credentials">套印檔下載 證件/底紋邊框 - 鶴屋｜金鶴購</a>
+<a href="https://ec.blueco.com.tw/Mold">刀模版型下載藍格印刷</a>
+建立刀模<a href="https://youtu.be/3zvJOj8D6G0?si=SxpSN5-C2YdRO_Ey">立牌AI檔案</a>
+<a href="https://youtube.com/shorts/L4A4o4ZstQE?si=y7B-2MsadVEFcqrY">建立文字外框</a></p>
+<p>Inkscape 繪圖
+<a href="https://b23.tv/j02yuEG">inkscape科研绘图大神之路-基础教程50讲</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

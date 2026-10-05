@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>#KVM on PIN技術筆記</title>
+        <link>http://localhost:1313/my-portfolio/tags/%23kvm/</link>
+        <description>Recent content in #KVM on PIN技術筆記</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Sat, 11 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/%23kvm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>企業虛擬化方案</title>
+        <link>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E8%99%9B%E6%93%AC%E5%8C%96%E6%96%B9%E6%A1%88/</link>
+        <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E8%99%9B%E6%93%AC%E5%8C%96%E6%96%B9%E6%A1%88/</guid>
+        <description>&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;替代方案&lt;/th&gt;
+					&lt;th&gt;優點&lt;/th&gt;
+					&lt;th&gt;強項&lt;/th&gt;
+					&lt;th&gt;適合對象&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Proxmox VE&lt;/td&gt;
+					&lt;td&gt;開源免費、有商用支援、支援 KVM + LXC、整合 SDN / Ceph / HA、操作類似 vCenter。&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;最多中小企業選擇的替代品。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Nutanix AHV&lt;/td&gt;
+					&lt;td&gt;企業級虛擬化，穩定、整合良好，但成本仍偏高。&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;大中型企業想維持支援級別。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href=&#34;https://github.com/ZSvirt/zsvirt/blob/main/README_zh.md&#34;&gt;ZSvirt&lt;/a&gt;&lt;/td&gt;
+					&lt;td&gt;中國開源虛擬化平台&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;OpenShift&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;OpenStack&lt;/td&gt;
+					&lt;td&gt;完全開源，能做大規模私有雲，但維運成本高。&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;內部有 DevOps / Infra 團隊的大型組織。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;OLVM/ oVirt&lt;/td&gt;
+					&lt;td&gt;oVirt為紅帽開發版本，現在剩Oracle 維護&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Harvester&lt;/td&gt;
+					&lt;td&gt;KubeVirt 架構，支援 VM + Container 混合管理，Web 界面現代化。&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;雲原生轉型中的企業。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Rancher&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Xen Orchestra / XCP-ng&lt;/td&gt;
+					&lt;td&gt;VMware-like 管理界面，支援快照、備份、HA。&lt;/td&gt;
+					&lt;td&gt;VDI支援多協定、整合體驗好&lt;/td&gt;
+					&lt;td&gt;想快速取代 ESXi 又不想太複雜的企業。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Hyper-V + &lt;br&gt;SCVMM&lt;/td&gt;
+					&lt;td&gt;原生整合、授權含在 Windows Server 裡。&lt;br&gt;Windows Server (Core) &lt;br&gt;Hyper-V Server 2019 &lt;br&gt;Windows admin Center&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;已是純 Microsoft 生態的企業。&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;OpenNebula&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Apache CloudStack&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;HPE Morpheus VM Essentials&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;bhyve&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Virtual Server 2005&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;VMware&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;qemu+cockpit&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;a href=&#34;https://github.com/oneclickvirt&#34;&gt;oneclickvirt&lt;/a&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;运维对比表&#34;&gt;运维对比表
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;操作&lt;/th&gt;
+					&lt;th&gt;KVM&lt;/th&gt;
+					&lt;th&gt;LXC&lt;/th&gt;
+					&lt;th&gt;OpenVZ&lt;/th&gt;
+					&lt;th&gt;XEN&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;创建&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virt-install&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-create&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl create&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;写cfg文件 + &lt;code&gt;xl create&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;启动&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh start&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-start&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl start&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl create&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;停止&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh shutdown&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-stop&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl stop&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl shutdown&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;强制停&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh destroy&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-stop -k&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl stop --fast&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl destroy&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;进入&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virt-viewer&lt;/code&gt;/SSH&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-attach&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl enter&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl console&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;热调内存&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh setmem --live&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;echo到cgroup&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl set --ram&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl mem-set&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;热调CPU&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh setvcpus&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;echo到cgroup&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl set --cpus&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl vcpu-set&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;快照&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh snapshot&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;复制文件&lt;/td&gt;
+					&lt;td&gt;快照LV&lt;/td&gt;
+					&lt;td&gt;LVM快照&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;备份&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;复制qcow2&lt;/td&gt;
+					&lt;td&gt;tar打包&lt;/td&gt;
+					&lt;td&gt;vzdump&lt;/td&gt;
+					&lt;td&gt;dd/LVM&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;迁移&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh migrate&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-copy&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzmigrate&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;xl migrate&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;删除&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;virsh undefine&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;lxc-destroy&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;vzctl destroy&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;删文件&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;硬體直通做法&#34;&gt;硬體直通做法
+&lt;/h2&gt;&lt;p&gt;Hyper-V+DDA方案：要Quardo A系列 RTX 才能直通
+Proxmox+Passthrough：無好用遠端桌面軟體，直通又受限於鍵盤滑鼠
+目前折衷：Proxmox+Windows Server VM (Hyper-V (GPU-PV)
+第2方案：Proxmox+ ESXiVM (Nested On Proxmox) :Workstation是可以直接開flat檔&lt;/p&gt;
+&lt;h2 id=&#34;vmware&#34;&gt;VMware
+&lt;/h2&gt;&lt;p&gt;&lt;img
+    src=&#34;https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/176036625500085fepg.png&#34;
+    alt=&#34;gh|450&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img
+    src=&#34;http://localhost:1313/my-portfolio/netbox-sot.webp&#34;
+    alt=&#34;&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;img
+    src=&#34;http://localhost:1313/my-portfolio/microvm-vs-lxc-vs-vm.svg&#34;
+    alt=&#34;&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

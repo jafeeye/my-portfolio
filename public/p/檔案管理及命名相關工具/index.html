@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="MultiCommander 單實例命令 MultiCommander.exe /OPEN 路徑 /PANEL=Left|Right\n自訂功能列 組態/功能表自訂 組態/自訂內容功能表 TotalCommander + Beyond Compare 自訂功能列在Wincmd.ini 中找到\u00a0\\[Configuration\\]加入\n1 2 3 4 5 6 7 8 9 10 [Configuration] CompareTool=c:\\ProgramFiles\\BeyondCompare4\\BCompare.exe StartupScreen=0 LanguageIni=wcmd_tw.lng Mainmenu=wcmd_tw.mnu UseRightButton=1 SizeFooter=3 MarkDirectories=1 SortDirsByName=0 ShowHiddenSystem=0 加入Everything搜尋\n1 2 3 [em_Everything] cmd=C:/Program Files/Everything/Everything.exe param=”-search “%P “” Everything 設置 AHK設定搜尋特定位置 1 2 3 !Space:: Run, &#34;C:\\Program Files\\Everything\\Everything.exe&#34; -filename E:\\desktopz\\everythingJump Return 鎖定搜尋窗口大小 在1.5.0.1257a之後版本，搜尋框輸入/window_style_remove=0x40000後按Enter，要解鎖搜尋框輸入/window_style_remove= 調用TotalCMD開啟 Everything.ini 修改 1 2 open_folder_path_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;$parent(%1)&#34;) open_folder_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;%1&#34;) Directory Opus ">
+<title>檔案管理及命名相關工具</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E6%AA%94%E6%A1%88%E7%AE%A1%E7%90%86%E5%8F%8A%E5%91%BD%E5%90%8D%E7%9B%B8%E9%97%9C%E5%B7%A5%E5%85%B7/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="檔案管理及命名相關工具">
+<meta property='og:description' content="MultiCommander 單實例命令 MultiCommander.exe /OPEN 路徑 /PANEL=Left|Right\n自訂功能列 組態/功能表自訂 組態/自訂內容功能表 TotalCommander + Beyond Compare 自訂功能列在Wincmd.ini 中找到\u00a0\\[Configuration\\]加入\n1 2 3 4 5 6 7 8 9 10 [Configuration] CompareTool=c:\\ProgramFiles\\BeyondCompare4\\BCompare.exe StartupScreen=0 LanguageIni=wcmd_tw.lng Mainmenu=wcmd_tw.mnu UseRightButton=1 SizeFooter=3 MarkDirectories=1 SortDirsByName=0 ShowHiddenSystem=0 加入Everything搜尋\n1 2 3 [em_Everything] cmd=C:/Program Files/Everything/Everything.exe param=”-search “%P “” Everything 設置 AHK設定搜尋特定位置 1 2 3 !Space:: Run, &#34;C:\\Program Files\\Everything\\Everything.exe&#34; -filename E:\\desktopz\\everythingJump Return 鎖定搜尋窗口大小 在1.5.0.1257a之後版本，搜尋框輸入/window_style_remove=0x40000後按Enter，要解鎖搜尋框輸入/window_style_remove= 調用TotalCMD開啟 Everything.ini 修改 1 2 open_folder_path_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;$parent(%1)&#34;) open_folder_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;%1&#34;) Directory Opus ">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E6%AA%94%E6%A1%88%E7%AE%A1%E7%90%86%E5%8F%8A%E5%91%BD%E5%90%8D%E7%9B%B8%E9%97%9C%E5%B7%A5%E5%85%B7/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-25T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="檔案管理及命名相關工具">
+<meta name="twitter:description" content="MultiCommander 單實例命令 MultiCommander.exe /OPEN 路徑 /PANEL=Left|Right\n自訂功能列 組態/功能表自訂 組態/自訂內容功能表 TotalCommander + Beyond Compare 自訂功能列在Wincmd.ini 中找到\u00a0\\[Configuration\\]加入\n1 2 3 4 5 6 7 8 9 10 [Configuration] CompareTool=c:\\ProgramFiles\\BeyondCompare4\\BCompare.exe StartupScreen=0 LanguageIni=wcmd_tw.lng Mainmenu=wcmd_tw.mnu UseRightButton=1 SizeFooter=3 MarkDirectories=1 SortDirsByName=0 ShowHiddenSystem=0 加入Everything搜尋\n1 2 3 [em_Everything] cmd=C:/Program Files/Everything/Everything.exe param=”-search “%P “” Everything 設置 AHK設定搜尋特定位置 1 2 3 !Space:: Run, &#34;C:\\Program Files\\Everything\\Everything.exe&#34; -filename E:\\desktopz\\everythingJump Return 鎖定搜尋窗口大小 在1.5.0.1257a之後版本，搜尋框輸入/window_style_remove=0x40000後按Enter，要解鎖搜尋框輸入/window_style_remove= 調用TotalCMD開啟 Everything.ini 修改 1 2 open_folder_path_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;$parent(%1)&#34;) open_folder_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;%1&#34;) Directory Opus ">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#multicommander">MultiCommander</a></li>
+            <li><a href="#totalcommander--beyond-compare">TotalCommander + Beyond Compare</a></li>
+          </ol>
+        </li>
+        <li><a href="#everything-設置">Everything 設置</a></li>
+        <li><a href="#directory-opus">Directory Opus</a></li>
+        <li><a href="#分類軟體">分類軟體</a></li>
+        <li><a href="#備份指令">備份指令</a></li>
+        <li><a href="#檔案命名工具">檔案命名工具</a></li>
+        <li><a href="#資料庫">資料庫</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E6%AA%94%E6%A1%88%E7%AE%A1%E7%90%86%E5%8F%8A%E5%91%BD%E5%90%8D%E7%9B%B8%E9%97%9C%E5%B7%A5%E5%85%B7/">檔案管理及命名相關工具</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-04-25T00:00:00Z'>Apr 25, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h4 id="multicommander">MultiCommander
+</h4><p>單實例命令
+<code>MultiCommander.exe /OPEN 路徑 /PANEL=Left|Right</code></p>
+<p>自訂功能列
+組態/功能表自訂
+組態/自訂內容功能表
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1748415449000jknms7.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<h4 id="totalcommander--beyond-compare">TotalCommander + Beyond Compare
+</h4><p>自訂功能列在<code>Wincmd.ini</code> 中找到 </p>
+\[Configuration\]<p>加入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Configuration]
+</span></span><span class="line"><span class="cl">CompareTool=c:\ProgramFiles\BeyondCompare4\BCompare.exe
+</span></span><span class="line"><span class="cl">StartupScreen=0
+</span></span><span class="line"><span class="cl">LanguageIni=wcmd_tw.lng
+</span></span><span class="line"><span class="cl">Mainmenu=wcmd_tw.mnu
+</span></span><span class="line"><span class="cl">UseRightButton=1
+</span></span><span class="line"><span class="cl">SizeFooter=3
+</span></span><span class="line"><span class="cl">MarkDirectories=1
+</span></span><span class="line"><span class="cl">SortDirsByName=0
+</span></span><span class="line"><span class="cl">ShowHiddenSystem=0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/17484158870008ihcmc.png"
+    alt="gh|350"
+    loading="lazy"
+>
+加入Everything搜尋</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[em_Everything]
+</span></span><span class="line"><span class="cl">cmd=C:/Program Files/Everything/Everything.exe
+</span></span><span class="line"><span class="cl">param=”-search “%P “”
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="everything-設置">Everything 設置
+</h3><ol>
+<li>AHK設定搜尋特定位置</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">!Space::
+</span></span><span class="line"><span class="cl">Run, &#34;C:\Program Files\Everything\Everything.exe&#34; -filename E:\desktopz\everythingJump
+</span></span><span class="line"><span class="cl">Return
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>鎖定搜尋窗口大小
+在1.5.0.1257a之後版本，搜尋框輸入<code>/window_style_remove=0x40000</code>後按Enter，要解鎖搜尋框輸入<code>/window_style_remove=</code></li>
+<li>調用TotalCMD開啟
+<code>Everything.ini</code> 修改</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">open_folder_path_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;$parent(%1)&#34;)
+</span></span><span class="line"><span class="cl">open_folder_command=$exec(&#34;c:/Program Files/totalcmd/TOTALCMD.EXE&#34; &#34;/O&#34; &#34;/T&#34; &#34;%1&#34;)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="directory-opus">Directory Opus
+</h3><p><img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1747840760000bmow8c.png"
+    alt="gh"
+    loading="lazy"
+></p>
+<p>使用Everything開啟Total Commander
+使用Total Commander開啟Everything
+點開資料夾預設用Total Commander開啟
+TotalCommander + Beyond Compare
+備選方案Dictionary Opus
+Listary+Seer
+Notron Commander</p>
+<h3 id="分類軟體">分類軟體
+</h3><p><strong>把檔案類型自動分類</strong>
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744377308000gmywdj.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>Adobe Bridge 整理照片
+<a href="https://youtu.be/sy0MQrDuXvs?si=TpAjAoMO1xIDvPRW">https://youtu.be/sy0MQrDuXvs?si=TpAjAoMO1xIDvPRW</a></p>
+<p>FFlister</p>
+<p>Zettlr</p>
+<p>Stuff Organizer
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744977634000jpfvsp.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>Tropy
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744978135000sxld0n.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>Zotero
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744977717000w38l7d.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<h3 id="備份指令">備份指令
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">forfiles /p <span class="nv">%userprofile%</span>\Downloads /s /m <span class="s2">&#34;*.ttf&#34;</span> /c <span class="s2">&#34;cmd /c move @path &#34;</span>E:\备份
+</span></span><span class="line"><span class="cl">\字体<span class="s2">&#34;&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Alternative Archiever</p>
+<p>PowerAutomate</p>
+<p><strong>Eagle 整理檔案</strong>
+排列方式:建立日期
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744697997000xmvqin.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>Document TagExplorer
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744781743000mpatvt.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<h3 id="檔案命名工具">檔案命名工具
+</h3><p>zRenamer
+FIleBot
+![[重灌設定#^900780]]</p>
+<h3 id="資料庫">資料庫
+</h3><p>drawDB 圖形化數據庫工具
+NocoDB 開源Docker版Airtable工具</p>
+<p>延伸閱讀</p>
+<ol>
+<li><a href="https://www.zhihu.com/question/21616258/answer/1545629286?utm_source=ZHShareTargetIDMore&amp;utm_medium=social&amp;utm_oi=635903389993668608#!">知乎，Total Commander 这款软件使用体验如何，有哪些优点和不足？</a></li>
+<li><a href="https://www.everythingsearch.cn/">Everythingcn，Everything相關使用技巧</a></li>
+<li>【懶人必備】25個重新命名軟體推薦，幫你輕鬆管理檔案https://tw.eagle.cool/blog/post/file-renamer</li>
+<li><a href="https://tw.eagle.cool/blog/post/top-15-must-have-apps-to-organize-your-design-files">https://tw.eagle.cool/blog/post/top-15-must-have-apps-to-organize-your-design-files</a></li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

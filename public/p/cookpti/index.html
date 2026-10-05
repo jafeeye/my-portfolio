@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="RockyLinux 安裝 官方預設把ppc64鎖死，只能模擬x86-64，更新系统并安装组件 1 2 3 4 5 ## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸 dnf update -y ## 安裝虛擬化套件 dnf install -y cockpit-machines libvirt qemu-kvm virt-install virt-viewer dnf install -y wget lrzsz net-tools 啟動服務 1 2 3 4 5 6 ## 啟用服務 systemctl enable --now libvirtd systemctl enable --now cockpit.socket ## 確認服務是否正常運作 systemctl status libvirtd systemctl status cockpit.socket 允许 Cockpit 使用 root 登录 1 echo &#34;#root&#34; | tee /etc/cockpit/disallowed-users 开放防火墙端口（默认无需操作） 1 2 firewall-cmd --add-port=9090/tcp --permanent firewall-cmd --reload Debian 跑powerppc64 可用Debian LXC跑qemu在機器再跑PowerPC\nCockpit 註冊/取消註冊虛擬機\n">
+<title>cookpti</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/cookpti/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="cookpti">
+<meta property='og:description' content="RockyLinux 安裝 官方預設把ppc64鎖死，只能模擬x86-64，更新系统并安装组件 1 2 3 4 5 ## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸 dnf update -y ## 安裝虛擬化套件 dnf install -y cockpit-machines libvirt qemu-kvm virt-install virt-viewer dnf install -y wget lrzsz net-tools 啟動服務 1 2 3 4 5 6 ## 啟用服務 systemctl enable --now libvirtd systemctl enable --now cockpit.socket ## 確認服務是否正常運作 systemctl status libvirtd systemctl status cockpit.socket 允许 Cockpit 使用 root 登录 1 echo &#34;#root&#34; | tee /etc/cockpit/disallowed-users 开放防火墙端口（默认无需操作） 1 2 firewall-cmd --add-port=9090/tcp --permanent firewall-cmd --reload Debian 跑powerppc64 可用Debian LXC跑qemu在機器再跑PowerPC\nCockpit 註冊/取消註冊虛擬機\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/cookpti/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-05-26T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="cookpti">
+<meta name="twitter:description" content="RockyLinux 安裝 官方預設把ppc64鎖死，只能模擬x86-64，更新系统并安装组件 1 2 3 4 5 ## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸 dnf update -y ## 安裝虛擬化套件 dnf install -y cockpit-machines libvirt qemu-kvm virt-install virt-viewer dnf install -y wget lrzsz net-tools 啟動服務 1 2 3 4 5 6 ## 啟用服務 systemctl enable --now libvirtd systemctl enable --now cockpit.socket ## 確認服務是否正常運作 systemctl status libvirtd systemctl status cockpit.socket 允许 Cockpit 使用 root 登录 1 echo &#34;#root&#34; | tee /etc/cockpit/disallowed-users 开放防火墙端口（默认无需操作） 1 2 firewall-cmd --add-port=9090/tcp --permanent firewall-cmd --reload Debian 跑powerppc64 可用Debian LXC跑qemu在機器再跑PowerPC\nCockpit 註冊/取消註冊虛擬機\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#rockylinux-安裝">RockyLinux 安裝</a></li>
+    <li><a href="#debian-跑powerppc64">Debian 跑powerppc64</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/cookpti/">cookpti</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-05-26T00:00:00Z'>May 26, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="rockylinux-安裝">RockyLinux 安裝
+</h2><ol>
+<li>官方預設把ppc64鎖死，只能模擬x86-64，更新系统并安装组件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸</span>
+</span></span><span class="line"><span class="cl"><span class="n">dnf</span> <span class="n">update</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl"><span class="c1">## 安裝虛擬化套件</span>
+</span></span><span class="line"><span class="cl"><span class="n">dnf</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">cockpit</span><span class="o">-</span><span class="n">machines</span> <span class="n">libvirt</span> <span class="n">qemu</span><span class="o">-</span><span class="n">kvm</span> <span class="n">virt</span><span class="o">-</span><span class="n">install</span> <span class="n">virt</span><span class="o">-</span><span class="n">viewer</span>
+</span></span><span class="line"><span class="cl"><span class="n">dnf</span> <span class="n">install</span> <span class="o">-</span><span class="n">y</span> <span class="n">wget</span> <span class="n">lrzsz</span> <span class="n">net</span><span class="o">-</span><span class="n">tools</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>啟動服務</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 啟用服務
+</span></span><span class="line"><span class="cl">systemctl enable --now libvirtd
+</span></span><span class="line"><span class="cl">systemctl enable --now cockpit.socket
+</span></span><span class="line"><span class="cl">## 確認服務是否正常運作
+</span></span><span class="line"><span class="cl">systemctl status libvirtd
+</span></span><span class="line"><span class="cl">systemctl status cockpit.socket
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>允许 Cockpit 使用 root 登录</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">echo &#34;#root&#34; | tee /etc/cockpit/disallowed-users
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>开放防火墙端口（默认无需操作）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">9090</span><span class="o">/</span><span class="n">tcp</span> <span class="o">--</span><span class="n">permanent</span>
+</span></span><span class="line"><span class="cl"><span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="debian-跑powerppc64">Debian 跑powerppc64
+</h2><p>可用Debian LXC跑qemu在機器再跑PowerPC</p>
+<p>Cockpit 註冊/取消註冊虛擬機</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo virsh undefine al
+</span></span><span class="line"><span class="cl">nano aix.xml
+</span></span><span class="line"><span class="cl">sudo virsh define aix.xml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Cockpit xml範本 (powerppc64)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;domain type=&#39;qemu&#39; xmlns:qemu=&#39;http://libvirt.org/schemas/domain/qemu/1.0&#39;&gt;
+</span></span><span class="line"><span class="cl">  &lt;name&gt;al&lt;/name&gt;
+</span></span><span class="line"><span class="cl">  &lt;memory unit=&#39;KiB&#39;&gt;3145728&lt;/memory&gt;
+</span></span><span class="line"><span class="cl">  &lt;currentMemory unit=&#39;KiB&#39;&gt;3145728&lt;/currentMemory&gt;
+</span></span><span class="line"><span class="cl">  &lt;vcpu placement=&#39;static&#39;&gt;2&lt;/vcpu&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;os&gt;
+</span></span><span class="line"><span class="cl">    &lt;type arch=&#39;ppc64&#39; machine=&#39;pseries&#39;&gt;hvm&lt;/type&gt;
+</span></span><span class="line"><span class="cl">    &lt;boot dev=&#39;hd&#39;/&gt; 
+</span></span><span class="line"><span class="cl">  &lt;/os&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;cpu mode=&#39;custom&#39; match=&#39;exact&#39;&gt;
+</span></span><span class="line"><span class="cl">    &lt;model fallback=&#39;allow&#39;&gt;POWER7&lt;/model&gt;
+</span></span><span class="line"><span class="cl">  &lt;/cpu&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;clock offset=&#39;utc&#39;/&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_reboot&gt;restart&lt;/on_reboot&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_crash&gt;destroy&lt;/on_crash&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;devices&gt;
+</span></span><span class="line"><span class="cl">    &lt;emulator&gt;/usr/bin/qemu-system-ppc64&lt;/emulator&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;disk type=&#39;file&#39; device=&#39;disk&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;driver name=&#39;qemu&#39; type=&#39;qcow2&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source file=&#39;/hdisk0.qcow2&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;target dev=&#39;sda&#39; bus=&#39;scsi&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/disk&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;disk type=&#39;file&#39; device=&#39;cdrom&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;driver name=&#39;qemu&#39; type=&#39;raw&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source file=&#39;/mnt/iso/template/iso/aix_7200-04-02-2027_1of2_072020.iso&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;target dev=&#39;sdb&#39; bus=&#39;scsi&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;readonly/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/disk&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;interface type=&#39;network&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;mac address=&#39;52:54:00:12:34:10&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source network=&#39;default&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;model type=&#39;virtio&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/interface&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;console type=&#39;pty&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;target type=&#39;serial&#39; port=&#39;0&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/console&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;/devices&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;qemu:commandline&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-serial&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;mon:stdio&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;boot-command=boot cdrom:&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;input-device=/vdevice/vty@71000000&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;output-device=/vdevice/vty@71000000&#39;/&gt;
+</span></span><span class="line"><span class="cl">  &lt;/qemu:commandline&gt;
+</span></span><span class="line"><span class="cl">&lt;/domain&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Cockpit 從硬碟啟動</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;domain type=&#39;qemu&#39; xmlns:qemu=&#39;http://libvirt.org/schemas/domain/qemu/1.0&#39;&gt;
+</span></span><span class="line"><span class="cl">  &lt;name&gt;al&lt;/name&gt;
+</span></span><span class="line"><span class="cl">  &lt;memory unit=&#39;KiB&#39;&gt;3145728&lt;/memory&gt;
+</span></span><span class="line"><span class="cl">  &lt;currentMemory unit=&#39;KiB&#39;&gt;3145728&lt;/currentMemory&gt;
+</span></span><span class="line"><span class="cl">  &lt;vcpu placement=&#39;static&#39;&gt;2&lt;/vcpu&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;os&gt;
+</span></span><span class="line"><span class="cl">    &lt;type arch=&#39;ppc64&#39; machine=&#39;pseries&#39;&gt;hvm&lt;/type&gt;
+</span></span><span class="line"><span class="cl">    &lt;boot dev=&#39;hd&#39;/&gt; 
+</span></span><span class="line"><span class="cl">  &lt;/os&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;cpu mode=&#39;custom&#39; match=&#39;exact&#39;&gt;
+</span></span><span class="line"><span class="cl">    &lt;model fallback=&#39;allow&#39;&gt;POWER7&lt;/model&gt;
+</span></span><span class="line"><span class="cl">  &lt;/cpu&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;clock offset=&#39;utc&#39;/&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_poweroff&gt;destroy&lt;/on_poweroff&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_reboot&gt;restart&lt;/on_reboot&gt;
+</span></span><span class="line"><span class="cl">  &lt;on_crash&gt;destroy&lt;/on_crash&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;devices&gt;
+</span></span><span class="line"><span class="cl">    &lt;emulator&gt;/usr/bin/qemu-system-ppc64&lt;/emulator&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;disk type=&#39;file&#39; device=&#39;disk&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;driver name=&#39;qemu&#39; type=&#39;qcow2&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source file=&#39;/hdisk0.qcow2&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;target dev=&#39;sda&#39; bus=&#39;scsi&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/disk&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;disk type=&#39;file&#39; device=&#39;cdrom&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;driver name=&#39;qemu&#39; type=&#39;raw&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source file=&#39;/mnt/iso/template/iso/aix_7200-04-02-2027_1of2_072020.iso&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;target dev=&#39;sdb&#39; bus=&#39;scsi&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;readonly/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/disk&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;interface type=&#39;network&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;mac address=&#39;52:54:00:12:34:10&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;source network=&#39;default&#39;/&gt;
+</span></span><span class="line"><span class="cl">      &lt;model type=&#39;virtio&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/interface&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    &lt;console type=&#39;pty&#39;&gt;
+</span></span><span class="line"><span class="cl">      &lt;target type=&#39;serial&#39; port=&#39;0&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;/console&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;/devices&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt;qemu:commandline&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-serial&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;mon:stdio&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;boot-command=boot disk:&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;input-device=/vdevice/vty@71000000&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;-prom-env&#39;/&gt;
+</span></span><span class="line"><span class="cl">    &lt;qemu:arg value=&#39;output-device=/vdevice/vty@71000000&#39;/&gt;
+</span></span><span class="line"><span class="cl">  &lt;/qemu:commandline&gt;
+</span></span><span class="line"><span class="cl">&lt;/domain&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="參考資料">參考資料
+</h2><ul>
+<li><a href="https://post.smzdm.com/p/apw3dwl0/">甚麼值得買，KVM虚拟化平台搭建与Cockpit管理：基于Rocky Linux 9.6</a></li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="RVTools：好用Windows管理ESXi虛擬機軟體\n常用指令 1 esxcfg-nics -l //檢查所有網孔 取消ESXi 虛擬內存 開機後按Shift+o 在cdromBoot runweasel 後面加入autoPartitionOSDataSize = 4096\n跳過vCenter 記憶體檢查 跳過vCenter Setup介面的硬件檢查[1] (�������s�b)\nIf Your homelab ESX have not sufficient RAM (8 GB for 6.0 and 10 GB for 6.5) is possible to pass hardware check vCenter 6.0 – run: installer.exe &ldquo;SKIP_HARDWARE_CHECKS=1&rdquo; vCenter 6.5 – edit file: vcsa-ui-installer\\win32\\resources\\app\\resources\\layout.json\n1 2 3 4 5 6 7 set: &#34;tiny&#34;: { &#34;cpu&#34;: 2, &#34;memory&#34;: 4096, &#34;host-count&#34;: 10, &#34;vm-count&#34;: 100, &#34;disk-swap&#34;: &#34;25GB&#34;, [1] (�������s�b) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357\n">
+<title>ESXi 安裝與細項配置</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%88%87%E7%B4%B0%E9%A0%85%E9%85%8D%E7%BD%AE/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="ESXi 安裝與細項配置">
+<meta property='og:description' content="RVTools：好用Windows管理ESXi虛擬機軟體\n常用指令 1 esxcfg-nics -l //檢查所有網孔 取消ESXi 虛擬內存 開機後按Shift+o 在cdromBoot runweasel 後面加入autoPartitionOSDataSize = 4096\n跳過vCenter 記憶體檢查 跳過vCenter Setup介面的硬件檢查[1] (�������s�b)\nIf Your homelab ESX have not sufficient RAM (8 GB for 6.0 and 10 GB for 6.5) is possible to pass hardware check vCenter 6.0 – run: installer.exe &ldquo;SKIP_HARDWARE_CHECKS=1&rdquo; vCenter 6.5 – edit file: vcsa-ui-installer\\win32\\resources\\app\\resources\\layout.json\n1 2 3 4 5 6 7 set: &#34;tiny&#34;: { &#34;cpu&#34;: 2, &#34;memory&#34;: 4096, &#34;host-count&#34;: 10, &#34;vm-count&#34;: 100, &#34;disk-swap&#34;: &#34;25GB&#34;, [1] (�������s�b) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%88%87%E7%B4%B0%E9%A0%85%E9%85%8D%E7%BD%AE/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='vmware' /><meta property='article:published_time' content='2026-02-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-19T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="ESXi 安裝與細項配置">
+<meta name="twitter:description" content="RVTools：好用Windows管理ESXi虛擬機軟體\n常用指令 1 esxcfg-nics -l //檢查所有網孔 取消ESXi 虛擬內存 開機後按Shift+o 在cdromBoot runweasel 後面加入autoPartitionOSDataSize = 4096\n跳過vCenter 記憶體檢查 跳過vCenter Setup介面的硬件檢查[1] (�������s�b)\nIf Your homelab ESX have not sufficient RAM (8 GB for 6.0 and 10 GB for 6.5) is possible to pass hardware check vCenter 6.0 – run: installer.exe &ldquo;SKIP_HARDWARE_CHECKS=1&rdquo; vCenter 6.5 – edit file: vcsa-ui-installer\\win32\\resources\\app\\resources\\layout.json\n1 2 3 4 5 6 7 set: &#34;tiny&#34;: { &#34;cpu&#34;: 2, &#34;memory&#34;: 4096, &#34;host-count&#34;: 10, &#34;vm-count&#34;: 100, &#34;disk-swap&#34;: &#34;25GB&#34;, [1] (�������s�b) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#常用指令">常用指令</a>
+      <ol>
+        <li><a href="#取消esxi-虛擬內存">取消ESXi 虛擬內存</a></li>
+      </ol>
+    </li>
+    <li><a href="#跳過vcenter-記憶體檢查">跳過vCenter 記憶體檢查</a></li>
+    <li><a href="#直通內顯">直通內顯</a></li>
+    <li><a href="#直通sata控制器">直通SATA控制器</a></li>
+    <li><a href="#直通rdm硬碟">直通RDM硬碟</a></li>
+    <li><a href="#常用指令-1">常用指令</a></li>
+    <li><a href="#自動關機">自動關機</a></li>
+    <li><a href="#斷線除錯">斷線除錯</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/esxi-%E5%AE%89%E8%A3%9D%E8%88%87%E7%B4%B0%E9%A0%85%E9%85%8D%E7%BD%AE/">ESXi 安裝與細項配置</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-02-19T00:00:00Z'>Feb 19, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>RVTools：好用Windows管理ESXi虛擬機軟體</p>
+<h2 id="常用指令">常用指令
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">esxcfg-nics -l   //檢查所有網孔
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="取消esxi-虛擬內存">取消ESXi 虛擬內存
+</h3><p>開機後按<code>Shift+o</code> 在cdromBoot runweasel 後面加入<code>autoPartitionOSDataSize = 4096</code></p>
+<h2 id="跳過vcenter-記憶體檢查">跳過vCenter 記憶體檢查
+</h2><p>跳過vCenter Setup介面的硬件檢查<span class="broken-link" style="color: gray;">[1] (�������s�b)</span></p>
+<p>If Your homelab ESX have not sufficient RAM (8 GB for 6.0 and 10 GB for 6.5) is possible to pass hardware check
+vCenter 6.0 – run: installer.exe &ldquo;SKIP_HARDWARE_CHECKS=1&rdquo;
+vCenter 6.5 – edit file:
+vcsa-ui-installer\win32\resources\app\resources\layout.json</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set:
+</span></span><span class="line"><span class="cl">   &#34;tiny&#34;: {
+</span></span><span class="line"><span class="cl">        &#34;cpu&#34;: 2,
+</span></span><span class="line"><span class="cl">        &#34;memory&#34;: 4096,
+</span></span><span class="line"><span class="cl">        &#34;host-count&#34;: 10,
+</span></span><span class="line"><span class="cl">        &#34;vm-count&#34;: 100,
+</span></span><span class="line"><span class="cl">        &#34;disk-swap&#34;: &#34;25GB&#34;,
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<p><span class="broken-link" style="color: gray;">[1] (�������s�b)</span> <a href="https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357">https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357</a></p>
+<h2 id="直通內顯">直通內顯
+</h2><p>UHD 630 直通方法</p>
+<ol>
+<li>主機/管理/系統/高級設定，在<code>VMkernel.Boot.disableACSCheck</code> 修改為 True，作用為IOMMU強制獨立分組</li>
+<li>主機-&gt;管理-&gt;硬體，UHD Graphics 630 切換為直通</li>
+<li>使用SSH連進ESXi，並輸入<code>esxcli system settings kernel set -s vga -v FALSE</code></li>
+<li>在虛擬機選項/高級/編輯設置，添加參數 <code>hypervisor.cpuid.v0</code> 為 <code>FALSE</code> ，欺騙作業系統不在虛擬機執行</li>
+<li>在VM中的PCIE設備添加UHD Graphics 630</li>
+</ol>
+<h2 id="直通sata控制器">直通SATA控制器
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lspci -v | grep &#34;Class 0106&#34; -B 1
+</span></span><span class="line"><span class="cl">## 填入以下資訊
+</span></span><span class="line"><span class="cl">vi /etc/vmware/passthru.map
+</span></span><span class="line"><span class="cl">#Intel Corporation Lynx Point AHCI Controller
+</span></span><span class="line"><span class="cl">8086 31e3 d3d0 false
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">## 重開機即可
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="直通rdm硬碟">直通RDM硬碟
+</h2><ol>
+<li>儲存區/裝置，可以看到目前的外部硬碟與SSD，這邊先從名稱點進去，記錄第二塊硬碟名稱複製<code>Local ATA Disk (t10.ATA_____WDC_WD5000AACS2D00ZUB0________________________WD2DWCASU2603567)</code> 括弧裡面名稱
+<img
+    src="/my-portfolio/Pasted%20image%2020260718173909.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>進入ESXi Shell輸入指令</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">vmkfstools</span> <span class="o">-</span><span class="n">z</span> <span class="o">/</span><span class="n">vmfs</span><span class="o">/</span><span class="n">devices</span><span class="o">/</span><span class="n">disks</span><span class="o">/</span><span class="n">t10</span><span class="o">.</span><span class="n">ATA_____WDC_WD5000AACS2D00ZUB0________________________WD2DWCASU260</span>
+</span></span><span class="line"><span class="cl"><span class="mi">3567</span> <span class="o">/</span><span class="n">vmfs</span><span class="o">/</span><span class="n">volumes</span><span class="o">/</span><span class="n">datastore1</span><span class="o">/</span><span class="n">wd500g_rdm</span><span class="o">.</span><span class="n">vmdk</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>把這個 <code>wd500g_rdm.vmdk</code> 加入虛擬機即可
+<img
+    src="/my-portfolio/Pasted%20image%2020260718174428.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="常用指令-1">常用指令
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># esxcli vm process list #獲取正在運行的虛擬機器的資訊
+</span></span><span class="line"><span class="cl"># esxcli vm process kill --type=hard --world-id=245735 #關閉虛擬機器
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="自動關機">自動關機
+</h2><p>在esxi的shell命令列中不支援cron命令，只能修改計畫任務（/var/spool/crontab/root），但由於這個檔每次重啟後會被自動重置，所以我們需要設置開機自動向計畫任務檔裡添加定時關機，將腳本放在vmfs/volumes/datastore1/不會被重置目錄裡</p>
+<p>1.我們需要修改（/etc/rc.local.d/local.sh)，在<strong>exit 0這一行之前</strong>添加如下的腳本，使其每次開機都自動添加定時任務。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#关闭cron进程（关闭进程后修改计划任务root文件）</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kill</span> <span class="o">$</span><span class="p">(</span><span class="n">cat</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">crond</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#向/var/spool/crontab/root里添加关闭虚拟机、关机的计划任务</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">echo</span> <span class="s1">&#39;40 13 * * * /vmfs/volumes/datastore1/vm-shutdown.sh&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">spool</span><span class="o">/</span><span class="n">cron</span><span class="o">/</span><span class="n">crontabs</span><span class="o">/</span><span class="n">root</span><span class="p">[[</span><span class="mi">1</span><span class="p">]](</span><span class="c1">#_ftn1)</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">echo</span> <span class="s1">&#39;45 13 * * * /vmfs/volumes/datastore1/esxi-shutdown.sh&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">spool</span><span class="o">/</span><span class="n">cron</span><span class="o">/</span><span class="n">crontabs</span><span class="o">/</span><span class="n">root</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#重启cron进程（将加载修改后的root文件）</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vmware</span><span class="o">/</span><span class="n">busybox</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">busybox</span> <span class="n">crond</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.由於/etc/rc.local.d/local.sh檔重啟後會丟失，所以需要手動執行一次下面的命令。（local.sh檔每次更改後想要永久保存設置的話，就需要手動執行一次。）
+<code>/sbin/auto-backup.sh</code></p>
+<p>3.先透過執行vim-cmd vmsvc/getallvms獲取需關機VM，後vi /vmfs/volumes/datastore1/vm-shutdown.sh填入以下內容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="c1">#关闭虚拟机(有安装VMware tools的虚拟机使用power.shutdown,没有的就只能使用power.off来进行强制关机。)</span>
+</span></span><span class="line"><span class="cl">vim-cmd vmsvc/power.shutdown <span class="m">2</span>
+</span></span><span class="line"><span class="cl">vim-cmd vmsvc/power.shutdown <span class="m">3</span>
+</span></span><span class="line"><span class="cl">vim-cmd vmsvc/power.shutdown <span class="m">4</span>
+</span></span><span class="line"><span class="cl">vim-cmd vmsvc/power.off <span class="m">5</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>4.vi /vmfs/volumes/datastore1/esxi-shutdown.sh 填入以下內容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="c1">#关闭esxi主机电源</span>
+</span></span><span class="line"><span class="cl">/sbin/poweroff
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>5.將兩個腳本增加可執行權限<span class="broken-link" style="color: gray;">[1] (�������s�b)</span></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">chmod +x /vmfs/volumes/datastore1/vm-shutdown.sh
+</span></span><span class="line"><span class="cl">chmod +x /vmfs/volumes/datastore1/esxi-shutdown.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最後重啟ESXi，執行cat /var/spool/cron/crontabs/root，出現腳本即完成
+<img
+    src="/my-portfolio/Pasted%20image%2020260506222806.png"
+    alt=""
+    loading="lazy"
+></p>
+<hr>
+<p><span class="broken-link" style="color: gray;">[1] (�������s�b)</span> Linux檔案的基本權限就有九個，分別是owner/group/others三種身份各有自己的read/write/execute權限，chmod +x為可執行、chmod 777全部可以rwx
+40 13 、45 13 處表示任務執行時間，格式為[分] [時] [日] [月份] [星期]，由於esxi的系統時間採用的是UTC時間（國際標準時間），而中國是UTC+8，所以想要在北京時間22:40時關閉虛擬機器的話，就只需要用22-8算出UTC時間為14，任務執行時間填寫為40 14 、45 14 就可以了。</p>
+<h2 id="斷線除錯">斷線除錯
+</h2><p>實際案例遇到i219v當拔除超過5分鐘後就無法再連線，根據排除因為i219v是消費級晶片,第一思路關閉自動協商調整成1000Mbps失效，第二關閉EEE省電模組寫死在驅動，雖然ESXi 可以使用但是社群版驅動<code>ne1000</code> ，BIOS也找不到可以關閉EEE選項，只好直接放棄ESXi</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">esxcli network nic tso set -n vmnic0 -e 0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>持久化設定
+/etc/rc.local.d/local.sh 在exit0 之前加入下面這條</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">esxcli network nic tso set -n vmnic0 -e 0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重開機生效</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/sbin/auto-backup.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>ESXI 7升8
+![[Pasted image 20260321174801.png]]</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/my-portfolio/tags/vmware/">Vmware</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

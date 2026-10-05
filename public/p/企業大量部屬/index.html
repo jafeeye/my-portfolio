@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="cloudinit 的作法是抓特殊映像檔，在PVE加入一個cloudinit硬碟寫好cloudinit的帳戶名密碼，轉換範本之後大量clone就能得到不同UUID相容設定的機器。(這是NoCloud作法，因為cloudinit主要是在雲端機器去撈雲端設定檔的Link-local Addresss 169.254.169.254 )\nGolden Image\n1 2 3 4 5 6 7 8 9 10 11 Terraform ↓ PVE API ↓ Clone VM Template ↓ 自動生成一個 CloudInit ISO ↓ 掛到 VM ↓ Cloudbase-Init 讀取內容 進階流程\n1 2 3 4 5 6 7 8 9 10 11 12 13 MDT ↓ 建立 Golden Image ↓ Sysprep ↓ 做成 PVE Template ↓ Terraform Clone ↓ Cloudbase-init ↓ Ansible 首次開機重置\n">
+<title>企業大量部屬</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E9%83%A8%E5%B1%AC/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="企業大量部屬">
+<meta property='og:description' content="cloudinit 的作法是抓特殊映像檔，在PVE加入一個cloudinit硬碟寫好cloudinit的帳戶名密碼，轉換範本之後大量clone就能得到不同UUID相容設定的機器。(這是NoCloud作法，因為cloudinit主要是在雲端機器去撈雲端設定檔的Link-local Addresss 169.254.169.254 )\nGolden Image\n1 2 3 4 5 6 7 8 9 10 11 Terraform ↓ PVE API ↓ Clone VM Template ↓ 自動生成一個 CloudInit ISO ↓ 掛到 VM ↓ Cloudbase-Init 讀取內容 進階流程\n1 2 3 4 5 6 7 8 9 10 11 12 13 MDT ↓ 建立 Golden Image ↓ Sysprep ↓ 做成 PVE Template ↓ Terraform Clone ↓ Cloudbase-init ↓ Ansible 首次開機重置\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E9%83%A8%E5%B1%AC/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-05-10T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="企業大量部屬">
+<meta name="twitter:description" content="cloudinit 的作法是抓特殊映像檔，在PVE加入一個cloudinit硬碟寫好cloudinit的帳戶名密碼，轉換範本之後大量clone就能得到不同UUID相容設定的機器。(這是NoCloud作法，因為cloudinit主要是在雲端機器去撈雲端設定檔的Link-local Addresss 169.254.169.254 )\nGolden Image\n1 2 3 4 5 6 7 8 9 10 11 Terraform ↓ PVE API ↓ Clone VM Template ↓ 自動生成一個 CloudInit ISO ↓ 掛到 VM ↓ Cloudbase-Init 讀取內容 進階流程\n1 2 3 4 5 6 7 8 9 10 11 12 13 MDT ↓ 建立 Golden Image ↓ Sysprep ↓ 做成 PVE Template ↓ Terraform Clone ↓ Cloudbase-init ↓ Ansible 首次開機重置\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#優化項目">優化項目</a></li>
+    <li><a href="#iventoy-lxc-pxe-部屬">iVentoy LXC PXE 部屬</a></li>
+    <li><a href="#netbootxyz">netboot.xyz</a></li>
+    <li><a href="#clonezilla-對拷-pve-p2v">Clonezilla 對拷 PVE (P2V)</a></li>
+    <li><a href="#gparted">GParted</a></li>
+    <li><a href="#iac-ct">IaC CT</a>
+      <ol>
+        <li><a href="#思路二proxy-dhcp-旁路做法你說的新思路">思路二：Proxy DHCP 旁路做法（你說的「新思路」）</a>
+          <ol>
+            <li><a href="#當你的裝機電腦client開機時網路上演的精彩小劇場">當你的裝機電腦（Client）開機時，網路上演的精彩小劇場：</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#注意事項">注意事項</a></li>
+    <li><a href="#gitlab一專案更改多台lxc設定檔">gitlab一專案更改多台LXC設定檔</a>
+      <ol>
+        <li><a href="#1-專案目錄結構設計怎麼把-30-台的檔案放一起">1. 專案目錄結構設計（怎麼把 30 台的檔案放一起？）</a></li>
+        <li><a href="#2-核心三步驟它是怎麼連動的">2. 核心三步驟：它是怎麼連動的？</a></li>
+      </ol>
+    </li>
+    <li><a href="#win-大量重置">Win 大量重置</a></li>
+    <li><a href="#linux-大量重置">Linux 大量重置</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%A4%A7%E9%87%8F%E9%83%A8%E5%B1%AC/">企業大量部屬</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-05-10T00:00:00Z'>May 10, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>cloudinit 的作法是抓特殊映像檔，在PVE加入一個cloudinit硬碟寫好cloudinit的帳戶名密碼，轉換範本之後大量clone就能得到不同UUID相容設定的機器。(這是NoCloud作法，因為cloudinit主要是在雲端機器去撈雲端設定檔的Link-local Addresss 169.254.169.254 )</p>
+<p>Golden Image</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Terraform
+</span></span><span class="line"><span class="cl">  ↓
+</span></span><span class="line"><span class="cl">PVE API
+</span></span><span class="line"><span class="cl">  ↓
+</span></span><span class="line"><span class="cl">Clone VM Template
+</span></span><span class="line"><span class="cl">  ↓
+</span></span><span class="line"><span class="cl">自動生成一個 CloudInit ISO
+</span></span><span class="line"><span class="cl">  ↓
+</span></span><span class="line"><span class="cl">掛到 VM
+</span></span><span class="line"><span class="cl">  ↓
+</span></span><span class="line"><span class="cl">Cloudbase-Init 讀取內容
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>進階流程</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MDT
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">建立 Golden Image
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">Sysprep
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">做成 PVE Template
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">Terraform Clone
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">Cloudbase-init
+</span></span><span class="line"><span class="cl"> ↓
+</span></span><span class="line"><span class="cl">Ansible
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首次開機重置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1. 將 machine-id 檔案清空（保留空檔案，不能直接刪除檔案）
+</span></span><span class="line"><span class="cl">sudo truncate -s 0 /etc/machine-id
+</span></span><span class="line"><span class="cl"># 2. 刪除現有的 SSH 金鑰（放心，開機會自動重生成）
+</span></span><span class="line"><span class="cl">sudo rm -f /etc/ssh/ssh_host_*
+</span></span><span class="line"><span class="cl"># 3. 告訴 systemd 這是首次開機，觸發系統通用化（ConditionFirstBoot）
+</span></span><span class="line"><span class="cl">sudo systemctl preset-all
+</span></span><span class="line"><span class="cl"># 4. 立即關機
+</span></span><span class="line"><span class="cl">sudo poweroff
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>模板製作過程</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Win11 VM
+</span></span><span class="line"><span class="cl">→ 安裝 VirtIO
+</span></span><span class="line"><span class="cl">→ 安裝 Cloudbase-Init
+</span></span><span class="line"><span class="cl">→ Sysprep
+</span></span><span class="line"><span class="cl">→ 關機
+</span></span><span class="line"><span class="cl">→ Convert to Template
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="優化項目">優化項目
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 開啟rdp
+</span></span><span class="line"><span class="cl">Set-ItemProperty -Path &#39;HKLM:\System\CurrentControlSet\Control\Terminal Server&#39; -name &#34;fDenyTSConnections&#34; -value 0  
+</span></span><span class="line"><span class="cl"># 關閉休眠
+</span></span><span class="line"><span class="cl">powercfg /hibernate off
+</span></span><span class="line"><span class="cl"># 關閉記憶體完整性
+</span></span><span class="line"><span class="cl">reg add &#34;HKLM\System\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity&#34; /v &#34;Enabled&#34; /t REG_DWORD /d 0 /f
+</span></span><span class="line"><span class="cl"># Credential Guard (停用會導致hyper-v無法開啟)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="iventoy-lxc-pxe-部屬">iVentoy LXC PXE 部屬
+</h2><ol>
+<li>敲入參數</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bash -c &#34;$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>參考 <a href="https://www.youtube.com/watch?v=TNseK41A0DQ">YT影片</a>，使用Advanced 並且輸入<code>192.168.8.X/24</code> 自訂成以下參數
+<img
+    src="/my-portfolio/iventoy260228.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>安裝後豋入SCP把ISO檔放進去就可以啟動服務
+<img
+    src="/my-portfolio/iventoyscr260228.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>用成不同網卡做PXE
+<img
+    src="/my-portfolio/Pasted%20image%2020260710162448.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>iVentoy LXC 掛載Storage ISO</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /etc/pve/storage.cfg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">pct</span> <span class="n">config</span> <span class="o">&lt;</span><span class="n">vmid</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">pct</span> <span class="n">set</span> <span class="mi">100</span> <span class="o">-</span><span class="n">mp0</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">template</span><span class="o">/</span><span class="n">iso</span><span class="p">,</span><span class="n">mp</span><span class="o">=/</span><span class="n">mnt</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">iso</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="netbootxyz">netboot.xyz
+</h2><h2 id="clonezilla-對拷-pve-p2v">Clonezilla 對拷 PVE (P2V)
+</h2><ol>
+<li>VM開機選擇Clonezilla 的ISO檔</li>
+<li>選擇<code>device-device</code> -&gt; <code>remote</code></li>
+<li>在一台實體機使用 Clonezilla 開機 <code>device-device</code> -&gt; <code>remote</code></li>
+<li>透過網路直接把實體機系統轉成VM</li>
+</ol>
+<h2 id="gparted">GParted
+</h2><h2 id="iac-ct">IaC CT
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[ 你電腦 Git Push ] ──► [ GitLab 專案 ] 
+</span></span><span class="line"><span class="cl">│ (發送任務) ▼
+</span></span><span class="line"><span class="cl">[ PVE LXC: ID 100 ] (長駐維運機) 
+</span></span><span class="line"><span class="cl"> ┌──────────────────────────────┐ 
+</span></span><span class="line"><span class="cl"> │ 1. GitLab Runner (收到任務)   │ 
+</span></span><span class="line"><span class="cl"> │ 2. Terraform (打 API 蓋 VM)   │──► [ PVE 宿主機 API ] 
+</span></span><span class="line"><span class="cl"> │ 3. Ansible (SSH 進 VM 裝軟體) │──► [ 新蓋好的 VM ] 
+</span></span><span class="line"><span class="cl"> └──────────────────────────────┘
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>安裝Rocky Linux 的CT模板,在 <a href="https://images.linuxcontainers.org/images/">https://images.linuxcontainers.org/images/</a> 可以找到或PVE裡面下載</li>
+<li>勾選 Unprivileged container （非特權容器）、nesting（巢狀虛擬化）</li>
+<li>因為是IaC專用機，把這台固定IP或實體路由器做DHCP Static IP Reservation或使用PVE IPAM</li>
+<li>安裝Terraform、Ansible、Gitlab Runner</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">:&#39;inital&#39;
+</span></span><span class="line"><span class="cl">dnf update -y &amp;&amp; dnf install -y epel-release &amp;&amp; dnf install -y curl wget git python3-pip openssh-clients ;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">:&#39;GitLab Runner&#39;
+</span></span><span class="line"><span class="cl">curl -L &#34;https://packages.gitlab.com/install/repositories/coordinator/script.rpm.sh&#34; | bash &amp;&amp; dnf install -y gitlab-runner ;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">:&#39;安裝 Terraform&#39;
+</span></span><span class="line"><span class="cl">dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo &amp;&amp; dnf install -y terraform ; 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">:&#39;安裝 Ansible&#39;
+</span></span><span class="line"><span class="cl">dnf install -y ansible-core ;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">:&#39;切換到 gitlab-runner 帳號，並生成 ed25519 金鑰（一路按 Enter 到底）&#39;
+</span></span><span class="line"><span class="cl">su - gitlab-runner -c &#34;ssh-keygen -t ed25519 -N &#39;&#39; -f ~/.ssh/id_ed25519&#34; ;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 印出公鑰，方便你等一下複製到 PVE 的 Cloud-Init 模板中
+</span></span><span class="line"><span class="cl">echo -e &#34;\n=== 【 這是你的自動化 SSH 公鑰，請複製它 】 ===&#34; &amp;&amp; cat /home/gitlab-runner/.ssh/id_ed25519.pub ;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="思路二proxy-dhcp-旁路做法你說的新思路">思路二：Proxy DHCP 旁路做法（你說的「新思路」）
+</h3><ul>
+<li>
+<p><strong>條件：</strong> <strong>主路由器完全不動</strong>，直接維持原樣。</p>
+</li>
+<li>
+<p><strong>玩法：</strong> 你把 iVentoy 的 DHCP 模式切換為 <strong>「外部 Proxy (External Proxy)」</strong>。這時候，iVentoy 內部其實就是啟動了我們上一題聊到的 <code>dnsmasq</code>（或是類似的 PXE Proxy 服務）。</p>
+</li>
+</ul>
+<h4 id="當你的裝機電腦client開機時網路上演的精彩小劇場">當你的裝機電腦（Client）開機時，網路上演的精彩小劇場：
+</h4><ol>
+<li><strong>Client 廣播：</strong> 「有沒有人能給我 IP 順便讓我 PXE 開機？」</li>
+<li><strong>主路由器（笨小烏龜）回應：</strong> 「IP 給你 <code>192.168.8.50</code>，其他我什麼都不知道！」</li>
+<li><strong>iVentoy (Proxy DHCP) 同時回應：</strong> 「我聽到了！我不會發 IP 給你（不跟主路由搶工作），但我手上有一份開機檔案叫 <code>ipxe.efi</code>，在 <code>192.168.8.200</code> 這裡，你拿去用！」</li>
+<li><strong>Client 網卡大腦：</strong> 把主路由給的 IP，和 iVentoy 給的開機引導<strong>完美合體</strong>，成功載入 iVentoy 的隨身碟裝機選單！</li>
+</ol>
+<h2 id="注意事項">注意事項
+</h2><p>複製linux 範本記得去改 <code>/etc/machine-id</code></p>
+<h2 id="gitlab一專案更改多台lxc設定檔">gitlab一專案更改多台LXC設定檔
+</h2><p><strong>建立一個 GitLab 專案（例如叫 <code>lxc-infrastructure</code>）</strong>，就能輕鬆掌控所有 LXC 的檔案</p>
+<h3 id="1-專案目錄結構設計怎麼把-30-台的檔案放一起">1. 專案目錄結構設計（怎麼把 30 台的檔案放一起？）
+</h3><p>在同一個 GitLab 專案裡，你可以用「資料夾」把各台 LXC 的設定檔隔開，並在根目錄放一個 <strong>Ansible</strong> 的自動化劇本。結構長這樣：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lxc-infrastructure/
+</span></span><span class="line"><span class="cl">├── .gitlab-ci.yml               # GitLab CI/CD 流程定義檔
+</span></span><span class="line"><span class="cl">├── inventory.ini                # 紀錄 30 台 LXC 的 IP 與連線資訊
+</span></span><span class="line"><span class="cl">├── deploy-playbook.yml          # Ansible 派發檔案的劇本
+</span></span><span class="line"><span class="cl">│
+</span></span><span class="line"><span class="cl">└── lxc-configs/                 # 存放各台 LXC 檔案的總目錄
+</span></span><span class="line"><span class="cl">    ├── lxc-101-nginx/
+</span></span><span class="line"><span class="cl">    │   └── nginx.conf
+</span></span><span class="line"><span class="cl">    ├── lxc-102-homepage/
+</span></span><span class="line"><span class="cl">    │   ├── services.yaml
+</span></span><span class="line"><span class="cl">    │   └── bookmarks.yaml
+</span></span><span class="line"><span class="cl">    └── lxc-103-mysql/
+</span></span><span class="line"><span class="cl">        └── my.cnf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-核心三步驟它是怎麼連動的">2. 核心三步驟：它是怎麼連動的？
+</h3><p>當你在 Code-Server 修改了 <code>lxc-102-homepage/services.yaml</code> 並 Commit Push 到 GitLab 後，後台會發生以下三件事：</p>
+<ol>
+<li>定義通訊錄（<code>inventory.ini</code>）</li>
+</ol>
+<p>你在專案裡會有一份通訊錄，告訴系統這 30 台 LXC 分別叫什麼名字、IP 是多少：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[web_servers]
+</span></span><span class="line"><span class="cl">lxc-101-nginx     ansible_host=192.168.1.101
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[dashboard_servers]
+</span></span><span class="line"><span class="cl">lxc-102-homepage  ansible_host=192.168.1.102
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[db_servers]
+</span></span><span class="line"><span class="cl">lxc-103-mysql     ansible_host=192.168.1.103
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>寫好搬運規則（<code>deploy-playbook.yml</code>）</li>
+</ol>
+<p>Ansible 劇本會寫得很像白話文，定義好「把 Git 裡的 A 檔案，複製到 102 號 LXC 的 B 路徑」：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- name: 同步 Homepage 設定檔並重啟
+</span></span><span class="line"><span class="cl">  hosts: dashboard_servers
+</span></span><span class="line"><span class="cl">  tasks:
+</span></span><span class="line"><span class="cl">    - name: 複製 YAML 檔到 LXC 內部
+</span></span><span class="line"><span class="cl">      copy:
+</span></span><span class="line"><span class="cl">        src: lxc-configs/lxc-102-homepage/services.yaml
+</span></span><span class="line"><span class="cl">        dest: /app/config/services.yaml
+</span></span><span class="line"><span class="cl">        owner: root
+</span></span><span class="line"><span class="cl">        group: root
+</span></span><span class="line"><span class="cl">        mode: &#39;0644&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>自動化觸發（<code>.gitlab-ci.yml</code>）</li>
+</ol>
+<p>這是 GitLab 的靈魂。當你 Push 程式碼時，GitLab Runner 會啟動，並自動執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">deploy_job:
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    # 執行 Ansible，它會自動根據通訊錄把檔案送到對應的 LXC
+</span></span><span class="line"><span class="cl">    - ansible-playbook -i inventory.ini deploy-playbook.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="win-大量重置">Win 大量重置
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sysprep /generalize /oobe /shutdown
+</span></span><span class="line"><span class="cl">登入Shift+F10 start ms-cxh:localonly
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 確認目前uuid
+</span></span><span class="line"><span class="cl">whoami /user 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">下了 sysprep /generalize /oobe /shutdown，會跑到建立新帳號
+</span></span><span class="line"><span class="cl">如果不想用新帳號 Ctrl+Shift+F3 會在重開使用Administrator登入
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;unattend xmlns=&#34;urn:schemas-microsoft-com:unattend&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;settings pass=&#34;oobeSystem&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;component name=&#34;Microsoft-Windows-Shell-Setup&#34; processorArchitecture=&#34;amd64&#34; publicKeyToken=&#34;31bf3856ad364e35&#34; language=&#34;neutral&#34; versionScope=&#34;nonSxS&#34; xmlns:wcm=&#34;http://schemas.microsoft.com/WMIConfig/2002/State&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;&gt;
+</span></span><span class="line"><span class="cl">            &lt;OOBE&gt;
+</span></span><span class="line"><span class="cl">                &lt;HideEULAPage&gt;true&lt;/HideEULAPage&gt;
+</span></span><span class="line"><span class="cl">                &lt;HideOEMRegistrationScreen&gt;true&lt;/HideOEMRegistrationScreen&gt;
+</span></span><span class="line"><span class="cl">                &lt;HideOnlineAccountScreens&gt;true&lt;/HideOnlineAccountScreens&gt;
+</span></span><span class="line"><span class="cl">                &lt;HideWirelessSetupInOOBE&gt;true&lt;/HideWirelessSetupInOOBE&gt;
+</span></span><span class="line"><span class="cl">                &lt;NetworkLocation&gt;Work&lt;/NetworkLocation&gt;
+</span></span><span class="line"><span class="cl">                &lt;ProtectYourPC&gt;3&lt;/ProtectYourPC&gt;
+</span></span><span class="line"><span class="cl">            &lt;/OOBE&gt;
+</span></span><span class="line"><span class="cl">            &lt;AutoLogon&gt;
+</span></span><span class="line"><span class="cl">                &lt;Enabled&gt;true&lt;/Enabled&gt;
+</span></span><span class="line"><span class="cl">                &lt;LogonCount&gt;999&lt;/LogonCount&gt;
+</span></span><span class="line"><span class="cl">                &lt;Username&gt;你原本的帳號名稱&lt;/Username&gt;
+</span></span><span class="line"><span class="cl">                &lt;Password&gt;
+</span></span><span class="line"><span class="cl">                    &lt;Value&gt;你原本的密碼&lt;/Value&gt;
+</span></span><span class="line"><span class="cl">                    &lt;PlainText&gt;true&lt;/PlainText&gt;
+</span></span><span class="line"><span class="cl">                &lt;/Password&gt;
+</span></span><span class="line"><span class="cl">            &lt;/AutoLogon&gt;
+</span></span><span class="line"><span class="cl">            &lt;TimeZone&gt;Taipei Standard Time&lt;/TimeZone&gt;
+</span></span><span class="line"><span class="cl">        &lt;/component&gt;
+</span></span><span class="line"><span class="cl">    &lt;/settings&gt;
+</span></span><span class="line"><span class="cl">&lt;/unattend&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sysprep /generalize /oobe /reboot /unattend:C:\Windows\System32\Sysprep\unattend.xml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="linux-大量重置">Linux 大量重置
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">machine</span><span class="o">-</span><span class="n">id</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dbus</span><span class="o">/</span><span class="n">machine</span><span class="o">-</span><span class="n">id</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemd</span><span class="o">-</span><span class="n">machine</span><span class="o">-</span><span class="n">id</span><span class="o">-</span><span class="n">setup</span> <span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Synology DSM\r下載docker-compose.yml及example.env ">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Synology DSM 下載docker-compose.yml及example.env 編輯檔案 .env 1 2 3 4 5 6 UPLOAD_LOCATION=/volume4/photo/library DB_DATA_LOCATION=./postgres IMMICH_VERSION=v2 DB_PASSWORD=postgres DB_USERNAME=postgres DB_DATABASE_NAME=immich 建立不同使用者,並且套用儲存範本資料夾會被放在\n1 /library/admin ">
 <title>immich 安裝教學</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/immich-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.b23bd73711f33d8ec70b961447b7c1ae20ad7f830f24412cca4d88a1273b5ec9.css"><meta property='og:title' content="immich 安裝教學">
-<meta property='og:description' content="Synology DSM\r下載docker-compose.yml及example.env ">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="immich 安裝教學">
+<meta property='og:description' content="Synology DSM 下載docker-compose.yml及example.env 編輯檔案 .env 1 2 3 4 5 6 UPLOAD_LOCATION=/volume4/photo/library DB_DATA_LOCATION=./postgres IMMICH_VERSION=v2 DB_PASSWORD=postgres DB_USERNAME=postgres DB_DATABASE_NAME=immich 建立不同使用者,並且套用儲存範本資料夾會被放在\n1 /library/admin ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/immich-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-06T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="immich 安裝教學">
-<meta name="twitter:description" content="Synology DSM\r下載docker-compose.yml及example.env ">
+<meta name="twitter:description" content="Synology DSM 下載docker-compose.yml及example.env 編輯檔案 .env 1 2 3 4 5 6 UPLOAD_LOCATION=/volume4/photo/library DB_DATA_LOCATION=./postgres IMMICH_VERSION=v2 DB_PASSWORD=postgres DB_USERNAME=postgres DB_DATABASE_NAME=immich 建立不同使用者,並且套用儲存範本資料夾會被放在\n1 /library/admin ">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -359,8 +359,37 @@
     <h2 id="synology-dsm">Synology DSM
 </h2><ol>
 <li>下載docker-compose.yml及example.env</li>
+<li>編輯檔案
+.env</li>
 </ol>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">UPLOAD_LOCATION=/volume4/photo/library
+</span></span><span class="line"><span class="cl">DB_DATA_LOCATION=./postgres
+</span></span><span class="line"><span class="cl">IMMICH_VERSION=v2
+</span></span><span class="line"><span class="cl">DB_PASSWORD=postgres
+</span></span><span class="line"><span class="cl">DB_USERNAME=postgres
+</span></span><span class="line"><span class="cl">DB_DATABASE_NAME=immich
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>建立不同使用者,並且套用儲存範本資料夾會被放在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/library/admin
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -411,8 +440,9 @@
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
 </div>
 
 <style>
@@ -537,7 +567,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.85e7929d27bb4982f674d65e2410f785f79a0a4ebbb9ce1a741df2750e18aff0.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.251f3ec0f39ebd44d95dd207e9b0dcc836d6d90402c29976db4b9bb39f8143fb.css"><meta property='og:title' content="pichome 安裝">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="pichome 安裝">
 <meta property='og:description' content=" 到Pichome的Github找compse檔 因為最新3.0版有問題,所以到docker hub 指定tag 為 2.2.0，到 Github 使用2.2.0版下載FilePress-2.2.0.zip放到資料夾中 編寫compose.yml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 version: &#34;3.8&#34; services: db: image: mariadb:10.7 command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW ports: - 3307:3306 volumes: - &#34;./db:/var/lib/mysql&#34; environment: - &#34;TZ=Asia/Shanghai&#34; - &#34;MYSQL_ROOT_PASSWORD=root@admin.0001&#34; - &#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&#34; - &#34;MYSQL_USER_FILE=/run/secrets/mysql_user&#34; - &#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&#34; restart: always secrets: - mysql_db - mysql_password - mysql_user redis: image: redis:6.2-alpine restart: always ports: - 6379:6379 environment: - TZ=Asia/Shanghai app: image: oaooa/pichome:2.2.0 ports: - 8088:80 links: - db - redis volumes: - &#34;./site:/var/www/html&#34; - &#34;./ssl:/etc/nginx/ssl&#34; - &#34;/volume4/stock/eaglelib/stock.library:/mnt/libray&#34; environment: - &#34;MYSQL_SERVER=db&#34; - &#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&#34; - &#34;MYSQL_USER_FILE=/run/secrets/mysql_user&#34; - &#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&#34; restart: always secrets: - mysql_db - mysql_password - mysql_user secrets: mysql_db: file: &#34;./mysql_db.txt&#34; mysql_password: file: &#34;./mysql_password.txt&#34; mysql_user: file: &#34;./mysql_user.txt&#34; docker 的寫法是外映射內 maridb Port 3306(外):3306(內) secret 的txt內容指定帳號及密碼 ![[Pasted-img-20260406144630.png]]\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/'>
 <meta property='og:site_name' content='PIN技術筆記'>
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -327,9 +327,7 @@
     
     <ol>
 <li>到Pichome的Github找compse檔</li>
-<li>因為最新3.0版有問題,所以到<a class="link" href="https://hub.docker.com/r/oaooa/pichome"  target="_blank" rel="noopener"
-    >docker hub</a> 指定tag 為 2.2.0，到 <a class="link" href="https://github.com/zyx0814/FilePress/releases"  target="_blank" rel="noopener"
-    >Github</a> 使用2.2.0版下載<code>FilePress-2.2.0.zip</code>放到資料夾中</li>
+<li>因為最新3.0版有問題,所以到<a href="https://hub.docker.com/r/oaooa/pichome">docker hub</a> 指定tag 為 2.2.0，到 <a href="https://github.com/zyx0814/FilePress/releases">Github</a> 使用2.2.0版下載<code>FilePress-2.2.0.zip</code>放到資料夾中</li>
 <li>編寫compose.yml</li>
 </ol>
 <div class="highlight"><div class="chroma">
@@ -511,8 +509,9 @@ secret 的txt內容指定帳號及密碼
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
 </div>
 
 <style>
@@ -637,7 +636,7 @@ secret 的txt內容指定帳號及密碼
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.85e7929d27bb4982f674d65e2410f785f79a0a4ebbb9ce1a741df2750e18aff0.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

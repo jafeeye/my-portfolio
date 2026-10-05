@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="目前資產盤點軟體皆為單一事實來源，其他軟體為讀取寫入Netbox或phpIPAM，無法做到在Netbox或phpIPAM 修改後又同步到PVE上\nPVE上工作流 ![[static/Diagram 7.svg]]\nNetBox 安裝netbox-proxbox 套件，可以同步Proxmox資料 1 2 3 4 5 # 激活 NetBox 的虛擬環境 source /opt/netbox/venv/bin/activate # 使用 pip 安裝 netbox-proxbox pip install netbox-proxbox (如果是使用 Docker 版本部署 NetBox，則需要將 netbox-proxbox 加入到 plugin_requirements.txt 中並重新 build 容器。) 2. 修改 NetBox 設定檔 編輯 NetBox 的 configuration.py（通常位於 /opt/netbox/netbox/netbox/configuration.py），將插件啟用：\n1 2 3 4 5 6 7 8 PLUGINS = [ &#39;netbox_proxbox&#39;, ] # 如果有需要，可以在這裡加入進階設定，通常預設即可 PLUGINS_CONFIG = { &#39;netbox_proxbox&#39;: {}, } 執行資料庫遷移與重啟服務 安裝新插件後，需要更新 NetBox 的資料庫結構並重啟服務： 1 2 3 4 5 6 7 8 9 # 執行 Django 資料庫遷移 cd /opt/netbox/netbox/ python3 manage.py migrate # 收集靜態檔案 python3 manage.py collectstatic --no-input # 重啟 NetBox 服務 sudo systemctl restart netbox netbox-rq 升級主程式，netbox-proxbox套件也升級方法 在LXC容器打上update 即可 升級會導致網頁進不去，因為schema升級 1 2 3 4 5 6 7 8 9 source /opt/netbox/venv/bin/activate cd /opt/netbox/netbox/ # 這一步會補上缺失的 validation_schema 欄位 python3 manage.py migrate # 強制重新收集所有靜態檔案 python3 manage.py collectstatic --no-input deactivate deactivate systemctl restart netbox netbox-rq NetBox API 整合 整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)\n">
+<title>資產盤點軟體</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E8%B3%87%E7%94%A2%E7%9B%A4%E9%BB%9E%E8%BB%9F%E9%AB%94/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="資產盤點軟體">
+<meta property='og:description' content="目前資產盤點軟體皆為單一事實來源，其他軟體為讀取寫入Netbox或phpIPAM，無法做到在Netbox或phpIPAM 修改後又同步到PVE上\nPVE上工作流 ![[static/Diagram 7.svg]]\nNetBox 安裝netbox-proxbox 套件，可以同步Proxmox資料 1 2 3 4 5 # 激活 NetBox 的虛擬環境 source /opt/netbox/venv/bin/activate # 使用 pip 安裝 netbox-proxbox pip install netbox-proxbox (如果是使用 Docker 版本部署 NetBox，則需要將 netbox-proxbox 加入到 plugin_requirements.txt 中並重新 build 容器。) 2. 修改 NetBox 設定檔 編輯 NetBox 的 configuration.py（通常位於 /opt/netbox/netbox/netbox/configuration.py），將插件啟用：\n1 2 3 4 5 6 7 8 PLUGINS = [ &#39;netbox_proxbox&#39;, ] # 如果有需要，可以在這裡加入進階設定，通常預設即可 PLUGINS_CONFIG = { &#39;netbox_proxbox&#39;: {}, } 執行資料庫遷移與重啟服務 安裝新插件後，需要更新 NetBox 的資料庫結構並重啟服務： 1 2 3 4 5 6 7 8 9 # 執行 Django 資料庫遷移 cd /opt/netbox/netbox/ python3 manage.py migrate # 收集靜態檔案 python3 manage.py collectstatic --no-input # 重啟 NetBox 服務 sudo systemctl restart netbox netbox-rq 升級主程式，netbox-proxbox套件也升級方法 在LXC容器打上update 即可 升級會導致網頁進不去，因為schema升級 1 2 3 4 5 6 7 8 9 source /opt/netbox/venv/bin/activate cd /opt/netbox/netbox/ # 這一步會補上缺失的 validation_schema 欄位 python3 manage.py migrate # 強制重新收集所有靜態檔案 python3 manage.py collectstatic --no-input deactivate deactivate systemctl restart netbox netbox-rq NetBox API 整合 整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E8%B3%87%E7%94%A2%E7%9B%A4%E9%BB%9E%E8%BB%9F%E9%AB%94/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-11T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="資產盤點軟體">
+<meta name="twitter:description" content="目前資產盤點軟體皆為單一事實來源，其他軟體為讀取寫入Netbox或phpIPAM，無法做到在Netbox或phpIPAM 修改後又同步到PVE上\nPVE上工作流 ![[static/Diagram 7.svg]]\nNetBox 安裝netbox-proxbox 套件，可以同步Proxmox資料 1 2 3 4 5 # 激活 NetBox 的虛擬環境 source /opt/netbox/venv/bin/activate # 使用 pip 安裝 netbox-proxbox pip install netbox-proxbox (如果是使用 Docker 版本部署 NetBox，則需要將 netbox-proxbox 加入到 plugin_requirements.txt 中並重新 build 容器。) 2. 修改 NetBox 設定檔 編輯 NetBox 的 configuration.py（通常位於 /opt/netbox/netbox/netbox/configuration.py），將插件啟用：\n1 2 3 4 5 6 7 8 PLUGINS = [ &#39;netbox_proxbox&#39;, ] # 如果有需要，可以在這裡加入進階設定，通常預設即可 PLUGINS_CONFIG = { &#39;netbox_proxbox&#39;: {}, } 執行資料庫遷移與重啟服務 安裝新插件後，需要更新 NetBox 的資料庫結構並重啟服務： 1 2 3 4 5 6 7 8 9 # 執行 Django 資料庫遷移 cd /opt/netbox/netbox/ python3 manage.py migrate # 收集靜態檔案 python3 manage.py collectstatic --no-input # 重啟 NetBox 服務 sudo systemctl restart netbox netbox-rq 升級主程式，netbox-proxbox套件也升級方法 在LXC容器打上update 即可 升級會導致網頁進不去，因為schema升級 1 2 3 4 5 6 7 8 9 source /opt/netbox/venv/bin/activate cd /opt/netbox/netbox/ # 這一步會補上缺失的 validation_schema 欄位 python3 manage.py migrate # 強制重新收集所有靜態檔案 python3 manage.py collectstatic --no-input deactivate deactivate systemctl restart netbox netbox-rq NetBox API 整合 整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#netbox">NetBox</a></li>
+    <li><a href="#netbox-api-整合">NetBox API 整合</a></li>
+    <li><a href="#phpipam">phpIPAM</a>
+      <ol>
+        <li><a href="#建立api">建立API</a></li>
+        <li><a href="#安裝-phpipam-agent">安裝 phpIPAM Agent</a></li>
+      </ol>
+    </li>
+    <li><a href="#homelable">Homelable</a></li>
+    <li><a href="#scanopy">Scanopy</a></li>
+    <li><a href="#可能解決辦法">可能解決辦法</a>
+      <ol>
+        <li><a href="#phpipam-啟用-webhooks">phpIPAM 啟用 Webhooks?</a></li>
+        <li><a href="#netbox-webhooks-腳本">NetBox Webhooks 腳本?</a></li>
+      </ol>
+    </li>
+    <li><a href="#phpipam撈pve資料腳本">phpIPAM撈PVE資料腳本</a></li>
+    <li><a href="#pve-mac與ip綁定">PVE MAC與IP綁定</a></li>
+    <li><a href="#ocs-inventory">OCS Inventory</a></li>
+    <li><a href="#itop"> iTop</a></li>
+    <li><a href="#open-audit">Open-AudIT</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E8%B3%87%E7%94%A2%E7%9B%A4%E9%BB%9E%E8%BB%9F%E9%AB%94/">資產盤點軟體</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-07-11T00:00:00Z'>Jul 11, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>目前資產盤點軟體皆為單一事實來源，其他軟體為讀取寫入Netbox或phpIPAM，無法做到在Netbox或phpIPAM 修改後又同步到PVE上</p>
+<p><img
+    src="/my-portfolio/netbox-sot%201.webp"
+    alt=""
+    loading="lazy"
+></p>
+<p>PVE上工作流
+![[static/Diagram 7.svg]]</p>
+<h2 id="netbox">NetBox
+</h2><ol>
+<li>安裝<code>netbox-proxbox</code> 套件，可以同步Proxmox資料</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 激活 NetBox 的虛擬環境
+</span></span><span class="line"><span class="cl">source /opt/netbox/venv/bin/activate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 使用 pip 安裝 netbox-proxbox
+</span></span><span class="line"><span class="cl">pip install netbox-proxbox
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>(如果是使用 Docker 版本部署 NetBox，則需要將 <code>netbox-proxbox</code> 加入到 <code>plugin_requirements.txt</code> 中並重新 build 容器。)</em>
+2. 修改 NetBox 設定檔
+編輯 NetBox 的 <code>configuration.py</code>（通常位於 <code>/opt/netbox/netbox/netbox/configuration.py</code>），將插件啟用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PLUGINS = [
+</span></span><span class="line"><span class="cl">    &#39;netbox_proxbox&#39;,
+</span></span><span class="line"><span class="cl">]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 如果有需要，可以在這裡加入進階設定，通常預設即可
+</span></span><span class="line"><span class="cl">PLUGINS_CONFIG = {
+</span></span><span class="line"><span class="cl">    &#39;netbox_proxbox&#39;: {},
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>執行資料庫遷移與重啟服務
+安裝新插件後，需要更新 NetBox 的資料庫結構並重啟服務：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 執行 Django 資料庫遷移
+</span></span><span class="line"><span class="cl">cd /opt/netbox/netbox/
+</span></span><span class="line"><span class="cl">python3 manage.py migrate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 收集靜態檔案
+</span></span><span class="line"><span class="cl">python3 manage.py collectstatic --no-input
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 重啟 NetBox 服務
+</span></span><span class="line"><span class="cl">sudo systemctl restart netbox netbox-rq
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>升級主程式，<code>netbox-proxbox</code>套件也升級方法
+在LXC容器打上update 即可
+升級會導致網頁進不去，因為schema升級</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">source /opt/netbox/venv/bin/activate 
+</span></span><span class="line"><span class="cl">cd /opt/netbox/netbox/ 
+</span></span><span class="line"><span class="cl"># 這一步會補上缺失的 validation_schema 欄位
+</span></span><span class="line"><span class="cl">python3 manage.py migrate
+</span></span><span class="line"><span class="cl"># 強制重新收集所有靜態檔案 
+</span></span><span class="line"><span class="cl">python3 manage.py collectstatic --no-input deactivate
+</span></span><span class="line"><span class="cl">deactivate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">systemctl restart netbox netbox-rq
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="netbox-api-整合">NetBox API 整合
+</h2><p>整合NetBox，讓Proxmox可以透過NetBox獲取IP (在Zone的IPAM要選NetBox)</p>
+<ol>
+<li>
+<p>打開NetBox，輸入token
+<img
+    src="/my-portfolio/netbox01260301.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>因為API要使用SSL連線，必須把憑證匯入PVE信任憑證，</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl s_client -showcerts -connect 192.168.8.128:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt
+</span></span><span class="line"><span class="cl">#更新系統信任清單
+</span></span><span class="line"><span class="cl">update-ca-certificates
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>憑證匯入後加入API出現hotsname錯誤，代表PVE認可憑證，不過IP位置憑證內登記的名字（可能是 <code>netbox.example.com</code>）跟 IP 對不起來，直接在PVE查看 fingerprint
+<img
+    src="/my-portfolio/netbox260301.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl x509 -in /usr/local/share/ca-certificates/netbox.crt -noout -fingerprint -sha256
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>直接填入API位置 <code>https://192.168.8.x/api</code> ，並且填入FingerPrint跟token完成
+<img
+    src="/my-portfolio/pvenetbox260301.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="phpipam">phpIPAM
+</h2><p>本文章為Rocky Linux 示範</p>
+<ol>
+<li>關閉基礎設定</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 關閉 SELinux (重啟後永久生效，或編輯 /etc/selinux/config)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">setenforce</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">sed</span> <span class="o">-</span><span class="n">i</span> <span class="s1">&#39;s/^SELINUX=enforcing$/SELINUX=disabled/&#39;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">selinux</span><span class="o">/</span><span class="n">config</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 開放防火牆 HTTP 服務</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">permanent</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">service</span><span class="o">=</span><span class="n">http</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>安裝Apache與MariaDB</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 安裝 Apache 與 MariaDB
+</span></span><span class="line"><span class="cl">sudo dnf install -y httpd mariadb-server mariadb git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 啟動並設定開機自啟
+</span></span><span class="line"><span class="cl">sudo systemctl enable --now httpd mariadb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 初始化 MariaDB 安全設定 (依提示設定 root 密碼、始化過程都採取用預設值只要一直按下 Enter 鍵即可)
+</span></span><span class="line"><span class="cl">sudo mysql_secure_installation
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>安裝php 相關套件</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 安裝 PHP 及其擴充模組
+</span></span><span class="line"><span class="cl">sudo dnf install -y php php-cli php-fpm php-mysqlnd php-gd php-common php-ldap php-pdo php-pear php-snmp php-xml php-mbstring php-gmp php-json
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 啟動並設定 PHP-FPM 開機自啟
+</span></span><span class="line"><span class="cl">sudo systemctl enable --now php-fpm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 修改 php.ini 設定時區 (避免系統時間報錯)
+</span></span><span class="line"><span class="cl"># 尋找 ;date.timezone = 改為：
+</span></span><span class="line"><span class="cl">sudo sed -i &#39;s/;date.timezone =/date.timezone = Asia\/Taipei/&#39; /etc/php.ini
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>下載phpipam並設定讀寫權限</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 下載最新穩定版 phpIPAM 到 /var/www/html</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">phpipam</span><span class="o">/</span><span class="n">phpipam</span><span class="o">.</span><span class="n">git</span> <span class="o">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 複製並建立設定檔</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">cp</span> <span class="n">config</span><span class="o">.</span><span class="n">dist</span><span class="o">.</span><span class="n">php</span> <span class="n">config</span><span class="o">.</span><span class="n">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改設定檔中的資料庫連線資訊 (這邊把dbname跟username都設成phpipam)</span>
+</span></span><span class="line"><span class="cl"><span class="n">nano</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">config</span><span class="o">.</span><span class="n">php</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;phpipam&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;pass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;想一組資料庫密碼&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;phpipam&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3306</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修正目錄權限，讓 Apache (httpd) 有權限讀寫</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chown</span> <span class="n">apache</span><span class="p">:</span><span class="n">apache</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>編輯 Apache 主設定檔 <code>/etc/httpd/conf/httpd.conf</code>，找到 <code>&lt;Directory &quot;/var/www/html&quot;&gt;</code> 區塊，將 <code>AllowOverride None</code> 修改all，並重啟服務httpd php-fpm</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="ne">Directory</span> <span class="s2">&#34;/var/www/html&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Options</span> <span class="n">Indexes</span> <span class="n">FollowSymLinks</span>
+</span></span><span class="line"><span class="cl">    <span class="n">AllowOverride</span> <span class="n">All</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Require</span> <span class="n">all</span> <span class="n">granted</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="ne">Directory</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">restart</span> <span class="n">httpd</span> <span class="n">php</span><span class="o">-</span><span class="n">fpm</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>因為發現網頁 <code>http://IP/index.php?page=install</code> 創空資料庫自動安裝會有問題，所以先不登入網頁，先使用指令創db，並匯入程式官方db的SCHEMA</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 先用root 登入MariaDB，進入MariaDB指令結尾都是分號</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 建立 phpipam db檔案</span>
+</span></span><span class="line"><span class="cl"><span class="n">CREATE</span> <span class="n">DATABASE</span> <span class="n">phpipam</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 建立db使用者及密碼，帳密要跟前面config.php一致</span>
+</span></span><span class="line"><span class="cl"><span class="n">CREATE</span> <span class="n">USER</span> <span class="s1">&#39;phpipam&#39;</span><span class="err">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="n">BY</span> <span class="s1">&#39;想一組資料庫密碼&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 將 phpipam 資料庫的所有權限賦予該使用者</span>
+</span></span><span class="line"><span class="cl"><span class="n">GRANT</span> <span class="n">ALL</span> <span class="n">PRIVILEGES</span> <span class="n">ON</span> <span class="n">phpipam</span><span class="o">.*</span> <span class="n">TO</span> <span class="s1">&#39;phpipam&#39;</span><span class="err">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. 重新整理權限並離開</span>
+</span></span><span class="line"><span class="cl"><span class="n">FLUSH</span> <span class="n">PRIVILEGES</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">EXIT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 5. 匯入官方db SCHEMA</span>
+</span></span><span class="line"><span class="cl"><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">p</span> <span class="n">phpipam</span> <span class="o">&lt;</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">db</span><span class="o">/</span><span class="n">SCHEMA</span><span class="o">.</span><span class="n">sql</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>進入網頁 <code>http://IP/index.php</code>，SCHEMA.sql預設登入帳密 admin/ipamadmin</li>
+</ol>
+<h3 id="建立api">建立API
+</h3><p>在PVE上使用IPAM，並填入phpIPAM API</p>
+<blockquote>
+<p>此功能目前有問題，PVE上SDN自動發IP 的方式是透過PVE內建dnsmaq發IP，並搭配API把資訊寫入phpIPAM或NetBox，只能單向同步，在phpIPAM修改IP並不能同步到PVE上，而且選了phpIPAM或NetBox 當IPAM目的，在PVE的IPAM便無法看到主機及IP清單，在此功能只當實驗用途
+<img
+    src="/my-portfolio/Pasted%20image%2020260718150317.png"
+    alt=""
+    loading="lazy"
+></p>
+</blockquote>
+<ol>
+<li>安裝 SSL 模組</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf install mod_ssl -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>簽一張https 自簽證書</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+</span></span><span class="line"><span class="cl">  -keyout /etc/pki/tls/private/phpipam.key \
+</span></span><span class="line"><span class="cl">  -out /etc/pki/tls/certs/phpipam.crt \
+</span></span><span class="line"><span class="cl">  -subj &#34;/CN=192.168.8.187&#34; \
+</span></span><span class="line"><span class="cl">  -addext &#34;subjectAltName = IP:192.168.8.187&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>啟用httpd的ssl</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SSLCertificateFile /etc/pki/tls/certs/phpipam.crt
+</span></span><span class="line"><span class="cl">SSLCertificateKeyFile /etc/pki/tls/private/phpipam.key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>測試語法</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo httpd -t
+</span></span><span class="line"><span class="cl">sudo systemctl restart httpd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>設定防火牆放行 HTTPS (443 埠口)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">permanent</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">service</span><span class="o">=</span><span class="n">https</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>PVE Node Shell上輸入</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl s_client -connect 192.168.8.187:443 &lt; /dev/null 2&gt;/dev/null | openssl x509 -fingerprint -sha256 -noout
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">openssl s_client -showcerts -connect 192.168.8.187:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/share/ca-certificates/phpipam.crt
+</span></span><span class="line"><span class="cl">echo &#34;phpipam.crt&#34; &gt;&gt; /etc/ca-certificates.conf
+</span></span><span class="line"><span class="cl">update-ca-certificates
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>重新在PVE套Zone區</li>
+</ol>
+<h3 id="安裝-phpipam-agent">安裝 phpIPAM Agent
+</h3><ol>
+<li>安裝套件在phpIPAM主機上</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#clone套件到 /var/www/</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span>
+</span></span><span class="line"><span class="cl"><span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">phpipam</span><span class="o">/</span><span class="n">phpipam</span><span class="o">-</span><span class="n">agent</span><span class="o">/</span> <span class="n">phpipam</span><span class="o">-</span><span class="n">agent</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="n">phpipam</span><span class="o">-</span><span class="n">agent</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#修改 config.php，這邊把db資料填成已經設定好的</span>
+</span></span><span class="line"><span class="cl"><span class="n">nano</span> <span class="n">config</span><span class="o">.</span><span class="n">php</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;phpipam&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;pass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;想一組資料庫密碼&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;phpipam&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">db</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3306</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>在網頁填入相關資訊，把/www/var/phpipam-agent/config.php 中的 <code>$config['key'] = &quot;aad984d8314....&quot;;</code> 填入網頁上即可
+<img
+    src="/my-portfolio/Pasted%20image%2020260718145619.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>可以做個定期掃描任務</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">crontab -e
+</span></span><span class="line"><span class="cl">*/15 * * * * php /where/your/agent/index.php update
+</span></span><span class="line"><span class="cl">*/15 * * * * php /where/your/agent/index.php discover
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="homelable">Homelable
+</h2><p>http://IP:3000</p>
+<h2 id="scanopy">Scanopy
+</h2><ol>
+<li>安裝完LXC後，改變IP去設定檔，把public url改掉</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/scanopy/.env
+</span></span><span class="line"><span class="cl">SCANOPY_PUBLIC_URL=http://192.168.10.9:60072
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>產生dameon腳本後,貼去LXC裡面執行就會開始掃</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@net:/opt/scanopy# bash -c &#34;$(curl -fsSL https://raw.githubusercontent.com/scanopy/scanopy/refs/heads/main/install.sh)&#34; &amp;&amp; sudo scanopy-daemon --server-url http://192.168.10.9:60072 --network-id ce737de8-80db-4957-a1b0-52cb78b94164 --daemon-api-key scp_d_VOCV3RED0wWSTLEURuBjTWvOuQPZDbCc --user-id b1f6c5
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>掃完畫面
+<img
+    src="/my-portfolio/Pasted%20image%2020260710193341.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h2 id="可能解決辦法">可能解決辦法
+</h2><h3 id="phpipam-啟用-webhooks">phpIPAM 啟用 Webhooks?
+</h3><h3 id="netbox-webhooks-腳本">NetBox Webhooks 腳本?
+</h3><p>這是最優雅、最推薦的作法。當你在 NetBox 點擊儲存修改時，NetBox 會立刻發出一個通知（Webhook），觸發一個簡單的自動化腳本去更新 PVE。
+運作流程：</p>
+<ol>
+<li><strong>你在 NetBox 修改：</strong> 你在 NetBox 更改了某個 IP 綁定的 MAC 位址。</li>
+<li><strong>NetBox 發送 Webhook：</strong> NetBox 偵測到資料變更，立刻將變更內容（JSON 格式）發送到你的自動化平台（例如 <strong>n8n</strong>、<strong>Node-RED</strong> 或一個簡單的 <strong>Python API 服務</strong>）。</li>
+<li><strong>腳本呼叫 PVE API：</strong> 腳本收到通知後，自動拿著新的 MAC 與 IP，呼叫 PVE 的 SDN API 進行更新：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">    # 範例：利用 PVE API 強行更新本地的 IPAM Mappings
+</span></span><span class="line"><span class="cl">    curl -X PUT https://&lt;PVE_IP&gt;:8006/api2/json/cluster/sdn/ipam/&lt;YOUR_NETBOX_ID&gt;/macs/&lt;MAC&gt; \
+</span></span><span class="line"><span class="cl">      -H &#34;Authorization: PVEAPIToken=...&#34; \
+</span></span><span class="line"><span class="cl">      -d &#34;ip=&lt;NEW_IP&gt;&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li><strong>自動套用：</strong> 腳本最後補上一發 PVE SDN <code>Apply</code> 指令，PVE 本地的 <code>dnsmasq</code> 隨即重載，VM 重新要 DHCP 時就會拿到新 IP。</li>
+</ol>
+<h2 id="phpipam撈pve資料腳本">phpIPAM撈PVE資料腳本
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="c1"># 讀取 PVE IPAM 狀態,同步 IP+MAC 到 phpIPAM</span>
+</span></span><span class="line"><span class="cl">jq -r <span class="s1">&#39;.zones.sdnzone.subnets.&#34;192.168.10.0/24&#34;.ips 
+</span></span></span><span class="line"><span class="cl"><span class="s1">  | to_entries[] 
+</span></span></span><span class="line"><span class="cl"><span class="s1">  | select(.key != &#34;192.168.10.1&#34;) 
+</span></span></span><span class="line"><span class="cl"><span class="s1">  | &#34;\(.key) \(.value.mac) \(.value.hostname)&#34;&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  /etc/pve/sdn/pve-ipam-state.json <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> ip mac hostname<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    curl -s -X PATCH <span class="s2">&#34;https://ipam.example.com/api/&lt;app_id&gt;/addresses/&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -H <span class="s2">&#34;token: &lt;TOKEN&gt;&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -d <span class="s2">&#34;subnetId=&lt;subnet_id&gt;&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -d <span class="s2">&#34;ip=</span><span class="nv">$ip</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -d <span class="s2">&#34;mac=</span><span class="nv">$mac</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">      -d <span class="s2">&#34;hostname=</span><span class="nv">$hostname</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="pve-mac與ip綁定">PVE MAC與IP綁定
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /etc/dnsmasq.d/zone10/ethers
+</span></span><span class="line"><span class="cl">BC:24:11:FF:69:1A,192.168.10.3
+</span></span><span class="line"><span class="cl">cat /etc/pve/sdn/pve-ipam-state.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ocs-inventory">OCS Inventory
+</h2><p>OCS Inventory Agent</p>
+<h2 id="itop"> iTop
+</h2><h2 id="open-audit">Open-AudIT
+</h2>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

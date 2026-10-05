@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="本身無守護進程，可允許一般使用者執行，所以要開機啟動容器也要寫腳本 高度相容Docker，並且能使用K8s 指令，創立Pod\n![[static/Diagram 13.svg]] 可以。你這台是 Debian，而且目前用 root 操作，完整安裝流程改成下面這套。前面 Rocky Linux 的 dnf、EPEL、SELinux、firewall-cmd 都不需要。\n安裝 Podman 與 Compose 1 2 apt update apt install -y podman podman-compose wget openssl 確認：\n1 2 3 podman --version podman-compose --version podman compose version 如果仍找不到，暫時指定 provider：\n1 2 export PODMAN_COMPOSE_PROVIDER=/usr/bin/podman-compose podman compose version 2.啟用 rootful Podman API\n1 2 systemctl enable --now podman.socket systemctl status podman.socket 確認 Socket：\n1 ls -l /run/podman/podman.sock 也可以測試 API：\n">
+<title>Podman 與 GoDoxy 做反向代理</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/podman-%E8%88%87-godoxy-%E5%81%9A%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Podman 與 GoDoxy 做反向代理">
+<meta property='og:description' content="本身無守護進程，可允許一般使用者執行，所以要開機啟動容器也要寫腳本 高度相容Docker，並且能使用K8s 指令，創立Pod\n![[static/Diagram 13.svg]] 可以。你這台是 Debian，而且目前用 root 操作，完整安裝流程改成下面這套。前面 Rocky Linux 的 dnf、EPEL、SELinux、firewall-cmd 都不需要。\n安裝 Podman 與 Compose 1 2 apt update apt install -y podman podman-compose wget openssl 確認：\n1 2 3 podman --version podman-compose --version podman compose version 如果仍找不到，暫時指定 provider：\n1 2 export PODMAN_COMPOSE_PROVIDER=/usr/bin/podman-compose podman compose version 2.啟用 rootful Podman API\n1 2 systemctl enable --now podman.socket systemctl status podman.socket 確認 Socket：\n1 ls -l /run/podman/podman.sock 也可以測試 API：\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/podman-%E8%88%87-godoxy-%E5%81%9A%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-08-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-09T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Podman 與 GoDoxy 做反向代理">
+<meta name="twitter:description" content="本身無守護進程，可允許一般使用者執行，所以要開機啟動容器也要寫腳本 高度相容Docker，並且能使用K8s 指令，創立Pod\n![[static/Diagram 13.svg]] 可以。你這台是 Debian，而且目前用 root 操作，完整安裝流程改成下面這套。前面 Rocky Linux 的 dnf、EPEL、SELinux、firewall-cmd 都不需要。\n安裝 Podman 與 Compose 1 2 apt update apt install -y podman podman-compose wget openssl 確認：\n1 2 3 podman --version podman-compose --version podman compose version 如果仍找不到，暫時指定 provider：\n1 2 export PODMAN_COMPOSE_PROVIDER=/usr/bin/podman-compose podman compose version 2.啟用 rootful Podman API\n1 2 systemctl enable --now podman.socket systemctl status podman.socket 確認 Socket：\n1 ls -l /run/podman/podman.sock 也可以測試 API：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#5-如果目前沒有-https-憑證">5. 如果目前沒有 HTTPS 憑證</a></li>
+      </ol>
+    </li>
+    <li><a href="#再修-podman-容器探索">再修 Podman 容器探索</a></li>
+    <li><a href="#godoxy要串接caddy-的acme-server-拿憑證來用">godoxy要串接caddy 的acme server 拿憑證來用</a></li>
+    <li><a href="#1-建立-dns-紀錄">1. 建立 DNS 紀錄</a></li>
+    <li><a href="#2-在-caddy-啟用-acme-server">2. 在 Caddy 啟用 ACME Server</a></li>
+    <li><a href="#3-把-caddy-root-ca-複製到-godoxy">3. 把 Caddy Root CA 複製到 GoDoxy</a></li>
+    <li><a href="#4-設定-powerdns-api-帳密">4. 設定 PowerDNS API 帳密</a></li>
+    <li><a href="#5-修改-godoxy-autocert">5. 修改 GoDoxy autocert</a></li>
+    <li><a href="#6-確認-root-ca-有掛入容器">6. 確認 Root CA 有掛入容器</a></li>
+    <li><a href="#7-重建-godoxy">7. 重建 GoDoxy</a></li>
+    <li><a href="#8-確認憑證">8. 確認憑證</a></li>
+    <li><a href="#9-windows-信任-caddy-root-ca">9. Windows 信任 Caddy Root CA</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/podman-%E8%88%87-godoxy-%E5%81%9A%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">Podman 與 GoDoxy 做反向代理</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-08-09T00:00:00Z'>Aug 09, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>本身無守護進程，可允許一般使用者執行，所以要開機啟動容器也要寫腳本
+高度相容Docker，並且能使用K8s 指令，創立Pod</p>
+<p>![[static/Diagram 13.svg]]
+可以。你這台是 Debian，而且目前用 <code>root</code> 操作，完整安裝流程改成下面這套。前面 Rocky Linux 的 <code>dnf</code>、EPEL、SELinux、<code>firewall-cmd</code> 都不需要。</p>
+<ol>
+<li>安裝 Podman 與 Compose</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install -y podman podman-compose wget openssl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman --version
+</span></span><span class="line"><span class="cl">podman-compose --version
+</span></span><span class="line"><span class="cl">podman compose version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果仍找不到，暫時指定 provider：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="k">export</span> <span class="n">PODMAN_COMPOSE_PROVIDER</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">podman</span><span class="o">-</span><span class="n">compose</span>
+</span></span><span class="line"><span class="cl"><span class="n">podman</span> <span class="n">compose</span> <span class="n">version</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2.啟用 rootful Podman API</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl enable --now podman.socket
+</span></span><span class="line"><span class="cl">systemctl status podman.socket
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認 Socket：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /run/podman/podman.sock
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以測試 API：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl --unix-socket /run/podman/podman.sock \
+</span></span><span class="line"><span class="cl">  http://localhost/_ping
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正常會回覆：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">OK
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>/var/run</code> 在 Debian 通常指向 <code>/run</code>，因此以下兩條其實通常是同一個 Socket：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">podman</span><span class="o">/</span><span class="n">podman</span><span class="o">.</span><span class="n">sock</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">podman</span><span class="o">/</span><span class="n">podman</span><span class="o">.</span><span class="n">sock</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>建立 GoDoxy 目錄</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p /opt/godoxy/config
+</span></span><span class="line"><span class="cl">mkdir -p /opt/godoxy/logs
+</span></span><span class="line"><span class="cl">mkdir -p /opt/godoxy/error_pages
+</span></span><span class="line"><span class="cl">mkdir -p /opt/godoxy/data
+</span></span><span class="line"><span class="cl">mkdir -p /opt/godoxy/certs
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cd /opt/godoxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>下載官方設定檔</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">wget \
+</span></span><span class="line"><span class="cl">  https://raw.githubusercontent.com/yusing/godoxy/main/config.example.yml \
+</span></span><span class="line"><span class="cl">  -O config/config.yml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">wget \
+</span></span><span class="line"><span class="cl">  https://raw.githubusercontent.com/yusing/godoxy/main/.env.example \
+</span></span><span class="line"><span class="cl">  -O .env
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">wget \
+</span></span><span class="line"><span class="cl">  https://raw.githubusercontent.com/yusing/godoxy/main/compose.example.yml \
+</span></span><span class="line"><span class="cl">  -O compose.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>修改 <code>.env</code></li>
+</ol>
+<p>先產生 JWT 密鑰：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl rand -base64 32
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>複製輸出結果，然後編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/.env
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>至少調整成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">TAG=latest
+</span></span><span class="line"><span class="cl">TZ=Asia/Taipei
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_UID=1000
+</span></span><span class="line"><span class="cl">GODOXY_GID=1000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_API_JWT_SECURE=true
+</span></span><span class="line"><span class="cl">GODOXY_API_JWT_SECRET=貼上剛才產生的隨機字串
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_API_USER=admin
+</span></span><span class="line"><span class="cl">GODOXY_API_PASSWORD=設定一組強密碼
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_HTTP_ADDR=:80
+</span></span><span class="line"><span class="cl">GODOXY_HTTPS_ADDR=:443
+</span></span><span class="line"><span class="cl">GODOXY_SNI_ROUTING_FOR_TCP_ROUTES=true
+</span></span><span class="line"><span class="cl">GODOXY_HTTP3_ENABLED=true
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_API_ADDR=127.0.0.1:8888
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">DOCKER_SOCKET=/run/podman/podman.sock
+</span></span><span class="line"><span class="cl">LISTEN_ADDR=127.0.0.1:2375
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">GODOXY_DEBUG=false
+</span></span><span class="line"><span class="cl">USE_SONIC_JSON=true
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>關鍵是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">DOCKER_SOCKET=/run/podman/podman.sock
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>GoDoxy 官方 <code>.env.example</code> 已直接標示 Podman 可以使用 <code>/var/run/podman/podman.sock</code>。<a href="https://raw.githubusercontent.com/yusing/godoxy/main/.env.example">官方 <code>.env.example</code></a>
+如果你目前沒有 HTTPS 憑證，只想先透過 HTTP 測試 Web UI，可以暫時改成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_API_JWT_SECURE=false
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正式使用 HTTPS 後再改回 <code>true</code>。</p>
+<ol start="6">
+<li>修正目錄權限
+因為 GoDoxy 容器預設以 UID/GID <code>1000:1000</code> 執行：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">chown -R 1000:1000 \
+</span></span><span class="line"><span class="cl">  /opt/godoxy/config \
+</span></span><span class="line"><span class="cl">  /opt/godoxy/logs \
+</span></span><span class="line"><span class="cl">  /opt/godoxy/error_pages \
+</span></span><span class="line"><span class="cl">  /opt/godoxy/data \
+</span></span><span class="line"><span class="cl">  /opt/godoxy/certs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 <code>.env</code> 裡改用其他 UID/GID，這裡也要跟著改。</p>
+<ol start="7">
+<li>設定 GoDoxy Web UI 網址</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/config/config.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>找到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">webui:
+</span></span><span class="line"><span class="cl">  aliases:
+</span></span><span class="line"><span class="cl">    - godoxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>改成你的實際網域，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">webui:
+</span></span><span class="line"><span class="cl">  aliases:
+</span></span><span class="line"><span class="cl">    - godoxy.lab.example.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接著讓 DNS 指向這台 Podman VM：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">godoxy.lab.example.com → Podman VM IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果要自動代理其他子網域，可以再建立：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">*.lab.example.com → Podman VM IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="8">
+<li>檢查 80／443 是否被占用</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ss -lntup | grep -E &#39;:(80|443|2375|8888)\b&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 80 或 443 已被 Nginx、Apache、Traefik 等服務占用，要先停掉或改 Port。</p>
+<ol start="9">
+<li>驗證並啟動</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /opt/godoxy
+</span></span><span class="line"><span class="cl">podman compose config
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若設定正常：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman compose pull
+</span></span><span class="line"><span class="cl">podman compose up -d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman ps
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期會看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">socket-proxy
+</span></span><span class="line"><span class="cl">godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看日誌：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman logs socket-proxy
+</span></span><span class="line"><span class="cl">podman logs godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>持續查看 GoDoxy 日誌：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman logs -f godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="10">
+<li>防火牆</li>
+</ol>
+<p>Debian 預設不一定有啟用 UFW。先檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ufw status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果顯示啟用，再開放：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ufw allow 80/tcp
+</span></span><span class="line"><span class="cl">ufw allow 443/tcp
+</span></span><span class="line"><span class="cl">ufw allow 443/udp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>443/udp</code> 是 HTTP/3。若不使用 HTTP/3，可以在 <code>.env</code> 設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_HTTP3_ENABLED=false
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>就不必開放 UDP 443。
+不要對外開放這兩個 Port：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">2375
+</span></span><span class="line"><span class="cl">8888
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>目前它們都只監聽 <code>127.0.0.1</code>，保持這樣即可。</p>
+<ol start="11">
+<li>測試 Podman 容器探索</li>
+</ol>
+<p>先啟動測試容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman run -d \
+</span></span><span class="line"><span class="cl">  --name whoami \
+</span></span><span class="line"><span class="cl">  --label proxy.aliases=whoami.lab.example.com \
+</span></span><span class="line"><span class="cl">  -p 8080:80 \
+</span></span><span class="line"><span class="cl">  docker.io/traefik/whoami:latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman ps
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再查看 GoDoxy 是否偵測到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman logs --since 2m godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>DNS 還要有：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">whoami.lab.example.com → Podman VM IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後測試：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -I http://whoami.lab.example.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>你現在最先需要做的其實就是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install -y podman-compose
+</span></span><span class="line"><span class="cl">podman compose version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認 Compose 已正常後，再從 <code>/opt/godoxy</code> 的安裝步驟繼續。</p>
+<p>重建容器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman compose up -d --force-recreate
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman ps
+</span></span><span class="line"><span class="cl">podman logs --since 2m godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5-如果目前沒有-https-憑證">5. 如果目前沒有 HTTPS 憑證
+</h3><p>編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/.env
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>暫時設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_API_JWT_SECURE=false
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後重建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /opt/godoxy
+</span></span><span class="line"><span class="cl">podman compose up -d --force-recreate
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再開：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http://godoxy.lab.example.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>GODOXY_API_JWT_SECURE=true</code> 時，登入 Cookie 要求 HTTPS；沒有可用憑證時，先用 <code>false</code> 測試比較合理。GoDoxy 官方也要求透過 <code>webui.aliases</code> 中的 hostname 開啟內嵌 Web UI，而不是直接連管理 API Port。<a href="https://docs.godoxy.dev/docs/godoxy/getting-started/Configuring-GoDoxy">GoDoxy Web UI 設定</a></p>
+<h2 id="再修-podman-容器探索">再修 Podman 容器探索
+</h2><p>這段是另一個問題：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">502 Bad Gateway
+</span></span><span class="line"><span class="cl">/v1.51/containers/json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Podman 的 Docker 相容 API 版本比 GoDoxy 嘗試使用的 <code>v1.51</code> 低。先測試 <code>v1.40</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -i http://127.0.0.1:2375/_ping
+</span></span><span class="line"><span class="cl">curl -i http://127.0.0.1:2375/version
+</span></span><span class="line"><span class="cl">curl -i &#39;http://127.0.0.1:2375/v1.40/containers/json?all=1&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果第三條能回傳容器 JSON，編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/compose.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>godoxy-proxy</code> 的 <code>environment</code> 加入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">environment:
+</span></span><span class="line"><span class="cl">  - DOCKER_HOST=tcp://127.0.0.1:2375
+</span></span><span class="line"><span class="cl">  - DOCKER_API_VERSION=1.40
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後重建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /opt/godoxy
+</span></span><span class="line"><span class="cl">podman compose up -d --force-recreate
+</span></span><span class="line"><span class="cl">podman logs --since 2m godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正常應該從：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker@local   0 routes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>變成至少偵測到你的 <code>whoami</code> 容器。Podman 官方說明其 REST 服務提供 Docker 相容 API，而 rootful socket 位於 <code>/run/podman/podman.sock</code>。<a href="https://docs.podman.io/en/latest/markdown/podman-system-service.1.html">Podman API 官方文件</a>
+所以你現在第一步只要做：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">hosts 加入 192.168.8.32 godoxy.test
+</span></span><span class="line"><span class="cl">→ 開啟 http://godoxy.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我現在進去網頁了 那帳號密碼又是甚麼
+帳號密碼就是你在 <code>/opt/godoxy/.env</code> 裡設定的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_API_USER=admin
+</span></span><span class="line"><span class="cl">GODOXY_API_PASSWORD=你當時設定的密碼
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>直接查看：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grep -E &#39;^GODOXY_API_(USER|PASSWORD)=&#39; /opt/godoxy/.env
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果還沒設定或忘記了，就編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/.env
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>填入新的帳密：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_API_USER=admin
+</span></span><span class="line"><span class="cl">GODOXY_API_PASSWORD=你的新密碼
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後必須重建容器，才能載入新環境變數：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /opt/godoxy
+</span></span><span class="line"><span class="cl">podman compose up -d --force-recreate
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">帳號：admin
+</span></span><span class="line"><span class="cl">密碼：你在 GODOXY_API_PASSWORD 設定的內容
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 HTTP 登入後又跳回登入頁，確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GODOXY_API_JWT_SECURE=false
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因為你目前是用 <code>http://godoxy.test</code>，不能設成 <code>true</code>。</p>
+<h2 id="godoxy要串接caddy-的acme-server-拿憑證來用">godoxy要串接caddy 的acme server 拿憑證來用
+</h2><p>可以。你目前使用 <code>godoxy.test</code>，最適合的做法是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">GoDoxy
+</span></span><span class="line"><span class="cl">  └─ DNS-01 驗證 → PowerDNS API
+</span></span><span class="line"><span class="cl">  └─ ACME 申請 → Caddy ACME Server
+</span></span><span class="line"><span class="cl">  └─ 最終憑證 → Caddy 內部 CA 簽發
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>GoDoxy 只支援 DNS-01，因此即使 CA 改成 Caddy，仍需要 PowerDNS API 幫它建立 <code>_acme-challenge</code> TXT 紀錄。</p>
+<p>以下假設：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Caddy ACME 主機名：caddy-ca.test
+</span></span><span class="line"><span class="cl">GoDoxy 網域：*.test
+</span></span><span class="line"><span class="cl">PowerDNS DNS IP：192.168.8.10
+</span></span><span class="line"><span class="cl">PowerDNS API：http://192.168.8.10:8081
+</span></span><span class="line"><span class="cl">GoDoxy IP：192.168.8.32
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>請把 IP 換成你的實際環境。</p>
+<h2 id="1-建立-dns-紀錄">1. 建立 DNS 紀錄
+</h2><p>PowerDNS 加入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">caddy-ca.test → Caddy 伺服器 IP
+</span></span><span class="line"><span class="cl">*.test        → 192.168.8.32
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>從 GoDoxy 主機確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">getent hosts caddy-ca.test
+</span></span><span class="line"><span class="cl">getent hosts godoxy.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2-在-caddy-啟用-acme-server">2. 在 Caddy 啟用 ACME Server
+</h2><p>編輯 Caddyfile：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">	pki {
+</span></span><span class="line"><span class="cl">		ca homelab {
+</span></span><span class="line"><span class="cl">			name &#34;HomeLab CA&#34;
+</span></span><span class="line"><span class="cl">			intermediate_lifetime 730d
+</span></span><span class="line"><span class="cl">		}
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">caddy-ca.test {
+</span></span><span class="line"><span class="cl">	tls {
+</span></span><span class="line"><span class="cl">		issuer internal {
+</span></span><span class="line"><span class="cl">			ca homelab
+</span></span><span class="line"><span class="cl">		}
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	acme_server {
+</span></span><span class="line"><span class="cl">		ca homelab
+</span></span><span class="line"><span class="cl">		lifetime 90d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		challenges dns-01
+</span></span><span class="line"><span class="cl">		allow_wildcard_names
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		resolvers 192.168.8.10:53
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		allow {
+</span></span><span class="line"><span class="cl">			domains &#34;*.test&#34;
+</span></span><span class="line"><span class="cl">		}
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這裡有兩個重要設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">allow_wildcard_names
+</span></span><span class="line"><span class="cl">lifetime 90d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Caddy ACME Server 預設憑證只有 <code>12h</code>，但 GoDoxy 會在到期前 30 天更新，因此一定要提高有效期；同時也要提高 Intermediate CA 的有效期。<a href="https://caddyserver.com/docs/caddyfile/directives/acme_server">Caddy ACME Server 文件</a></p>
+<p>驗證並重新載入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">caddy</span> <span class="n">validate</span> <span class="o">--</span><span class="n">config</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">Caddyfile</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">reload</span> <span class="n">caddy</span>
+</span></span><span class="line"><span class="cl"><span class="n">journalctl</span> <span class="o">-</span><span class="n">u</span> <span class="n">caddy</span> <span class="o">-</span><span class="n">n</span> <span class="mi">100</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">pager</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>測試 ACME Directory：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -k https://caddy-ca.test/acme/homelab/directory
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正常會看到包含 <code>newAccount</code>、<code>newOrder</code> 等網址的 JSON。</p>
+<h2 id="3-把-caddy-root-ca-複製到-godoxy">3. 把 Caddy Root CA 複製到 GoDoxy
+</h2><p>如果 Caddy 是用 Debian/RHEL systemd 安裝，Root CA 通常在：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">caddy</span><span class="o">/.</span><span class="n">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">authorities</span><span class="o">/</span><span class="n">homelab</span><span class="o">/</span><span class="n">root</span><span class="o">.</span><span class="n">crt</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>從 Caddy 主機複製到 GoDoxy：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">scp</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">caddy</span><span class="o">/.</span><span class="n">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">authorities</span><span class="o">/</span><span class="n">homelab</span><span class="o">/</span><span class="n">root</span><span class="o">.</span><span class="n">crt</span> \
+</span></span><span class="line"><span class="cl">  <span class="n">root</span><span class="err">@</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">8.32</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">godoxy</span><span class="o">/</span><span class="n">certs</span><span class="o">/</span><span class="n">caddy</span><span class="o">-</span><span class="n">homelab</span><span class="o">-</span><span class="n">root</span><span class="o">.</span><span class="n">crt</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 Caddy 是容器，容器內通常位於：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/data/caddy/pki/authorities/homelab/root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>回到 GoDoxy 主機確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /opt/godoxy/certs/caddy-homelab-root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>測試 GoDoxy 能否信任 ACME Server：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl \
+</span></span><span class="line"><span class="cl">  --cacert /opt/godoxy/certs/caddy-homelab-root.crt \
+</span></span><span class="line"><span class="cl">  https://caddy-ca.test/acme/homelab/directory
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這條不能出現：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">certificate signed by unknown authority
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="4-設定-powerdns-api-帳密">4. 設定 PowerDNS API 帳密
+</h2><p>編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/.env
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>加入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PDNS_API_URL=http://192.168.8.10:8081/
+</span></span><span class="line"><span class="cl">PDNS_API_KEY=你的PowerDNS_API_Key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>PowerDNS API 不建議暴露至外網，只讓 GoDoxy 所在內網存取即可。PowerDNS 在 lego 裡面的 provider 名稱是 <code>pdns</code>。<a href="https://go-acme.github.io/lego/dns/pdns/">lego PowerDNS 文件</a></p>
+<h2 id="5-修改-godoxy-autocert">5. 修改 GoDoxy autocert
+</h2><p>編輯：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /opt/godoxy/config/config.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>加入或修改：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">autocert:
+</span></span><span class="line"><span class="cl">  provider: pdns
+</span></span><span class="line"><span class="cl">  email: your-email@example.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  domains:
+</span></span><span class="line"><span class="cl">    - &#34;*.test&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  ca_dir_url: https://caddy-ca.test/acme/homelab/directory
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  ca_certs:
+</span></span><span class="line"><span class="cl">    - /app/certs/caddy-homelab-root.crt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  cert_path: /app/certs/cert.crt
+</span></span><span class="line"><span class="cl">  key_path: /app/certs/priv.key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這裡不要寫：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">provider: custom
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因為你申請的是 wildcard 憑證，GoDoxy仍然需要 <code>pdns</code> provider 建立 DNS-01 TXT 紀錄；<code>ca_dir_url</code> 才是用來把簽發端改成 Caddy。</p>
+<p>GoDoxy 官方支援使用 <code>ca_dir_url</code> 與 <code>ca_certs</code> 串接自訂內部 CA。<a href="https://docs.godoxy.dev/docs/godoxy/advanced-topics/Certificates">GoDoxy 憑證文件</a></p>
+<h2 id="6-確認-root-ca-有掛入容器">6. 確認 Root CA 有掛入容器
+</h2><p>檢查 Compose：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grep -A15 &#39;volumes:&#39; /opt/godoxy/compose.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>GoDoxy 服務需要有：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">volumes:
+</span></span><span class="line"><span class="cl">  - ./certs:/app/certs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認容器看得到憑證：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman exec godoxy-proxy \
+</span></span><span class="line"><span class="cl">  ls -l /app/certs/caddy-homelab-root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="7-重建-godoxy">7. 重建 GoDoxy
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /opt/godoxy
+</span></span><span class="line"><span class="cl">podman compose up -d --force-recreate
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>持續查看日誌：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman logs -f godoxy-proxy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正常流程應該會看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">registering ACME account
+</span></span><span class="line"><span class="cl">presenting DNS challenge
+</span></span><span class="line"><span class="cl">obtaining certificate
+</span></span><span class="line"><span class="cl">certificate obtained
+</span></span><span class="line"><span class="cl">server started addr=:443
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>另外觀察 Caddy：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">journalctl -u caddy -f
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="8-確認憑證">8. 確認憑證
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl s_client \
+</span></span><span class="line"><span class="cl">  -connect 127.0.0.1:443 \
+</span></span><span class="line"><span class="cl">  -servername godoxy.test \
+</span></span><span class="line"><span class="cl">  -showcerts &lt;/dev/null
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl \
+</span></span><span class="line"><span class="cl">  --cacert /opt/godoxy/certs/caddy-homelab-root.crt \
+</span></span><span class="line"><span class="cl">  https://godoxy.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="9-windows-信任-caddy-root-ca">9. Windows 信任 Caddy Root CA
+</h2><p>即使 GoDoxy 成功取得憑證，Windows 沒信任 Caddy Root CA，瀏覽器還是會顯示不安全。</p>
+<p>把：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">caddy-homelab-root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>複製到 Windows，使用系統管理員 PowerShell 執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">certutil -addstore -f Root .\caddy-homelab-root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>關閉並重新開啟瀏覽器後，進入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://godoxy.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果申請失敗，最有用的是貼這三段輸出：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">podman logs --tail 150 godoxy-proxy
+</span></span><span class="line"><span class="cl">curl --cacert /opt/godoxy/certs/caddy-homelab-root.crt https://caddy-ca.test/acme/homelab/directory
+</span></span><span class="line"><span class="cl">dig @192.168.8.10 TXT _acme-challenge.test
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

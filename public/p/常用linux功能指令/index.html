@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="macOS 要push之前驗證裝 brew tap microsoft/git-credential-manager\n網路 Debian 設定網路重新載入設定 ifreload -a Debian 固定DNS (使用dhclient) Alpine Linux 查詢Port netstao --tunlp 監聽Port netstat -tunlp | grep 5432 、 ss -tunlp | grep 80 檢查網址有效 crul -I -k 網址 nc -uv &lt;IP&gt; &lt;Port&gt; curl -k 略過憑證 wget &ndash;no-check-certificate 忽略憑證錯誤 網路重新取得IP ifdown eth0 --force &amp;&amp; ifup eth0 查看DNS cat /etc/resolv.conf 看default gateway ：ip route show 看hosts getent hosts illumio.twse.com.tw * 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8\n">
+<title>常用Linux功能指令</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8linux%E5%8A%9F%E8%83%BD%E6%8C%87%E4%BB%A4/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="常用Linux功能指令">
+<meta property='og:description' content="macOS 要push之前驗證裝 brew tap microsoft/git-credential-manager\n網路 Debian 設定網路重新載入設定 ifreload -a Debian 固定DNS (使用dhclient) Alpine Linux 查詢Port netstao --tunlp 監聽Port netstat -tunlp | grep 5432 、 ss -tunlp | grep 80 檢查網址有效 crul -I -k 網址 nc -uv &lt;IP&gt; &lt;Port&gt; curl -k 略過憑證 wget &ndash;no-check-certificate 忽略憑證錯誤 網路重新取得IP ifdown eth0 --force &amp;&amp; ifup eth0 查看DNS cat /etc/resolv.conf 看default gateway ：ip route show 看hosts getent hosts illumio.twse.com.tw * 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8linux%E5%8A%9F%E8%83%BD%E6%8C%87%E4%BB%A4/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-02T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="常用Linux功能指令">
+<meta name="twitter:description" content="macOS 要push之前驗證裝 brew tap microsoft/git-credential-manager\n網路 Debian 設定網路重新載入設定 ifreload -a Debian 固定DNS (使用dhclient) Alpine Linux 查詢Port netstao --tunlp 監聽Port netstat -tunlp | grep 5432 、 ss -tunlp | grep 80 檢查網址有效 crul -I -k 網址 nc -uv &lt;IP&gt; &lt;Port&gt; curl -k 略過憑證 wget &ndash;no-check-certificate 忽略憑證錯誤 網路重新取得IP ifdown eth0 --force &amp;&amp; ifup eth0 查看DNS cat /etc/resolv.conf 看default gateway ：ip route show 看hosts getent hosts illumio.twse.com.tw * 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com 如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#網路">網路</a></li>
+    <li><a href="#查log">查Log</a></li>
+    <li><a href="#使用者">使用者</a></li>
+    <li><a href="#檔案資料夾">檔案資料夾</a></li>
+    <li><a href="#路徑">路徑</a></li>
+    <li><a href="#終端機">終端機</a>
+      <ol>
+        <li><a href="#vi">Vi</a></li>
+      </ol>
+    </li>
+    <li><a href="#亂數">亂數</a></li>
+    <li><a href="#環境變數">環境變數</a>
+      <ol>
+        <li><a href="#啟用zsh">啟用zsh</a></li>
+        <li><a href="#改chrome-啟動鑰匙圈">改Chrome 啟動鑰匙圈</a></li>
+      </ol>
+    </li>
+    <li><a href="#安裝套件">安裝套件</a></li>
+    <li><a href="#服務">服務</a></li>
+    <li><a href="#補充-自行取用">補充-自行取用</a>
+      <ol>
+        <li><a href="#ubuntu-常用軟體">Ubuntu 常用軟體</a></li>
+        <li><a href="#rocky-linux-常用軟體">Rocky linux 常用軟體</a></li>
+        <li><a href="#opensuse-常用軟體">openSUSE 常用軟體</a></li>
+        <li><a href="#kail-linux-常用軟體">Kail Linux 常用軟體</a></li>
+      </ol>
+    </li>
+    <li><a href="#rhel">RHEL</a></li>
+    <li><a href="#ssl握手失敗原因">SSL握手失敗原因</a></li>
+    <li><a href="#常用設定">常用設定</a></li>
+    <li><a href="#快速鍵">快速鍵</a></li>
+    <li><a href="#輸入法">輸入法</a></li>
+    <li><a href="#環境組態">環境組態</a></li>
+    <li><a href="#debian">Debian</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E5%B8%B8%E7%94%A8linux%E5%8A%9F%E8%83%BD%E6%8C%87%E4%BB%A4/">常用Linux功能指令</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-04-02T00:00:00Z'>Apr 02, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>macOS 要push之前驗證裝 <code>brew tap microsoft/git-credential-manager</code></p>
+<h2 id="網路">網路
+</h2><ul>
+<li>Debian 設定網路重新載入設定 <code>ifreload -a</code></li>
+<li>Debian 固定DNS (使用dhclient)</li>
+<li>Alpine Linux 查詢Port <code>netstao --tunlp</code></li>
+<li>監聽Port <code>netstat -tunlp | grep 5432</code>  、 <code>ss -tunlp | grep 80</code></li>
+<li>檢查網址有效 <code>crul -I -k 網址</code>   <code>nc -uv &lt;IP&gt; &lt;Port&gt;</code>
+<ul>
+<li>curl -k 略過憑證</li>
+<li>wget &ndash;no-check-certificate 忽略憑證錯誤</li>
+</ul>
+</li>
+<li>網路重新取得IP <code>ifdown eth0 --force &amp;&amp; ifup eth0</code></li>
+<li>查看DNS <code>cat /etc/resolv.conf</code></li>
+<li>看default gateway ：ip route show</li>
+<li>看hosts  <code>getent hosts illumio.twse.com.tw</code></li>
+</ul>
+<blockquote>
+<p>* 發生過ping無法使用可能網段不對 例host設172.16.8.3 example.com 結果誤打成172.168.8.3 example.com
+如果Ping 8.8.8.8無法成功但卻可以上網,可能防火牆擋掉ICMP Type-8</p>
+</blockquote>
+<h2 id="查log">查Log
+</h2><ul>
+<li><code>tail -f /var/log/production.log</code></li>
+<li><code>journalctl -b -1 -r</code></li>
+</ul>
+<h2 id="使用者">使用者
+</h2><ol>
+<li>借權限(向root借權，但密碼是打目前使用者登入密碼)</li>
+</ol>
+<ul>
+<li>借權限成sudo <code>sudo -i</code>，在su模式輸入 exit</li>
+<li>借權限成特定使用者 <code>sudo -u &lt;使用者帳號&gt;</code></li>
+</ul>
+<ol start="2">
+<li>切帳號登入(要有原帳號密碼才能登入)</li>
+</ol>
+<ul>
+<li>切root帳號登入，環境變數在目前使用者 <code>su</code></li>
+<li>切root帳號登入，環境變數在root使用者 <code>su -</code></li>
+<li>切特定使用者，環境變數在特定使用者  <code>su - gss</code></li>
+</ul>
+<ol start="3">
+<li>看目前登入使用者</li>
+</ol>
+<ul>
+<li>who ,who -H ,w,id</li>
+</ul>
+<ol start="4">
+<li>管理帳戶</li>
+</ol>
+<ul>
+<li>建立使用者跟加密碼 <code>useradd kevin</code> / <code>passwd kevin</code>
+<ul>
+<li>用ubuntu最好用adduser 會自動建立家目錄,在gnome防呆沒關係,但xfce不會建立家目錄直接進不去桌面</li>
+</ul>
+</li>
+<li>列出本機所有帳戶 <code>cat /etc/passwd</code>
+方法1 sudo visudo
+方法2 加入sudoers : sudo visudo -f /etc/sudoers.d/jack jack ALL=(ALL:ALL) ALL (sudoers.d個別設定檔)
+方法3 使用者加入sudo <code>usermod -aG wheel &lt;username&gt;</code> (RedHat)</li>
+</ul>
+<ol start="5">
+<li>強制登出 <code>loginctl terminate-user bruce</code></li>
+</ol>
+<h2 id="檔案資料夾">檔案資料夾
+</h2><ol>
+<li>檔案權限</li>
+</ol>
+<ul>
+<li>決定檔案執行權限 chmod 770 &lt;資料夾&gt;</li>
+<li>決定檔案擁有者是誰 chown -R &lt;使用者&gt;:&lt;群組&gt; &lt;資料夾&gt;</li>
+</ul>
+<ol>
+<li>scp 傳輸檔案</li>
+</ol>
+<ul>
+<li>上傳目錄 <code>scp &lt;參數&gt; &lt;本地檔案位置&gt; &lt;使用者帳號&gt;＠&lt;IP位置&gt;: &lt;遠端檔案位置&gt;  sudo scp </code>-r<code>test/</code><a href="mailto:root@192.168.8.5">root@192.168.8.5</a>:~`</li>
+<li>下載目錄</li>
+</ul>
+<blockquote>
+<p>-r 複製整個目錄,沒加把路徑當檔案
+複製資料夾直接複製就好不用在本地創一個相同名字資料夾
+複製檔案要記得本身創的使用者有沒有權限複製</p>
+</blockquote>
+<ol start="3">
+<li>建立大空檔
+dd if=/dev/zero of=testimage.raw bs=1G count=8</li>
+<li>寫入檔案
+echo &ldquo;192.168.8.58  kevin.bdx.dev&rdquo; &raquo; /etc/hosts</li>
+<li>列出空間</li>
+</ol>
+<ul>
+<li>df -h (只能看掛載點大小)
+<img
+    src="/my-portfolio/Pasted%20image%2020260609205205.png"
+    alt=""
+    loading="lazy"
+></li>
+<li><code>du -h --max-depth=1 / 2&gt;/dev/null | sort -rh</code>  (列出各資料夾大小)
+<img
+    src="/my-portfolio/Pasted%20image%2020260609205359.png"
+    alt=""
+    loading="lazy"
+></li>
+<li><code>du -sh &lt;資料夾&gt;</code> (顯示目前位置資料夾大小)
+<img
+    src="/my-portfolio/Pasted%20image%2020260609205719.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>lsblk
+<img
+    src="/my-portfolio/Pasted%20image%2020260609210153.png"
+    alt=""
+    loading="lazy"
+>
+建立資料夾並進入位置 <code>mkdir test1 &amp;&amp; cd test1</code>
+~表示為用戶目錄 EX:/home/PIN
+～/.表示用戶目錄下隱藏資料夾 EX:～/.資料夾
+ls -l</li>
+<li><strong><code>cp -r ./* /var/tmp</code></strong>
+<ul>
+<li>效果：把 <code>mydata</code> 裡面的所有內容物（不含隱藏檔），<strong>直接散落、倒進</strong> <code>/var/tmp/</code> 底下。</li>
+</ul>
+</li>
+<li><strong><code>cp -r . /var/tmp/</code></strong>
+<ul>
+<li>效果：它會把 <code>mydata</code> <strong>這整個資料夾本身</strong> 複製過去！也就是說，它會在目的地建立一整包 <code>/var/tmp/mydata/</code>，然後把所有東西（含隱藏檔）好好地收在這個新資料夾裡。</li>
+</ul>
+</li>
+</ul>
+<p>關掉ssh登入一直出現訊息 <code>dmesg -n 1</code></p>
+<h2 id="路徑">路徑
+</h2><p>![[static/Diagram 11.svg]]</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">var指存放程式執行會產生收集讀寫資料</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span>        <span class="n">log檔位置</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="n">www</span>        <span class="err">網頁位置</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="n">tmp</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="n">spool</span>      <span class="err">列印服務</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="n">lock</span>       <span class="err">程式執行鎖定檔案</span>
+</span></span><span class="line"><span class="cl">    <span class="o">/</span><span class="n">liｂ</span>       <span class="err">應用程式資料重開機不消失</span><span class="p">(</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">docker</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">tmp</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">sbin</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">lib</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">home</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span>
+</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="n">local</span>
+</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="n">lib</span> <span class="err">：執行檔相關</span><span class="n">so</span> <span class="err">類</span><span class="n">dll</span>
+</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="n">man</span>
+</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="n">bin</span> <span class="err">：執行檔</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">etc</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">dev</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">bin</span> <span class="err">：系統執行檔</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">opt</span> <span class="p">:</span> <span class="err">存放第</span><span class="mi">3</span><span class="err">方軟體</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">proc</span> <span class="p">:</span> <span class="err">類似像硬體資訊參數</span>
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="n">mnt</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="終端機">終端機
+</h2><p>nautilus admin:/
+./ 執行應用程式
+history：查看打的所有指令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">stty -a 查詢目前佔用功能鍵
+</span></span><span class="line"><span class="cl">backspace 無法使用 stty erase ^H ,如果是出現^? stty erase ^? 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">快捷键：
+</span></span><span class="line"><span class="cl">Tab : 自動補齊
+</span></span><span class="line"><span class="cl">Ctrl+L ：清除螢幕訊息
+</span></span><span class="line"><span class="cl">Ctrl+S /Ctrl+Q : 畫面凍結/解除凍結(XON/XOFF)
+</span></span><span class="line"><span class="cl">Ctrl+C : 中斷程式
+</span></span><span class="line"><span class="cl">Ctrl+U : 清除貼上所有文字
+</span></span><span class="line"><span class="cl">Ctrl+A : 游標到行首
+</span></span><span class="line"><span class="cl">Ctrl+E : 游標到行尾
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ctrl D : 删除当前光标所在字符
+</span></span><span class="line"><span class="cl">命令行窗口中键/Shift Insert: 粘贴（相当于Windows的**Ctrl V**）
+</span></span><span class="line"><span class="cl">在命令行窗口选中即复制
+</span></span><span class="line"><span class="cl">Ctrl R，再按历史命令中出现过的字符串：按字符串寻找历史命令（重度推荐）
+</span></span><span class="line"><span class="cl">Ctrl PageUp : 屏幕输出向上翻页
+</span></span><span class="line"><span class="cl">Ctrl PageDown : 屏幕输出向下翻页
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano
+</span></span><span class="line"><span class="cl">Option+X (Alt+X) 隱藏選單
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>^[](200~</code> 貼上夾帶模式 <code>bind 'set enable-bracketed-paste off'</code></p>
+<h3 id="vi">Vi
+</h3><p>顯示行數 <code>set nu</code></p>
+<p>cd wewe/</p>
+<h2 id="亂數">亂數
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl rand -base64 16
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="環境變數">環境變數
+</h2><h3 id="啟用zsh">啟用zsh
+</h3><ol>
+<li>編輯組態檔</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano ~/.zshrc        //   ~/代表家目錄
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>加入以下內容</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 初始化補齊系統 </span>
+</span></span><span class="line"><span class="cl"><span class="n">autoload</span> <span class="o">-</span><span class="n">Uz</span> <span class="n">compinit</span> <span class="n">compinit</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 開啟選單模式，按下 Tab 兩次後進入選單 </span>
+</span></span><span class="line"><span class="cl"><span class="n">zstyle</span> <span class="s1">&#39;:completion:*&#39;</span> <span class="n">menu</span> <span class="n">select</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>存檔</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">source ~/.zshrc      //   重新讀取設定檔
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>要快速顯示檔案輸入cd，tab兩次出現資料夾，再按tab做選擇</li>
+</ol>
+<h3 id="改chrome-啟動鑰匙圈">改Chrome 啟動鑰匙圈
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;echo &#34;export CHROMIUM_USER_FLAGS=</span><span class="se">\&#34;</span><span class="s1">--password-store=basic</span><span class="se">\&#34;</span><span class="s1">&#34; &gt; /etc/profile.d/chromium-custom.sh&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#建立.sh </span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">vi</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">profile</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">chromium</span><span class="o">-</span><span class="n">custom</span><span class="o">.</span><span class="n">sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 寫入以下內容存檔</span>
+</span></span><span class="line"><span class="cl"><span class="k">export</span> <span class="n">CHROMIUM_USER_FLAGS</span><span class="o">=</span><span class="s2">&#34;--password-store=basic&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安裝套件">安裝套件
+</h2><p>yum RHEL7之前,dnf RHEL8之後
+dnf 要跳過gpg檢查 dnf -no gpgcheck
+因有時候內建repo會把gpgcheck取消,以下為確保在無連網環境能透過dnf+gpgkey 安裝
+AppImage 沒有權限記得chmod +x</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1.vi illumio.key 後貼上begin跟end後存檔
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">2.匯入gpg key
+</span></span><span class="line"><span class="cl">sudo rpm --import /home/gss/illumio.key
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">3.用rpm -K 可檢查是否成功匯入key,正確會顯示digests signatures OK
+</span></span><span class="line"><span class="cl">rpm -K illumio-pce-25.2.40-141.el9.x86_64.rpm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">4.強制做gpg檢查安裝,是否能安裝成功
+</span></span><span class="line"><span class="cl">dnf install illumio-pce-25.2.40-141.el9.x86_64.rpm --setopt=localpkg_gpgcheck=1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="服務">服務
+</h2><p>systemctl<br>
+sysctl
+top：表格式工作管理員
+htop
+free-h : 查詢記憶體用量
+pkill：踢掉服務</p>
+<h2 id="補充-自行取用">補充-自行取用
+</h2><h3 id="ubuntu-常用軟體">Ubuntu 常用軟體
+</h3><p>sudo apt install nemo synaptic gdebi gparted freerdp2-x11</p>
+<ul>
+<li>Nemo：</li>
+<li>synaptic</li>
+<li>gdebi：</li>
+<li>gparted</li>
+<li>xfreerdp：<code>xfreerdp /size:90% /v:192.168.170.200</code> //遠端到 192.168.170.200</li>
+</ul>
+<h3 id="rocky-linux-常用軟體">Rocky linux 常用軟體
+</h3><p>dnf install epel-release chrony net-tools bind-utils nmon htop</p>
+<ul>
+<li>epel-release</li>
+<li>chrony</li>
+<li>net-tools</li>
+<li>bind-utils</li>
+<li>nmon</li>
+<li>htop</li>
+</ul>
+<h3 id="opensuse-常用軟體">openSUSE 常用軟體
+</h3><h3 id="kail-linux-常用軟體">Kail Linux 常用軟體
+</h3><h2 id="rhel">RHEL
+</h2><p>無訂閱啟用RockyLinux鏡像源</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vi /etc/yum.repos.d/rocky.repo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">##如果有Fortclient擋住,關掉ssl
+</span></span><span class="line"><span class="cl">[rocky-baseos]
+</span></span><span class="line"><span class="cl">name=Rocky Linux 9 - BaseOS
+</span></span><span class="line"><span class="cl">baseurl=https://dl.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+</span></span><span class="line"><span class="cl">gpgcheck=1
+</span></span><span class="line"><span class="cl">gpgkey=https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
+</span></span><span class="line"><span class="cl">enabled=1
+</span></span><span class="line"><span class="cl">sslverify=0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[rocky-appstream]
+</span></span><span class="line"><span class="cl">name=Rocky Linux 9 - AppStream
+</span></span><span class="line"><span class="cl">baseurl=https://dl.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/
+</span></span><span class="line"><span class="cl">gpgcheck=1
+</span></span><span class="line"><span class="cl">gpgkey=https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-Rocky-9
+</span></span><span class="line"><span class="cl">enabled=1
+</span></span><span class="line"><span class="cl">sslverify=0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#修改後記得清除暫存
+</span></span><span class="line"><span class="cl">dnf clean all
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="ssl握手失敗原因">SSL握手失敗原因
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">date
+</span></span><span class="line"><span class="cl">dnf upgrade ca-certificates
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="常用設定">常用設定
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="k">export</span> <span class="n">LANG</span><span class="o">=</span><span class="n">en_US</span><span class="o">.</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span> <span class="o">//</span><span class="err">避免安裝軟體語系不符</span>
+</span></span><span class="line"><span class="cl"><span class="n">date</span> <span class="o">-</span><span class="n">s</span> <span class="s2">&#34;2026-05-05 11:00:00&#34;</span>  <span class="o">//</span><span class="err">手動校時避免</span><span class="n">dnf無法安裝</span>
+</span></span><span class="line"><span class="cl"><span class="k">export</span> <span class="ne">Path</span><span class="o">=$</span><span class="n">PATH</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span>  <span class="o">//</span><span class="err">將路徑加入程式環境變數</span>
+</span></span><span class="line"><span class="cl"><span class="err">開啟自動登入：系統設定</span><span class="o">/</span><span class="err">登入視窗</span><span class="o">/</span><span class="err">使用者，打上使用者名稱</span> <span class="p">(</span><span class="err">預設可登入</span><span class="n">root環境</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="快速鍵">快速鍵
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th><strong>快速鍵</strong></th>
+					<th><strong>功能</strong></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Super+A</td>
+					<td>Show Applications</td>
+			</tr>
+			<tr>
+					<td>Alt+R</td>
+					<td>執行視窗</td>
+			</tr>
+			<tr>
+					<td>Ctrl+Alt+T</td>
+					<td>執行終端機</td>
+			</tr>
+			<tr>
+					<td>PrtSc</td>
+					<td>獲取整個螢幕的截圖並儲存到 Pictures 目錄</td>
+			</tr>
+			<tr>
+					<td>Shift+PrtSc</td>
+					<td>獲取螢幕的某個區域截圖並儲存到 Pictures 目錄。</td>
+			</tr>
+			<tr>
+					<td>Alt+PrtSc</td>
+					<td>獲取當前視窗的截圖並儲存到 Pictures 目錄。</td>
+			</tr>
+			<tr>
+					<td>Ctrl+PrtSc</td>
+					<td>獲取整個螢幕的截圖並存放到剪貼簿。</td>
+			</tr>
+			<tr>
+					<td>Shift+Ctrl+PrtSc</td>
+					<td>獲取螢幕的某個區域截圖並存放到剪貼簿。</td>
+			</tr>
+			<tr>
+					<td>Ctrl+Alt+PrtSc</td>
+					<td>獲取當前視窗的 截圖並存放到剪貼簿。</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="輸入法">輸入法
+</h2><p>ibus/fctrix/RIME/HIME(類似於新注音的輸入法)</p>
+<h2 id="環境組態">環境組態
+</h2><p>bash 尋找順序</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th><strong>組態檔名稱</strong></th>
+					<th><strong>觸發時機</strong></th>
+					<th><strong>適合放什麼內容</strong></th>
+					<th>系統</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong><code>~/.profile</code></strong></td>
+					<td><strong>登入系統時</strong>執行（Login Shell）<br><em>※ Bourne shell 家族的通用設定</em></td>
+					<td>全域環境變數（例如 <code>PATH</code>）、不依賴特定 Shell 的設定。</td>
+					<td>Ubuntu</td>
+			</tr>
+			<tr>
+					<td><strong><code>~/.bash_profile</code></strong></td>
+					<td><strong>登入系統時</strong>執行（Login Shell）<br><em>※ 專屬 Bash Shell 的設定</em></td>
+					<td>效果同上，但只有使用 Bash 登入時才會讀取。</td>
+					<td>rocky</td>
+			</tr>
+			<tr>
+					<td><strong><code>~/.bashrc</code></strong></td>
+					<td><strong>打開新終端機視窗時</strong>執行<br>（Non-login Interactive Shell）</td>
+					<td>命令別名（<code>alias</code>）、終端機提示字元顏色（<code>PS1</code>）、特定 Shell 函數。</td>
+					<td></td>
+			</tr>
+			<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="debian">Debian
+</h2><p>套件位置：/etc/apt/sources.list.d/</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

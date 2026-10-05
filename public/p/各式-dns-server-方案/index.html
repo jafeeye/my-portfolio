@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 資料來源 查詢流程 典型用途 權威 DNS Server 自己管理的 zone 記錄 直接從自己的資料庫回答 你自己網域的官方解析（PowerDNS） DNS Proxy Server 完全沒有，仰賴上游 轉發給指定的上游 DNS，快取回應 路由器內建 DNS、Pi-hole、家用網路 遞迴解析器 沒有自己的 zone，但會自己走完整個 DNS 階層 自己一路問到 root/TLD/權威伺服器 Unbound、企業內部解析器 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole CoreDNS dnsmasq：兼具DHCP功能 mosDNS：常用於複雜DNS分流 BindDNS OxiDNS Technitium AdGuard Home：也提供簡單DHCP功能 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS) KeaDHCP SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制， Pi-hole DNSControl dnsweaver Adguard DNSProxy 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS\n">
+<title>各式 DNS Server 方案</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%90%84%E5%BC%8F-dns-server-%E6%96%B9%E6%A1%88/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="各式 DNS Server 方案">
+<meta property='og:description' content=" 資料來源 查詢流程 典型用途 權威 DNS Server 自己管理的 zone 記錄 直接從自己的資料庫回答 你自己網域的官方解析（PowerDNS） DNS Proxy Server 完全沒有，仰賴上游 轉發給指定的上游 DNS，快取回應 路由器內建 DNS、Pi-hole、家用網路 遞迴解析器 沒有自己的 zone，但會自己走完整個 DNS 階層 自己一路問到 root/TLD/權威伺服器 Unbound、企業內部解析器 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole CoreDNS dnsmasq：兼具DHCP功能 mosDNS：常用於複雜DNS分流 BindDNS OxiDNS Technitium AdGuard Home：也提供簡單DHCP功能 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS) KeaDHCP SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制， Pi-hole DNSControl dnsweaver Adguard DNSProxy 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%90%84%E5%BC%8F-dns-server-%E6%96%B9%E6%A1%88/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-05T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="各式 DNS Server 方案">
+<meta name="twitter:description" content=" 資料來源 查詢流程 典型用途 權威 DNS Server 自己管理的 zone 記錄 直接從自己的資料庫回答 你自己網域的官方解析（PowerDNS） DNS Proxy Server 完全沒有，仰賴上游 轉發給指定的上游 DNS，快取回應 路由器內建 DNS、Pi-hole、家用網路 遞迴解析器 沒有自己的 zone，但會自己走完整個 DNS 階層 自己一路問到 root/TLD/權威伺服器 Unbound、企業內部解析器 Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole CoreDNS dnsmasq：兼具DHCP功能 mosDNS：常用於複雜DNS分流 BindDNS OxiDNS Technitium AdGuard Home：也提供簡單DHCP功能 Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS) KeaDHCP SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制， Pi-hole DNSControl dnsweaver Adguard DNSProxy 以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#powerdns-簡介">PowerDNS 簡介</a>
+      <ol>
+        <li><a href="#lxc-安裝powerdns">LXC 安裝PowerDNS</a></li>
+      </ol>
+    </li>
+    <li><a href="#powerdns-資料庫問題">PowerDNS 資料庫問題</a>
+      <ol>
+        <li><a href="#步驟一把-pdns-帳號加到-www-data-群組">步驟一：把 pdns 帳號加到 www-data 群組</a></li>
+        <li><a href="#步驟二設定資料夾的-sgid黃金關鍵">步驟二：設定資料夾的 SGID（黃金關鍵）</a></li>
+        <li><a href="#步驟三重啟-powerdns-與你的網頁後台服務">步驟三：重啟 PowerDNS 與你的網頁後台服務</a></li>
+      </ol>
+    </li>
+    <li><a href="#powerdns-外網解析">PowerDNS 外網解析</a></li>
+    <li><a href="#powerdns-api-與-proxmox-整合">PowerDNS API 與 Proxmox 整合</a></li>
+    <li><a href="#powerdns-相關指令">PowerDNS 相關指令</a>
+      <ol>
+        <li><a href="#清除recursor">清除Recursor</a></li>
+      </ol>
+    </li>
+    <li><a href="#dns-相關應用">DNS 相關應用</a>
+      <ol>
+        <li><a href="#實作1powerdns-與-ad-dns共存">實作1：PowerDNS 與 AD DNS共存</a>
+          <ol>
+            <li><a href="#配置-powerdns-authoritative-授權伺服器">配置 PowerDNS Authoritative (授權伺服器)</a></li>
+            <li><a href="#配置-powerdns-recursor-遞迴伺服器">配置 PowerDNS Recursor (遞迴伺服器)</a></li>
+          </ol>
+        </li>
+        <li><a href="#實作2powerdns-authoritativerecursor--adguard">實作2：PowerDNS (Authoritative+Recursor) + AdGuard</a>
+          <ol>
+            <li><a href="#混用流量封包走向">混用流量封包走向</a></li>
+          </ol>
+        </li>
+        <li><a href="#實作3windows-dns-zonetransfer-powerdns">實作3：Windows DNS Zonetransfer PowerDNS</a></li>
+        <li><a href="#實作4自簽ip證書dnsdist">實作4：自簽IP證書+DNSdist</a></li>
+        <li><a href="#實作5caddy-doh反向代理">實作5：Caddy DOH+反向代理</a>
+          <ol>
+            <li><a href="#步驟二在-lxc-內安裝-caddy">步驟二：在 LXC 內安裝 Caddy</a></li>
+            <li><a href="#步驟三設定你的-caddyfile">步驟三：設定你的 Caddyfile</a></li>
+            <li><a href="#xcaddy">XCaddy</a></li>
+          </ol>
+        </li>
+        <li><a href="#實作6adguard-homemosdnssmartdns">實作6：Adguard Home+MosDNS+SmartDNS</a></li>
+      </ol>
+    </li>
+    <li><a href="#dns測試指令">DNS測試指令</a></li>
+    <li><a href="#dnsmasq">dnsmasq</a></li>
+    <li><a href="#dnsproxy">DNSProxy</a></li>
+    <li><a href="#pi-hole">Pi-hole</a></li>
+    <li><a href="#traefik">Traefik</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E5%90%84%E5%BC%8F-dns-server-%E6%96%B9%E6%A1%88/">各式 DNS Server 方案</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-07-05T00:00:00Z'>Jul 05, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    12 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+					<th>資料來源</th>
+					<th>查詢流程</th>
+					<th>典型用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>權威 DNS Server</strong></td>
+					<td>自己管理的 zone 記錄</td>
+					<td>直接從自己的資料庫回答</td>
+					<td>你自己網域的官方解析（PowerDNS）</td>
+			</tr>
+			<tr>
+					<td><strong>DNS Proxy Server</strong></td>
+					<td>完全沒有，仰賴上游</td>
+					<td>轉發給指定的上游 DNS，快取回應</td>
+					<td>路由器內建 DNS、Pi-hole、家用網路</td>
+			</tr>
+			<tr>
+					<td><strong>遞迴解析器</strong></td>
+					<td>沒有自己的 zone，但會自己走完整個 DNS 階層</td>
+					<td>自己一路問到 root/TLD/權威伺服器</td>
+					<td>Unbound、企業內部解析器</td>
+			</tr>
+			<tr>
+					<td>Unbound：遞迴解析器（Recursor），不透過8.8.8.8查，通常會搭配Pi-hole</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>CoreDNS</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>dnsmasq：兼具DHCP功能</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>mosDNS：常用於複雜DNS分流</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>BindDNS</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>OxiDNS</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Technitium</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>AdGuard Home：也提供簡單DHCP功能</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Stork：WebUI 介面Monitoring KeaDHCP+Bind9 套件 (也可以監控PowerDNS)</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>KeaDHCP</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>SmartDNS：也常用於DNS測速，內建多上游併發查詢、最快回應優先 (Best IP)機制，</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Pi-hole</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>DNSControl</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>dnsweaver</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+			<tr>
+					<td>Adguard DNSProxy</td>
+					<td></td>
+					<td></td>
+					<td></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>以基本上來說，OS可以填入兩組基本DNS Server，但是OS絕對都是先查一組，真的是掛到斷線很久才會去查第二組，所以國外就有人就覺得第一台DNS可以放一個Keepalive做兩台DNS 查詢，第二台才放另外其他DNS</p>
+<h2 id="powerdns-簡介">PowerDNS 簡介
+</h2><p>PowerDNS主要架構元件為以下三個</p>
+<ul>
+<li>Authoritative Server (權威伺服器)</li>
+<li>Recursor (遞迴解析伺服器)</li>
+<li>dnsdist (DNS 負載均衡與路由器)
+<img
+    src="/my-portfolio/Diagram%203.svg"
+    alt=""
+    loading="lazy"
+></li>
+</ul>
+<h3 id="lxc-安裝powerdns">LXC 安裝PowerDNS
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 1. 一口氣安裝 PowerDNS(SQLite3)、Apache 與 PHP 套件</span>
+</span></span><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">update</span>
+</span></span><span class="line"><span class="cl"><span class="n">apt</span> <span class="n">install</span> <span class="n">pdns</span><span class="o">-</span><span class="n">server</span> <span class="n">pdns</span><span class="o">-</span><span class="n">backend</span><span class="o">-</span><span class="n">sqlite3</span> <span class="n">sqlite3</span> <span class="n">apache2</span> <span class="n">php</span> <span class="n">php</span><span class="o">-</span><span class="n">sqlite3</span> <span class="n">php</span><span class="o">-</span><span class="n">mbstring</span> <span class="n">php</span><span class="o">-</span><span class="n">intl</span> <span class="n">php8</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">gettext</span> <span class="n">php8</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">xml</span> <span class="n">php8</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">intl</span> <span class="o">-</span><span class="n">y</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 建立存放目錄並注入官方 SQLite Schema 結構</span>
+</span></span><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span>
+</span></span><span class="line"><span class="cl"><span class="n">sqlite3</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite3</span> <span class="o">&lt;</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">doc</span><span class="o">/</span><span class="n">pdns</span><span class="o">-</span><span class="n">backend</span><span class="o">-</span><span class="n">sqlite3</span><span class="o">/</span><span class="n">schema</span><span class="o">.</span><span class="n">sqlite3</span><span class="o">.</span><span class="n">sql</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 關鍵：把這個檔案與目錄的權限，同時交給 pdns 與網頁 (www-data) 共同存取</span>
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">pdns</span><span class="p">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span>
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">775</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span>
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">664</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4.編輯設定檔</span>
+</span></span><span class="line"><span class="cl"><span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">conf</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">launch</span><span class="o">=</span><span class="n">gsqlite3</span> 
+</span></span><span class="line"><span class="cl"><span class="n">gsqlite3</span><span class="o">-</span><span class="n">database</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite3</span> 
+</span></span><span class="line"><span class="cl"><span class="n">local</span><span class="o">-</span><span class="n">address</span><span class="o">=</span><span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">restart</span> <span class="n">pdns</span> 
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">pdns</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5.下載poweradmin</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 下載 Poweradmin 4.2.1 穩定版（目前 4.2 系列的最新發行版） </span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span>
+</span></span><span class="line"><span class="cl"><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">refs</span><span class="o">/</span><span class="n">tags</span><span class="o">/</span><span class="n">v4</span><span class="o">.</span><span class="mf">2.1</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 解壓並移動到 Apache 網頁目錄 </span>
+</span></span><span class="line"><span class="cl"><span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">v4</span><span class="o">.</span><span class="mf">2.1</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> 
+</span></span><span class="line"><span class="cl"><span class="n">mv</span> <span class="n">poweradmin</span><span class="o">-</span><span class="mf">4.2</span><span class="o">.</span><span class="mi">1</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 修正目錄權限，讓 Apache (www-data) 能夠正常存取</span>
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="p">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6. 瀏覽器輸入http://&lt;你的LXC_IP&gt;/poweradmin/install/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 啟用 Apache 的 rewrite 模組 </span>
+</span></span><span class="line"><span class="cl"><span class="n">a2enmod</span> <span class="n">rewrite</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 修改 Apache 設定檔，允許網頁目錄使用 .htaccess 進行路由覆寫 </span>
+</span></span><span class="line"><span class="cl"><span class="n">sed</span> <span class="o">-</span><span class="n">i</span> <span class="s1">&#39;s/AllowOverride None/AllowOverride All/g&#39;</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">apache2</span><span class="o">.</span><span class="n">conf</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 7.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">pdns</span><span class="p">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 強制給予資料夾 775 權限（允許 www-data 群組在裡面建立暫存檔） </span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">775</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 強制給予資料庫檔案本身 664 權限（允許 www-data 讀寫） </span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">664</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 8. web DNS設置</span>
+</span></span><span class="line"><span class="cl"><span class="err">主機管理員</span><span class="p">:</span><span class="n">admin</span><span class="o">.</span><span class="n">bd1</span><span class="o">.</span><span class="n">dev</span>
+</span></span><span class="line"><span class="cl"><span class="err">主域名服務器</span><span class="p">:</span><span class="n">ns1</span><span class="o">.</span><span class="n">bd1</span><span class="o">.</span><span class="n">dev</span>
+</span></span><span class="line"><span class="cl"><span class="err">輔助域名服務器</span> <span class="p">:</span><span class="n">ns2</span><span class="o">.</span><span class="n">bd1</span><span class="o">.</span><span class="n">dev</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 9 確認PowerDNS 設定檔路徑有被創立</span>
+</span></span><span class="line"><span class="cl"><span class="n">touch</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">setting</span><span class="o">.</span><span class="n">php</span> <span class="err">並貼上網頁的內容</span>
+</span></span><span class="line"><span class="cl"><span class="n">chown</span> <span class="n">www</span><span class="o">-</span><span class="n">data</span><span class="p">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">settings</span><span class="o">.</span><span class="n">php</span> 
+</span></span><span class="line"><span class="cl"><span class="n">chmod</span> <span class="mi">664</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">settings</span><span class="o">.</span><span class="n">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#刪除poweradmin install 資料夾才能正常運行</span>
+</span></span><span class="line"><span class="cl"><span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">poweradmin</span><span class="o">/</span><span class="n">install</span><span class="o">/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>設定檔備份</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cp /opt/poweradmin_settings.php.bak /opt/poweradmin/config/settings.php 
+</span></span><span class="line"><span class="cl">cp /opt/poweradmin_powerdns.db.bak /opt/poweradmin/powerdns.db
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="powerdns-資料庫問題">PowerDNS 資料庫問題
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="err">簡易維護使用</span><span class="n">sqlite</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 查詢底下檔案權限</span>
+</span></span><span class="line"><span class="cl"><span class="n">ls</span> <span class="o">-</span><span class="n">la</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 發現底下有pdns.sqlite3-shm跟pdns.sqlite3-wal，看權限是不是屬於www-data</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>為了解決這種因為「兩個不同帳號同時搶同一個 SQLite 資料庫」產生的權限衝突，最 root-cause（根本）的解法是<strong>把 <code>pdns</code> 帳號直接加進 <code>www-data</code> 群組，並利用 Linux 的 <code>umask</code> 或是 <code>SGID</code> 讓新建立的檔案強制繼承群組</strong>。
+請直接依序執行以下三個動作：</p>
+<h3 id="步驟一把-pdns-帳號加到-www-data-群組">步驟一：把 pdns 帳號加到 www-data 群組
+</h3><p>讓 PowerDNS 服務有權限處理網頁端建立的東西：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo usermod -aG www-data pdns
+</span></span><span class="line"><span class="cl">sudo usermod -aG pdns www-data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="步驟二設定資料夾的-sgid黃金關鍵">步驟二：設定資料夾的 SGID（黃金關鍵）
+</h3><p>我們要在 <code>/var/lib/powerdns</code> 資料夾上加上一個特殊的 <code>SGID</code> 權限（原本的 <code>775</code> 改成 <code>2775</code>）。它的神奇之處在於：<strong>未來不管是誰（pdns 或是 www-data）在這個資料夾下建立任何新檔案（包括臨時的 -shm 和 -wal），群組一律會強制繼承資料夾的群組（也就是 www-data）</strong>！</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 1. 再次把所有權交回，並把資料夾群組定為 www-data</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="n">pdns</span><span class="p">:</span><span class="n">www</span><span class="o">-</span><span class="n">data</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. 開啟 SGID (注意那個 2)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">2775</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. 再次把現有的檔案權限刷乾淨</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">664</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite</span><span class="o">*</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="步驟三重啟-powerdns-與你的網頁後台服務">步驟三：重啟 PowerDNS 與你的網頁後台服務
+</h3><p>為了讓剛剛加入群組（<code>usermod</code>）的設定在服務中生效，一定要重啟：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl restart pdns
+</span></span><span class="line"><span class="cl">sudo systemctl restart pdns-recursor
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 如果你有裝網頁後台（例如 powerdns-admin），也請重啟它，或者重啟 nginx/apache
+</span></span><span class="line"><span class="cl"># sudo systemctl restart powerdns-admin
+</span></span><span class="line"><span class="cl"># sudo systemctl restart apache
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="powerdns-外網解析">PowerDNS 外網解析
+</h2><ol>
+<li>把原本 Authoritative Server 的Port 53改成別的</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /etc/powerdns/pdns.conf
+</span></span><span class="line"><span class="cl">local-port=5353
+</span></span><span class="line"><span class="cl">local-address=0.0.0.0
+</span></span><span class="line"><span class="cl">systemctl restart pdns
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>安裝 PowerDNS Recursor</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update &amp;&amp; apt install pdns-recursor -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>修改Recursor設定檔,現在新版是用yaml排版要注意寫法</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /etc/powerdns/recursor.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>新增以下內容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dnssec:
+</span></span><span class="line"><span class="cl">  trustanchorfile: /usr/share/dns/root.key
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">recursor:
+</span></span><span class="line"><span class="cl">  hint_file: /usr/share/dns/root.hints
+</span></span><span class="line"><span class="cl">  include_dir: /etc/powerdns/recursor.d
+</span></span><span class="line"><span class="cl">  security_poll_suffix: &#39;&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  forward_zones_recurse:
+</span></span><span class="line"><span class="cl">    - zone: .
+</span></span><span class="line"><span class="cl">      forwarders:
+</span></span><span class="line"><span class="cl">        - 192.168.50.1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  forward_zones:
+</span></span><span class="line"><span class="cl">    - zone: bd1.dev
+</span></span><span class="line"><span class="cl">      forwarders:
+</span></span><span class="line"><span class="cl">        - 127.0.0.1:5353
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">incoming:
+</span></span><span class="line"><span class="cl">  listen:
+</span></span><span class="line"><span class="cl">    - 0.0.0.0
+</span></span><span class="line"><span class="cl">    - &#39;::&#39;
+</span></span><span class="line"><span class="cl">  allow_from:
+</span></span><span class="line"><span class="cl">    - 172.16.0.0/16
+</span></span><span class="line"><span class="cl">    - 127.0.0.0/8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重啟服務</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl restart pdns-recursor
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>用dig查詢是否正常</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># dig &lt;網域&gt; @&lt;DNS位置&gt; -p &lt;Port&gt;
+</span></span><span class="line"><span class="cl">dig bd1.dev @127.0.0.1 -p 5353
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260709092627.png"
+    alt=""
+    loading="lazy"
+></p>
+<ol start="5">
+<li>(進階設定)使用lua腳本，不用在自己新增遞迴Zone</li>
+</ol>
+<p>建立一個<code>nano /etc/powerdns/recursor-fallback.lua</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">function preresolve(dq)
+</span></span><span class="line"><span class="cl">    -- 1. 先把使用者的問題，悄悄丟給後台 5353 的 SQLite 權威版
+</span></span><span class="line"><span class="cl">    local res = resolveUDP(&#34;127.0.0.1&#34;, 5353, dq.qname, dq.qtype)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    -- 2. 如果後台有答案，而且不是錯誤（代表是內網網域）
+</span></span><span class="line"><span class="cl">    if res and res.rcode == pdns.RCODE_NOERROR and #res.records &gt; 0 then
+</span></span><span class="line"><span class="cl">        dq:addRecords(res.records)
+</span></span><span class="line"><span class="cl">        dq.rcode = pdns.RCODE_NOERROR
+</span></span><span class="line"><span class="cl">        return true -- 內網攔截成功，直接回傳給用戶
+</span></span><span class="line"><span class="cl">    end
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    -- 3. 如果後台找不到，就回傳 false，PowerDNS 會自動往下走 recursor.conf 裡設定的 Windows DNS 查外網
+</span></span><span class="line"><span class="cl">    return false
+</span></span><span class="line"><span class="cl">end
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把 <code>/etc/powerdns/recursor.conf</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dnssec:
+</span></span><span class="line"><span class="cl">  validation: off
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">recursor:
+</span></span><span class="line"><span class="cl">  hint_file: /usr/share/dns/root.hints
+</span></span><span class="line"><span class="cl">  include_dir: /etc/powerdns/recursor.d
+</span></span><span class="line"><span class="cl">  security_poll_suffix: &#39;&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  lua_config_file: /etc/powerdns/recursor-fallback.lua
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  # 預設外網流量全部交給有權限出海的 Windows DNS
+</span></span><span class="line"><span class="cl">  forward_zones_recurse:
+</span></span><span class="line"><span class="cl">    - zone: .
+</span></span><span class="line"><span class="cl">      forwarders:
+</span></span><span class="line"><span class="cl">        - 172.16.4.35
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">incoming:
+</span></span><span class="line"><span class="cl">  listen:
+</span></span><span class="line"><span class="cl">    - 0.0.0.0
+</span></span><span class="line"><span class="cl">    - &#39;::&#39;
+</span></span><span class="line"><span class="cl">  allow_from:
+</span></span><span class="line"><span class="cl">    - 172.16.0.0/16
+</span></span><span class="line"><span class="cl">    - 127.0.0.0/8
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="powerdns-api-與-proxmox-整合">PowerDNS API 與 Proxmox 整合
+</h2><ol>
+<li>先安裝完PowerDNS，修改組態檔</li>
+</ol>
+<ul>
+<li>api=yes  ;啟用api功能</li>
+<li>api-keys=&lt;自訂一串字母&gt;</li>
+<li>webserver=yes</li>
+<li>webserver-address=0.0.0.0</li>
+<li>webserver-allow-from= ;全放是0.0.0.0/0, ::/0</li>
+<li>webserver-port=8081</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># launch Which backends to launch and order to query them in </span>
+</span></span><span class="line"><span class="cl"><span class="n">launch</span><span class="o">=</span><span class="n">gsqlite3</span> 
+</span></span><span class="line"><span class="cl"><span class="n">gsqlite3</span><span class="o">-</span><span class="n">database</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">powerdns</span><span class="o">/</span><span class="n">pdns</span><span class="o">.</span><span class="n">sqlite3</span>
+</span></span><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># api Enable/disable the REST API (including HTTP listener) </span>
+</span></span><span class="line"><span class="cl"><span class="n">api</span><span class="o">=</span><span class="n">yes</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># api-key Static pre-shared authentication key for access to the REST API </span>
+</span></span><span class="line"><span class="cl"><span class="n">api</span><span class="o">-</span><span class="n">key</span><span class="o">=</span><span class="n">arandomgeneratedstring</span>
+</span></span><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># webserver Start a webserver for monitoring (api=yes also enables the HTTP listener) </span>
+</span></span><span class="line"><span class="cl"><span class="n">webserver</span><span class="o">=</span><span class="n">yes</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># webserver-address IP Address of webserver/API to listen on </span>
+</span></span><span class="line"><span class="cl"><span class="n">webserver</span><span class="o">-</span><span class="n">address</span><span class="o">=</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">240.13</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">################################# </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># webserver-allow-from Webserver/API access is only allowed from these subnets </span>
+</span></span><span class="line"><span class="cl"><span class="n">webserver</span><span class="o">-</span><span class="n">allow</span><span class="o">-</span><span class="n">from</span><span class="o">=</span><span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">,::</span><span class="mi">1</span><span class="p">,</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">16</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#################################</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># webserver-port        Port of webserver/API to listen on</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="n">webserver</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">8081</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>重啟PowerDNS</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl restart pdns
+</span></span><span class="line"><span class="cl">sudo systemctl status pdns
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>測試PowerDNS透過 <code>pdnsutil</code> 寫入Zone</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 正解zone名稱，這邊是internal
+</span></span><span class="line"><span class="cl">sudo pdnsutil create-zone internal
+</span></span><span class="line"><span class="cl"># 反解zone名稱，反解只能是.in-addr.arpa
+</span></span><span class="line"><span class="cl">sudo pdnsutil create-zone 168.192.in-addr.arpa
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認是否寫入在sqlite3</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SQLite version 3.37.2 2022-01-06 13:25:41 
+</span></span><span class="line"><span class="cl">Enter &#34;.help&#34; for usage hints. 
+</span></span><span class="line"><span class="cl">sqlite&gt; select * from records; 1|2|pve.box2.kmc.gr.jp|SOA|a.misconfigured.dns.server.invalid hostmaster.pve.box2.kmc.gr.jp 0 10800 3600 604800 3600|3600|0|0||1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>在PVE啟動SDN的DNS功能
+<code>Datacenter &gt; SDN &gt; Options &gt; DNS</code>
+<code>URI</code> 填入 <code>http://192.168.240.13:8081/api/v1/servers/localhost</code>
+<code>API Key</code>= &lt;自訂一串字母&gt; ; 與前面/etc/powerdns/pdns.conf裡面API 一致
+<img
+    src="/my-portfolio/Pasted%20image%2020260518225755.png"
+    alt=""
+    loading="lazy"
+></li>
+<li>編輯Zones，填入剛剛創立正向 internal 網域
+<img
+    src="/my-portfolio/Pasted%20image%2020260703223039.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<blockquote>
+<p>重新寫入DNS必須要重新創立虛擬機才有
+<code>dig eve.pve.box2.kmc.gr.jp @192.168.240.13</code></p>
+</blockquote>
+<h2 id="powerdns-相關指令">PowerDNS 相關指令
+</h2><h3 id="清除recursor">清除Recursor
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dig @172.16.8.8 -p 53 illumio-kevin.bd1.dev
+</span></span><span class="line"><span class="cl">rec_control wipe-cache illumio-sandra.bd2.dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>PowerDNS Recursor<code>rec_control</code>清快取、看統計、reload 設定等
+PowerDNS Authoritative <code>pdnsutil</code>管理 zone/記錄、check-zone、increase-serial 等</p>
+<h2 id="dns-相關應用">DNS 相關應用
+</h2><h3 id="實作1powerdns-與-ad-dns共存">實作1：PowerDNS 與 AD DNS共存
+</h3><p>在 Linux 伺服器上配置兩套 PowerDNS 元件，在PVE Script 下的PowerDNS預設沒有安裝PowerDNS Recursor，先補裝此套件，此原理是透過 PowerDNS Recursor 遞迴解析，把不同網域交給不同的DNS查詢，首先給AD查詢，然後再給PowerDNS Authoritative，最後再派給外網DNS</p>
+<h4 id="配置-powerdns-authoritative-授權伺服器">配置 PowerDNS Authoritative (授權伺服器)
+</h4><p>負責管理 AD 以外的其他內網自訂紀錄（例如：Nginx、Harbor、GitLab 等伺服器的 <code>*.internal</code> 紀錄）。</p>
+<ul>
+<li><strong>修改設定檔：</strong> <code>/etc/powerdns/pdns.conf</code></li>
+<li><strong>關鍵修改：</strong> 因為預設用 PowerDNS Authoritative 的 Port 53，這邊交給給 Recursor，改成<code>5300</code> 埠。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">    local-port=5300
+</span></span><span class="line"><span class="cl">    local-address=127.0.0.1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>重啟服務：</strong> <code>sudo systemctl restart pdns</code></li>
+</ul>
+<h4 id="配置-powerdns-recursor-遞迴伺服器">配置 PowerDNS Recursor (遞迴伺服器)
+</h4><p>站在內網第一線，負責接收所有設備的 DNS 請求（Port 53），並落實條件式轉發（Forward Zones）。</p>
+<ol>
+<li><strong>修改YAML （適用 5.x 新版)設定檔：</strong> <code>/etc/powerdns/recursor.conf</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-YAML" data-lang="YAML"><span class="line"><span class="cl"><span class="w">    </span><span class="nt">dnssec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">trustanchorfile</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/share/dns/root.key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">recursor</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">hint_file</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/share/dns/root.hints</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">include_dir</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/powerdns/recursor.d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">security_poll_suffix</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 💡 5.x 新版條件式轉發 (將 AD 紀錄與內網紀錄精準分流)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">forward_zones</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 只要查 AD 網域，就丟給 Windows DC (假設 DC IP 是 192.168.1.10)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l">ad.internal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">forwarders</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="m">192.168.1.10</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l">_msdcs.ad.internal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">forwarders</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="m">192.168.1.10</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># 其他內部自訂域名，丟給剛剛改聽 5300 埠的 PowerDNS Authoritative</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">zone</span><span class="p">:</span><span class="w"> </span><span class="l">internal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">forwarders</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="p">:</span><span class="m">5300</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 💡 5.x 正確的監聽入口設定：監聽全內網的標準 Port 53</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">incoming</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">listen</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">0.0.0.0</span><span class="p">:</span><span class="m">53</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li><strong>驗證 YAML 語法並重啟：</strong></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Bash" data-lang="Bash"><span class="line"><span class="cl"><span class="c1"># 檢查設定檔是否正確（必須無 Fatal 錯誤）</span>
+</span></span><span class="line"><span class="cl">sudo pdns_recursor --check-config
+</span></span><span class="line"><span class="cl"><span class="c1"># 重啟服務</span>
+</span></span><span class="line"><span class="cl">sudo systemctl restart pdns-recursor
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="實作2powerdns-authoritativerecursor--adguard">實作2：PowerDNS (Authoritative+Recursor) + AdGuard
+</h3><h4 id="混用流量封包走向">混用流量封包走向
+</h4><p>內網所有設備（PC、手機、伺服器、舊設備）的 DNS，統一指向 <strong>AdGuard Home</strong>（Port 53）。
+當設備發出 DNS 查詢時，封包會經歷以下完美的旅程：
+<strong>第一關：AdGuard Home（前線盾牌 🛡️）</strong>
+- 收到查詢後，先比對廣告、追蹤器與惡意網站黑名單。
+- <strong>如果是廣告</strong>（例如 <code>ads.doubleclick.net</code>）：直接在第一關<strong>攔截並丟棄</strong>。
+- 查詢上游伺服器：經過特殊寫法，<strong>把特定網域網址轉發給後方 PowerDNS Recursor</strong>。
+<strong>第二關：PowerDNS Recursor（核心分流 🚦）</strong>
+- 收到 AdGuard 送過來的乾淨請求。
+- 執行你先前設定好的 YAML 條件式轉發（Forward Zones）邏輯：
+- 查 AD 網域（<code>ad.internal</code>） ➡️ 轉發給 <strong>Windows AD DNS</strong>（確保 LDAPS 正常）。
+- 查內部域名（<code>internal</code>） ➡️ 轉發給 <strong>PowerDNS Authoritative (Port 5300)</strong>。</p>
+<ol>
+<li>第一次進入ADguard是IP:3000,設定完後為IP:80進入</li>
+</ol>
+<p><img
+    src="/my-portfolio/Pasted%20image%2020260705144248.png"
+    alt=""
+    loading="lazy"
+>
+2. 之後修改 nano /opt/AdGuardHome/AdGuardHome.yaml</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http
+</span></span><span class="line"><span class="cl">  address: 192.168.10.6:80
+</span></span><span class="line"><span class="cl">dns:
+</span></span><span class="line"><span class="cl">  bind_hosts:
+</span></span><span class="line"><span class="cl">    - 192.168.10.6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>設定 AdGuard Home 上游 DNS，在  (Upstream DNS servers) 欄位中，清空原本預設的外網 DNS，<strong>唯獨填入你 PowerDNS Recursor 的 IP 與新 Port</strong>：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://dns10.quad9.net/dns-query
+</span></span><span class="line"><span class="cl">[/internal/]192.168.10.6:53
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Adguard 有簡單提供 DNS Rewire 功能，就是做本地域名解析功能，但功能太過簡潔</p>
+<h3 id="實作3windows-dns-zonetransfer-powerdns">實作3：Windows DNS Zonetransfer PowerDNS
+</h3><ol>
+<li>讓PowerDNS 支援Secondary功能</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /etc/powerdns/pdns.conf
+</span></span><span class="line"><span class="cl">secondary=yes
+</span></span><span class="line"><span class="cl">systemctl restart pdns
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>
+<p>Windows DNS 開啟 ZoneTransfer
+<img
+    src="/my-portfolio/Pasted%20image%2020260708112538.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>PowerDNS 加入從屬區域
+<img
+    src="/my-portfolio/Pasted%20image%2020260708112816.png"
+    alt=""
+    loading="lazy"
+>
+4.開啟同步</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#測試是否有收到IP
+</span></span><span class="line"><span class="cl">dig axfr bd1.dev @IP
+</span></span><span class="line"><span class="cl">#同步PowerDNS
+</span></span><span class="line"><span class="cl">pdns_control retrieve bd1.dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="實作4自簽ip證書dnsdist">實作4：自簽IP證書+DNSdist
+</h3><ol>
+<li>安裝</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update &amp;&amp; apt install -y dnsdist
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>配置DOH 證書</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">openssl req -x509 -newkey rsa:4096 -keyout /etc/dnsdist/key.pem -out /etc/dnsdist/cert.pem -days 1000 -nodes -subj &#39;/CN=這台主機IP或域名&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>比較嚴謹的2層簽法(寫入SAN屬性)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo openssl req -x509 -newkey rsa:4096 \
+</span></span><span class="line"><span class="cl">  -keyout /etc/dnsdist/key.pem \
+</span></span><span class="line"><span class="cl">  -out /etc/dnsdist/cert.pem \
+</span></span><span class="line"><span class="cl">  -days 1000 -nodes \
+</span></span><span class="line"><span class="cl">  -subj &#39;/CN=192.168.10.3&#39; \
+</span></span><span class="line"><span class="cl">  -addext &#34;subjectAltName = IP:192.168.10.3&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>配置證書權限</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1. 讓擁有者和群組保持為 root
+</span></span><span class="line"><span class="cl">sudo chown root:root /etc/dnsdist/cert.pem /etc/dnsdist/key.pem
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 2. 開放讀取權限（讓任何執行 dnsdist 的內部帳號都能讀到這兩個檔案）
+</span></span><span class="line"><span class="cl">sudo chmod 644 /etc/dnsdist/cert.pem /etc/dnsdist/key.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>编辑 dnsdist 设定 <code>/etc/dnsdist/dnsdist.conf</code>
+其中 newServer 把 Pi-hole(127.0.0.1:53)加为后端 server,addDOHLocal 建立 DoH 监听端点,webserver 则是 dnsdist 自己的管理界面(记得改成不冲突的 port,比如 8080)。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">-- disable security status polling via DNS</span>
+</span></span><span class="line"><span class="cl"><span class="n">setSecurityPollSuffix</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 全域放行 ACL</span>
+</span></span><span class="line"><span class="cl"><span class="n">setACL</span><span class="p">({</span><span class="s1">&#39;0.0.0.0/0&#39;</span><span class="p">,</span> <span class="s1">&#39;::/0&#39;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 監聽設定</span>
+</span></span><span class="line"><span class="cl"><span class="n">addLocal</span><span class="p">(</span><span class="s1">&#39;0.0.0.0:5300&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="n">reusePort</span><span class="o">=</span><span class="kc">true</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">addDOHLocal</span><span class="p">(</span><span class="s1">&#39;0.0.0.0:443&#39;</span><span class="p">,</span> <span class="s2">&#34;/etc/dnsdist/cert.pem&#34;</span><span class="p">,</span> <span class="s2">&#34;/etc/dnsdist/key.pem&#34;</span><span class="p">,</span> <span class="s1">&#39;/dns-query&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 明確指定後端 PowerDNS 的位置</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 根據你剛剛 dig 會通，你的 PowerDNS 應該是開在 53 埠口，所以我們直接指到 192.168.10.3:53</span>
+</span></span><span class="line"><span class="cl"><span class="n">newServer</span><span class="p">({</span><span class="n">address</span><span class="o">=</span><span class="s2">&#34;192.168.10.3:53&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;powerdns-backend&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 網頁主控台</span>
+</span></span><span class="line"><span class="cl"><span class="n">webserver</span><span class="p">(</span><span class="s1">&#39;0.0.0.0:8080&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">setWebserverConfig</span><span class="p">({</span><span class="n">password</span><span class="o">=</span><span class="s2">&#34;設定密碼&#34;</span><span class="p">,</span> <span class="n">acl</span><span class="o">=</span><span class="s2">&#34;0.0.0.0/0&#34;</span><span class="p">})</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="5">
+<li>啟動</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable --now dnsdist
+</span></span><span class="line"><span class="cl">sudo systemctl restart dnsdist
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>檢查</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -k -v https://192.168.10.3/
+</span></span><span class="line"><span class="cl">dig @192.168.10.3 dns.powerdns.internal
+</span></span><span class="line"><span class="cl">dig @192.168.10.3 dns.powerdns.internal +doh
+</span></span><span class="line"><span class="cl">curl -k -v -H &#34;accept: application/dns-json&#34; &#34;https://192.168.10.3/dns-query?name=dns.powerdns.internal&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>出現網頁有寫IP位置代表服務有正常運作
+<img
+    src="/my-portfolio/Pasted%20image%2020260718202905.png"
+    alt=""
+    loading="lazy"
+>
+6. 網址最後在瀏覽器填入 <code>https://192.168.10.x/dns-query</code> 完成
+7. macOS 憑證
+<img
+    src="/my-portfolio/Pasted%20image%2020260718204149.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="實作5caddy-doh反向代理">實作5：Caddy DOH+反向代理
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">scp</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">caddy</span><span class="o">/.</span><span class="n">local</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">pki</span><span class="o">/</span><span class="n">authorities</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">root</span><span class="o">.</span><span class="n">crt</span> <span class="o">.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Caddy 寫法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">local_certs</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">:</span><span class="mi">80</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">root</span> <span class="o">*</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">share</span><span class="o">/</span><span class="n">caddy</span>
+</span></span><span class="line"><span class="cl">        <span class="n">file_server</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Another common task is to set up a reverse proxy:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># reverse_proxy localhost:8080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Or serve a PHP site through php-fpm:</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># php_fastcgi localhost:9000</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">=</span><span class="err">沒寫</span><span class="n">Port預設轉到https</span><span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="mf">192.168</span><span class="o">.</span><span class="mf">10.9</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="c1"># 正常的網頁服務</span>
+</span></span><span class="line"><span class="cl">   <span class="c1"># root * /var/www/html</span>
+</span></span><span class="line"><span class="cl">   <span class="c1"># file_server</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># DoH 流量轉發給 DNSdist (假設 DNSdist 監聽在 8080)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_proxy</span> <span class="o">/</span><span class="n">dns</span><span class="o">-</span><span class="n">query</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">10.6</span><span class="p">:</span><span class="mi">8080</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">transport</span> <span class="n">http</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 或者是 proxy_protocol v2，用來傳遞客戶端真實 IP</span>
+</span></span><span class="line"><span class="cl">            <span class="n">versions</span> <span class="n">h2c</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">header_up</span> <span class="n">Host</span> <span class="p">{</span><span class="n">upstream_hostport</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">docker</span><span class="o">.</span><span class="n">internal</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 告訴 Caddy 用內部的 CA 幫這個自訂域名簽發憑證</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tls</span> <span class="n">internal</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 後端指向你實際跑 Open WebUI 的那一台 IP 與 Port</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_proxy</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">10.7</span><span class="p">:</span><span class="mi">5380</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>DNSDist 寫法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-- disable security status polling via DNS
+</span></span><span class="line"><span class="cl">setSecurityPollSuffix(&#34;&#34;)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 全域放行 ACL
+</span></span><span class="line"><span class="cl">setACL({&#39;0.0.0.0/0&#39;, &#39;::/0&#39;})
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 監聽設定
+</span></span><span class="line"><span class="cl">addLocal(&#39;0.0.0.0:5300&#39;, { reusePort=true })
+</span></span><span class="line"><span class="cl">addDOHLocal(&#39;0.0.0.0:8080&#39;, nil, nil, { &#34;/dns-query&#34; })
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 明確指定後端 PowerDNS 的位置
+</span></span><span class="line"><span class="cl">-- dig 會通，PowerDNS 開在53埠口，直接指到 192.168.10.6:53
+</span></span><span class="line"><span class="cl">newServer({address=&#34;192.168.10.6:53&#34;, name=&#34;powerdns-backend&#34;})
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">-- 網頁主控台(不要用8081會跟原本PowerDNS結果網頁撞)
+</span></span><span class="line"><span class="cl">webserver(&#39;0.0.0.0:8082&#39;)
+</span></span><span class="line"><span class="cl">setWebserverConfig({password=&#34;設定密碼&#34;, acl=&#34;0.0.0.0/0&#34;})
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="步驟二在-lxc-內安裝-caddy">步驟二：在 LXC 內安裝 Caddy
+</h4><p>進入該 LXC 的 Console（主控台），依序執行以下官方標準 APT 安裝指令：</p>
+<ol>
+<li>更新系統並安裝基礎依賴</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update &amp;&amp; apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>匯入 Caddy 官方安全金鑰</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -1sLf &#39;https://dl.cloudsmith.io/public/caddy/stable/gpg.key&#39; | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>加入 Caddy 官方軟體源</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -1sLf &#39;https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt&#39; | tee /etc/apt/sources.list.pve.d/caddy-stable.list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>(備註：有些系統路徑可能不同，若報錯也可以用 <code>/etc/apt/sources.list.v/</code> 或標準的 <code>/etc/apt/sources.list.d/caddy-stable.list</code>)</em></p>
+<ol start="4">
+<li>正式安裝 Caddy</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update &amp;&amp; apt install -y caddy
+</span></span><span class="line"><span class="cl">systemctl status caddy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="步驟三設定你的-caddyfile">步驟三：設定你的 Caddyfile
+</h4><p>Caddy 安裝好後，預設的設定檔位在 <code>/etc/caddy/Caddyfile</code>。</p>
+<ol>
+<li>編輯設定檔</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /etc/caddy/Caddyfile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>配置你的內網服務
+把你之前規劃的 Local CA、DoH 反向代理及 Open WebUI 填進去。這裡結合我們之前討論的優化結構（加入 <code>.internal</code> 保留網域）：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 啟用本地憑證中心 (自建 Local CA)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">local_certs</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. 處理本機 IP 的服務</span>
+</span></span><span class="line"><span class="cl"><span class="mf">192.168</span><span class="o">.</span><span class="mf">10.9</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 正常的網頁服務 (可以放你的導航頁首頁，如 Homepage)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">root</span> <span class="o">*</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_server</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># DoH 流量轉發給 DNSdist</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_proxy</span> <span class="o">/</span><span class="n">dns</span><span class="o">-</span><span class="n">query</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">10.6</span><span class="p">:</span><span class="mi">8080</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">transport</span> <span class="n">http</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">versions</span> <span class="n">h2c</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">header_up</span> <span class="n">Host</span> <span class="p">{</span><span class="n">upstream_hostport</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. Open WebUI 服務</span>
+</span></span><span class="line"><span class="cl"><span class="n">ai</span><span class="o">.</span><span class="n">internal</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tls</span> <span class="n">internal</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_proxy</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">10.7</span><span class="p">:</span><span class="mi">5380</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. Keycloak 服務 (維持預設 8080，由 Caddy 扛 HTTPS 轉換)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sso</span><span class="o">.</span><span class="n">internal</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tls</span> <span class="n">internal</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reverse_proxy</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">10.8</span><span class="p">:</span><span class="mi">8080</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">header_up</span> <span class="n">X</span><span class="o">-</span><span class="n">Forwarded</span><span class="o">-</span><span class="n">Proto</span> <span class="n">https</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>檢查並重載 Caddy 設定
+每次修改完 <code>Caddyfile</code>，請養成好習慣在 LXC 內跑這兩行命令：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 檢查語法有沒有寫錯</span>
+</span></span><span class="line"><span class="cl"><span class="n">caddy</span> <span class="n">validate</span> <span class="o">--</span><span class="n">config</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">Caddyfile</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 讓設定無痛生效（免重啟服務、不斷線）</span>
+</span></span><span class="line"><span class="cl"><span class="n">caddy</span> <span class="n">reload</span> <span class="o">--</span><span class="n">config</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">caddy</span><span class="o">/</span><span class="n">Caddyfile</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="xcaddy">XCaddy
+</h4><p>做到只轉發第7層流量，不轉第4層
+瀏覽器跑L7 Agent 跑L4</p>
+<h3 id="實作6adguard-homemosdnssmartdns">實作6：Adguard Home+MosDNS+SmartDNS
+</h3><p>AD去广告，MosDNS分流，SmartDNS测速</p>
+<h2 id="dns測試指令">DNS測試指令
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># DNS 主機那台
+</span></span><span class="line"><span class="cl">dig illumio-kevin.bd1.dev @127.0.0.1 -p 5353
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Resolve-DnsName illumio-kevin.bd1.dev -Server 172.16.8.131
+</span></span><span class="line"><span class="cl"># 修改 nano /etc/resolv.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="dnsmasq">dnsmasq
+</h2><p>透過LXC 安裝</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update &amp;&amp; apt upgrade -y
+</span></span><span class="line"><span class="cl">apt install dnsmasq -y
+</span></span><span class="line"><span class="cl"># 確認port 53正常
+</span></span><span class="line"><span class="cl">ss -tunlp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>編寫 <strong>dnsmasq.conf</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mv /etc/dnsmasq.conf /etc/dnsmasq.conf.bak 
+</span></span><span class="line"><span class="cl">nano /etc/dnsmasq.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>設定內容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># --- 基礎設定 ---
+</span></span><span class="line"><span class="cl"># 監聽的介面，也可以寫 interface=eth0
+</span></span><span class="line"><span class="cl">listen-address=127.0.0.1, 192.168.1.53  # 192.168.1.53 是這台 LXC 的固定 IP
+</span></span><span class="line"><span class="cl">port=53
+</span></span><span class="line"><span class="cl">domain-needed       # 限制唯有完整網域才能往外查（不轉發純主機名）
+</span></span><span class="line"><span class="cl">bogus-priv          # 防止私有 IP 逆向解析請求流到外網
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># --- 上游 DNS 伺服器 (當 dnsmasq 找不到答案時向外問) ---
+</span></span><span class="line"><span class="cl">server=1.1.1.1
+</span></span><span class="line"><span class="cl">server=8.8.8.8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># --- 內網本地 DNS 解析 ---
+</span></span><span class="line"><span class="cl">local=/lab.home/     # 定義你的本地專屬網域
+</span></span><span class="line"><span class="cl">expand-hosts
+</span></span><span class="line"><span class="cl">domain=lab.home
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># --- DHCP 伺服器設定 (選用，如果家裡有路由器發 IP 則不要開) ---
+</span></span><span class="line"><span class="cl"># 發放的 IP 範圍，以及租期 12 小時
+</span></span><span class="line"><span class="cl">dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,12h
+</span></span><span class="line"><span class="cl"># 預設閘道 (通常是你家路由器的 IP)
+</span></span><span class="line"><span class="cl">dhcp-option=3,192.168.1.1
+</span></span><span class="line"><span class="cl"># 分配給用戶端的 DNS 伺服器 (指向這台 LXC 自己)
+</span></span><span class="line"><span class="cl">dhcp-option=6,192.168.1.53
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># --- 靜態 IP 綁定 (Static DHCP) ---
+</span></span><span class="line"><span class="cl"># 適合把你家 PVE 主機、NAS、其他重要 VM 的 MAC 鎖定固定 IP
+</span></span><span class="line"><span class="cl">dhcp-host=AA:BB:CC:DD:EE:FF,pve-host,192.168.1.10,infinite
+</span></span><span class="line"><span class="cl">dhcp-host=11:22:33:44:55:66,my-nas,192.168.1.20,infinite
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>設定 PXE Proxy</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">interface = eth0
+</span></span><span class="line"><span class="cl">bind-interfaces
+</span></span><span class="line"><span class="cl">dhcp-range=192.168.0.0, proxy
+</span></span><span class="line"><span class="cl">pxe-service=7, &#34;ipxe net boot&#34;, Boot\x64\wdsmgfw.efi, 192.168.181.188
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>啟用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl enable dnsmasq 
+</span></span><span class="line"><span class="cl">systemctl start dnsmasq
+</span></span><span class="line"><span class="cl">systemctl status dnsmasq
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="dnsproxy">DNSProxy
+</h2><h2 id="pi-hole">Pi-hole
+</h2><h2 id="traefik">Traefik
+</h2><p>Caddy 自己會產生一整套 CA(根憑證 + 中繼憑證),平常拿來幫你自動簽發各個網站的憑證。我們要做的是:<strong>把 Caddy 的中繼憑證私鑰借出來,幫 Traefik 的網域手動簽一張憑證</strong>,這樣 Traefik 跟 Caddy 用的是同一套信任鏈,你的電腦/手機只要信任過 Caddy 的根憑證,連 Traefik 的網站也會直接被信任。</p>
+<ol>
+<li>從 Caddy 容器裡把 CA 檔案複製出來
+假設你的 Caddy 容器名稱叫 <code>caddy</code>(如果不是,底下指令要換成你實際的名字)。
+在你的專案資料夾裡開終端機,執行:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p ./traefik/ca
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">docker compose cp caddy:/data/caddy/pki/authorities/local/root.crt ./traefik/ca/root.crt
+</span></span><span class="line"><span class="cl">docker compose cp caddy:/data/caddy/pki/authorities/local/intermediate.crt ./traefik/ca/intermediate.crt
+</span></span><span class="line"><span class="cl">docker compose cp caddy:/data/caddy/pki/authorities/local/intermediate.key ./traefik/ca/intermediate.key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>跑完這三行,你的資料夾應該長這樣:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">traefik/
+</span></span><span class="line"><span class="cl">└── ca/
+</span></span><span class="line"><span class="cl">    ├── root.crt
+</span></span><span class="line"><span class="cl">    ├── intermediate.crt
+</span></span><span class="line"><span class="cl">    └── intermediate.key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>這三個檔案分別是什麼:</strong></p>
+<ul>
+<li><code>root.crt</code>:Caddy 的根憑證,等一下要拿去讓你的電腦/瀏覽器信任</li>
+<li><code>intermediate.crt</code> / <code>intermediate.key</code>:中繼憑證跟它的私鑰,等一下要拿來簽 Traefik 的憑證</li>
+</ul>
+<ol start="2">
+<li>安裝 <code>root.crt</code> 到系統信任庫
+如果你的電腦已經裝過 Caddy 的 root.crt 了(之前你有沒有裝過?),這步可以跳過。如果還沒裝過:
+Windows(打開系統管理員權限的 cmd):</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">certutil -addstore -f &#34;ROOT&#34; traefik\ca\root.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>用 Caddy 的中繼憑證,幫 Traefik 的網域簽一張新憑證
+在同一個終端機裡,繼續執行:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 產生金鑰 + 簽署請求(CSR)</span>
+</span></span><span class="line"><span class="cl">openssl req -new -newkey rsa:2048 -nodes <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -keyout ./traefik.test.key <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -out ./traefik.test.csr <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -subj <span class="s2">&#34;/CN=*.test&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -addext <span class="s2">&#34;subjectAltName=DNS:*.test,DNS:test&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 用 Caddy 的 intermediate 簽發,效期設 1 年</span>
+</span></span><span class="line"><span class="cl">openssl x509 -req -in ./traefik.test.csr <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -CA ./intermediate.crt -CAkey ./intermediate.key -CAcreateserial <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -out ./traefik.test.crt -days <span class="m">730</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">  -extfile &lt;<span class="o">(</span><span class="nb">printf</span> <span class="s2">&#34;subjectAltName=DNS:*.test,DNS:test&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 組成完整鏈(leaf + intermediate),Traefik 才吃得下</span>
+</span></span><span class="line"><span class="cl">cat ./traefik.test.crt ./intermediate.crt <span class="se">\
+</span></span></span><span class="line"><span class="cl">  &gt; ./traefik.test.fullchain.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>這三個指令分別在做什麼:</strong></p>
+<ol>
+<li>第一個:產生一把新的私鑰,跟一份「我要申請 <code>*.home.lab</code> 這個網域憑證」的申請書(CSR)</li>
+<li>第二個:拿 Caddy 的中繼私鑰,在那份申請書上蓋章簽名,變成一張正式的憑證,效期 365 天</li>
+<li>第三個:因為瀏覽器驗證的時候需要看到完整的信任鏈(從你的憑證一路到根憑證),所以把「你的憑證」跟「中繼憑證」接在一起,變成一份完整檔案</li>
+</ol>
+<p>跑完之後,你的資料夾長這樣:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">traefik/
+</span></span><span class="line"><span class="cl">├── ca/
+</span></span><span class="line"><span class="cl">│   ├── root.crt
+</span></span><span class="line"><span class="cl">│   ├── intermediate.crt
+</span></span><span class="line"><span class="cl">│   └── intermediate.key
+</span></span><span class="line"><span class="cl">└── certs/
+</span></span><span class="line"><span class="cl">    ├── traefik.home.lab.key           ← 私鑰
+</span></span><span class="line"><span class="cl">    ├── traefik.home.lab.csr           ← 申請書(之後用不到了,可以留著也可以刪)
+</span></span><span class="line"><span class="cl">    ├── traefik.home.lab.crt           ← 你的憑證(單獨一張)
+</span></span><span class="line"><span class="cl">    └── traefik.home.lab.fullchain.crt ← 完整鏈,這個是等一下要用的
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>建立 <code>traefik/dynamic/tls.yml</code>
+在專案資料夾裡建立 <code>traefik/dynamic/tls.yml</code> 這個檔案,內容寫:</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">certificates</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">certFile</span><span class="p">:</span><span class="w"> </span><span class="l">/certs/traefik.home.lab.fullchain.crt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">keyFile</span><span class="p">:</span><span class="w"> </span><span class="l">/certs/traefik.home.lab.key</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>這裡的路徑 <code>/certs/...</code> 指的是 Traefik 容器內部的路徑,不是你電腦上的路徑 —— 之所以能對應到步驟 3 產生的檔案,是因為你的 docker-compose.yml 裡已經有這行掛載:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./traefik/certs:/certs:ro</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>意思是你電腦上的 <code>./traefik/certs</code> 資料夾,會被 Traefik 容器看成是它內部的 <code>/certs</code>。所以只要步驟 3 產生的檔案真的放在 <code>./traefik/certs</code> 裡,檔名對得上,這裡就抓得到。
+最終確你的資料夾長怎樣</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">你的專案資料夾/
+</span></span><span class="line"><span class="cl">├── docker-compose.yml
+</span></span><span class="line"><span class="cl">└── traefik/
+</span></span><span class="line"><span class="cl">    ├── ca/
+</span></span><span class="line"><span class="cl">    │   ├── root.crt
+</span></span><span class="line"><span class="cl">    │   ├── intermediate.crt
+</span></span><span class="line"><span class="cl">    │   └── intermediate.key
+</span></span><span class="line"><span class="cl">    ├── certs/
+</span></span><span class="line"><span class="cl">    │   ├── traefik.home.lab.key
+</span></span><span class="line"><span class="cl">    │   └── traefik.home.lab.fullchain.crt
+</span></span><span class="line"><span class="cl">    └── dynamic/
+</span></span><span class="line"><span class="cl">        └── tls.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

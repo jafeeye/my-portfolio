@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Obsidian 要確定開啟目錄下有.obsidian資料夾，設定才會同步\nRemtely Save：同步OneDrive、WebDAV\nOmnisearch：搜尋所有寫過文章\nDigram.net：畫向量(可導入svg)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)\nImage TookIt：快速顯示圖片\nSimple Mind Map：心智圖\nCanvas：Obsidian預設畫圖\nDynamic Table of Content ：動態目錄外掛\nEmbedded Code Title：程式碼檔名\nemo：自動將圖片上傳自Github\nCommander：側邊欄按鈕隱藏\nMedia Extened:嵌入Youtube等多媒體檔案\ncMenu\nDataview\nEagle\nPDF++\nS3agl：Eagle附件查看\nTimelines：編年史記\nHeatmap Calendar：热图，按年展示各习惯打卡情况\nAnyBlock\n常用快速鍵 Ctrl+Shift+N 分割視窗顯示新分頁 Ctrl+P 顯示命令列 Ctrl+Shift+P 顯示Omnisearch 寫作大綱 腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）\n寫作語法 插入本地圖片(正斜槓) ![顯示名稱](./) 轉譯運算符號(反斜槓) \\ 反向連結 [[筆記名稱]] [[筆記名稱#標題]] [[筆記名稱|代替文本]] 嵌入筆記內容 ![[筆記名稱#標題]] ![[筆記名稱^段落] 插入引注連結 [1](#^編號) 或 [[#^footnote|1]]，步驟先打兩個[後打^ 出現文章列表 YAML前置資料區 (start)&mdash; (end)&mdash; 要在文件開頭才有效 寫作示範1:\n">
+<title>寫作整合KPM</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%AF%AB%E4%BD%9C%E6%95%B4%E5%90%88kpm/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="寫作整合KPM">
+<meta property='og:description' content="Obsidian 要確定開啟目錄下有.obsidian資料夾，設定才會同步\nRemtely Save：同步OneDrive、WebDAV\nOmnisearch：搜尋所有寫過文章\nDigram.net：畫向量(可導入svg)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)\nImage TookIt：快速顯示圖片\nSimple Mind Map：心智圖\nCanvas：Obsidian預設畫圖\nDynamic Table of Content ：動態目錄外掛\nEmbedded Code Title：程式碼檔名\nemo：自動將圖片上傳自Github\nCommander：側邊欄按鈕隱藏\nMedia Extened:嵌入Youtube等多媒體檔案\ncMenu\nDataview\nEagle\nPDF++\nS3agl：Eagle附件查看\nTimelines：編年史記\nHeatmap Calendar：热图，按年展示各习惯打卡情况\nAnyBlock\n常用快速鍵 Ctrl+Shift+N 分割視窗顯示新分頁 Ctrl+P 顯示命令列 Ctrl+Shift+P 顯示Omnisearch 寫作大綱 腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）\n寫作語法 插入本地圖片(正斜槓) ![顯示名稱](./) 轉譯運算符號(反斜槓) \\ 反向連結 [[筆記名稱]] [[筆記名稱#標題]] [[筆記名稱|代替文本]] 嵌入筆記內容 ![[筆記名稱#標題]] ![[筆記名稱^段落] 插入引注連結 [1](#^編號) 或 [[#^footnote|1]]，步驟先打兩個[後打^ 出現文章列表 YAML前置資料區 (start)&mdash; (end)&mdash; 要在文件開頭才有效 寫作示範1:\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%AF%AB%E4%BD%9C%E6%95%B4%E5%90%88kpm/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-11T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="寫作整合KPM">
+<meta name="twitter:description" content="Obsidian 要確定開啟目錄下有.obsidian資料夾，設定才會同步\nRemtely Save：同步OneDrive、WebDAV\nOmnisearch：搜尋所有寫過文章\nDigram.net：畫向量(可導入svg)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)\nImage TookIt：快速顯示圖片\nSimple Mind Map：心智圖\nCanvas：Obsidian預設畫圖\nDynamic Table of Content ：動態目錄外掛\nEmbedded Code Title：程式碼檔名\nemo：自動將圖片上傳自Github\nCommander：側邊欄按鈕隱藏\nMedia Extened:嵌入Youtube等多媒體檔案\ncMenu\nDataview\nEagle\nPDF++\nS3agl：Eagle附件查看\nTimelines：編年史記\nHeatmap Calendar：热图，按年展示各习惯打卡情况\nAnyBlock\n常用快速鍵 Ctrl+Shift+N 分割視窗顯示新分頁 Ctrl+P 顯示命令列 Ctrl+Shift+P 顯示Omnisearch 寫作大綱 腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）\n寫作語法 插入本地圖片(正斜槓) ![顯示名稱](./) 轉譯運算符號(反斜槓) \\ 反向連結 [[筆記名稱]] [[筆記名稱#標題]] [[筆記名稱|代替文本]] 嵌入筆記內容 ![[筆記名稱#標題]] ![[筆記名稱^段落] 插入引注連結 [1](#^編號) 或 [[#^footnote|1]]，步驟先打兩個[後打^ 出現文章列表 YAML前置資料區 (start)&mdash; (end)&mdash; 要在文件開頭才有效 寫作示範1:\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#obsidian">Obsidian</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#常用快速鍵">常用快速鍵</a></li>
+          </ol>
+        </li>
+        <li><a href="#寫作大綱">寫作大綱</a></li>
+        <li><a href="#寫作語法">寫作語法</a></li>
+      </ol>
+    </li>
+    <li><a href="#雜項處理">雜項處理</a></li>
+    <li><a href="#eagle">Eagle</a></li>
+    <li><a href="#affinity">Affinity</a></li>
+    <li><a href="#typora">Typora</a></li>
+    <li><a href="#vs-code">VS Code</a></li>
+    <li><a href="#memo">Memo</a></li>
+    <li><a href="#延伸閱讀">延伸閱讀</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E5%AF%AB%E4%BD%9C%E6%95%B4%E5%90%88kpm/">寫作整合KPM</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-04-11T00:00:00Z'>Apr 11, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="obsidian">Obsidian
+</h2><p>要確定開啟目錄下有.obsidian資料夾，設定才會同步</p>
+<ul>
+<li>
+<p>Remtely Save：同步OneDrive、WebDAV</p>
+</li>
+<li>
+<p>Omnisearch：搜尋所有寫過文章</p>
+</li>
+<li>
+<p>Digram.net：畫向量(可導入svg)正常情況下1pt=1px (macOS)，1pt=3/4px (Win)</p>
+</li>
+<li>
+<p>Image TookIt：快速顯示圖片</p>
+</li>
+<li>
+<p>Simple Mind Map：心智圖</p>
+</li>
+<li>
+<p>Canvas：Obsidian預設畫圖</p>
+</li>
+<li>
+<p>Dynamic Table of Content ：動態目錄外掛</p>
+</li>
+<li>
+<p>Embedded Code Title：程式碼檔名</p>
+</li>
+<li>
+<p>emo：自動將圖片上傳自Github</p>
+</li>
+<li>
+<p>Commander：側邊欄按鈕隱藏</p>
+</li>
+<li>
+<p>Media Extened:嵌入Youtube等多媒體檔案</p>
+</li>
+<li>
+<p>cMenu</p>
+</li>
+<li>
+<p>Dataview</p>
+</li>
+<li>
+<p>Eagle</p>
+</li>
+<li>
+<p>PDF++</p>
+</li>
+<li>
+<p>S3agl：Eagle附件查看</p>
+</li>
+<li>
+<p>Timelines：編年史記</p>
+</li>
+<li>
+<p>Heatmap Calendar：热图，按年展示各习惯打卡情况</p>
+</li>
+<li>
+<p>AnyBlock</p>
+</li>
+</ul>
+<h4 id="常用快速鍵">常用快速鍵
+</h4><ul>
+<li>Ctrl+Shift+N 分割視窗顯示新分頁</li>
+<li>Ctrl+P 顯示命令列</li>
+<li>Ctrl+Shift+P 顯示Omnisearch</li>
+</ul>
+<h3 id="寫作大綱">寫作大綱
+</h3><p><strong>腳註 + 延伸閱讀 + 參考資料 + Backlink（反向連結）</strong></p>
+<h3 id="寫作語法">寫作語法
+</h3><ul>
+<li>插入本地圖片(正斜槓) <code>![顯示名稱](./)</code></li>
+<li>轉譯運算符號(反斜槓)  <code>\</code></li>
+<li>反向連結 <code>[[筆記名稱]]</code>  <code>[[筆記名稱#標題]]</code>  <code>[[筆記名稱|代替文本]]</code>
+嵌入筆記內容  <code>![[筆記名稱#標題]]</code>  <code>![[筆記名稱^段落]</code></li>
+<li>插入引注連結 <code>[1](#^編號)</code> 或 <code>[[#^footnote|1]]</code>，步驟先打兩個<code>[</code>後打<code>^</code> 出現文章列表</li>
+<li>YAML前置資料區 (start)&mdash;  (end)&mdash; 要在文件開頭才有效</li>
+</ul>
+<p><strong>寫作示範1:</strong></p>
+<blockquote>
+<p>[!Note] 示例：修改文本颜色
+例如，可以创建一个名为 <code>snippet.css</code> 的文件并在其中加入以下代码。该片段可以将文本颜色更改为红色：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>body {
+&ndash;text-normal: red;</p>
+<blockquote>
+<p>[!Note] Obsidian 如何处理删除的文件？
+这取决于你的设置。（要更改删除文件后的操作，请在 <strong>设置 → 文件与链接</strong> 下选择以下任一选项）：</p>
+<ul>
+<li><strong>移至系统回收站</strong>：默认情况下，删除的文件会进入你操作系统的系统回收站。要恢复文件，使用系统的文件管理器即可。</li>
+<li><strong>移至软件回收站（.trash）文件夹</strong>：Obsidian 将把删除的文件发送到仓库中的 <code>.trash</code> 文件夹。你可以在该文件夹中恢复这些文件。</li>
+</ul>
+</blockquote>
+<p><strong>寫作示範2：</strong></p>
+<ul>
+<li><strong>移至系统回收站</strong>：默认情况下，删除的文件会进入你操作系统的系统回收站。要恢复文件，使用系统的文件管理器即可。</li>
+<li><strong>移至软件回收站（.trash）文件夹</strong>：Obsidian 将把删除的文件发送到仓库中的 <code>.trash</code> 文件夹。你可以在该文件夹中恢复这些文件。</li>
+<li><strong>永久删除</strong>：文件会立即永久删除，无法恢复。</li>
+</ul>
+<p><strong>寫作示範3:</strong>
+Obsidian支持以下文件格式：</p>
+<ol>
+<li>Markdown 文件：<code>md</code></li>
+<li>图像文件：<code>avif</code>、<code>bmp</code>、<code>gif</code>、<code>jpeg</code>、<code>jpg</code>、<code>png</code>、<code>svg</code>、<code>webp</code></li>
+<li>音频文件：<code>flac</code>、<code>m4a</code>、<code>mp3</code>、<code>ogg</code>、<code>wav</code>、<code>webm</code>、<code>3g</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-toc" data-lang="toc"></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">time-played, length, rating from &#34;games&#34; sort rating desc 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="雜項處理">雜項處理
+</h2><p>可將Acrobat打開PDF文件中的向量文件圖物件，匯出SVG檔後導入
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1738729840000xgpna8.png"
+    alt="gh|250"
+    loading="lazy"
+></p>
+<h2 id="eagle">Eagle
+</h2><h2 id="affinity">Affinity
+</h2><h2 id="typora">Typora
+</h2><h2 id="vs-code">VS Code
+</h2><p>常用指令：Option+Z Ａlt+Z 切換自動換行
+選擇程式語言: Ctrl+K,M
+自動換行: Alt+Z
+Markdown Allin1</p>
+<h2 id="memo">Memo
+</h2><p>YT影片下載字幕，英文字幕直接轉成中文
+<img
+    src="/my-portfolio/Pasted%20image%2020260411101809.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>快速提取Office文檔所有圖片
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744378916000bk5khg.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>註解PDF檔案
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1744378848000pq5g2f.png"
+    alt="gh|300"
+    loading="lazy"
+></p>
+<p>Word 編輯Markdown Writage</p>
+<p>快速把樂譜輸出成PDF</p>
+<p>Typora 產生各種主題</p>
+<h2 id="延伸閱讀">延伸閱讀
+</h2><ol>
+<li><a href="https://forum-zh.obsidian.md/t/topic/10506">我的习惯追踪工作流 - 经验分享 - Obsidian 中文论坛</a></li>
+<li><a href="https://publish.obsidian.md/help-zh/%E7%BC%96%E8%BE%91%E4%B8%8E%E6%A0%BC%E5%BC%8F%E5%8C%96/%E6%A0%87%E7%AD%BE">Obsidian 中文帮助，裡面介紹許多OB的寫法</a></li>
+<li>[[KPM管理研究]]</li>
+<li>KPM學習交流網站，<a href="https://pkmer.cn/">PKMER</a></li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

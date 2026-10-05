@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="find . -type l 找目前目錄下軟連結 unlink &lt;軟連結名稱&gt; 移除軟連結\nDSM 家目錄不同磁碟 scrutiny 先用SSH連線以fdisk -l查看硬碟代號，例硬碟在sde則寫為 - /dev/sde:/dev/sde `\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 services: scrutiny: container_name: scrutiny image: ghcr.io/analogj/scrutiny:master-omnibus cap_add: - SYS_RAWIO - SYS_ADMIN ports: - 6090:8080/tcp # webapp - 8086:8086/tcp # influxDB admin volumes: - /run/udev:/run/udev:ro - /volume1/docker/scrutiny:/opt/scrutiny/config - /volume1/docker/scrutiny/influxdb:/opt/scrutiny/influxdb devices: - /dev/nvme0n1:/dev/nvme0n1 - /dev/nvme1n1:/dev/nvme1n1 - /dev/sata1:/dev/sata1 - /dev/sde:/dev/sde environment: - SCRUTINY_WEB_INFLUXDB_TOKEN=ANYLONGSTRING - SCRUTINY_WEB_INFLUXDB_INIT_USERNAME=A-USERNAME - SCRUTINY_WEB_INFLUXDB_INIT_PASSWORD=A-PASSWORD - COLLECTOR_CRON_SCHEDULE=0 23 * * * network_mode: synobridge security_opt: - no-new-privileges:true restart: unless-stopped OliveTin Vaultwarden 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 version: &#34;3&#34; services: vaultwarden: image: vaultwarden/server:latest container_name: vaultwarden restart: unless-stopped ports: - 9445:80 #map any custom port to use (replace 9445 not 80) volumes: - ./data:/data:rw #environment: # - ROCKET_TLS={certs=&#34;/ssl/certs/certs.pem&#34;,key=&#34;/ssl/private/key.pem&#34;} // Environment variable is specific to the Rocket web server #- ADMIN_TOKEN=${ADMIN_TOKEN} #- WEBSOCKET_ENABLED=true #- SIGNUPS_ALLOWED=false #- SMTP_HOST=${SMTP_HOST} #- SMTP_FROM=${SMTP_FROM} #- SMTP_PORT=${SMTP_PORT} #- SMTP_SSL=${SMTP_SSL} #- SMTP_USERNAME=${SMTP_USERNAME} #- SMTP_PASSWORD=${SMTP_PASSWORD} #- DOMAIN=${DOMAIN} glance 1 2 3 4 5 6 7 8 9 10 11 12 13 services: glance: container_name: glance network_mode: bridge image: glanceapp/glance volumes: - ./glance:/app/assets - ./glance.yml:/app/glance.yml - /etc/TZ:/etc/timezone:ro - /etc/localtime:/etc/localtime:ro ports: - 2020:8080 restart: always OpenSpeedtest 1 2 3 4 5 6 7 8 9 10 version: &#39;3.3&#39; services: speedtest: restart: unless-stopped container_name: openspeedtest network_mode: bridge ports: - &#39;1030:3000&#39; - &#39;1031:3001&#39; image: openspeedtest/latest portainer 1 2 3 4 5 6 7 8 9 10 11 services: portainer: container_name: portainer image: portainer/portainer-ce:sts restart: always volumes: - /var/run/docker.sock:/var/run/docker.sock - ./portainer_data:/data ports: - 9443:9443 - 8000:8000 # Remove if you do not intend to use Edge Agents 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 version: &#39;3.8&#39; services: bark-server: image: finab/bark-server container_name: bark-server restart: always volumes: - ./data:/data ports: - &#34;8090:8080&#34; # 左边的8090可以自行修改成服务器上没有使用的端口 code-server: image: lscr.io/linuxserver/code-server:latest container_name: code-server environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC - PASSWORD=password #optional - HASHED_PASSWORD= #optional - SUDO_PASSWORD=password #optional - SUDO_PASSWORD_HASH= #optional - PROXY_DOMAIN=code-server.my.domain #optional - DEFAULT_WORKSPACE=/config/workspace #optional volumes: - /path/to/code-server/config:/config ports: - 8443:8443 restart: unless-stopped feishin: container_name: feishin image: &#39;ghcr.io/jeffvli/feishin:latest&#39; environment: - SERVER_NAME=navidrome - SERVER_LOCK=true - SERVER_TYPE=navidrome - SERVER_URL=https://nd.xdn.duckdns.org - PUID=1000 - PGID=1000 - UMASK=002 - TZ=America/Los_Angeles ports: - 9180:9180 restart: unless-stopped heimdall: image: lscr.io/linuxserver/heimdall:latest container_name: heimdall environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/heimdall/config:/config ports: - 1330:80 - 1320:443 restart: unless-stopped homarr: container_name: homarr image: ghcr.io/ajnart/homarr:latest restart: unless-stopped volumes: - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration - ./docker/homarr/configs:/app/data/configs - ./docker/homarr/icons:/app/public/icons - ./docker/homarr/data:/data ports: - 7575:7575 homer: image: b4bz/homer:latest container_name: homer restart: unless-stopped network_mode: bridge environment: - PUID=1000 - PGID=100 - TZ=Asia/Taipei volumes: - /docker/share/Container/homer/assets:/www/assets ports: - 5007:8080 npm: image: &#39;jc21/nginx-proxy-manager:latest&#39; container_name: npm restart: unless-stopped ports: - &#39;80:80&#39; # Public HTTP Port - &#39;443:443&#39; # Public HTTPS Port - &#39;81:81&#39; # Admin Web Port volumes: - ./docker/npm/data:/data - ./docker/npm/letsencrypt:/etc/letsencrypt speedtest: restart: unless-stopped container_name: openspeedtest ports: - &#39;3000:3000&#39; - &#39;3001:3001&#39; image: openspeedtest/latest snapdrop: image: lscr.io/linuxserver/snapdrop:latest container_name: snapdrop environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/snapdrop/config:/config ports: - 1080:80 - 1043:443 restart: unless-stopped ">
+<title>常用指令 DSM</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-dsm/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="常用指令 DSM">
+<meta property='og:description' content="find . -type l 找目前目錄下軟連結 unlink &lt;軟連結名稱&gt; 移除軟連結\nDSM 家目錄不同磁碟 scrutiny 先用SSH連線以fdisk -l查看硬碟代號，例硬碟在sde則寫為 - /dev/sde:/dev/sde `\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 services: scrutiny: container_name: scrutiny image: ghcr.io/analogj/scrutiny:master-omnibus cap_add: - SYS_RAWIO - SYS_ADMIN ports: - 6090:8080/tcp # webapp - 8086:8086/tcp # influxDB admin volumes: - /run/udev:/run/udev:ro - /volume1/docker/scrutiny:/opt/scrutiny/config - /volume1/docker/scrutiny/influxdb:/opt/scrutiny/influxdb devices: - /dev/nvme0n1:/dev/nvme0n1 - /dev/nvme1n1:/dev/nvme1n1 - /dev/sata1:/dev/sata1 - /dev/sde:/dev/sde environment: - SCRUTINY_WEB_INFLUXDB_TOKEN=ANYLONGSTRING - SCRUTINY_WEB_INFLUXDB_INIT_USERNAME=A-USERNAME - SCRUTINY_WEB_INFLUXDB_INIT_PASSWORD=A-PASSWORD - COLLECTOR_CRON_SCHEDULE=0 23 * * * network_mode: synobridge security_opt: - no-new-privileges:true restart: unless-stopped OliveTin Vaultwarden 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 version: &#34;3&#34; services: vaultwarden: image: vaultwarden/server:latest container_name: vaultwarden restart: unless-stopped ports: - 9445:80 #map any custom port to use (replace 9445 not 80) volumes: - ./data:/data:rw #environment: # - ROCKET_TLS={certs=&#34;/ssl/certs/certs.pem&#34;,key=&#34;/ssl/private/key.pem&#34;} // Environment variable is specific to the Rocket web server #- ADMIN_TOKEN=${ADMIN_TOKEN} #- WEBSOCKET_ENABLED=true #- SIGNUPS_ALLOWED=false #- SMTP_HOST=${SMTP_HOST} #- SMTP_FROM=${SMTP_FROM} #- SMTP_PORT=${SMTP_PORT} #- SMTP_SSL=${SMTP_SSL} #- SMTP_USERNAME=${SMTP_USERNAME} #- SMTP_PASSWORD=${SMTP_PASSWORD} #- DOMAIN=${DOMAIN} glance 1 2 3 4 5 6 7 8 9 10 11 12 13 services: glance: container_name: glance network_mode: bridge image: glanceapp/glance volumes: - ./glance:/app/assets - ./glance.yml:/app/glance.yml - /etc/TZ:/etc/timezone:ro - /etc/localtime:/etc/localtime:ro ports: - 2020:8080 restart: always OpenSpeedtest 1 2 3 4 5 6 7 8 9 10 version: &#39;3.3&#39; services: speedtest: restart: unless-stopped container_name: openspeedtest network_mode: bridge ports: - &#39;1030:3000&#39; - &#39;1031:3001&#39; image: openspeedtest/latest portainer 1 2 3 4 5 6 7 8 9 10 11 services: portainer: container_name: portainer image: portainer/portainer-ce:sts restart: always volumes: - /var/run/docker.sock:/var/run/docker.sock - ./portainer_data:/data ports: - 9443:9443 - 8000:8000 # Remove if you do not intend to use Edge Agents 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 version: &#39;3.8&#39; services: bark-server: image: finab/bark-server container_name: bark-server restart: always volumes: - ./data:/data ports: - &#34;8090:8080&#34; # 左边的8090可以自行修改成服务器上没有使用的端口 code-server: image: lscr.io/linuxserver/code-server:latest container_name: code-server environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC - PASSWORD=password #optional - HASHED_PASSWORD= #optional - SUDO_PASSWORD=password #optional - SUDO_PASSWORD_HASH= #optional - PROXY_DOMAIN=code-server.my.domain #optional - DEFAULT_WORKSPACE=/config/workspace #optional volumes: - /path/to/code-server/config:/config ports: - 8443:8443 restart: unless-stopped feishin: container_name: feishin image: &#39;ghcr.io/jeffvli/feishin:latest&#39; environment: - SERVER_NAME=navidrome - SERVER_LOCK=true - SERVER_TYPE=navidrome - SERVER_URL=https://nd.xdn.duckdns.org - PUID=1000 - PGID=1000 - UMASK=002 - TZ=America/Los_Angeles ports: - 9180:9180 restart: unless-stopped heimdall: image: lscr.io/linuxserver/heimdall:latest container_name: heimdall environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/heimdall/config:/config ports: - 1330:80 - 1320:443 restart: unless-stopped homarr: container_name: homarr image: ghcr.io/ajnart/homarr:latest restart: unless-stopped volumes: - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration - ./docker/homarr/configs:/app/data/configs - ./docker/homarr/icons:/app/public/icons - ./docker/homarr/data:/data ports: - 7575:7575 homer: image: b4bz/homer:latest container_name: homer restart: unless-stopped network_mode: bridge environment: - PUID=1000 - PGID=100 - TZ=Asia/Taipei volumes: - /docker/share/Container/homer/assets:/www/assets ports: - 5007:8080 npm: image: &#39;jc21/nginx-proxy-manager:latest&#39; container_name: npm restart: unless-stopped ports: - &#39;80:80&#39; # Public HTTP Port - &#39;443:443&#39; # Public HTTPS Port - &#39;81:81&#39; # Admin Web Port volumes: - ./docker/npm/data:/data - ./docker/npm/letsencrypt:/etc/letsencrypt speedtest: restart: unless-stopped container_name: openspeedtest ports: - &#39;3000:3000&#39; - &#39;3001:3001&#39; image: openspeedtest/latest snapdrop: image: lscr.io/linuxserver/snapdrop:latest container_name: snapdrop environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/snapdrop/config:/config ports: - 1080:80 - 1043:443 restart: unless-stopped ">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-dsm/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-06-19T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-06-19T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="常用指令 DSM">
+<meta name="twitter:description" content="find . -type l 找目前目錄下軟連結 unlink &lt;軟連結名稱&gt; 移除軟連結\nDSM 家目錄不同磁碟 scrutiny 先用SSH連線以fdisk -l查看硬碟代號，例硬碟在sde則寫為 - /dev/sde:/dev/sde `\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 services: scrutiny: container_name: scrutiny image: ghcr.io/analogj/scrutiny:master-omnibus cap_add: - SYS_RAWIO - SYS_ADMIN ports: - 6090:8080/tcp # webapp - 8086:8086/tcp # influxDB admin volumes: - /run/udev:/run/udev:ro - /volume1/docker/scrutiny:/opt/scrutiny/config - /volume1/docker/scrutiny/influxdb:/opt/scrutiny/influxdb devices: - /dev/nvme0n1:/dev/nvme0n1 - /dev/nvme1n1:/dev/nvme1n1 - /dev/sata1:/dev/sata1 - /dev/sde:/dev/sde environment: - SCRUTINY_WEB_INFLUXDB_TOKEN=ANYLONGSTRING - SCRUTINY_WEB_INFLUXDB_INIT_USERNAME=A-USERNAME - SCRUTINY_WEB_INFLUXDB_INIT_PASSWORD=A-PASSWORD - COLLECTOR_CRON_SCHEDULE=0 23 * * * network_mode: synobridge security_opt: - no-new-privileges:true restart: unless-stopped OliveTin Vaultwarden 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 version: &#34;3&#34; services: vaultwarden: image: vaultwarden/server:latest container_name: vaultwarden restart: unless-stopped ports: - 9445:80 #map any custom port to use (replace 9445 not 80) volumes: - ./data:/data:rw #environment: # - ROCKET_TLS={certs=&#34;/ssl/certs/certs.pem&#34;,key=&#34;/ssl/private/key.pem&#34;} // Environment variable is specific to the Rocket web server #- ADMIN_TOKEN=${ADMIN_TOKEN} #- WEBSOCKET_ENABLED=true #- SIGNUPS_ALLOWED=false #- SMTP_HOST=${SMTP_HOST} #- SMTP_FROM=${SMTP_FROM} #- SMTP_PORT=${SMTP_PORT} #- SMTP_SSL=${SMTP_SSL} #- SMTP_USERNAME=${SMTP_USERNAME} #- SMTP_PASSWORD=${SMTP_PASSWORD} #- DOMAIN=${DOMAIN} glance 1 2 3 4 5 6 7 8 9 10 11 12 13 services: glance: container_name: glance network_mode: bridge image: glanceapp/glance volumes: - ./glance:/app/assets - ./glance.yml:/app/glance.yml - /etc/TZ:/etc/timezone:ro - /etc/localtime:/etc/localtime:ro ports: - 2020:8080 restart: always OpenSpeedtest 1 2 3 4 5 6 7 8 9 10 version: &#39;3.3&#39; services: speedtest: restart: unless-stopped container_name: openspeedtest network_mode: bridge ports: - &#39;1030:3000&#39; - &#39;1031:3001&#39; image: openspeedtest/latest portainer 1 2 3 4 5 6 7 8 9 10 11 services: portainer: container_name: portainer image: portainer/portainer-ce:sts restart: always volumes: - /var/run/docker.sock:/var/run/docker.sock - ./portainer_data:/data ports: - 9443:9443 - 8000:8000 # Remove if you do not intend to use Edge Agents 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 version: &#39;3.8&#39; services: bark-server: image: finab/bark-server container_name: bark-server restart: always volumes: - ./data:/data ports: - &#34;8090:8080&#34; # 左边的8090可以自行修改成服务器上没有使用的端口 code-server: image: lscr.io/linuxserver/code-server:latest container_name: code-server environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC - PASSWORD=password #optional - HASHED_PASSWORD= #optional - SUDO_PASSWORD=password #optional - SUDO_PASSWORD_HASH= #optional - PROXY_DOMAIN=code-server.my.domain #optional - DEFAULT_WORKSPACE=/config/workspace #optional volumes: - /path/to/code-server/config:/config ports: - 8443:8443 restart: unless-stopped feishin: container_name: feishin image: &#39;ghcr.io/jeffvli/feishin:latest&#39; environment: - SERVER_NAME=navidrome - SERVER_LOCK=true - SERVER_TYPE=navidrome - SERVER_URL=https://nd.xdn.duckdns.org - PUID=1000 - PGID=1000 - UMASK=002 - TZ=America/Los_Angeles ports: - 9180:9180 restart: unless-stopped heimdall: image: lscr.io/linuxserver/heimdall:latest container_name: heimdall environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/heimdall/config:/config ports: - 1330:80 - 1320:443 restart: unless-stopped homarr: container_name: homarr image: ghcr.io/ajnart/homarr:latest restart: unless-stopped volumes: - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration - ./docker/homarr/configs:/app/data/configs - ./docker/homarr/icons:/app/public/icons - ./docker/homarr/data:/data ports: - 7575:7575 homer: image: b4bz/homer:latest container_name: homer restart: unless-stopped network_mode: bridge environment: - PUID=1000 - PGID=100 - TZ=Asia/Taipei volumes: - /docker/share/Container/homer/assets:/www/assets ports: - 5007:8080 npm: image: &#39;jc21/nginx-proxy-manager:latest&#39; container_name: npm restart: unless-stopped ports: - &#39;80:80&#39; # Public HTTP Port - &#39;443:443&#39; # Public HTTPS Port - &#39;81:81&#39; # Admin Web Port volumes: - ./docker/npm/data:/data - ./docker/npm/letsencrypt:/etc/letsencrypt speedtest: restart: unless-stopped container_name: openspeedtest ports: - &#39;3000:3000&#39; - &#39;3001:3001&#39; image: openspeedtest/latest snapdrop: image: lscr.io/linuxserver/snapdrop:latest container_name: snapdrop environment: - PUID=1000 - PGID=1000 - TZ=Etc/UTC volumes: - /path/to/snapdrop/config:/config ports: - 1080:80 - 1043:443 restart: unless-stopped ">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#dsm-家目錄不同磁碟">DSM 家目錄不同磁碟</a></li>
+    <li><a href="#scrutiny">scrutiny</a></li>
+    <li><a href="#olivetin">OliveTin</a></li>
+    <li><a href="#vaultwarden">Vaultwarden</a></li>
+    <li><a href="#glance">glance</a></li>
+    <li><a href="#openspeedtest">OpenSpeedtest</a></li>
+    <li><a href="#portainer">portainer</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-dsm/">常用指令 DSM</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-19T00:00:00Z'>Jun 19, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>find . -type l 找目前目錄下軟連結
+unlink &lt;軟連結名稱&gt; 移除軟連結</p>
+<h2 id="dsm-家目錄不同磁碟">DSM 家目錄不同磁碟
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260506223910.png"
+    alt=""
+    loading="lazy"
+></p>
+<p><img
+    src="/my-portfolio/Pasted%20image%2020260506223918.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="scrutiny">scrutiny
+</h2><p>先用SSH連線以fdisk -l查看硬碟代號，例硬碟在sde則寫為 - /dev/sde:/dev/sde
+`</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">scrutiny</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">scrutiny</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/analogj/scrutiny:master-omnibus</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cap_add</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SYS_RAWIO</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SYS_ADMIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">6090</span><span class="p">:</span><span class="m">8080</span><span class="l">/tcp</span><span class="w"> </span><span class="c"># webapp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">8086</span><span class="p">:</span><span class="m">8086</span><span class="l">/tcp</span><span class="w"> </span><span class="c"># influxDB admin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/run/udev:/run/udev:ro</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/volume1/docker/scrutiny:/opt/scrutiny/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/volume1/docker/scrutiny/influxdb:/opt/scrutiny/influxdb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">devices</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/dev/nvme0n1:/dev/nvme0n1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/dev/nvme1n1:/dev/nvme1n1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/dev/sata1:/dev/sata1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/dev/sde:/dev/sde</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SCRUTINY_WEB_INFLUXDB_TOKEN=ANYLONGSTRING</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SCRUTINY_WEB_INFLUXDB_INIT_USERNAME=A-USERNAME</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SCRUTINY_WEB_INFLUXDB_INIT_PASSWORD=A-PASSWORD</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">COLLECTOR_CRON_SCHEDULE=0 23 * * *</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network_mode</span><span class="p">:</span><span class="w"> </span><span class="l">synobridge</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">security_opt</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="kc">no</span>-<span class="l">new-privileges:true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="olivetin">OliveTin
+</h2><h2 id="vaultwarden">Vaultwarden
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;3&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">vaultwarden</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">vaultwarden/server:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">vaultwarden</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="m">9445</span><span class="p">:</span><span class="m">80</span><span class="w"> </span><span class="c">#map any custom port to use (replace 9445 not 80)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="l">./data:/data:rw</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c">#environment:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c">#     - ROCKET_TLS={certs=&#34;/ssl/certs/certs.pem&#34;,key=&#34;/ssl/private/key.pem&#34;}  // Environment variable is specific to the Rocket web server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- ADMIN_TOKEN=${ADMIN_TOKEN}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- WEBSOCKET_ENABLED=true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SIGNUPS_ALLOWED=false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_HOST=${SMTP_HOST}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_FROM=${SMTP_FROM}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_PORT=${SMTP_PORT}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_SSL=${SMTP_SSL}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_USERNAME=${SMTP_USERNAME}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- SMTP_PASSWORD=${SMTP_PASSWORD}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="c">#- DOMAIN=${DOMAIN}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="glance">glance
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">glance</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">glance</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network_mode</span><span class="p">:</span><span class="w"> </span><span class="l">bridge</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">glanceapp/glance</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./glance:/app/assets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./glance.yml:/app/glance.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/etc/TZ:/etc/timezone:ro</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/etc/localtime:/etc/localtime:ro</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">2020</span><span class="p">:</span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="openspeedtest">OpenSpeedtest
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">version: &#39;3.3&#39;
+</span></span><span class="line"><span class="cl">services:
+</span></span><span class="line"><span class="cl">    speedtest:
+</span></span><span class="line"><span class="cl">        restart: unless-stopped
+</span></span><span class="line"><span class="cl">        container_name: openspeedtest
+</span></span><span class="line"><span class="cl">        network_mode: bridge
+</span></span><span class="line"><span class="cl">        ports:
+</span></span><span class="line"><span class="cl">            - &#39;1030:3000&#39;
+</span></span><span class="line"><span class="cl">            - &#39;1031:3001&#39;
+</span></span><span class="line"><span class="cl">        image: openspeedtest/latest
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="portainer">portainer
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">services</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">portainer</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">container_name</span><span class="p">:</span> <span class="n">portainer</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span><span class="p">:</span> <span class="n">portainer</span><span class="o">/</span><span class="n">portainer</span><span class="o">-</span><span class="n">ce</span><span class="p">:</span><span class="n">sts</span>
+</span></span><span class="line"><span class="cl">    <span class="n">restart</span><span class="p">:</span> <span class="n">always</span>
+</span></span><span class="line"><span class="cl">    <span class="n">volumes</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="o">-</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span><span class="p">:</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="o">.</span><span class="n">sock</span>
+</span></span><span class="line"><span class="cl">      <span class="o">-</span> <span class="o">./</span><span class="n">portainer_data</span><span class="p">:</span><span class="o">/</span><span class="n">data</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ports</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="o">-</span> <span class="mi">9443</span><span class="p">:</span><span class="mi">9443</span>
+</span></span><span class="line"><span class="cl">      <span class="o">-</span> <span class="mi">8000</span><span class="p">:</span><span class="mi">8000</span>  <span class="c1"># Remove if you do not intend to use Edge Agents</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3.8&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">bark-server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">finab/bark-server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">bark-server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">always</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./data:/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;8090:8080&#34;</span><span class="w">  </span><span class="c"># 左边的8090可以自行修改成服务器上没有使用的端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">code-server</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">lscr.io/linuxserver/code-server:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">code-server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PUID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PGID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">TZ=Etc/UTC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PASSWORD=password</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">HASHED_PASSWORD=</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SUDO_PASSWORD=password</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SUDO_PASSWORD_HASH=</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PROXY_DOMAIN=code-server.my.domain</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">DEFAULT_WORKSPACE=/config/workspace</span><span class="w"> </span><span class="c">#optional</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/path/to/code-server/config:/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">8443</span><span class="p">:</span><span class="m">8443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">feishin</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">feishin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;ghcr.io/jeffvli/feishin:latest&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SERVER_NAME=navidrome</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SERVER_LOCK=true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SERVER_TYPE=navidrome</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SERVER_URL=https://nd.xdn.duckdns.org</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PUID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PGID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">UMASK=002</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">TZ=America/Los_Angeles</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">9180</span><span class="p">:</span><span class="m">9180</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">heimdall</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">lscr.io/linuxserver/heimdall:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">heimdall</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PUID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PGID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">TZ=Etc/UTC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/path/to/heimdall/config:/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1330</span><span class="p">:</span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1320</span><span class="p">:</span><span class="m">443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">homarr</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">homarr</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/ajnart/homarr:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/var/run/docker.sock:/var/run/docker.sock</span><span class="w"> </span><span class="c"># Optional, only if you want docker integration</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./docker/homarr/configs:/app/data/configs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./docker/homarr/icons:/app/public/icons</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./docker/homarr/data:/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">7575</span><span class="p">:</span><span class="m">7575</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">homer</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">b4bz/homer:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">homer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">network_mode</span><span class="p">:</span><span class="w"> </span><span class="l">bridge</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PUID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PGID=100</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">TZ=Asia/Taipei</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/docker/share/Container/homer/assets:/www/assets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">5007</span><span class="p">:</span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">npm</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;jc21/nginx-proxy-manager:latest&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">npm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;80:80&#39;</span><span class="w"> </span><span class="c"># Public HTTP Port</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;443:443&#39;</span><span class="w"> </span><span class="c"># Public HTTPS Port</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;81:81&#39;</span><span class="w"> </span><span class="c"># Admin Web Port</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./docker/npm/data:/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./docker/npm/letsencrypt:/etc/letsencrypt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">speedtest</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">openspeedtest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">           </span>- <span class="s1">&#39;3000:3000&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">           </span>- <span class="s1">&#39;3001:3001&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">openspeedtest/latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">snapdrop</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">lscr.io/linuxserver/snapdrop:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">snapdrop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PUID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">PGID=1000</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">TZ=Etc/UTC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">/path/to/snapdrop/config:/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1080</span><span class="p">:</span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">1043</span><span class="p">:</span><span class="m">443</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

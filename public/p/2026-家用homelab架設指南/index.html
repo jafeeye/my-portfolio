@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+<title>2026 家用Homelab架設指南</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8homelab%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="2026 家用Homelab架設指南">
+<meta property='og:description' content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8homelab%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-28T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="2026 家用Homelab架設指南">
+<meta name="twitter:description" content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#homelab-架設">Homelab 架設</a>
+      <ol>
+        <li><a href="#網路">網路</a>
+          <ol>
+            <li><a href="#命名建議用用途--vlan-id">命名建議：用「用途 + VLAN ID」</a></li>
+          </ol>
+        </li>
+        <li><a href="#ca架設">CA架設</a></li>
+      </ol>
+    </li>
+    <li><a href="#公網網域">公網網域</a></li>
+    <li><a href="#內網網域">內網網域</a></li>
+    <li><a href="#dns">DNS</a></li>
+    <li><a href="#mdm">MDM</a></li>
+    <li><a href="#設備選擇">設備選擇</a></li>
+    <li><a href="#os選擇">OS選擇</a></li>
+    <li><a href="#虛擬桌面">虛擬桌面</a></li>
+    <li><a href="#軟體">軟體</a></li>
+    <li><a href="#檔案命名">檔案命名</a></li>
+    <li><a href="#影音資料庫">影音資料庫</a>
+      <ol>
+        <li><a href="#方案1-embyjellyfininfuseplaylist">方案1: emby/jellyfin+infuse+playlist</a></li>
+        <li><a href="#方案2peertube">方案2:PeerTube</a></li>
+        <li><a href="#音樂tag編輯">音樂TAG編輯</a></li>
+        <li><a href="#crazyktv">CrazyKTV</a></li>
+      </ol>
+    </li>
+    <li><a href="#優化設定">優化設定</a></li>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8homelab%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/">2026 家用Homelab架設指南</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-02-28T00:00:00Z'>Feb 28, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="前言">前言
+</h2><p>最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄</p>
+<p>三層式架構：Data Plane、Control Plane<br>
+列印VM：PaperMF、AirPrint、Windows 區網印表機<br>
+備份VM：ws2022-fix<br>
+VDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce<br>
+Mointor VM：</p>
+<p><img
+    src="/my-portfolio/homelab-diagram.svg"
+    alt=""
+    loading="lazy"
+></p>
+<p>LXC (Router)</p>
+<ul>
+<li>Adguard</li>
+<li>PowerDNS</li>
+<li>Caddy</li>
+<li>Certimate</li>
+<li>stepca</li>
+<li>infisical</li>
+<li>nginx-ui</li>
+<li>haos</li>
+<li>homeassisant</li>
+<li>kms</li>
+<li>iStoreOS
+Docker LXC：Docker  + Coolify (Addons) + Code Server (Addons)
+同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯</li>
+<li>arcane</li>
+<li>Portainer.io</li>
+<li>baidunetdisk</li>
+<li>copyparty</li>
+<li>filebot</li>
+<li>homeassisant</li>
+<li>librespeed</li>
+<li>mailhog</li>
+<li>pingvin-share x</li>
+<li>Coolify</li>
+<li>Code Server</li>
+<li>Obsidian Ignis</li>
+<li>traefik</li>
+<li>screengo</li>
+<li>OpenList</li>
+</ul>
+<p><img
+    src="/my-portfolio/lab.svg"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="homelab-架設">Homelab 架設
+</h2><h3 id="網路">網路
+</h3><p>結合前面決定的架構（<strong>PowerDNS 當主總機、Windows AD 獨立在 <code>ad.homelab.test</code> 子網域</strong>），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：</p>
+<h4 id="命名建議用用途--vlan-id">命名建議：用「用途 + VLAN ID」
+</h4><p>在 PVE 的 <strong>SDN Zones</strong> 與 <strong>VNets</strong> 中，建議直接採用直覺的命名慣例：</p>
+<ol>
+<li>
+<p><strong>一般自建服務 / 容器區段（對應 PowerDNS）</strong>：</p>
+<ul>
+<li><strong>VNet 名稱</strong>：<code>vlan10-infra</code> 或 <code>infra-v10</code></li>
+<li><strong>Subnet 網段</strong>：例如 <code>192.168.10.0/24</code></li>
+<li><strong>PVE IPAM 設定</strong>：選擇 PVE 內建的 <code>pve</code> IPAM，讓 PVE 自動追蹤這個網段所有 VM/LXC 的 IP。</li>
+</ul>
+</li>
+<li>
+<p><strong>Windows AD 網域設備區段（對應 Windows AD / 子網域）</strong>：</p>
+<ul>
+<li><strong>VNet 名稱</strong>：<code>vlan20-ad</code> 或 <code>ad-v20</code></li>
+<li><strong>Subnet 網段</strong>：例如 <code>192.168.20.0/24</code></li>
+<li><strong>PVE IPAM 設定</strong>：同樣可以讓 PVE 記錄，但<strong>這個網段的 DHCP 與 DNS 發放權要交給 Windows AD DHCP/DNS</strong>，PVE 的 IPAM 在這邊主要扮演「資產盤點與紀錄」的角色，避免跟 Windows DHCP 派發的 IP 撞號。</li>
+</ul>
+</li>
+</ol>
+<h3 id="ca架設">CA架設
+</h3><p>Windows Server CA</p>
+<ul>
+<li>Enterprise Root CA</li>
+<li>Enterprise Subordinate CA</li>
+<li>Standalone Root CA</li>
+<li>Standalone Subordinate CA</li>
+</ul>
+<h2 id="公網網域">公網網域
+</h2><h2 id="內網網域">內網網域
+</h2><h2 id="dns">DNS
+</h2><p>AdGuard DNS+PowerDNS Authoritative+Caddy</p>
+<h2 id="mdm">MDM
+</h2><p>Apple Open Directory
+macOS Server</p>
+<h2 id="設備選擇">設備選擇
+</h2><p>電腦主機：瘦客戶端以及耐用度可以考慮 Dell Wyse、HP Prodesk
+鍵盤：Logitech K400 Plus 鍵盤 (非必要)、手把收納架</p>
+<h2 id="os選擇">OS選擇
+</h2><p>對於系統新舊而言，用最好的配置就是最好的系統</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>系統平台</th>
+					<th>RAM</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Win7 x86</td>
+					<td>512MB</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="虛擬桌面">虛擬桌面
+</h2><p>Horizon
+1.安裝 <code>Omnissa-Horizon-Agent-x86_64-2503-8.15.0-14304348675.exe /v VDM_SKIP_BROKER_REGISTRATION=1</code>
+2.安裝 Omnissa-Horizon-Agent-Direct-Connection-x86_64-8.16.0-16560454767
+3.Horizon Client 無法安裝,將host檔唯讀取消即可</p>
+<p><a href="https://github.com/VirtualDrivers/Virtual-Display-Driver">https://github.com/VirtualDrivers/Virtual-Display-Driver</a></p>
+<h2 id="軟體">軟體
+</h2><p>JRiver Media Center
+PowerDVD
+PowerDVD 播放YouTube
+Jriver 播放歌曲
+遠端桌面用ipad控制htpc
+Pegasus 當萬用前端 啟用crazyktv與es</p>
+<p>模擬器：DockStation、Redream、Pegasus gameos、Heimdall</p>
+<h2 id="檔案命名">檔案命名
+</h2><p>有些程式路徑不能包含空格，Windows除了<code>\/：*？''｜</code> 都是支持，不能用空格是因為一些軟體的功能都是調用命令行執行，命令行程序傳輸參數就是用空白格來分割 ，要解決這問題就是路徑及代稱路徑參數一定要前後加單引號</p>
+<p>常見命名規則
+軟體：Firefox_V10_Alpha_CHT_20220202.7z
+文件名：文件名稱</p>
+<p>範例1:專案存放
+<img
+    src="/my-portfolio/Pasted%20image%2020241123113459.png"
+    alt=""
+    loading="lazy"
+>
+範例2:檔案命名
+<img
+    src="/my-portfolio/Pasted%20image%2020241123113507.png"
+    alt=""
+    loading="lazy"
+>
+範例3:
+<img
+    src="/my-portfolio/Pasted%20image%2020241123114616.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="影音資料庫">影音資料庫
+</h2><h3 id="方案1-embyjellyfininfuseplaylist">方案1: emby/jellyfin+infuse+playlist
+</h3><p>目前jellyfin跟emby搜尋功能都很難用,還要按一個框還要按下一頁,而且搜尋出來的結果都是左右不能向下捲,kodi為客戶端也沒解決搜尋方便問題
+缺：影片播放清單自己加 搜尋不直覺</p>
+<h3 id="方案2peertube">方案2:PeerTube
+</h3><p>缺點需要在維護一個資料庫跟影片</p>
+<p>設定不同資料夾顯示方式；設定/emby/首頁螢幕/，顯示預設畫面為哪種</p>
+<h3 id="音樂tag編輯">音樂TAG編輯
+</h3><p>整理音樂軟體
+MediaGO 使用Gracenote抓取
+先使用MP3Tag將檔名寫入標籤，再丟進軟體去擷取資訊
+iTunes 抓取資訊
+解決亂碼問題：可使用mp3tag將標籤以UTF-8全部寫入一遍
+mp3 tag 信息里的album artist和artist 这两个tag 有什么区别？为什么没有词作者这一项？<a href="https://www.zhihu.com/question/19736378">https://www.zhihu.com/question/19736378</a>
+打造自己的 iTunes Server，一同分享最愛的 MP3 音樂
+<a href="http://blog.itist.tw/2014/11/centos-itunes-server.html?zx=5522c0214f92462b">http://blog.itist.tw/2014/11/centos-itunes-server.html?zx=5522c0214f92462b</a></p>
+<p>超級無損：支援7.1
+DSD DSF DFF
+無損：
+DTS FLAC M4A WAV APE ASF AIFC</p>
+<h3 id="crazyktv">CrazyKTV
+</h3><p><img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1759737079000pcpta2.png"
+    alt="gh|400"
+    loading="lazy"
+></p>
+<p>因為大部分歌曲是原聲原影 (所以也不要去設,不然重複檔會一直加)
+整理歌遇到原聲原影類別就砍掉
+刪掉演唱會類別
+有時候判斷也不準 有時並未重複
+語系設定
+程式不能偵測臺語加入
+佛教
+節慶</p>
+<p>*unicode值不對無法判斷合唱:＆
+將－替代為-
+將＆替代為&amp;
+將^替代為&amp;</p>
+<p>翻唱就直接(其他 佚名)(佚名不知道誰唱_不要設定翻唱)
+佚名設定：其他/佚名 (女聲)(優必勝)
+佚名女
+佚名男
+佚名合唱</p>
+<p>取代
+取代所有英文文字[a-zA-Z ]
+刪除空行 ^\s*\n
+只匹配一個數字加字元(^\d.\S+)  例:1.好棒&gt;01.好棒
+(\S+)_(\S+)
+愿 願、后 後、舍 捨、么 麽、干 乾、云 雲、傑&lt;&gt;杰</p>
+<p>大陸方言
+福州語、潮州語
+雷語
+牛馬丁 潮語
+小蜻蜓 你到底愛誰</p>
+<p>CrazyKTV設定
+一定要調成左右聲音
+隨機播放使用立體聲</p>
+<p>低配置方案
+Firefox 裝上 h264ify-ehanced 可以硬解H.264</p>
+<p><a href="https://www.ctrl.blog/entry/why-htpc-benefits.html" title="Why you need a HTPC">1</a> Android TV 雖然稱為 SmartTV，但它笨重、反應遲鈍、速度慢、無法多應用切換，
+Youtube TV：可使用Chrome 外掛加上 Kiosk Mode</p>
+<h2 id="優化設定">優化設定
+</h2><p>關閉、停用 Win10自動傳送錯誤報告 Disable Error Reporting in Windows
+刪除自動排程器的關閉程式錯誤報告
+<a href="https://superuser.com/questions/1343290/disable-chrome-session-restore-popup">https://superuser.com/questions/1343290/disable-chrome-session-restore-popup</a></p>
+<h2 id="參考資料">參考資料
+</h2><ol>
+<li><a href="https://yangwenqing.com/archives/2473/">2026年-家庭/工作室/小企业免费的云桌面VDI方案&ndash;VDI for PVE8/9</a>，超有價值文章。</li>
+<li><a href="https://youtu.be/QtHFbskDCtg?si=YtUSAHONgQbf2Lik">歷經30年，為啥這個文件夾越來越沒存在感</a></li>
+<li>The Best Way to Organize Your Computer Files， <a href="https://www.youtube.com/watch?v=bKjRKZxr-KY">https://www.youtube.com/watch?v=bKjRKZxr-KY</a>。</li>
+<li>Linux 快速列出(製作)樹狀目錄結構清單(tree)</li>
+<li><a href="https://www.spreadsheet.com/template/equipment-sign-out-system">https://www.spreadsheet.com/template/equipment-sign-out-system</a></li>
+<li>制定檔案整理的規範，https://medium.com/deerlight/file-efc8c86e37d9。</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

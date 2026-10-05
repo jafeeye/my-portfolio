@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="mac共用桌面\r1.桌面資料夾設定共用 2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱) 3.Win端登入 帳號：mac主機名\\帳號 mini.local\\PIN 密碼：mac主機密碼 關閉連線 net use \\\\192.168.8.120 /delete IPC$\nWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
 <title>企業共用設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.b23bd73711f33d8ec70b961447b7c1ae20ad7f830f24412cca4d88a1273b5ec9.css"><meta property='og:title' content="企業共用設定">
-<meta property='og:description' content="mac共用桌面\r1.桌面資料夾設定共用 2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱) 3.Win端登入 帳號：mac主機名\\帳號 mini.local\\PIN 密碼：mac主機密碼 關閉連線 net use \\\\192.168.8.120 /delete IPC$\nWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="企業共用設定">
+<meta property='og:description' content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-06T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="企業共用設定">
-<meta name="twitter:description" content="mac共用桌面\r1.桌面資料夾設定共用 2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱) 3.Win端登入 帳號：mac主機名\\帳號 mini.local\\PIN 密碼：mac主機密碼 關閉連線 net use \\\\192.168.8.120 /delete IPC$\nWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<meta name="twitter:description" content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -284,19 +284,14 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li>
-      <ol>
-        <li><a href="#mac共用桌面">mac共用桌面</a></li>
-      </ol>
-    </li>
+    <li><a href="#mac共用桌面">mac共用桌面</a></li>
+    <li><a href="#macos-開機自動掛載">macOS 開機自動掛載</a></li>
     <li><a href="#win10-掛載nfs">Win10 掛載NFS</a></li>
     <li><a href="#webdav">WebDAV</a></li>
-    <li><a href="#airprint-印表機共享">AirPrint 印表機共享</a>
-      <ol>
-        <li><a href="#windows">Windows</a></li>
-        <li><a href="#smb">SMB</a></li>
-      </ol>
-    </li>
+    <li><a href="#airprint-印表機共享">AirPrint 印表機共享</a></li>
+    <li><a href="#windows">Windows</a></li>
+    <li><a href="#smb">SMB</a></li>
+    <li><a href="#linux-共享smb">Linux 共享SMB</a></li>
   </ol>
 </nav>
         </div>
@@ -368,23 +363,24 @@
     <section class="article-content">
     
     
-    <h3 id="mac共用桌面">mac共用桌面
-</h3><p>1.桌面資料夾設定共用
-2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)
-<img src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/17591386650005k7c6m.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="gh|330"
-	
-	
+    <h2 id="mac共用桌面">mac共用桌面
+</h2><p>1.桌面資料夾設定共用<br>
+2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)<br>
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/17591386650005k7c6m.png"
+    alt="gh|330"
+    loading="lazy"
 >
-3.Win端登入
-帳號：mac主機名\帳號 <code>mini.local\PIN</code>
-密碼：mac主機密碼
+3.Win端登入<br>
+帳號：mac主機名\帳號 <code>mini.local\PIN</code><br>
+密碼：mac主機密碼<br>
 關閉連線 <code>net use \\192.168.8.120 /delete</code> IPC$</p>
+<h2 id="macos-開機自動掛載">macOS 開機自動掛載
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020260506231922.png"
+    alt=""
+    loading="lazy"
+></p>
 <h2 id="win10-掛載nfs">Win10 掛載NFS
 </h2><ol>
 <li><code>appwiz.cpl</code>啟用<code>Service for NFS/Client for NFS</code></li>
@@ -402,13 +398,10 @@
 </span></span><span class="line"><span class="cl">unmount -f z:
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p><img src="/my-portfolio/Pasted%20image%2020260406170629.png"
-	
-	
-	
-	loading="lazy"
-	
-	
+</div><p><img
+    src="/my-portfolio/Pasted%20image%2020260406170629.png"
+    alt=""
+    loading="lazy"
 ></p>
 <h2 id="webdav">WebDAV
 </h2><p>Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表
@@ -431,15 +424,10 @@
 <li>點擊 Install AirPrint Service</li>
 <li>設置 Sercvie Startup 為Auto，點Start</li>
 <li>選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印
-<img src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739971146000cs88gj.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="gh|300"
-	
-	
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739971146000cs88gj.png"
+    alt="gh|300"
+    loading="lazy"
 ></li>
 </ul>
 </li>
@@ -451,61 +439,78 @@
 <p>實測一定要打上AirPrint IOS 5 Fix．否則將無法設定成功</p>
 </blockquote>
 <p>成功畫面：
-<img src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739627745000dm9z0d.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="gh|350"
-	
-	
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1739627745000dm9z0d.png"
+    alt="gh|350"
+    loading="lazy"
 ></p>
 <p>Windows 共享
 如果無法共享在認證管理員儲存
-<img src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1742819159000r3q28b.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="gh"
-	
-	
+<img
+    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1742819159000r3q28b.png"
+    alt="gh"
+    loading="lazy"
 ></p>
 <blockquote>
 <p>[!Note] 實驗結果
 這個程式會導致macOS莫名無法儲存密碼列印，必須要每次輸入密碼才能原因不明，有可能是密碼多次儲存的關係</p>
 </blockquote>
-<h3 id="windows">Windows
-</h3><p>掛載指令
-net share：顯示目前共用資料夾
+<h2 id="windows">Windows
+</h2><p>掛載指令<br>
+net share：顯示目前共用資料夾<br>
 <code>net use Z:\\192.168.8.106\Software /user:PIN Yster86a /persistent:no</code>
-persistent: 不會自動連線
-中斷網路磁碟機
+persistent: 不會自動連線<br>
+中斷網路磁碟機<br>
 <code>net use /delete *</code></p>
 <blockquote>
 <p>在Windows中，Windows 檔案總管無法阻止它「自動嘗試連線」已掛載但尚未連線的 SMB 網路磁碟機(GPT)，</p>
 </blockquote>
-<p>出現共享文件：目前的帳戶已被鎖定無法登陸
+<p>出現共享文件：目前的帳戶已被鎖定無法登陸<br>
 <code>cmdkey /add:ip位置 /user:用戶名 /pass:密碼</code></p>
 <p>Win11 無法共享原因 (提高安全性，預設不能用伺服端的權限帳戶強制要設密碼)
 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation\AllowInsecureGuestAuth =1 或 - 編輯「啟用不安全的來賓登入」原則，將其設定為「已啟用」。做gpudate
 發生延伸錯誤 <code>Set-Smb Client Configuration -RequireSecuritySignature $false</code></p>
-<h3 id="smb">SMB
-</h3><p>我不知道大家有沒有用過window的net use這指令，他是一個可以自動連你的smb網路磁碟。最近我一直在玩他，但怕會忘記就來寫一下。
-這是如果你電腦沒有設定密碼(空密碼)情況可以下以下
+<h2 id="smb">SMB
+</h2><p>這是如果你電腦沒有設定密碼(空密碼)情況可以下以下<br>
 net use z: \IP-ADDRESS\share-folder /user:username \login
-有密碼:
-net use X: \server\share /user:user abc
-你們也可以這樣下，沒有login，他會跳出來要你打帳號密碼。沒密碼就按enter鍵如下
-net use z: \IP-ADDRESS\share-folder
-如果要清掉或取消連線可以用 \delete 如下:
-net use z: /delete
-列出所有網路磁碟: net use
-可以不用指定drive letter，用* 當做temp如下:
+有密碼:<br>
+net use X: \server\share /user:user abc<br>
+你們也可以這樣下，沒有login，他會跳出來要你打帳號密碼。沒密碼就按enter鍵如下<br>
+net use z: \IP-ADDRESS\share-folder<br>
+如果要清掉或取消連線可以用 \delete 如下:<br>
+net use z: /delete<br>
+列出所有網路磁碟: net use<br>
+可以不用指定drive letter，用* 當做temp如下:<br>
 net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
-
+<h2 id="linux-共享smb">Linux 共享SMB
+</h2><ol>
+<li>
+<p>在在本機安全性原則/網路清單管理原則，點擊修改的網路連線，改成網路類型：私人
+<img
+    src="/my-portfolio/Pasted%20image%2020260621115753.png"
+    alt=""
+    loading="lazy"
+></p>
+</li>
+<li>
+<p><code>etc/samba/smb.conf</code></p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Global]
+</span></span><span class="line"><span class="cl">workgroup = WORKGROUP//讓Ubuntu和Win兩台區網電腦同一網域
+</span></span><span class="line"><span class="cl">client min protocol = SMB3
+</span></span><span class="line"><span class="cl">client max protocol = SMB3
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -556,8 +561,9 @@ net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
         (d.head || d.body).appendChild(s);
     })();
 </script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
 </div>
 
 <style>
@@ -682,7 +688,7 @@ net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.85e7929d27bb4982f674d65e2410f785f79a0a4ebbb9ce1a741df2750e18aff0.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
