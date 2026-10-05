@@ -4,13 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "fff2e3dfc01a9498",
+        "id": "c068093f20bd253b",
         "type": "split",
         "children": [
           {
             "id": "f3893ffd3842edff",
             "type": "tabs",
-            "dimension": 79.38144329896907,
             "children": [
               {
                 "id": "4f7703ef8571cf91",
@@ -18,30 +17,29 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/2026 家用Homelab架設指南.md",
+                    "file": "content/post/proj/XenServer 企業VDI實作.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "2026 家用Homelab架設指南"
+                  "title": "XenServer 企業VDI實作"
                 }
               }
             ]
           },
           {
-            "id": "dbfcad9d5d638f0b",
+            "id": "88c3b8ebf2b01b06",
             "type": "tabs",
-            "dimension": 20.618556701030926,
             "children": [
               {
-                "id": "d45abd92a962813b",
+                "id": "dc3c9b215f0b91e6",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/git/my-portfolio",
+                      "cwd": "/Users/kevin_ni/Desktop/公司檔案/obsidian/my-portfolio",
                       "focus": false,
                       "profile": {
                         "args": [
@@ -258,8 +256,9 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "d45abd92a962813b",
+  "active": "dc3c9b215f0b91e6",
   "lastOpenFiles": [
+    "content/post/proj/XenServer 企業VDI實作.md",
     "content/post/2026 家用Homelab架設指南.md",
     "Clippings/AIX - 來張 AIX 證照吧  最終回 - iT 邦幫忙一起幫忙解決難題，拯救 IT 人的一天.md",
     "Excalidraw/Drawing 2026-07-10 22.16.32.excalidraw.md",
@@ -290,7 +289,6 @@
     "content/post/下載續傳工具.md",
     "content/post/下載相依套件.md",
     "content/post/proj/企業VPN架設.md",
-    "content/post/proj/XenServer 企業VDI實作.md",
     "content/post/proj/Microsoft ADFS.md",
     "content/post/proj/Hyper-V 企業實作.md",
     "content/post/illustrator TQC 練習考題.md",

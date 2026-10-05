@@ -3,6 +3,20 @@ title: XenServer 企業實作
 toc: true
 date: 2026-09-25
 ---
+
+## 舊版安裝License Server VPX
+(舊版方法保留,現在是安裝CXVD就包含License_Server，跳過步驟到4)
+1. `File → Import` 匯入 Citrix_License_Server_Virtual_Appliance.xva，安裝 Citrix License Server
+![](static/Pasted%20image%2020260926155759.png)
+
+2. 開機會先設定密碼，因為hostname 要跟 License 的hostname一致，使用 `hostnamectl set-hostname --static 電腦名稱`，因為還會有transit hostname所以再重開機一次，要重置授權可以輸入 resetsettings.sh
+Web:https://192.168.8.81:8082/ 授權Port 27000
+![](static/Pasted%20image%2020260926202359.png)
+
+3. 指派授權，舊版的License Server VPX 已經淘汰，Tools/License Manager
+
+
+## 安裝XenServer
 1. 先基本安裝Hypervisor，在這邊使用PVE模擬 (RAM32G/HDD200G/SeaBIOS)
 ![](static/Pasted%20image%2020260925210139.png)
 
@@ -10,16 +24,10 @@ date: 2026-09-25
 ![](static/Pasted%20image%2020260926141201.png)
 
 3. 安裝XenCenter 
-4. `File → Import` 匯入 Citrix_License_Server_Virtual_Appliance.xva，安裝 Citrix License Server
-![](static/Pasted%20image%2020260926155759.png)
-
-5. 開機會先設定密碼，因為hostname 要跟 License 的hostname一致，使用 `hostnamectl set-hostname --static 電腦名稱`，因為還會有transit hostname所以再重開機一次，要重置授權可以輸入 resetsettings.sh
-Web:https://192.168.8.81:8082/ 授權Port 27000
-![](static/Pasted%20image%2020260926202359.png)
-6. 指派授權，舊版的License Server VPX 已經淘汰，Tools/License Manager
 
 
 
+## 安裝 Citrix CXVD
 
 相關套件一覽表
 
@@ -54,21 +62,22 @@ XenServer（XenCenter 管理）
     └─ 要提供給使用者的應用程式
 ```
 
-4. 安裝 CXVD，Delivery Controller，完成後加入AD
+
+1. 安裝 CXVD，Delivery Controller，完成後加入AD
 ![](static/Pasted%20image%2020260926003723.png)
 
-5. 在XenServer起一台Win10，當成Golden Image母版，安裝完成VM後接著安裝 VirtualDeliveryAgent for WindowsMulti-sessionOS
+2. 在XenServer 裝一台Win10，當成Golden Image母版，安裝完成VM後接著安裝 VirtualDeliveryAgent for WindowsMulti-sessionOS
 ![](static/Pasted%20image%2020260927123658.png)
 
-6. 在CXVD那台電腦設定Citirx Studio
+3. 在CXVD那台電腦設定Citirx Studio
 ![](static/Pasted%20image%2020260927001158.png)
 
 
-7. Citrix Studio 派發
+4. Citrix Studio 派發
 ![](static/Pasted%20image%2020260927151704.png)
 
 
-8. 發布步驟
+5. 發布步驟
 ```
 Citrix Studio / Delivery Controller
         ↓
@@ -82,7 +91,7 @@ VDI01 / VDI02 / VDI03 ...
 ```
 
 
-## XCP-NG
+## XCP-NG (網頁版XenCenter)
 
 1. XCP-NG 安裝
 ![](static/Pasted%20image%2020260927123210.png)
