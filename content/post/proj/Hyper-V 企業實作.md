@@ -6,13 +6,12 @@ toc: true
 ## 前言
 
 ## 已知限制
-- 第一代VM 可載實體光碟機，第二代反之不行
+- 第一代VM 可載實體光碟機，第二代不行
 - 第一二代都可以掛載VHD硬碟
 - 管理嚮導會坑人不要用，新增成
-- 第一代可以使用SCSI硬碟但只能使用IDE開機(因為開機選項無SCSI)，而且傳統MBR
-- 第二代強制UEFI然後只能SCSI開機也不支援MBR
-
-一些Hyper-V 的進階功能，記得使用主機板BIOS要開啟intel VMX、 SR-IOV、 VT-D
+- 第一代可以使用SCSI硬碟但只能使用IDE開機(因開機選項無SCSI)跟傳統MBR
+- 第二代強制UEFI然後只能SCSI開機(不支援MBR)
+- Hyper-V 的進階功能，記得使用主機板BIOS要開啟intel VMX、 SR-IOV、 VT-D
 
 EXHyperV
 WSLDashboard
@@ -31,7 +30,7 @@ Get-NetNat
 Remove-NetNat -Name "NAT-SW" -Confirm:$false
 ```
 
-### WSL+WSLg
+## WSL+WSLg
 
 在Win10上啟用Windows 子系統Linux版、Hyper-V
 WSL1：使用Linux轉譯內核，不需開WHP，可與VMware 第一層共存 (性能不減)
@@ -39,7 +38,7 @@ WSL2：使用WHP轉譯層強制開啟虛擬化型安全性，Hyper-V強制升為
 
 >Win11 24H2 預設開啟VBS虛擬化，檢查方式： msinfo32.exe 虛擬化型安全性為執行中，關閉`bcdedit /set hypervisorlaunchtype off`
 
-### 批量建立
+## 批量建立
 ```powershell
 [string[]] $arr1 = ("1","2","3","4","5","6","7")
 $pc = "W2019K"
@@ -89,7 +88,7 @@ foreach ($vm in $vmList) {
 }
 ```
 
-### 開啟WHP兼容層
+## Windows Server 開啟WHP兼容層
 備註:要Windows Server 2022 才能開啟
 ```
 Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All Install-WindowsFeature Hyper-V -IncludeManagementTools
@@ -97,7 +96,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName HypervisorPlatform -All Insta
 ![](260404-whp01.png)
 
 ![](Pasted%20image%2020260531144500.png)
-### WSLg
+## WSLg
 
 安裝桌面環境 `sudo apt-get update && sudo apt-get install -y xfce4 xfce4-goodies`
 wsl
@@ -118,8 +117,6 @@ Xephyr -br -ac -noreset -resizeable -screen 1600x900 :1 &
 export DISPLAY=:1
 dbus-run-session startxfce4
 ```
-
-## 二代機器強制舊式vhd
 
 
 ## WSL
