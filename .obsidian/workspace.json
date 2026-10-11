@@ -13,49 +13,21 @@
             "dimension": 75,
             "children": [
               {
-                "id": "4f7703ef8571cf91",
+                "id": "68cb276d344bbb70",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/資產盤點軟體.md",
+                    "file": "Linux RDP 設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "資產盤點軟體"
+                  "title": "Linux RDP 設定"
                 }
               },
               {
-                "id": "a52971caec86781d",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/企業共享設定.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "企業共享設定"
-                }
-              },
-              {
-                "id": "3534ab653a2e6a2e",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/備份還原軟體.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "備份還原軟體"
-                }
-              },
-              {
-                "id": "e84cdbd814470bd3",
+                "id": "f9abf1d848759f2e",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
@@ -68,8 +40,7 @@
                   "title": "AI 提示詞"
                 }
               }
-            ],
-            "currentTab": 2
+            ]
           },
           {
             "id": "29c1231d9cfd7956",
@@ -178,7 +149,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -300,15 +272,18 @@
   },
   "active": "c109a469f74a9fe4",
   "lastOpenFiles": [
-    "content/post/備份還原軟體.md",
-    "content/post/架設 CUPS 網路列印伺服器.md",
+    "Linux RDP 設定.md",
     "content/post/AI 提示詞.md",
-    "static/Pasted image 20261011205129.png",
     "content/post/企業共享設定.md",
+    "content/post/資產盤點軟體.md",
+    "資料庫同步工具 DBSyncer.md",
+    "content/post/備份還原軟體.md",
+    "static/Pasted image 20261011210607.png",
+    "content/post/架設 CUPS 網路列印伺服器.md",
+    "static/Pasted image 20261011205129.png",
     "static/Pasted image 20261011203317.png",
     "content/post/列印技術.md",
     "content/post/常用指令linux.md",
-    "content/post/資產盤點軟體.md",
     "static/Pasted image 20261011121234.png",
     "static/Pasted image 20261011121107.png",
     "static/Pasted image 20261011121006.png",
@@ -331,7 +306,6 @@
     "public/img/avatar_hu_7d70d9a336b4e0d9.png",
     "resources/_gen/images/img/avatar_hu_7d70d9a336b4e0d9.png",
     "themes/hugo-theme-stack/images/tn.png",
-    "themes/hugo-theme-stack/images/screenshot.png",
     "themes/hugo-theme-stack/exampleSite/content/post/rich-content/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.ar.md",
@@ -343,8 +317,6 @@
     "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.ja.md",
     "themes/hugo-theme-stack/exampleSite/content/page/search/index.md",
     "themes/hugo-theme-stack/exampleSite/content/page/links/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/page/archives/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/categories/Test/_index.md",
-    "themes/hugo-theme-stack/exampleSite/content/page/about/index.zh-cn.md"
+    "themes/hugo-theme-stack/exampleSite/content/page/archives/index.md"
   ]
 }
