@@ -27,6 +27,11 @@ Web:https://192.168.8.81:8082/ 授權Port 27000
 
 
 
+
+## 新增NFS ISO SR
+
+
+
 ## 安裝 Citrix CXVD
 
 相關套件一覽表

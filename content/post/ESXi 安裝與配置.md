@@ -1,12 +1,13 @@
 ---
-title: ESXi 安裝與細項配置
+title: ESXi 安裝與配置
 date: 2026-02-19
 toc: true
 tags:
   - vmware
+  - 虛擬化
 ---
 RVTools：好用Windows管理ESXi虛擬機軟體
-
+PowerCLI：Windows管理ESXi虛擬機命令列
 ## 常用指令
 ```
 esxcfg-nics -l   //檢查所有網孔
@@ -36,7 +37,8 @@ set:
 [[1]](#_ftnref1) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357
 
 
-## 直通內顯
+## 直通設定
+### 直通內顯
 UHD 630 直通方法
 1. 主機/管理/系統/高級設定，在`VMkernel.Boot.disableACSCheck` 修改為 True，作用為IOMMU強制獨立分組
 2. 主機->管理->硬體，UHD Graphics 630 切換為直通
@@ -44,7 +46,7 @@ UHD 630 直通方法
 4. 在虛擬機選項/高級/編輯設置，添加參數 `hypervisor.cpuid.v0` 為 `FALSE` ，欺騙作業系統不在虛擬機執行
 5. 在VM中的PCIE設備添加UHD Graphics 630
 
-## 直通SATA控制器
+### 直通SATA控制器
 ```
 lspci -v | grep "Class 0106" -B 1
 ## 填入以下資訊
@@ -56,7 +58,7 @@ vi /etc/vmware/passthru.map
 ```
 
 
-## 直通RDM硬碟
+### 直通RDM硬碟
 1. 儲存區/裝置，可以看到目前的外部硬碟與SSD，這邊先從名稱點進去，記錄第二塊硬碟名稱複製`Local ATA Disk (t10.ATA_____WDC_WD5000AACS2D00ZUB0________________________WD2DWCASU2603567)` 括弧裡面名稱
 ![](static/Pasted%20image%2020260718173909.png)
 2. 進入ESXi Shell輸入指令
@@ -145,4 +147,24 @@ ESXI 7升8
 ![[Pasted image 20260321174801.png]]
 
 
+## 嵌套式虛擬化
+在vSphere 編輯設定／虛擬設定／向客體作業系統公開硬體協助虛擬化或在ESXi編輯 vmx為vhv.enable = "TRUE"　
 
+![484](static/Pasted%20image%2020261012224004.png)
+
+## 網路關係
+![475](static/mermaid-diagram.png)
+
+| 名稱                     | 是什麼                        | 用途                                    |
+| ---------------------- | -------------------------- | ------------------------------------- |
+| **vmnic0**             | ESXi 主機的實體網卡               | 連接外部實體網路                              |
+| **vSwitch0**           | 虛擬交換器                      | 在 VM、ESXi 介面與實體網卡之間轉送封包               |
+| **VM Network**         | 給 VM 使用的 Port Group（連接埠群組） | VM 網卡選這個，就接到對應的虛擬網路                   |
+| **Management Network** | 給管理介面使用的 Port Group        | 承載 ESXi 管理流量                          |
+| **vmk0**               | VMkernel 網路介面              | ESXi 的管理 IP 通常設在這裡，例如 `192.168.8.100` |
+
+| 設定                               | 設成 Reject（拒絕）                                | 設成 Accept（接受）                  |
+| -------------------------------- | -------------------------------------------- | ------------------------------ |
+| **混雜模式** Promiscuous Mode        | VM 通常只收到發給自己 MAC 的封包，以及適用的廣播／多播              | 允許 VM 收到該虛擬網路中原本不是發給自己 MAC 的封包 |
+| **MAC 位址變更** MAC Address Changes | 客體 OS 將網卡 MAC 改成與 VMware 設定不同時，阻止送到新 MAC 的流量 | 允許送到變更後 MAC 的流量                |
+| **偽造傳輸** Forged Transmits        | 送出的封包，來源 MAC 與網卡目前有效 MAC 不同時，丟棄封包            | 允許送出來源 MAC 不同的封包               |

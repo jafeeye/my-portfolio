@@ -18,7 +18,7 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Linux RDP 設定.md",
+                    "file": "content/post/Linux RDP 設定.md",
                     "mode": "source",
                     "source": false
                   },
@@ -27,20 +27,63 @@
                 }
               },
               {
-                "id": "f9abf1d848759f2e",
+                "id": "7de6a220b8982da6",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/AI 提示詞.md",
+                    "file": "content/post/ESXi 安裝與配置.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "AI 提示詞"
+                  "title": "ESXi 安裝與配置"
+                }
+              },
+              {
+                "id": "145d930f1174db73",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/VirtualBox.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "VirtualBox"
+                }
+              },
+              {
+                "id": "1c5f309294b783ac",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/Kata Containers.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "Kata Containers"
+                }
+              },
+              {
+                "id": "7b7f425195a39a47",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/VirtualBox.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "VirtualBox"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
             "id": "29c1231d9cfd7956",
@@ -84,7 +127,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe"
+                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
                 }
               }
             ]
@@ -149,8 +192,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "b0b42f073e0cce65",
@@ -272,8 +314,15 @@
   },
   "active": "c109a469f74a9fe4",
   "lastOpenFiles": [
-    "Linux RDP 設定.md",
+    "content/post/ESXi 安裝與配置.md",
+    "static/mermaid-diagram.png",
+    "content/post/VirtualBox.md",
+    "content/post/FireCracker.md",
+    "content/post/Kata Containers.md",
+    "content/post/Linux RDP 設定.md",
     "content/post/AI 提示詞.md",
+    "static/Pasted image 20261012224004.png",
+    "content/post/proj/XenServer 企業VDI實作.md",
     "content/post/企業共享設定.md",
     "content/post/資產盤點軟體.md",
     "資料庫同步工具 DBSyncer.md",
@@ -290,7 +339,6 @@
     "static/Pasted image 20261011112306.png",
     "content/post/SCCM 安裝.md",
     "content/post/proj/Hyper-V 企業實作.md",
-    "content/post/proj/XenServer 企業VDI實作.md",
     "content/post/PVE 進階設定.md",
     "content/post/靜態網站製作.md",
     "layouts/_default/_markup/render-image.html",
@@ -304,19 +352,10 @@
     "public/page/22/index.html",
     "public/page/22",
     "public/img/avatar_hu_7d70d9a336b4e0d9.png",
-    "resources/_gen/images/img/avatar_hu_7d70d9a336b4e0d9.png",
-    "themes/hugo-theme-stack/images/tn.png",
     "themes/hugo-theme-stack/exampleSite/content/post/rich-content/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.ar.md",
     "themes/hugo-theme-stack/exampleSite/content/post/math-typesetting/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
     "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-tw.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh-cn.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.ja.md",
-    "themes/hugo-theme-stack/exampleSite/content/page/search/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/page/links/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/page/archives/index.md"
-  ]
-}
+    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh
