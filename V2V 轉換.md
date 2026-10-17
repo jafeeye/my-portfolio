@@ -4,6 +4,8 @@ toc: true
 date: 2026-10-17
 tags:
   - 虛擬化
+  - PVE
+  - ESXi
 ---
 轉換之前要注意一下
 Proxmox 要把直通的設備刪除
@@ -11,7 +13,7 @@ Proxmox 要把直通的設備刪除
 轉換的虛擬機名稱不要用破折號跟點號
 
 方法1、使用 StarWind V2V Converter (缺點速度慢)
-
+![](static/Pasted%20image%2020261017185606.png)
 
 方法2、使用P2V 方式
 開啟VMware Converter，選擇Powered On ，藉由登入Windows 或Linux 遙控Proxmox VM 備份到ESXi
@@ -32,6 +34,8 @@ vmkfstools -i ws22-export.vmdk ws22.vmdk -d thin
 
 
 方法4、Proxmox 論壇網友寫的轉換腳本 [出處](https://forum.proxmox.com/threads/how-to-convert-vm-from-proxmox-to-vmware.122124/)
+實測發現錯誤的vmx 會讓vSphere的登入按鈕直接便灰色
+
 ```bash
 #!/bin/bash
 
@@ -282,3 +286,8 @@ log "Conversion completed successfully!"
 log "VM files are available in: $DESTINATION"
 ```
 
+
+## vSphere 轉 Hyper-V
+![](static/Pasted%20image%2020261017235747.png)
+進到畫面安裝PowerCLI
+![](static/Pasted%20image%2020261017235858.png)

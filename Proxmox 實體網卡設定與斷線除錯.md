@@ -2,6 +2,8 @@
 title: Proxmox 實體網卡設定與斷線除錯
 toc: true
 date: 2026-10-17
+tags:
+  - PVE
 ---
 當大量設備連入PVE主機出現突然主機無法連線，可能是相容性問題
 1. 檢查Log檔，發現是 Detected Hardware Unit Hang
