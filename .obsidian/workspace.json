@@ -1,112 +1,65 @@
 {
   "main": {
-    "id": "405fd6fbc8d21b84",
+    "id": "eb12856996e7efb4",
     "type": "split",
     "children": [
       {
-        "id": "0baaf52e82ac5529",
+        "id": "5a8a617269ad4bc3",
         "type": "split",
         "children": [
           {
-            "id": "f3893ffd3842edff",
+            "id": "9d7bbd029ab39b0b",
             "type": "tabs",
-            "dimension": 75,
             "children": [
               {
-                "id": "68cb276d344bbb70",
+                "id": "871e5f3f8c0d1fe8",
                 "type": "leaf",
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "content/post/Linux RDP 設定.md",
+                    "file": "content/post/SSO.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Linux RDP 設定"
+                  "title": "SSO"
                 }
               },
               {
-                "id": "7de6a220b8982da6",
+                "id": "b2c02749623c4fd0",
                 "type": "leaf",
                 "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/ESXi 安裝與配置.md",
-                    "mode": "source",
-                    "source": false
-                  },
+                  "type": "empty",
+                  "state": {},
                   "icon": "lucide-file",
-                  "title": "ESXi 安裝與配置"
-                }
-              },
-              {
-                "id": "145d930f1174db73",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/VirtualBox.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "VirtualBox"
-                }
-              },
-              {
-                "id": "1c5f309294b783ac",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/Kata Containers.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Kata Containers"
-                }
-              },
-              {
-                "id": "7b7f425195a39a47",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/VirtualBox.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "VirtualBox"
+                  "title": "新分頁"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
-            "id": "29c1231d9cfd7956",
+            "id": "b7c9605cb25a2683",
             "type": "tabs",
-            "dimension": 25,
             "children": [
               {
-                "id": "c109a469f74a9fe4",
+                "id": "3f2e70e6546c24a5",
                 "type": "leaf",
                 "pinned": true,
                 "state": {
                   "type": "terminal:terminal",
                   "state": {
                     "terminal:terminal": {
-                      "cwd": "C:\\Users\\PIN\\Desktop\\obsidian\\my-portfolio",
+                      "cwd": "/Users/kevin_ni/Desktop/公司檔案/obsidian/my-portfolio",
                       "focus": false,
                       "profile": {
-                        "args": [],
-                        "executable": "C:\\Windows\\System32\\cmd.exe",
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
                         "followTheme": true,
                         "name": "",
                         "platforms": {
-                          "win32": true
+                          "darwin": true
                         },
                         "pythonExecutable": "python3",
                         "restoreHistory": false,
@@ -127,7 +80,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "終端：C:\\Windows\\System32\\conhost.exe - git  add ."
+                  "title": "終端：zsh"
                 }
               }
             ]
@@ -139,15 +92,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "93143301adfb64c3",
+    "id": "37c3725140d0986d",
     "type": "split",
     "children": [
       {
-        "id": "4b3b6f59aa3c96a7",
+        "id": "3c4b02ab7a2bf17c",
         "type": "tabs",
         "children": [
           {
-            "id": "ca51aa279fc78fde",
+            "id": "ad2fc1792de2c140",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -162,7 +115,7 @@
             }
           },
           {
-            "id": "ef6092f23a9d8e80",
+            "id": "30eafd4c0e64c5a3",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -179,11 +132,14 @@
             }
           },
           {
-            "id": "6f60c14c3f9028f6",
+            "id": "deadef8391b98eb0",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {},
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
               "icon": "lucide-bookmark",
               "title": "書籤"
             }
@@ -192,37 +148,23 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 300,
+    "collapsed": true
   },
   "right": {
-    "id": "b0b42f073e0cce65",
+    "id": "bf396298f79400d2",
     "type": "split",
     "children": [
       {
-        "id": "bfddd76b0535ad8b",
+        "id": "885f9a568e9ff25f",
         "type": "tabs",
         "children": [
           {
-            "id": "aed188c09fa85dad",
-            "type": "leaf",
-            "state": {
-              "type": "outline",
-              "state": {
-                "followCursor": false,
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-list",
-              "title": "大綱"
-            }
-          },
-          {
-            "id": "04868394b3f68522",
+            "id": "82b56432acf0a110",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/radius/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -232,25 +174,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "index 的反向連結"
+              "title": "反向連結"
             }
           },
           {
-            "id": "61705302cd242792",
+            "id": "d166e10a5ab874ba",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/post/radius/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "index 的對外連結"
+              "title": "對外連結"
             }
           },
           {
-            "id": "edc588461625963a",
+            "id": "b5ebc78e9b925a32",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -265,7 +206,7 @@
             }
           },
           {
-            "id": "ddc02c862b8df90a",
+            "id": "b5aa1c6ffec8ae9a",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -279,24 +220,28 @@
             }
           },
           {
-            "id": "9367e372d2d4329b",
+            "id": "102ddae6ecdbbdf0",
             "type": "leaf",
             "state": {
-              "type": "claudian-view",
-              "state": {},
-              "icon": "bot",
-              "title": "Claudian"
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大綱"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "switcher:開啟快速切換": false,
       "graph:查看關聯圖": false,
       "canvas:建立新畫布": false,
@@ -304,58 +249,21 @@
       "templates:插入模板": false,
       "command-palette:開啟命令面板": false,
       "bases:建立新的 base": false,
+      "terminal:Open terminal": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "omnisearch:Omnisearch": false,
       "vscode-editor:新建程式碼檔案": false,
       "simple-mind-map:新建思維導圖": false,
-      "terminal:Open terminal": false,
-      "omnisearch:Omnisearch": false,
       "obsidian-importer:Open Importer": false,
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "c109a469f74a9fe4",
+  "active": "3f2e70e6546c24a5",
   "lastOpenFiles": [
-    "content/post/ESXi 安裝與配置.md",
-    "static/mermaid-diagram.png",
-    "content/post/VirtualBox.md",
-    "content/post/FireCracker.md",
-    "content/post/Kata Containers.md",
-    "content/post/Linux RDP 設定.md",
-    "content/post/AI 提示詞.md",
-    "static/Pasted image 20261012224004.png",
-    "content/post/proj/XenServer 企業VDI實作.md",
-    "content/post/企業共享設定.md",
-    "content/post/資產盤點軟體.md",
-    "資料庫同步工具 DBSyncer.md",
-    "content/post/備份還原軟體.md",
-    "static/Pasted image 20261011210607.png",
-    "content/post/架設 CUPS 網路列印伺服器.md",
-    "static/Pasted image 20261011205129.png",
-    "static/Pasted image 20261011203317.png",
-    "content/post/列印技術.md",
-    "content/post/常用指令linux.md",
-    "static/Pasted image 20261011121234.png",
-    "static/Pasted image 20261011121107.png",
-    "static/Pasted image 20261011121006.png",
-    "static/Pasted image 20261011112306.png",
-    "content/post/SCCM 安裝.md",
-    "content/post/proj/Hyper-V 企業實作.md",
-    "content/post/PVE 進階設定.md",
-    "content/post/靜態網站製作.md",
-    "layouts/_default/_markup/render-image.html",
-    "layouts/_default/_markup/render-link拷貝.html",
-    "public/page/25/index.html",
-    "public/page/25",
-    "public/page/24/index.html",
-    "public/page/24",
-    "public/page/23/index.html",
-    "public/page/23",
-    "public/page/22/index.html",
-    "public/page/22",
-    "public/img/avatar_hu_7d70d9a336b4e0d9.png",
-    "themes/hugo-theme-stack/exampleSite/content/post/rich-content/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/placeholder-text/index.ar.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/math-typesetting/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/markdown-syntax/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/emoji-support/index.md",
-    "themes/hugo-theme-stack/exampleSite/content/post/chinese-test/index.zh
+    "content/post/SSO.md",
+    "content/post/網頁伺服器.md",
+    "ng.md",
+    "content/post/illumio 2x2 DR.md",
+    "content/post/illumio Debug.md"
+  ]
+}
