@@ -3,6 +3,117 @@ title: illumio LXC ncat
 date: 2026-06-16
 toc: true
 ---
+```toc
+```
+
+## 一、測試步驟
+1. 使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
+```
+# 1.安裝套件
+apt update && apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
+
+# 2.systemd-resolved 讓容器可以讀取PVE DNS欄位
+apt update && apt install systemd-resolved -y
+```
+2. 找一台設定好LXC，把Script 設定好執行
+```
+(
+set -euo pipefail
+
+# 來源 LXC 範本 ID
+TEMPLATE_ID=900
+
+# 新 LXC 從哪個 CT ID 開始
+START_ID=201
+
+# 目標儲存
+STORAGE="local-lvm"
+
+# 按照你想要的順序填入 hostname
+HOSTS=(
+  sandra-core0
+  sandra-core1
+  sandra-data0
+  sandra-data1
+)
+
+# 先確認所有目標 ID 都沒有被 VM 或 LXC 使用
+for index in "${!HOSTS[@]}"; do
+  id=$((START_ID + index))
+
+  if [[ -e "/etc/pve/lxc/$id.conf" ||
+        -e "/etc/pve/qemu-server/$id.conf" ]]; then
+    echo "錯誤：ID $id 已被使用，停止執行。"
+    exit 1
+  fi
+done
+
+# 按清單順序，逐台複製
+for index in "${!HOSTS[@]}"; do
+  id=$((START_ID + index))
+  hostname="${HOSTS[$index]}"
+
+  echo "正在建立：CT $id → $hostname"
+
+  pct clone "$TEMPLATE_ID" "$id" \
+    --hostname "$hostname" \
+    --full 1 \
+    --storage "$STORAGE"
+done
+
+echo "全部複製完成。"
+)
+```
+
+3. 製作`/root/root-ca.crt` 、`/root/pair.sh`，直接用pct容器直接大量配對
+```
+(
+set -euo pipefail
+
+CTS=(300 301 302 303)
+CA="/root/root-ca.crt"
+PAIR="/root/pair.sh"
+
+[[ -f "$CA" && -f "$PAIR" ]] || {
+  echo "找不到憑證或配對腳本，請確認路徑。"
+  exit 1
+}
+
+for id in "${CTS[@]}"; do
+  echo "========== 處理 CT $id =========="
+
+  if [[ $(pct status "$id") != "status: running" ]]; then
+    echo "CT $id 尚未啟動，請先啟動後重試。"
+    exit 1
+  fi
+
+  # 建立 CA 憑證目錄
+  pct exec "$id" -- mkdir -p /usr/local/share/ca-certificates
+
+  # 複製並信任 CA 憑證
+  pct push "$id" "$CA" \
+    /usr/local/share/ca-certificates/lab-root-ca.crt \
+    --perms 0644
+
+  pct exec "$id" -- update-ca-certificates
+
+  # 複製配對腳本，限制只有 root 可讀取與執行
+  pct push "$id" "$PAIR" /root/pair.sh --perms 0700
+
+  # 執行腳本
+  pct exec "$id" -- bash /root/pair.sh
+
+  # 成功後移除容器內的配對腳本
+  pct exec "$id" -- rm -f /root/pair.sh
+
+  echo "CT $id 完成"
+done
+)
+```
+
+
+
+
 ## LXC安裝前置作業
 
 避免hosts被覆蓋
@@ -27,15 +138,7 @@ systemctl enable --now ssh
 ```
 apt install curl
 ```
-### Debian LXC
-使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
-```
-# 1.安裝套件
-apt update && apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
 
-# 2.systemd-resolved 讓容器可以讀取PVE DNS欄位
-apt update && apt install systemd-resolved -y
-```
 
 看安裝錯誤訊息
 /var/log/illumio_install.log
@@ -111,6 +214,13 @@ nft list ruleset
 nft delete table inet ILO-FILTER-X
 
 ```
+
+
+
+
+
+
+
 ## nc 模擬流量
 ```
 dnf install -y nmap-ncat

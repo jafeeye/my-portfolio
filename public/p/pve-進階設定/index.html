@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM\r建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap\r預設PVE沒調整狀態下為60\n">
 <title>PVE 進階設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/pve-%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="PVE 進階設定">
-<meta property='og:description' content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="PVE 進階設定">
+<meta property='og:description' content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM\r建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap\r預設PVE沒調整狀態下為60\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/pve-%E9%80%B2%E9%9A%8E%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-28T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="PVE 進階設定">
-<meta name="twitter:description" content="前言 PVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM 建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap 預設PVE沒調整狀態下為60\n">
+<meta name="twitter:description" content="前言\rPVE 是目前開源界好用虛擬化系統，但也有超多進階化設定可供調整&hellip;\n增加LVM\r建議作法：建立獨立的 LVM-Thin\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 1. 先確認硬碟代號 到節點 → Disks，確認那顆 1TB 硬碟，例如： /dev/sdb 千萬不要選到 Proxmox 系統碟。 2. 移除原本的 ext4 Storage 設定 如果這顆硬碟曾經出現在： Datacenter → Storage 3.去Disk/Director 4.Disk/Wipe Disk 5. 建立 LVM-Thin 前往： 節點 → Disks → LVM-Thin → Create: Thinpool 優化: PVE 調整Swap\r預設PVE沒調整狀態下為60\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -287,10 +287,7 @@
     <li><a href="#前言">前言</a></li>
     <li><a href="#增加lvm">增加LVM</a></li>
     <li><a href="#優化-pve-調整swap">優化: PVE 調整Swap</a></li>
-    <li><a href="#優化-e1000斷線問題">優化: E1000斷線問題</a></li>
     <li><a href="#優化-刪除local-lvm">優化: 刪除local-lvm</a></li>
-    <li><a href="#優化-固定網卡名稱">優化: 固定網卡名稱</a></li>
-    <li><a href="#usb-網卡優化設定">USB 網卡優化設定</a></li>
     <li><a href="#使用nvme開機">使用NVME開機</a></li>
     <li><a href="#驅動安裝">驅動安裝</a></li>
     <li><a href="#網路">網路</a>
@@ -299,11 +296,6 @@
         <li><a href="#sdn取得dnscloud-init">SDN取得DNS+cloud-init</a></li>
         <li><a href="#sdn-fabrics">SDN Fabrics</a></li>
         <li><a href="#opnsense--切vlan">OPNSense + 切Vlan</a></li>
-        <li><a href="#pve網口設定">PVE網口設定</a></li>
-        <li><a href="#bond">BOND</a></li>
-        <li><a href="#ospf">OSPF</a></li>
-        <li><a href="#網路路由">網路路由</a></li>
-        <li><a href="#openvswtch">OpenVSwtch</a></li>
       </ol>
     </li>
     <li><a href="#去虛擬化">去虛擬化</a></li>
@@ -330,10 +322,7 @@
     </li>
     <li><a href="#遷移">遷移</a>
       <ol>
-        <li><a href="#遷移-從esxi">遷移: 從ESXi</a></li>
-        <li><a href="#遷移-p2v">遷移: P2V</a></li>
         <li><a href="#遷移-migrate">遷移: Migrate</a></li>
-        <li><a href="#遷移-轉換至esxi">遷移: 轉換至ESXi</a></li>
       </ol>
     </li>
     <li><a href="#啟用防火牆">啟用防火牆</a></li>
@@ -341,21 +330,8 @@
     <li><a href="#pve-tools-9">PVE Tools 9</a></li>
     <li><a href="#不同虛擬機下硬碟掛載到目前vm">不同虛擬機下硬碟掛載到目前VM</a></li>
     <li><a href="#pve-使用vdsm掛載-iscsi">PVE 使用vDSM掛載 iSCSI</a></li>
-    <li><a href="#直通技術">直通技術</a>
-      <ol>
-        <li>
-          <ol>
-            <li><a href="#hyper-v-遷移至pve">Hyper-V 遷移至PVE</a></li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-    <li><a href="#顯卡直通">顯卡直通</a></li>
     <li><a href="#常用位置">常用位置</a></li>
     <li><a href="#pve-共享目錄">PVE 共享目錄</a></li>
-    <li><a href="#正確刪除節點">正確刪除節點</a></li>
-    <li><a href="#全部退出節點">全部退出節點</a></li>
-    <li><a href="#叢集設定">叢集設定</a></li>
     <li><a href="#建立ws-server-範本">建立WS Server 範本</a></li>
     <li><a href="#安裝ｗin11">安裝Ｗin11</a></li>
     <li><a href="#lxc-安裝cockit開啟共享">LXC 安裝cockit開啟共享</a></li>
@@ -434,7 +410,7 @@
 
 
                 <time class="article-time--reading">
-                    13 minute read
+                    8 minute read
                 </time>
             </div>
         
@@ -516,41 +492,6 @@
 </div><ul>
 <li><a href="https://blog.welain.com/articles/2023/notes-about-pve/">排障笔记-解决PVE中节点SWAP占用过高问题&amp;一些关于PVE宿主硬盘的题外话</a></li>
 </ul>
-<h2 id="優化-e1000斷線問題">優化: E1000斷線問題
-</h2><p>通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
-除錯顯示log</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">journalctl -b -1 -e 
-</span></span><span class="line"><span class="cl">journalctl --until &#34;2026-02-27 11:00:00&#34; -n 100 -r
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>發現這條，懷疑是驅動出現 <code>Detected Hardware Unit Hang</code>，關閉電源休眠可解決問題
-<code>Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># 關閉卸載功能 Hardware Unit Hang</span>
-</span></span><span class="line"><span class="cl"><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">enx00e01c680083</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span> 
-</span></span><span class="line"><span class="cl"><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">eno1</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span> 
-</span></span><span class="line"><span class="cl"><span class="c1"># 重新啟動網卡服務 </span>
-</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">restart</span> <span class="n">networking</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>Proxmox 重啟後 <code>ethtool</code> 的設定會消失，請編輯網路設定檔：</p>
-<ol>
-<li>在 <code>iface eno1 inet manual</code> 下方增加一行： <code>post-up /usr/sbin/ethtool -K eno1 tso off gso off</code></li>
-</ol>
 <h2 id="優化-刪除local-lvm">優化: 刪除local-lvm
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -562,210 +503,9 @@
 </span></span><span class="line"><span class="cl">lvextend -l +100%FREE -r pve/root
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="優化-固定網卡名稱">優化: 固定網卡名稱
-</h2><p>实现方案(pve9)</p>
-<div class="table-wrapper"><table>
-	<thead>
-			<tr>
-					<th><strong>網卡名稱範例</strong></th>
-					<th><strong>命名類型</strong></th>
-					<th><strong>實際代表的硬體意義</strong></th>
-					<th><strong>常見出現場景</strong></th>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-					<td><strong><code>eno1</code></strong></td>
-					<td>板載 (Onboard)</td>
-					<td>主機板內建的有線網卡</td>
-					<td>實體伺服器、PC 主機板原生網口</td>
-			</tr>
-			<tr>
-					<td><strong><code>ens18</code></strong></td>
-					<td>插槽 (Slot)</td>
-					<td>虛擬或實體熱插拔插槽第 18 號</td>
-					<td><strong>PVE 虛擬機 (VM) 內部</strong></td>
-			</tr>
-			<tr>
-					<td><strong><code>enp1s0</code></strong></td>
-					<td>匯流排 (PCIe)</td>
-					<td>PCIe Bus 1, Slot 0 的實體網卡</td>
-					<td>實體機補插的獨立網卡、擴充卡</td>
-			</tr>
-			<tr>
-					<td><strong><code>nic0</code> / <code>eth0</code></strong></td>
-					<td>自訂 / 傳統</td>
-					<td>人為綁定 MAC 或老舊核心隨機分配</td>
-					<td>經維運優化後的環境、老舊 Linux</td>
-			</tr>
-			<tr>
-					<td>注意：在 Proxmox VE 9（基于 Debian 13）中，固定网卡名称的方式与 PVE 8（基于 Debian 12）有所不同，主要是因为 Debian 13 对 udev 规则的处理逻辑做了调整，传统的 70-persistent-net.rules 方式可能不再生效。</td>
-					<td></td>
-					<td></td>
-					<td></td>
-			</tr>
-			<tr>
-					<td>在 PVE 9 中，推荐通过 systemd 的 .link 配置文件 来固定网卡名称，这是更现代且兼容的方式。</td>
-					<td></td>
-					<td></td>
-					<td></td>
-			</tr>
-			<tr>
-					<td>步骤如下：</td>
-					<td></td>
-					<td></td>
-					<td></td>
-			</tr>
-	</tbody>
-</table></div>
-<ol>
-<li>找出需要固定的网卡 MAC 地址</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ ip addr
-</span></span><span class="line"><span class="cl">2: eno1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000
-</span></span><span class="line"><span class="cl">link/ether 04:d4:c4:57:af:9d brd ff:ff:ff:ff:ff:ff
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="2">
-<li>创建 .link 配置文件<code>vi /etc/systemd/network/10-static-en219v.link</code> 内容为</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match] 
-</span></span><span class="line"><span class="cl">MACAddress=04:d4:c4:57:af:9d
-</span></span><span class="line"><span class="cl">[Link] 
-</span></span><span class="line"><span class="cl">Name=en219v
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="3">
-<li>修改 vmbr0 的配置
-因为一般都是远程操作，为了安全起见，重命名前后的两个网卡名字都加入到 vmbr0，以防万一出错时无法连接管理网络：<code>nano /etc/network/interfaces</code>内容为：</li>
-</ol>
-<p>目前对设备名称使用以下命名约定：</p>
-<ul>
-<li>以太网设备：en*，systemd 网络接口名称。此命名方案用于自版本 5.0 以来的新 Proxmox VE 安装。</li>
-<li>以太网设备：eth[N]，其中 0 ≤ N （eth0， eth1， …）此命名方案用于在5.0版本之前安装的Proxmox VE主机。升级到 5.0 时，名称将保持原样。</li>
-<li>网桥名称：vmbr[N]，其中 0 ≤ N ≤ 4094 （vmbr0 - vmbr4094）</li>
-<li>bond：bond[N]，其中 0 ≤ N （bond0， bond1， …）</li>
-<li>VLAN：只需将 VLAN 编号添加到设备名称中，用句点分隔（eno1.50、bond1.30）</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">iface en219v inet manual
-</span></span><span class="line"><span class="cl">iface eno1 inet manual
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto vmbr0
-</span></span><span class="line"><span class="cl">iface vmbr0 inet static
-</span></span><span class="line"><span class="cl">       ......
-</span></span><span class="line"><span class="cl">       bridge-ports eno1 en219v
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="4">
-<li>更新<code>update-initramfs -u -k all</code> 重启<code>reboot</code>之后查看网卡名称发现已经固定：</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ ip addr 
-</span></span><span class="line"><span class="cl">2: en100g1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000 link/ether 8c:3a:8e:88:7d:5a brd ff:ff:ff:ff:ff:ff altname enx8c2a8e886d5a
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="5">
-<li>修复 vmbr0 的 bridge-ports，把改名之前的网卡名字去掉。
-对于只有多个网卡的情况，操作要复杂一下，主要是需要区分是哪些网卡。如我这里有一台机器上有 100g 和 25g 两块双头网卡， 提供四个网口，其中 100g 网卡提供两个网口，25g 网卡提供两个网口。需要通过下面两个命令找出哪些网卡是 100g 网卡，哪些网卡是 25g 网卡， 记录好 mac 地址，然后再逐个网口进行操作：</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip addr
-</span></span><span class="line"><span class="cl">lspci | grep Ethernet
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en25g1.link
-</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en25g2.link
-</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en100g1.link
-</span></span><span class="line"><span class="cl">vi /etc/systemd/network/10-static-en100g2.link
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="usb-網卡優化設定">USB 網卡優化設定
-</h2><p>想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">auto</span> <span class="n">lo</span>
-</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">lo</span> <span class="n">inet</span> <span class="n">loopback</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">nic0</span> <span class="n">inet</span> <span class="n">manual</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">auto</span> <span class="n">vmbr0</span>
-</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">vmbr0</span> <span class="n">inet</span> <span class="k">static</span>
-</span></span><span class="line"><span class="cl">        <span class="n">address</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">8.90</span><span class="o">/</span><span class="mi">24</span>
-</span></span><span class="line"><span class="cl">        <span class="n">gateway</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">8.1</span>
-</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">ports</span> <span class="n">nic0</span> <span class="n">enx00e01c680083</span>
-</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">stp</span> <span class="n">off</span>
-</span></span><span class="line"><span class="cl">        <span class="n">bridge</span><span class="o">-</span><span class="n">fd</span> <span class="mi">0</span>
-</span></span><span class="line"><span class="cl">        <span class="n">post</span><span class="o">-</span><span class="n">up</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">ethtool</span> <span class="o">-</span><span class="n">K</span> <span class="n">enx00e01c680083</span> <span class="n">tso</span> <span class="n">off</span> <span class="n">gso</span> <span class="n">off</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">iface</span> <span class="n">nic1</span> <span class="n">inet</span> <span class="n">manual</span>
-</span></span><span class="line"><span class="cl"><span class="n">source</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">network</span><span class="o">/</span><span class="n">interfaces</span><span class="o">.</span><span class="n">d</span><span class="o">/*</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡</li>
-<li>post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能</li>
-</ul>
-<h2 id="使用nvme開機">使用NVME開機
+</div><h2 id="使用nvme開機">使用NVME開機
 </h2><ol>
-<li>在VM中Hardware增加PCI Device，勾選ROM-Bar</li>
+<li>在VM中Hardware增加PCI Device，勾選ROM-Bar、all functions、pci-express，不要勾Primary GPU <code>qm set 100 -hostpci0 0000:04:00,pcie=1,allfunc=1</code></li>
 <li>Options中把Boot Order加入hostpci</li>
 <li>檢查PVE主機設定檔嵌套式虛擬化為開啟，並把VM上CPU type調整為Host並開啟NUMA即可(用指令或WebUI都可以)</li>
 </ol>
@@ -907,181 +647,6 @@ Virtiofs</p>
 <li>Node/System/Network 在橋接網口開啟vlan aware</li>
 <li>建立VM那邊vlan填上設定的數值</li>
 </ol>
-<h3 id="pve網口設定">PVE網口設定
-</h3><p>在banner會放上IP位置是從檔案去改的 nano /etc/issue
-修改主機ip</p>
-<ol>
-<li>nano /etc/network/interfaces</li>
-<li>nano /etc/hosts
-<img
-    src="/my-portfolio/default-network-setup-bridge.svg"
-    alt=""
-    loading="lazy"
->
-如果硬碟拔去新機器，無法進入畫面去檢查 <code>/etc/network/interfaces</code> ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可</li>
-</ol>
-<p>在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
-預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
-nano /etc/network/interfaces</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auto lo iface lo inet loopback 
-</span></span><span class="line"><span class="cl">iface enp1s0 inet manual 
-</span></span><span class="line"><span class="cl">iface enp2s0 inet manual 
-</span></span><span class="line"><span class="cl">iface enp3s0 inet manual 
-</span></span><span class="line"><span class="cl">auto vmbr0 
-</span></span><span class="line"><span class="cl">iface vmbr0 inet static 
-</span></span><span class="line"><span class="cl">address 192.168.1.100/24 
-</span></span><span class="line"><span class="cl">gateway 192.168.1.1 
-</span></span><span class="line"><span class="cl">bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
-</span></span><span class="line"><span class="cl">bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
-</span></span><span class="line"><span class="cl">bridge-fd 2
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>也可以指定不同vmbr 其他Ip 這樣就是雙管理口</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auto lo
-</span></span><span class="line"><span class="cl">iface lo inet loopback
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto nic0
-</span></span><span class="line"><span class="cl">iface nic0 inet manual
-</span></span><span class="line"><span class="cl">auto nic1
-</span></span><span class="line"><span class="cl">iface nic1 inet manual
-</span></span><span class="line"><span class="cl">auto nic2
-</span></span><span class="line"><span class="cl">iface nic2 inet manual
-</span></span><span class="line"><span class="cl">auto nic3
-</span></span><span class="line"><span class="cl">iface nic3 inet manual
-</span></span><span class="line"><span class="cl">iface wlp4s0 inet manual
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto vmbr0
-</span></span><span class="line"><span class="cl">iface vmbr0 inet static
-</span></span><span class="line"><span class="cl">        address 192.168.1.5/24
-</span></span><span class="line"><span class="cl">        gateway 192.168.1.1
-</span></span><span class="line"><span class="cl">        bridge-ports nic2
-</span></span><span class="line"><span class="cl">        bridge-stp on
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto vmbr1
-</span></span><span class="line"><span class="cl">iface vmbr1 inet manual
-</span></span><span class="line"><span class="cl">        address 192.168.8.49/24
-</span></span><span class="line"><span class="cl">        gateway 192.168.8.1
-</span></span><span class="line"><span class="cl">        bridge-ports nic1
-</span></span><span class="line"><span class="cl">        bridge-stp off
-</span></span><span class="line"><span class="cl">        bridge-fd 0
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">source /etc/network/interfaces.d/*
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>關閉USB網卡 tso gso <code>post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso</code>
-<img
-    src="/my-portfolio/Pasted%20image%2020260524123306.png"
-    alt=""
-    loading="lazy"
-></p>
-<p>修改 hosts
-<img
-    src="/my-portfolio/Pasted%20image%2020260524125131.png"
-    alt=""
-    loading="lazy"
-></p>
-<h3 id="bond">BOND
-</h3><h3 id="ospf">OSPF
-</h3><h3 id="網路路由">網路路由
-</h3><p><img
-    src="/my-portfolio/default-network-setup-routed.svg"
-    alt=""
-    loading="lazy"
-></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">种常见情况是，你有一个公共 IP（在本例中假定为 198.51.100.5），以及一个用于 VM 的额外 IP 块 （203.0.113.16/28）。对于此类情况，我们建议进行以下设置：
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto lo
-</span></span><span class="line"><span class="cl">iface lo inet loopback
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto eno0
-</span></span><span class="line"><span class="cl">iface eno0 inet static
-</span></span><span class="line"><span class="cl">        address  198.51.100.5/29
-</span></span><span class="line"><span class="cl">        gateway  198.51.100.1
-</span></span><span class="line"><span class="cl">        post-up echo 1 &gt; /proc/sys/net/ipv4/ip_forward
-</span></span><span class="line"><span class="cl">        post-up echo 1 &gt; /proc/sys/net/ipv4/conf/eno0/proxy_arp
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">auto vmbr0
-</span></span><span class="line"><span class="cl">iface vmbr0 inet static
-</span></span><span class="line"><span class="cl">        address  203.0.113.17/28
-</span></span><span class="line"><span class="cl">        bridge-ports none
-</span></span><span class="line"><span class="cl">        bridge-stp off
-</span></span><span class="line"><span class="cl">        bridge-fd 0
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="openvswtch">OpenVSwtch
-</h3><p><a href="https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/">https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/</a></p>
 <h2 id="去虛擬化">去虛擬化
 </h2><h2 id="ha功能">HA功能
 </h2><h2 id="oci功能">OCI功能
@@ -1398,30 +963,7 @@ Zfs-pool</p>
 ></li>
 </ol>
 <h2 id="遷移">遷移
-</h2><h3 id="遷移-從esxi">遷移: 從ESXi
-</h3><p>會有驅動問題，在Windows不能開機就選SATA
-<img
-    src="/my-portfolio/260404-pve.png"
-    alt=""
-    loading="lazy"
-></p>
-<h3 id="遷移-p2v">遷移: P2V
-</h3><ol>
-<li>把目前開機的作業系統,使用對應軟體可直接熱轉換</li>
-</ol>
-<ul>
-<li>Disk2vhd</li>
-<li>StarWind V2V</li>
-</ul>
-<ol start="2">
-<li>先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
-<img
-    src="/my-portfolio/260404-v2v.png"
-    alt=""
-    loading="lazy"
-></li>
-</ol>
-<h3 id="遷移-migrate">遷移: Migrate
+</h2><h3 id="遷移-migrate">遷移: Migrate
 </h3><p>在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
 最大影響快照在CT 模式做不了</p>
 <ul>
@@ -1433,12 +975,6 @@ Zfs-pool</p>
 >
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow</li>
 </ul>
-<h3 id="遷移-轉換至esxi">遷移: 轉換至ESXi
-</h3><p><img
-    src="/my-portfolio/PixPin_2026-05-02_00-17-16.png"
-    alt=""
-    loading="lazy"
-></p>
 <h2 id="啟用防火牆">啟用防火牆
 </h2><ol>
 <li><code>Datacenter/Firewall/Option</code> 選項Firewall切換成Yes</li>
@@ -1498,124 +1034,6 @@ Zfs-pool</p>
 ![[Pasted-img-20260406143515.png]]</p>
 </li>
 </ol>
-<h2 id="直通技術">直通技術
-</h2><p>SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術</p>
-<p>ACS Patch
-Iommu group
-Gvt-g
-Io-pathrough
-ASUS BIOS 可開啟項目
-Iommu group
-SR-IOV
-VT-d
-進階/VMX
-Advanced/System Agent(SA)/VT-d
-PCH-FW Configuration/PTT，PTT Enable
-AMD RESET BUG</p>
-<p>使用SPICE 虛擬視窗+noVNC不偏移安裝方法<a href="https://pvecli.xuan2host.com/spice-novnc/">https://pvecli.xuan2host.com/spice-novnc/</a></p>
-<h4 id="hyper-v-遷移至pve">Hyper-V 遷移至PVE
-</h4><ol>
-<li>將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳</li>
-<li>輸入以下指令</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
-</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
-</span></span><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="nb">convert</span> <span class="o">-</span><span class="n">O</span> <span class="n">qcow2</span> <span class="n">WIN10</span><span class="o">.</span><span class="n">vhdx</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span>
-</span></span><span class="line"><span class="cl"><span class="n">mv</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">103</span><span class="o">/</span>
-</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">rescan</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="3">
-<li>BIOS 選擇<strong>OVMF(UEFI)</strong>、<strong>q35</strong>，網路選擇<strong>E1000</strong></li>
-<li>最後要安裝Vitro-win驅動</li>
-</ol>
-<h2 id="顯卡直通">顯卡直通
-</h2><ol>
-<li>開啟主機板對應功能</li>
-</ol>
-<ul>
-<li>intel vt-d</li>
-<li>amd IOMMU SVM</li>
-</ul>
-<ol start="2">
-<li>追加grub
-nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet&rdquo; 後面打上 <code>intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream</code></li>
-</ol>
-<ul>
-<li>intel_iommu 和 amd_iommu=on 為開啟IOMMU</li>
-<li>video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）</li>
-<li>pcie_acs_override=downstream 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）</li>
-</ul>
-<ol start="2">
-<li>
-<p>更新grub
-update-grub</p>
-</li>
-<li>
-<p>增加vfio</p>
-</li>
-</ol>
-<p>屏蔽顯卡
-nano /etc/modprobe.d/pve-blacklist.conf</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># nvidia
-</span></span><span class="line"><span class="cl">blacklist nouveau
-</span></span><span class="line"><span class="cl">blacklist nvidia
-</span></span><span class="line"><span class="cl">blacklist nvidiafb
-</span></span><span class="line"><span class="cl"># amd
-</span></span><span class="line"><span class="cl">blacklist amdgpu
-</span></span><span class="line"><span class="cl">blacklist radeon
-</span></span><span class="line"><span class="cl"># intel
-</span></span><span class="line"><span class="cl">blacklist snd_hda_codec_hdmi
-</span></span><span class="line"><span class="cl">blacklist snd_hda_intel
-</span></span><span class="line"><span class="cl">blacklist snd_hda_codec
-</span></span><span class="line"><span class="cl">blacklist snd_hda_core
-</span></span></code></pre></td></tr></table>
-</div>
-</div><blockquote>
-<p>無法正常關機Deadlock有時是開源驅動對顯卡的 <strong>電源狀態切換 (D3 state)</strong> 記得沒直通需求也要屏蔽nouveau
-GRUB_CMDLINE_LINUX_DEFAULT=&ldquo;quiet intel_iommu=on pcie_aspm=off acpi=force&rdquo;</p>
-</blockquote>
-<p>針對nvidia
-/etc/modprobe.d/kvm.conf</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">options kvm ignore_msrs=1 report_ignored_msrs=0
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>重新編譯內核
-update-initramfs -u -k all</p>
-<p>如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會</p>
-<ol start="6">
-<li><code>VM/Hardwares/Display</code> 選擇none,關閉虛擬螢幕顯示</li>
-</ol>
 <h2 id="常用位置">常用位置
 </h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1643,93 +1061,6 @@ update-initramfs -u -k all</p>
 <blockquote>
 <p>主要GPU勾選會讓終端不顯示畫面，可以再安裝完驅動再勾</p>
 </blockquote>
-<h2 id="正確刪除節點">正確刪除節點
-</h2><p>因為會有<code>corosync.conf</code> 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C (<strong>此方法適用只退一台</strong>)</p>
-<ol>
-<li>先把Node C 關機 (用意為不送出Corosync 叢集廣播)</li>
-<li>在Node A或Node B 其中一台下指令 (A,B其中一台做完設定會自動同步)</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 1.先切去看節點名稱並記下
-</span></span><span class="line"><span class="cl">ls -la /etc/pve/nodes/
-</span></span><span class="line"><span class="cl"># 2. 透過官方指令，將C節點的開會投票名單中移除
-</span></span><span class="line"><span class="cl">pvecm delnode C節點名稱 
-</span></span><span class="line"><span class="cl"># 3. 透過官方指令，徹底清除C節點在網頁UI殘留問號資料夾 
-</span></span><span class="line"><span class="cl">rm -rf /etc/pve/nodes/C節點名稱
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="3">
-<li>Node C重開機 (要真的安全就把Node A跟B 都先關了)</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 停止 C 機器殘留的叢集通訊服務 
-</span></span><span class="line"><span class="cl">systemctl stop corosync.service 
-</span></span><span class="line"><span class="cl"># 刪除舊的通訊錄檔案 
-</span></span><span class="line"><span class="cl">rm -f /etc/pve/corosync.conf
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="全部退出節點">全部退出節點
-</h2><ol>
-<li>前面那個方法適用只退其中一台，如果一次20台退群用下面方法</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#1. 在20台一次下停止叢集服務 
-</span></span><span class="line"><span class="cl">systemctl stop pve-cluster.service 
-</span></span><span class="line"><span class="cl">systemctl stop corosync.service
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">#2. 在20台將系統設置為本地模式，刪除corosync
-</span></span><span class="line"><span class="cl">pmxcfs -l  # 強制解鎖成本地模式
-</span></span><span class="line"><span class="cl">rm /etc/pve/corosync.conf
-</span></span><span class="line"><span class="cl">rm -rf /etc/corosync/*
-</span></span><span class="line"><span class="cl">killall pmxcfs
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">#3. 重啟節點服務
-</span></span><span class="line"><span class="cl">systemctl start pve-cluster.service 
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"># 4.重啟服務後,在webui並不會刪除,所以要再刪除自己以外節點 (千萬不要刪自己)
-</span></span><span class="line"><span class="cl">ls -la /etc/pve/nodes
-</span></span><span class="line"><span class="cl">rm -rf /etc/pve/nodes/自己以外節點名稱
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="叢集設定">叢集設定
-</h2><p>如果單純要以一個WebUI 管理把多台機器做叢集，這樣是不好的，光是一個SMB服務就會卡死
-PVE HA兩個群集設定
-<a href="https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he">https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he</a></p>
 <h2 id="建立ws-server-範本">建立WS Server 範本
 </h2><ol>
 <li>先建立VM,在安裝畫面去找Vitro 驅動使用Vitro iSCSi硬碟，並安裝完WS Server</li>
@@ -2311,7 +1642,7 @@ Analyzed storage migration from directory-based to ZFS pools
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

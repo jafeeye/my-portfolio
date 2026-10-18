@@ -290,6 +290,369 @@ fi
 log "Conversion completed successfully!"
 log "VM files are available in: $DESTINATION"
 ```
+原本的腳本有問題，下面為修改版修正scsi 編號不對問題
+用法 ````
+./proxmox-vm-to-esxi.sh \
+  -i 160 \
+  -d /mnt/pve/pve-nfs/win-ws22-hyperv \
+  -p "VM Network"
+
+```bash
+#!/usr/bin/env bash
+
+# Convert a powered-off Proxmox VE VM for import into VMware ESXi.
+#
+# This script creates:
+#   1. One streamOptimized transfer VMDK per Proxmox disk
+#   2. A valid ESXi VMX file
+#   3. import-on-esxi.sh, which converts transfer VMDKs to native ESXi thin VMDKs
+#
+# Usage:
+#   chmod +x proxmox-vm-to-esxi.sh
+#   ./proxmox-vm-to-esxi.sh -i 160 -d /path/to/output
+#
+# After copying the output directory to an ESXi datastore:
+#   cd /vmfs/volumes/<datastore>/<vm-directory>
+#   chmod +x import-on-esxi.sh
+#   ./import-on-esxi.sh
+#   vim-cmd solo/registervm "/vmfs/volumes/<datastore>/<vm-directory>/<vm-name>.vmx"
+
+set -Eeuo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: proxmox-vm-to-esxi.sh -i VMID [-n VM_NAME] [-d DESTINATION] [-p PORTGROUP]
+
+Options:
+  -i VMID         Proxmox VM ID (required)
+  -n VM_NAME      Destination VM name (default: name from Proxmox)
+  -d DESTINATION  Output directory (default: current directory/VM_NAME)
+  -p PORTGROUP    ESXi port group (default: VM Network)
+  -h              Show this help
+EOF
+}
+
+log() {
+    printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
+}
+
+die() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 1
+}
+
+require_command() {
+    command -v "$1" >/dev/null 2>&1 ||
+        die "Required command '$1' was not found."
+}
+
+escape_vmx() {
+    printf '%s' "$1" |
+        sed 's/\\/\\\\/g; s/"/\\"/g'
+}
+
+VMID=''
+VM_NAME=''
+DESTINATION=''
+PORTGROUP='VM Network'
+
+while getopts ':i:n:d:p:h' opt; do
+    case "$opt" in
+        i) VMID=$OPTARG ;;
+        n) VM_NAME=$OPTARG ;;
+        d) DESTINATION=$OPTARG ;;
+        p) PORTGROUP=$OPTARG ;;
+        h)
+            usage
+            exit 0
+            ;;
+        :) die "Option -$OPTARG requires a value." ;;
+        \?) die "Unknown option: -$OPTARG" ;;
+    esac
+done
+
+[[ -n "$VMID" ]] || {
+    usage
+    die 'VM ID is required.'
+}
+
+[[ "$VMID" =~ ^[0-9]+$ ]] ||
+    die 'VM ID must contain digits only.'
+
+require_command qm
+require_command pvesm
+require_command qemu-img
+require_command sed
+require_command awk
+
+PVE_CONFIG="/etc/pve/qemu-server/${VMID}.conf"
+
+[[ -f "$PVE_CONFIG" ]] ||
+    die "VM $VMID was not found on this Proxmox node."
+
+if qm status "$VMID" | grep -q 'status: running'; then
+    die "VM $VMID is running. Shut it down before conversion."
+fi
+
+if [[ -z "$VM_NAME" ]]; then
+    VM_NAME=$(
+        awk -F': *' '$1 == "name" {print $2; exit}' \
+            "$PVE_CONFIG"
+    )
+
+    [[ -n "$VM_NAME" ]] ||
+        VM_NAME="vm-${VMID}"
+fi
+
+FILE_NAME=$(
+    printf '%s' "$VM_NAME" |
+        sed 's#[/\\:*?"<>|]#-#g; s/[[:space:]]\+/-/g'
+)
+
+[[ -n "$FILE_NAME" ]] ||
+    FILE_NAME="vm-${VMID}"
+
+if [[ -z "$DESTINATION" ]]; then
+    DESTINATION="$(pwd)/${FILE_NAME}"
+fi
+
+mkdir -p "$DESTINATION"
+DESTINATION=$(cd "$DESTINATION" && pwd)
+
+VMX_PATH="${DESTINATION}/${FILE_NAME}.vmx"
+IMPORT_SCRIPT="${DESTINATION}/import-on-esxi.sh"
+
+[[ ! -e "$VMX_PATH" ]] ||
+    die "Output already exists: $VMX_PATH"
+
+[[ ! -e "$IMPORT_SCRIPT" ]] ||
+    die "Output already exists: $IMPORT_SCRIPT"
+
+MEMORY=$(
+    awk -F': *' '$1 == "memory" {print $2; exit}' \
+        "$PVE_CONFIG"
+)
+
+CORES=$(
+    awk -F': *' '$1 == "cores" {print $2; exit}' \
+        "$PVE_CONFIG"
+)
+
+SOCKETS=$(
+    awk -F': *' '$1 == "sockets" {print $2; exit}' \
+        "$PVE_CONFIG"
+)
+
+BIOS=$(
+    awk -F': *' '$1 == "bios" {print $2; exit}' \
+        "$PVE_CONFIG"
+)
+
+MEMORY=${MEMORY:-2048}
+CORES=${CORES:-1}
+SOCKETS=${SOCKETS:-1}
+NUM_VCPUS=$((CORES * SOCKETS))
+
+mapfile -t DISK_LINES < <(
+    awk '
+        /^(scsi|sata|ide|virtio)[0-9]+:/ &&
+        $0 !~ /(^|,)media=cdrom(,|$)/ &&
+        $0 !~ /(^|,)cdrom(,|$)/ &&
+        $0 !~ /: *none(,|$)/ &&
+        $0 !~ /cloudinit/
+    ' "$PVE_CONFIG"
+)
+
+(( ${#DISK_LINES[@]} > 0 )) ||
+    die "No supported VM disks were found in $PVE_CONFIG"
+
+(( ${#DISK_LINES[@]} <= 15 )) ||
+    die 'This script supports at most 15 SCSI disks.'
+
+DISPLAY_NAME_ESCAPED=$(escape_vmx "$VM_NAME")
+PORTGROUP_ESCAPED=$(escape_vmx "$PORTGROUP")
+
+if [[ "$BIOS" == 'ovmf' ]]; then
+    VMWARE_FIRMWARE='efi'
+else
+    VMWARE_FIRMWARE='bios'
+fi
+
+cat >"$VMX_PATH" <<EOF
+.encoding = "UTF-8"
+config.version = "8"
+virtualHW.version = "19"
+displayName = "${DISPLAY_NAME_ESCAPED}"
+numvcpus = "${NUM_VCPUS}"
+memsize = "${MEMORY}"
+firmware = "${VMWARE_FIRMWARE}"
+
+pciBridge0.present = "TRUE"
+pciBridge4.present = "TRUE"
+pciBridge4.virtualDev = "pcieRootPort"
+pciBridge4.functions = "8"
+pciBridge5.present = "TRUE"
+pciBridge5.virtualDev = "pcieRootPort"
+pciBridge5.functions = "8"
+pciBridge6.present = "TRUE"
+pciBridge6.virtualDev = "pcieRootPort"
+pciBridge6.functions = "8"
+pciBridge7.present = "TRUE"
+pciBridge7.virtualDev = "pcieRootPort"
+pciBridge7.functions = "8"
+
+scsi0.present = "TRUE"
+scsi0.virtualDev = "lsisas1068"
+
+ethernet0.present = "TRUE"
+ethernet0.virtualDev = "e1000e"
+ethernet0.networkName = "${PORTGROUP_ESCAPED}"
+ethernet0.startConnected = "TRUE"
+ethernet0.addressType = "generated"
+
+vmci0.present = "TRUE"
+tools.syncTime = "FALSE"
+powerType.powerOff = "soft"
+powerType.powerOn = "hard"
+powerType.suspend = "hard"
+powerType.reset = "soft"
+uuid.action = "create"
+EOF
+
+cat >"$IMPORT_SCRIPT" <<'EOF'
+#!/bin/sh
+set -eu
+
+cd "$(dirname "$0")"
+
+command -v vmkfstools >/dev/null 2>&1 || {
+    echo 'Error: Run this script from an ESXi shell.' >&2
+    exit 1
+}
+EOF
+
+log "Converting Proxmox VM $VMID ($VM_NAME)"
+log "Output directory: $DESTINATION"
+
+DISK_INDEX=0
+
+for DISK_LINE in "${DISK_LINES[@]}"; do
+    DISK_ID=${DISK_LINE%%:*}
+    DISK_SPEC=${DISK_LINE#*:}
+    DISK_SPEC=${DISK_SPEC# }
+    VOLUME_ID=${DISK_SPEC%%,*}
+
+    [[ -n "$VOLUME_ID" ]] ||
+        die "Could not parse disk entry: $DISK_LINE"
+
+    if [[ "$VOLUME_ID" == /* ]]; then
+        SOURCE_PATH=$VOLUME_ID
+    elif [[ "$VOLUME_ID" == *:* ]]; then
+        SOURCE_PATH=$(pvesm path "$VOLUME_ID")
+    else
+        die "Unsupported disk reference '$VOLUME_ID'"
+    fi
+
+    [[ -e "$SOURCE_PATH" ]] ||
+        die "Source disk does not exist: $SOURCE_PATH"
+
+    SCSI_UNIT=$DISK_INDEX
+
+    # VMware reserves SCSI unit 7 for the controller.
+    if (( SCSI_UNIT >= 7 )); then
+        SCSI_UNIT=$((SCSI_UNIT + 1))
+    fi
+
+    TRANSFER_VMDK="${FILE_NAME}-disk${DISK_INDEX}-transfer.vmdk"
+    NATIVE_VMDK="${FILE_NAME}-disk${DISK_INDEX}.vmdk"
+    TRANSFER_PATH="${DESTINATION}/${TRANSFER_VMDK}"
+
+    [[ ! -e "$TRANSFER_PATH" ]] ||
+        die "Output already exists: $TRANSFER_PATH"
+
+    log "Disk $DISK_ID: $SOURCE_PATH"
+    log "Creating transfer image: $TRANSFER_VMDK"
+
+    qemu-img convert \
+        -p \
+        -O vmdk \
+        -o subformat=streamOptimized,adapter_type=lsilogic \
+        "$SOURCE_PATH" \
+        "$TRANSFER_PATH"
+
+    cat >>"$VMX_PATH" <<EOF
+
+scsi0:${SCSI_UNIT}.present = "TRUE"
+scsi0:${SCSI_UNIT}.fileName = "${NATIVE_VMDK}"
+scsi0:${SCSI_UNIT}.deviceType = "scsi-hardDisk"
+EOF
+
+    cat >>"$IMPORT_SCRIPT" <<EOF
+
+if [ -e "${NATIVE_VMDK}" ] ||
+   [ -e "${NATIVE_VMDK%.vmdk}-flat.vmdk" ]; then
+    echo "Error: Destination disk already exists: ${NATIVE_VMDK}" >&2
+    exit 1
+fi
+
+echo "Importing ${TRANSFER_VMDK} -> ${NATIVE_VMDK}"
+
+vmkfstools \
+    -i "${TRANSFER_VMDK}" \
+    "${NATIVE_VMDK}" \
+    -d thin
+EOF
+
+    DISK_INDEX=$((DISK_INDEX + 1))
+done
+
+cat >>"$IMPORT_SCRIPT" <<EOF
+
+echo
+echo 'Disk import completed.'
+echo 'Register the VM with:'
+echo "vim-cmd solo/registervm \"\$(pwd)/${FILE_NAME}.vmx\""
+EOF
+
+chmod +x "$IMPORT_SCRIPT"
+
+cat >"${DESTINATION}/README-ESXI.txt" <<EOF
+Proxmox VM $VMID was exported for ESXi.
+
+1. Copy this complete directory to an ESXi datastore.
+
+2. Open an ESXi SSH shell and enter the directory.
+
+3. Run:
+
+   chmod +x import-on-esxi.sh
+   ./import-on-esxi.sh
+
+4. Register the VM:
+
+   vim-cmd solo/registervm \
+   "/vmfs/volumes/<datastore>/<directory>/${FILE_NAME}.vmx"
+
+5. Confirm the firmware before first boot:
+
+   Proxmox BIOS: ${BIOS:-seabios}
+   VMware firmware: ${VMWARE_FIRMWARE}
+
+Do not attach the *-transfer.vmdk files directly.
+They are import sources.
+
+After the VM boots and is verified, the *-transfer.vmdk files
+may be removed.
+EOF
+
+log 'Conversion completed successfully.'
+log "VMX: $VMX_PATH"
+log "ESXi import script: $IMPORT_SCRIPT"
+log 'Copy the complete output directory to ESXi.'
+log 'Then run import-on-esxi.sh from the ESXi shell.'
+```
+
+
 
 
 ## 二、vSphere 轉 Hyper-V

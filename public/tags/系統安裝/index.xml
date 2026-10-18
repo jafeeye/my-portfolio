@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>系統安裝 on PIN技術筆記</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/</link>
+        <description>Recent content in 系統安裝 on PIN技術筆記</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Sat, 17 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Proxmox 安裝 QANP</title>
+        <link>http://localhost:1313/my-portfolio/p/proxmox-%E5%AE%89%E8%A3%9D-qanp/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/proxmox-%E5%AE%89%E8%A3%9D-qanp/</guid>
+        <description>&lt;p&gt;全文安裝&lt;a href=&#34;https://blog.hx99.net/Tech/2079.html&#34;&gt;出處&lt;/a&gt;指引&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

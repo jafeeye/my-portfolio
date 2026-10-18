@@ -7,7 +7,95 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Fri, 10 Jul 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 18 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>EVPN</title>
+        <link>http://localhost:1313/my-portfolio/tags/evpn/</link>
+        <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/evpn/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>PVE</title>
+        <link>http://localhost:1313/my-portfolio/tags/pve/</link>
+        <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/pve/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>直通</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E7%9B%B4%E9%80%9A/</link>
+        <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E7%9B%B4%E9%80%9A/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>ESXi</title>
+        <link>http://localhost:1313/my-portfolio/tags/esxi/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/esxi/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>NFS</title>
+        <link>http://localhost:1313/my-portfolio/tags/nfs/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/nfs/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>SOC</title>
+        <link>http://localhost:1313/my-portfolio/tags/soc/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/soc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Synology</title>
+        <link>http://localhost:1313/my-portfolio/tags/synology/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/synology/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>使用中工具</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>系統安裝</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E7%B3%BB%E7%B5%B1%E5%AE%89%E8%A3%9D/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>虛擬化</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E8%99%9B%E6%93%AC%E5%8C%96/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E8%99%9B%E6%93%AC%E5%8C%96/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>資安</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E8%B3%87%E5%AE%89/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E8%B3%87%E5%AE%89/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>#K8s</title>
         <link>http://localhost:1313/my-portfolio/tags/%23k8s/</link>
         <pubDate>Fri, 10 Jul 2026 00:00:00 +0000</pubDate>

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="前言\r最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設\r網路\r結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
 <title>2026 家用Homelab架設指南</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8homelab%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="2026 家用Homelab架設指南">
-<meta property='og:description' content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="2026 家用Homelab架設指南">
+<meta property='og:description' content="前言\r最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設\r網路\r結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/2026-%E5%AE%B6%E7%94%A8homelab%E6%9E%B6%E8%A8%AD%E6%8C%87%E5%8D%97/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-02-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-02-28T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="2026 家用Homelab架設指南">
-<meta name="twitter:description" content="前言 最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設 網路 結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
+<meta name="twitter:description" content="前言\r最近這一年學習上課加上學了許多開源技術，而現在已進入5G時代，可以在家用架許多好用服務供家裡使用，於是就有了以下紀錄\n三層式架構：Data Plane、Control Plane\n列印VM：PaperMF、AirPrint、Windows 區網印表機\n備份VM：ws2022-fix\nVDI: VMware Horizon、Citirx、SPICE、Kasm Workskapce\nMointor VM：\nLXC (Router)\nAdguard PowerDNS Caddy Certimate stepca infisical nginx-ui haos homeassisant kms iStoreOS Docker LXC：Docker + Coolify (Addons) + Code Server (Addons) 同時可達到安裝Docker又有Coolify管理介面，設定檔則用Code Server編輯 arcane Portainer.io baidunetdisk copyparty filebot homeassisant librespeed mailhog pingvin-share x Coolify Code Server Obsidian Ignis traefik screengo OpenList Homelab 架設\r網路\r結合前面決定的架構（PowerDNS 當主總機、Windows AD 獨立在 ad.homelab.test 子網域），在 PVE 設定 SDN 區域與 IPAM 時，這樣規劃最直覺且好維護：\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -779,7 +779,7 @@ Youtube TV：可使用Chrome 外掛加上 Kiosk Mode</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="VMware Workstation HyperV+VMware 導致VMNAT無法使用 因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接 橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料 HackMD，VM NAT內網穿透紀錄總結 ">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="VMware Workstation\rHyperV+VMware 導致VMNAT無法使用\r因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接\r橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料\rHackMD，VM NAT內網穿透紀錄總結 ">
 <title>Windows多網路設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/windows%E5%A4%9A%E7%B6%B2%E8%B7%AF%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Windows多網路設定">
-<meta property='og:description' content="VMware Workstation HyperV+VMware 導致VMNAT無法使用 因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接 橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料 HackMD，VM NAT內網穿透紀錄總結 ">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Windows多網路設定">
+<meta property='og:description' content="VMware Workstation\rHyperV+VMware 導致VMNAT無法使用\r因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接\r橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料\rHackMD，VM NAT內網穿透紀錄總結 ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/windows%E5%A4%9A%E7%B6%B2%E8%B7%AF%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-05-28T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Windows多網路設定">
-<meta name="twitter:description" content="VMware Workstation HyperV+VMware 導致VMNAT無法使用 因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接 橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料 HackMD，VM NAT內網穿透紀錄總結 ">
+<meta name="twitter:description" content="VMware Workstation\rHyperV+VMware 導致VMNAT無法使用\r因為Hyper-V搶了NAT某個網段，以致VMware雖然有設定但是錯誤 去VMNet8的網卡確認有被指定網關 網路卡橋接\r橋接的原理是把兩張網卡弄成一張，在這邊是建立橋接器之後，兩張卡都不能單獨設定IP，到橋接器去設定一個區網IP，tap網卡在虛擬機同網段就能上網 參考資料\rHackMD，VM NAT內網穿透紀錄總結 ">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -562,7 +562,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

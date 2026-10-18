@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="pichome 安裝">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="pichome 安裝">
 <meta property='og:description' content=" 到Pichome的Github找compse檔 因為最新3.0版有問題,所以到docker hub 指定tag 為 2.2.0，到 Github 使用2.2.0版下載FilePress-2.2.0.zip放到資料夾中 編寫compose.yml 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 version: &#34;3.8&#34; services: db: image: mariadb:10.7 command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW ports: - 3307:3306 volumes: - &#34;./db:/var/lib/mysql&#34; environment: - &#34;TZ=Asia/Shanghai&#34; - &#34;MYSQL_ROOT_PASSWORD=root@admin.0001&#34; - &#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&#34; - &#34;MYSQL_USER_FILE=/run/secrets/mysql_user&#34; - &#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&#34; restart: always secrets: - mysql_db - mysql_password - mysql_user redis: image: redis:6.2-alpine restart: always ports: - 6379:6379 environment: - TZ=Asia/Shanghai app: image: oaooa/pichome:2.2.0 ports: - 8088:80 links: - db - redis volumes: - &#34;./site:/var/www/html&#34; - &#34;./ssl:/etc/nginx/ssl&#34; - &#34;/volume4/stock/eaglelib/stock.library:/mnt/libray&#34; environment: - &#34;MYSQL_SERVER=db&#34; - &#34;MYSQL_DATABASE_FILE=/run/secrets/mysql_db&#34; - &#34;MYSQL_USER_FILE=/run/secrets/mysql_user&#34; - &#34;MYSQL_PASSWORD_FILE=/run/secrets/mysql_password&#34; restart: always secrets: - mysql_db - mysql_password - mysql_user secrets: mysql_db: file: &#34;./mysql_db.txt&#34; mysql_password: file: &#34;./mysql_password.txt&#34; mysql_user: file: &#34;./mysql_user.txt&#34; docker 的寫法是外映射內 maridb Port 3306(外):3306(內) secret 的txt內容指定帳號及密碼 ![[Pasted-img-20260406144630.png]]\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/pichome-%E5%AE%89%E8%A3%9D/'>
 <meta property='og:site_name' content='PIN技術筆記'>
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -636,7 +636,7 @@ secret 的txt內容指定帳號及密碼
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

@@ -3,7 +3,9 @@ title: 郵件Server 架設
 toc: true
 date: 2026-06-29
 ---
-## MailHog
+```toc
+```
+## 一、MailHog
 
 1. 先安裝docker，跑mailhog服務
 docker run -d -p 1025:1025 -p 8025:8025 --name local_mailhog mailhog/mailhog
@@ -19,7 +21,7 @@ smtp_relay_address: 192.168.8.30:1025
 腳本改法
 把`smtp.sendmail(from_, recipients, msg.as_bytes())` 改成 `smtp.sendmail(from_, recipients, msg.as_string())`
 
-## Mailpit
+## 二、Mailpit
 ```
 services:
   mailpit:
@@ -79,7 +81,7 @@ sudo docker compose up -d
 ## Zimbra
 
 
-## 寄送除錯
+## 五、寄送除錯指令
 name I or service not know：SMTP Host 無法被解析
 ```
 getent hosts smtp-mail.bd1.dev

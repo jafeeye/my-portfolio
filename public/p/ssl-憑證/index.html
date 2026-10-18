@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令\r列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程\r數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
 <title>SSL 憑證</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="SSL 憑證">
-<meta property='og:description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="SSL 憑證">
+<meta property='og:description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令\r列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程\r數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-07-10T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-07-10T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="SSL 憑證">
-<meta name="twitter:description" content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令 列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程 數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
+<meta name="twitter:description" content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令\r列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程\r數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -1033,7 +1033,7 @@ DNSSEC（網域名稱系統安全擴充）</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

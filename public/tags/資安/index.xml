@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>資安 on PIN技術筆記</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E8%B3%87%E5%AE%89/</link>
+        <description>Recent content in 資安 on PIN技術筆記</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Sat, 17 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/%E8%B3%87%E5%AE%89/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>HostGuard‑AI 審計平台</title>
+        <link>http://localhost:1313/my-portfolio/p/hostguardai-%E5%AF%A9%E8%A8%88%E5%B9%B3%E5%8F%B0/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/hostguardai-%E5%AF%A9%E8%A8%88%E5%B9%B3%E5%8F%B0/</guid>
+        <description>&lt;p&gt;原文&lt;a href=&#34;https://blog.hx99.net/Tech/4079.html&#34;&gt;出處&lt;/a&gt;作者在這，軟體使用 FastAPI完成，可以使用LXC部屬
+&lt;img
+    src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020261017175606.png&#34;
+    alt=&#34;&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>NAMP Web掃描工具</title>
+        <link>http://localhost:1313/my-portfolio/p/namp-web%E6%8E%83%E6%8F%8F%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/namp-web%E6%8E%83%E6%8F%8F%E5%B7%A5%E5%85%B7/</guid>
+        <description>&lt;p&gt;原文&lt;a href=&#34;https://blog.hx99.net/Tech/4075.html&#34;&gt;出處&lt;/a&gt;作者在這，軟體使用 FastAPI完成，可以使用LXC部屬&lt;/p&gt;
+&lt;p&gt;安裝完LXC ，可以執行以下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 安装系统依赖
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install python3 python3-pip python3-venv nmap
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 拉取代码
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git clone https://gitee.com/cncsrf/nmap-scanner-web.git
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cd nmap-scanner-web
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 创建虚拟环境
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python3 -m venv venv
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;source venv/bin/activate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pip install -r requirements.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# 临时启动
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python3 -m uvicorn main:app --host 0.0.0.0 --port 8090
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;登入密碼預設 admin/admin123
+&lt;img
+    src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020261017175252.png&#34;
+    alt=&#34;&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/x11/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="X11">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="X11">
 <meta property='og:description' content="1、解析度模式已存在\n1.如何查詢是否存在： 圖形介面：在System Settings/Displays/Resolution欄檢視下拉列表。 控制檯：在控制檯輸入命令：xrandr，即會輸出當前已存在的解析度模式。 2.如何配置： 圖形介面：在System Settings/Displays/Resolution欄下拉列表中設定。 控制檯：使用命令xrandr &ndash;output 顯示器名稱 &ndash;mode 模式名稱，如：xrandr &ndash;output Virtual1 &ndash;mode &ldquo;1440x900&rdquo;\u00a02、解析度模式不存在 總體操作流程如下： 1）使用ctv或gtf命令計算mode line引數； 2）使用xrandr &ndash;newmode 新建一個模式； 3）使用xrandr &ndash;add新增一個模式到指定的顯示器； 4）使用xrandr -s 設定指定顯示器的解析度； 5）持久化模式與設定，即設定引數重啟後有效。\n以下為操作例項，新建一個解析度模式1600x900_60.00，並將解析度設定為該模式，同時持久化該配置： 測試環境： 1）ubuntu16.04（執行在win7 + vmware workstation 12） 2）對ubunut的顯示器Virtual1進行設定\n操作與輸出如下：\n$ gtf 1600 900 60 # 1600x900 @ 60.00 Hz (GTF) hsync: 55.92 kHz; pclk: 119.00 MHz Modeline &ldquo;1600x900_60.00&rdquo;\u00a0119.00\u00a01600 1696 1864 2128\u00a0900 901 904 932\u00a0-HSync +Vsync $ xrandr &ndash;newmode &ldquo;1600x900_60.00&rdquo;\u00a0119.00\u00a01600 1696 1864 2128\u00a0900 901 904 932\u00a0-HSync +Vsync\u00a0//新建一個顯示模式，將上一行的後半部分作為xrandr &ndash;newmode的引數 $ xrandr &ndash;addmode Virtual1 &ldquo;1600x900_60.00&rdquo;\u00a0//增加一個顯示模式到Virtual1\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/x11/'>
 <meta property='og:site_name' content='PIN技術筆記'>
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -576,7 +576,7 @@ $ xrandr &ndash;addmode Virtual1 &ldquo;1600x900_60.00&rdquo;   //增加一個
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

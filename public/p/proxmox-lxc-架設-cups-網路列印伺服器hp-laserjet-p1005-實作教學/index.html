@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、實作環境\r本次使用 Proxmox VE 建立 Debian 13 LXC Container，安裝 CUPS 列印服務，並將 HP LaserJet P1005 透過 USB Passthrough 提供給容器使用。 由於 HP LaserJet P1005 屬於需要由主機載入 Firmware 的印表機，因此每次印表機重新通電後，都需要重新傳送 Firmware，才能正常列印。 環境資訊\r項目 配置 虛擬化平台 Proxmox VE Container ID 193 作業系統 Debian 13 CPU 1 Core RAM 512 MB 磁碟 2 GB 列印服務 CUPS 2.4.x 印表機 HP LaserJet P1005 USB Vendor/Product ID 03f0:3d17 驅動 Foomatic/foo2xqx USB 裝置 /dev/usb/lp0 CUPS Device URI parallel:/dev/usb/lp0 CUPS IP 192.168.8.86 網路列印 IPP / AirPrint 最終架構\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 Windows / macOS / iPhone / iPad | LAN / IPP | Proxmox VE | LXC CT 193 Debian 13 | CUPS + Avahi foo2xqx Driver | /dev/usb/lp0 | HP LaserJet P1005 二、建立 Debian LXC\r在 Proxmox 建立 Debian 13 Container。\n">
+<title>Proxmox LXC 架設 CUPS 網路列印伺服器：HP LaserJet P1005 實作教學</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/proxmox-lxc-%E6%9E%B6%E8%A8%AD-cups-%E7%B6%B2%E8%B7%AF%E5%88%97%E5%8D%B0%E4%BC%BA%E6%9C%8D%E5%99%A8hp-laserjet-p1005-%E5%AF%A6%E4%BD%9C%E6%95%99%E5%AD%B8/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Proxmox LXC 架設 CUPS 網路列印伺服器：HP LaserJet P1005 實作教學">
+<meta property='og:description' content="一、實作環境\r本次使用 Proxmox VE 建立 Debian 13 LXC Container，安裝 CUPS 列印服務，並將 HP LaserJet P1005 透過 USB Passthrough 提供給容器使用。 由於 HP LaserJet P1005 屬於需要由主機載入 Firmware 的印表機，因此每次印表機重新通電後，都需要重新傳送 Firmware，才能正常列印。 環境資訊\r項目 配置 虛擬化平台 Proxmox VE Container ID 193 作業系統 Debian 13 CPU 1 Core RAM 512 MB 磁碟 2 GB 列印服務 CUPS 2.4.x 印表機 HP LaserJet P1005 USB Vendor/Product ID 03f0:3d17 驅動 Foomatic/foo2xqx USB 裝置 /dev/usb/lp0 CUPS Device URI parallel:/dev/usb/lp0 CUPS IP 192.168.8.86 網路列印 IPP / AirPrint 最終架構\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 Windows / macOS / iPhone / iPad | LAN / IPP | Proxmox VE | LXC CT 193 Debian 13 | CUPS + Avahi foo2xqx Driver | /dev/usb/lp0 | HP LaserJet P1005 二、建立 Debian LXC\r在 Proxmox 建立 Debian 13 Container。\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/proxmox-lxc-%E6%9E%B6%E8%A8%AD-cups-%E7%B6%B2%E8%B7%AF%E5%88%97%E5%8D%B0%E4%BC%BA%E6%9C%8D%E5%99%A8hp-laserjet-p1005-%E5%AF%A6%E4%BD%9C%E6%95%99%E5%AD%B8/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-10-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-11T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Proxmox LXC 架設 CUPS 網路列印伺服器：HP LaserJet P1005 實作教學">
+<meta name="twitter:description" content="一、實作環境\r本次使用 Proxmox VE 建立 Debian 13 LXC Container，安裝 CUPS 列印服務，並將 HP LaserJet P1005 透過 USB Passthrough 提供給容器使用。 由於 HP LaserJet P1005 屬於需要由主機載入 Firmware 的印表機，因此每次印表機重新通電後，都需要重新傳送 Firmware，才能正常列印。 環境資訊\r項目 配置 虛擬化平台 Proxmox VE Container ID 193 作業系統 Debian 13 CPU 1 Core RAM 512 MB 磁碟 2 GB 列印服務 CUPS 2.4.x 印表機 HP LaserJet P1005 USB Vendor/Product ID 03f0:3d17 驅動 Foomatic/foo2xqx USB 裝置 /dev/usb/lp0 CUPS Device URI parallel:/dev/usb/lp0 CUPS IP 192.168.8.86 網路列印 IPP / AirPrint 最終架構\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 Windows / macOS / iPhone / iPad | LAN / IPP | Proxmox VE | LXC CT 193 Debian 13 | CUPS + Avahi foo2xqx Driver | /dev/usb/lp0 | HP LaserJet P1005 二、建立 Debian LXC\r在 Proxmox 建立 Debian 13 Container。\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一實作環境">一、實作環境</a>
+      <ol>
+        <li><a href="#環境資訊">環境資訊</a></li>
+        <li><a href="#最終架構">最終架構</a></li>
+      </ol>
+    </li>
+    <li><a href="#二建立-debian-lxc">二、建立 Debian LXC</a></li>
+    <li><a href="#三確認-proxmox-host-辨識印表機">三、確認 Proxmox Host 辨識印表機</a>
+      <ol>
+        <li><a href="#1-檢查-usb-裝置">1. 檢查 USB 裝置</a></li>
+        <li><a href="#2-確認-usblp-驅動">2. 確認 usblp 驅動</a></li>
+        <li><a href="#3-確認-usb-printer-device">3. 確認 USB Printer Device</a></li>
+      </ol>
+    </li>
+    <li><a href="#四將-usb-裝置映射到-lxc">四、將 USB 裝置映射到 LXC</a>
+      <ol>
+        <li><a href="#確認容器內裝置">確認容器內裝置</a></li>
+      </ol>
+    </li>
+    <li><a href="#五安裝-cups-與印表機驅動">五、安裝 CUPS 與印表機驅動</a>
+      <ol>
+        <li><a href="#確認-p1005-驅動">確認 P1005 驅動</a></li>
+      </ol>
+    </li>
+    <li><a href="#六下載-hp-laserjet-p1005-firmware">六、下載 HP LaserJet P1005 Firmware</a>
+      <ol>
+        <li><a href="#1-確認-firmware-是否存在">1. 確認 Firmware 是否存在</a></li>
+        <li><a href="#2-使用-debian-內建-getweb">2. 使用 Debian 內建 getweb</a></li>
+      </ol>
+    </li>
+    <li><a href="#七將-firmware-載入印表機">七、將 Firmware 載入印表機</a>
+      <ol>
+        <li><a href="#重要注意事項">重要注意事項</a></li>
+      </ol>
+    </li>
+    <li><a href="#八設定-cups-印表機">八、設定 CUPS 印表機</a>
+      <ol>
+        <li><a href="#列印測試">列印測試</a></li>
+      </ol>
+    </li>
+    <li><a href="#九設定-airprint-網路列印">九、設定 AirPrint 網路列印</a>
+      <ol>
+        <li><a href="#1-安裝-avahi">1. 安裝 Avahi</a></li>
+        <li><a href="#2-開啟-cups-共享">2. 開啟 CUPS 共享</a></li>
+        <li><a href="#3-檢查-ipp-廣播">3. 檢查 IPP 廣播</a></li>
+        <li><a href="#4-iphone-測試">4. iPhone 測試</a></li>
+      </ol>
+    </li>
+    <li><a href="#十常見問題與排除方式">十、常見問題與排除方式</a>
+      <ol>
+        <li><a href="#實用檢查指令">實用檢查指令</a></li>
+      </ol>
+    </li>
+    <li><a href="#十一實作結論">十一、實作結論</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/proxmox-lxc-%E6%9E%B6%E8%A8%AD-cups-%E7%B6%B2%E8%B7%AF%E5%88%97%E5%8D%B0%E4%BC%BA%E6%9C%8D%E5%99%A8hp-laserjet-p1005-%E5%AF%A6%E4%BD%9C%E6%95%99%E5%AD%B8/">Proxmox LXC 架設 CUPS 網路列印伺服器：HP LaserJet P1005 實作教學</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-10-11T00:00:00Z'>Oct 11, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="一實作環境">一、實作環境
+</h2><p>本次使用 Proxmox VE 建立 Debian 13 LXC Container，安裝 CUPS 列印服務，並將 HP LaserJet P1005 透過 USB Passthrough 提供給容器使用。
+由於 HP LaserJet P1005 屬於需要由主機載入 Firmware 的印表機，因此每次印表機重新通電後，都需要重新傳送 Firmware，才能正常列印。
+<img
+    src="/my-portfolio/Pasted%20image%2020261011205129.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="環境資訊">環境資訊
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>項目</th>
+					<th>配置</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>虛擬化平台</td>
+					<td>Proxmox VE</td>
+			</tr>
+			<tr>
+					<td>Container ID</td>
+					<td>193</td>
+			</tr>
+			<tr>
+					<td>作業系統</td>
+					<td>Debian 13</td>
+			</tr>
+			<tr>
+					<td>CPU</td>
+					<td>1 Core</td>
+			</tr>
+			<tr>
+					<td>RAM</td>
+					<td>512 MB</td>
+			</tr>
+			<tr>
+					<td>磁碟</td>
+					<td>2 GB</td>
+			</tr>
+			<tr>
+					<td>列印服務</td>
+					<td>CUPS 2.4.x</td>
+			</tr>
+			<tr>
+					<td>印表機</td>
+					<td>HP LaserJet P1005</td>
+			</tr>
+			<tr>
+					<td>USB Vendor/Product ID</td>
+					<td><code>03f0:3d17</code></td>
+			</tr>
+			<tr>
+					<td>驅動</td>
+					<td>Foomatic/foo2xqx</td>
+			</tr>
+			<tr>
+					<td>USB 裝置</td>
+					<td><code>/dev/usb/lp0</code></td>
+			</tr>
+			<tr>
+					<td>CUPS Device URI</td>
+					<td><code>parallel:/dev/usb/lp0</code></td>
+			</tr>
+			<tr>
+					<td>CUPS IP</td>
+					<td><code>192.168.8.86</code></td>
+			</tr>
+			<tr>
+					<td>網路列印</td>
+					<td>IPP / AirPrint</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="最終架構">最終架構
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Windows / macOS / iPhone / iPad
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">          LAN / IPP
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">       Proxmox VE
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">       LXC CT 193
+</span></span><span class="line"><span class="cl">       Debian 13
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">       CUPS + Avahi
+</span></span><span class="line"><span class="cl">       foo2xqx Driver
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">     /dev/usb/lp0
+</span></span><span class="line"><span class="cl">             |
+</span></span><span class="line"><span class="cl">    HP LaserJet P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="二建立-debian-lxc">二、建立 Debian LXC
+</h2><p>在 Proxmox 建立 Debian 13 Container。</p>
+<p>建議配置：</p>
+<ul>
+<li>
+<p>CPU：1 Core</p>
+</li>
+<li>
+<p>RAM：512 MB</p>
+</li>
+<li>
+<p>Disk：2～4 GB</p>
+</li>
+<li>
+<p>Network：vmbr0</p>
+</li>
+<li>
+<p>IP：DHCP 或固定 IP</p>
+</li>
+</ul>
+<p>本次使用 CT ID <code>193</code>。</p>
+<p>建立完成後，先將 HP LaserJet P1005 的 USB 直接連接至 Proxmox Host。</p>
+<h2 id="三確認-proxmox-host-辨識印表機">三、確認 Proxmox Host 辨識印表機
+</h2><p>以下指令均在 Proxmox Host 執行。</p>
+<h3 id="1-檢查-usb-裝置">1. 檢查 USB 裝置
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsusb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期顯示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Bus 001 Device 004: ID 03f0:3d17 HP, Inc LaserJet P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-確認-usblp-驅動">2. 確認 usblp 驅動
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">modprobe usblp
+</span></span><span class="line"><span class="cl">lsusb -t
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期可看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Class=Printer, Driver=usblp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-確認-usb-printer-device">3. 確認 USB Printer Device
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期顯示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">crw-rw---- 1 root lp 180, 0 /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以透過以下指令確認裝置對應的印表機：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">udevadm info -a -n /dev/usb/lp0 | grep -E &#39;idVendor|idProduct|product&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認 Vendor ID 為 <code>03f0</code>、Product ID 為 <code>3d17</code>。</p>
+<h2 id="四將-usb-裝置映射到-lxc">四、將 USB 裝置映射到 LXC
+</h2><p>在 Proxmox Web UI 操作：</p>
+<p><strong>CT 193 → Resources → Add → Device</strong></p>
+<p>設定如下：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>項目</th>
+					<th>設定</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Device Path</td>
+					<td><code>/dev/usb/lp0</code></td>
+			</tr>
+			<tr>
+					<td>UID in CT</td>
+					<td><code>0</code></td>
+			</tr>
+			<tr>
+					<td>GID in CT</td>
+					<td><code>7</code></td>
+			</tr>
+			<tr>
+					<td>Access Mode in CT</td>
+					<td><code>0660</code></td>
+			</tr>
+			<tr>
+					<td>Read only</td>
+					<td>不勾選</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>或者直接透過 Proxmox Host CLI：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pct stop 193
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pct set 193 --dev0 path=/dev/usb/lp0,uid=0,gid=7,mode=0660
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">pct start 193
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完成後，容器設定檔應包含：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dev0: /dev/usb/lp0,uid=0,gid=7,mode=0660
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>這個方式不需要另外映射 <code>/dev/bus/usb/001</code>，因為本次實作採用 Linux <code>usblp</code> 裝置介面。</p>
+<h3 id="確認容器內裝置">確認容器內裝置
+</h3><p>進入 LXC：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pct enter 193
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -l /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期顯示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">crw-rw---- 1 root lp 180, 0 /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 GID <code>7</code> 是 Debian 的 <code>lp</code> 群組，提供 CUPS 列印服務存取裝置的權限。</p>
+<hr>
+<h2 id="五安裝-cups-與印表機驅動">五、安裝 CUPS 與印表機驅動
+</h2><p>在 Debian LXC 執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install -y cups cups-client \
+</span></span><span class="line"><span class="cl">  printer-driver-foo2zjs \
+</span></span><span class="line"><span class="cl">  wget usbutils
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>啟用 CUPS：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl enable --now cups
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl status cups
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="確認-p1005-驅動">確認 P1005 驅動
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lpinfo -m | grep -i P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>選擇：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HP LaserJet P1005 Foomatic/foo2xqx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意，P1005 不建議使用 Generic PCL 或 PostScript 驅動。</p>
+<h2 id="六下載-hp-laserjet-p1005-firmware">六、下載 HP LaserJet P1005 Firmware
+</h2><p>這是本次實作最重要的部分。</p>
+<p>HP LaserJet P1005 的 Firmware 需要由主機載入。當印表機重新通電後，可能無法直接列印，必須重新傳送 Firmware。</p>
+<h3 id="1-確認-firmware-是否存在">1. 確認 Firmware 是否存在
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh /lib/firmware/hp/sihpP1005.dl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若已存在非空檔案，可跳過下載程序。</p>
+<h3 id="2-使用-debian-內建-getweb">2. 使用 Debian 內建 getweb
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
+</span></span><span class="line"><span class="cl">getweb P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次實作發現 Debian 13 的 <code>getweb</code> 下載來源可能無法連線：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">https://www.quirinux.org/printers/sihpP1005.tar.gz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>錯誤：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Connection timed out
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因此本次改採第三方備份來源下載 P1005 Firmware 映像檔。第三方檔案應先確認來源可信、檔案完整性及授權條件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">curl -fL \
+</span></span><span class="line"><span class="cl">  -o sihpP1005.img \
+</span></span><span class="line"><span class="cl">  https://raw.githubusercontent.com/faradayfury/printer-all/main/foo2zjs/sihpP1005.img
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再透過 <code>arm2hpdl</code> 轉換：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p /lib/firmware/hp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">arm2hpdl /tmp/sihpP1005.img \
+</span></span><span class="line"><span class="cl">  &gt; /lib/firmware/hp/sihpP1005.dl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls -lh /lib/firmware/hp/sihpP1005.dl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次產生的檔案約 218 KB。檔案大小僅供參考，不代表已完成完整性驗證。</p>
+<hr>
+<h2 id="七將-firmware-載入印表機">七、將 Firmware 載入印表機
+</h2><p><strong>這是本次成功列印的關鍵步驟。</strong></p>
+<p>先確認印表機已開機，且目前沒有進行中的列印工作。</p>
+<p>在 Debian LXC 執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /lib/firmware/hp/sihpP1005.dl &gt; /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此指令會將 Firmware 資料直接傳送到 USB 印表機。</p>
+<p>成功傳送後，觀察印表機是否有反應，再進行列印測試。</p>
+<h3 id="重要注意事項">重要注意事項
+</h3><p>本次測試發現：</p>
+<ul>
+<li>
+<p>印表機重新通電後，手動傳送 Firmware 可以正常運作。</p>
+</li>
+<li>
+<p>如果印表機已經載入 Firmware，重複執行上傳指令可能造成 USB 寫入卡住。</p>
+</li>
+<li>
+<p>單純重新啟動 LXC，不代表印表機需要再次載入 Firmware。</p>
+</li>
+<li>
+<p>不建議將上述 <code>cat</code> 指令無條件綁定在每次 CUPS 或 LXC 啟動流程。</p>
+</li>
+</ul>
+<p>因此，較合理的管理方式是：印表機重新通電並需要 Firmware 時，再執行載入程序。</p>
+<hr>
+<h2 id="八設定-cups-印表機">八、設定 CUPS 印表機
+</h2><p>使用瀏覽器進入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http://192.168.8.86:631
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>前往：</p>
+<p>Administration → Add Printer</p>
+<p>選擇 HP LaserJet P1005，並使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HP LaserJet P1005 Foomatic/foo2xqx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次實測發現，使用標準 CUPS <code>usb://</code> Backend 時，雖然能偵測裝置，但無法正常列印。</p>
+<p>因此最後使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">parallel:/dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此方式雖然 URI 名稱為 <code>parallel</code>，但實際連接仍然是 USB，透過 Linux Kernel 的 <code>usblp</code> 介面存取印表機。</p>
+<p>設定指令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lpadmin -p P1005 -v parallel:/dev/usb/lp0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cupsenable P1005
+</span></span><span class="line"><span class="cl">cupsaccept P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lpstat -v P1005
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>預期：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">device for P1005: parallel:/dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="列印測試">列印測試
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lp -d P1005 /etc/hostname
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以透過 CUPS 管理介面：</p>
+<p>Maintenance → Print Test Page</p>
+<p>本次在正確載入 Firmware 並修正 USB 裝置權限後，已成功列印。</p>
+<hr>
+<h2 id="九設定-airprint-網路列印">九、設定 AirPrint 網路列印
+</h2><p>為了讓 iPhone、iPad、macOS 裝置透過網路找到印表機，可以使用 CUPS + Avahi。</p>
+<h3 id="1-安裝-avahi">1. 安裝 Avahi
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt install -y avahi-daemon avahi-utils dbus
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>啟用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl enable --now avahi-daemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-開啟-cups-共享">2. 開啟 CUPS 共享
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cupsctl --share-printers
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">lpadmin -p P1005 -o printer-is-shared=true
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新啟動：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl restart cups avahi-daemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-檢查-ipp-廣播">3. 檢查 IPP 廣播
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">avahi-browse -rt _ipp._tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認區網中可以探索到共享的 P1005。</p>
+<p>iPhone AirPrint 還需要適當的 DNS-SD 能力資訊及相容的文件格式；若能探索但不能列印，應進一步檢查 AirPrint TXT 紀錄及 IPP 格式支援。</p>
+<h3 id="4-iphone-測試">4. iPhone 測試
+</h3><p>iPhone 連接相同區網後：</p>
+<ol>
+<li>
+<p>開啟照片、Safari 或 PDF。</p>
+</li>
+<li>
+<p>點選分享 → 列印。</p>
+</li>
+<li>
+<p>選擇 HP LaserJet P1005。</p>
+</li>
+<li>
+<p>送出測試列印。</p>
+</li>
+</ol>
+<p>若 Proxmox 防火牆有啟用，需確認內網允許：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>通訊</th>
+					<th>Port</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>IPP</td>
+					<td>TCP 631</td>
+			</tr>
+			<tr>
+					<td>mDNS / Bonjour</td>
+					<td>UDP 5353</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>不要直接將 CUPS 的 631 Port 公開到 Internet。</p>
+<hr>
+<h2 id="十常見問題與排除方式">十、常見問題與排除方式
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>問題</th>
+					<th>原因或排查方式</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>CUPS 顯示 Completed，但沒印出來</td>
+					<td>確認 Firmware 是否載入</td>
+			</tr>
+			<tr>
+					<td><code>/dev/usb/lp0</code> 不存在</td>
+					<td>確認 Host <code>usblp</code> 驅動及 Device Passthrough</td>
+			</tr>
+			<tr>
+					<td><code>Permission denied</code></td>
+					<td>確認裝置 GID 與 CUPS 存取權限</td>
+			</tr>
+			<tr>
+					<td><code>Device or resource busy</code></td>
+					<td>檢查是否有其他列印或 Firmware 載入程序</td>
+			</tr>
+			<tr>
+					<td>Firmware <code>cat</code> 卡住</td>
+					<td>可能重複上傳、USB 裝置未就緒或 USB I/O 異常</td>
+			</tr>
+			<tr>
+					<td><code>usb://</code> 偵測正常卻無法列印</td>
+					<td>可檢查 libusb 權限及 Host 核心驅動；本次改用 <code>/dev/usb/lp0</code></td>
+			</tr>
+			<tr>
+					<td>LXC 重啟後列印異常</td>
+					<td>檢查裝置映射及印表機 Firmware 狀態</td>
+			</tr>
+			<tr>
+					<td>AirPrint 找不到印表機</td>
+					<td>檢查 Avahi、IPP 共享、mDNS Multicast 與防火牆</td>
+			</tr>
+	</tbody>
+</table></div>
+<h3 id="實用檢查指令">實用檢查指令
+</h3><p>Proxmox Host：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsusb
+</span></span><span class="line"><span class="cl">lsusb -t
+</span></span><span class="line"><span class="cl">ls -l /dev/usb/lp0
+</span></span><span class="line"><span class="cl">pct config 193
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Debian LXC：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">ls</span> <span class="o">-</span><span class="n">l</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">usb</span><span class="o">/</span><span class="n">lp0</span>
+</span></span><span class="line"><span class="cl"><span class="n">lpstat</span> <span class="o">-</span><span class="n">t</span>
+</span></span><span class="line"><span class="cl"><span class="n">lpstat</span> <span class="o">-</span><span class="n">v</span> <span class="n">P1005</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">status</span> <span class="n">cups</span>
+</span></span><span class="line"><span class="cl"><span class="n">tail</span> <span class="o">-</span><span class="n">n</span> <span class="mi">50</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="o">/</span><span class="n">cups</span><span class="o">/</span><span class="n">error_log</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="十一實作結論">十一、實作結論
+</h2><p>本次成功將 HP LaserJet P1005 整合至 Proxmox Debian 13 LXC，透過 CUPS 提供網路列印服務，並搭配 Avahi 提供 AirPrint 裝置探索與列印功能。</p>
+<p>最後成功的核心設定為：</p>
+<p><strong>1. Proxmox LXC USB Passthrough</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dev0: /dev/usb/lp0,uid=0,gid=7,mode=0660
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2. CUPS Device URI</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">parallel:/dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3. 印表機 Firmware 載入</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /lib/firmware/hp/sihpP1005.dl &gt; /dev/usb/lp0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>4. AirPrint</strong></p>
+<p>透過 CUPS IPP Sharing + Avahi Bonjour/mDNS 提供區網列印。</p>
+<p>本次最大的心得是：<strong>HP LaserJet P1005 並非單純安裝 CUPS 驅動後就能正常列印，還需要正確載入 Firmware。</strong></p>
+<p>而且 Firmware 的載入時機很重要。對本次環境而言，應避免在每次 LXC 啟動時無條件重新傳送 Firmware，以免造成印表機 USB I/O 卡住。</p>
+<p>只要完成 Firmware 載入、正確 USB 裝置映射及 CUPS 驅動設定，即可讓這台舊款印表機繼續透過現代 Linux 列印伺服器提供網路列印服務。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

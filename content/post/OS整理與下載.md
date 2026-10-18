@@ -44,3 +44,22 @@ Tiny 11
 Nano 11
 [UnCyler](https://home.gamer.com.tw/eason929623) 優化系統映像檔
 UUP dump https://uupdump.net/
+https://massgrave.dev/
+
+##  優化指令
+- 停用Windows Defender
+- 停用 Windows Update
+- 停用 Superfetch
+- 開啟 RDP
+- 關閉休眠
+- 關閉記憶體完整性
+```
+# 開啟rdp
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0  
+# 關閉休眠
+powercfg /hibernate off
+# 關閉記憶體完整性
+reg add "HKLM\System\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d 0 /f
+# Credential Guard (停用會導致hyper-v無法開啟)
+
+```

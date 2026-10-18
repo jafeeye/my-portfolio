@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域 Cloudflare Tunnel 設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證 實作1: 透過反向代理連進illumio 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域\rCloudflare Tunnel\r設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證\r實作1: 透過反向代理連進illumio\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
 <title>Cloudflare 網站設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/cloudflare-%E7%B6%B2%E7%AB%99%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="Cloudflare 網站設定">
-<meta property='og:description' content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域 Cloudflare Tunnel 設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證 實作1: 透過反向代理連進illumio 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Cloudflare 網站設定">
+<meta property='og:description' content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域\rCloudflare Tunnel\r設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證\r實作1: 透過反向代理連進illumio\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/cloudflare-%E7%B6%B2%E7%AB%99%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-22T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Cloudflare 網站設定">
-<meta name="twitter:description" content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域 Cloudflare Tunnel 設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證 實作1: 透過反向代理連進illumio 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
+<meta name="twitter:description" content="預設 Cloureflare 託管後即有加密SSL，還可以做另外設定 Automatic HTTPS Rewrites：如果訪問的是 HTTP，會自動轉到 HTTPS。 Always use HTTPS：永遠使用 HTTPS。 Brotli：使用 Brotli 壓縮加快網站的載入速度。 Flexible SSL Full (Strict) SSL 模式 Origin Rules端口 (端口轉發)\n託管網域\rCloudflare Tunnel\r設定https IP，這邊假設為PVE IP https://192.168.100.1:8006，如果直接設定會出現Bad gateway， 加上ZeroTrust MFA 驗證\r實作1: 透過反向代理連進illumio\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 外網 │ │ HTTP :8080 ▼ cloudflared │ │ HTTP :8080 ▼ Caddy 192.168.10.9:8080 │ │ HTTPS :8443 ▼ Illumio │ └── 200 OK ✅ 詳細步驟:\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -732,7 +732,7 @@ Origin Rules端口 (端口轉發)</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

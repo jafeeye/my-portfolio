@@ -5,8 +5,11 @@ date: 2026-10-17
 tags:
   - PVE
 ---
+```toc
+```
 
-### PVE網口設定
+
+## 一、PVE網口設定
 在banner會放上IP位置是從檔案去改的 nano /etc/issue
 修改主機ip
 1. nano /etc/network/interfaces
@@ -69,7 +72,7 @@ source /etc/network/interfaces.d/*
 
 
 
-## 固定網卡名稱
+## 二、固定網卡名稱
 
 实现方案(pve9)
 
@@ -136,7 +139,7 @@ vi /etc/systemd/network/10-static-en100g2.link
 ```
 
 
-## 斷線除錯
+## 三、斷線除錯
 當大量設備連入PVE主機出現突然主機無法連線，可能是相容性問題，USB網卡也會有斷線問題，針對這些問題都是關閉休眠功能
 
 1. 檢查Log檔，發現是 Detected Hardware Unit Hang

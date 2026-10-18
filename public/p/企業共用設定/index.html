@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="mac共用桌面\r1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載\rWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n">
 <title>企業共用設定</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="企業共用設定">
-<meta property='og:description' content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="企業共用設定">
+<meta property='og:description' content="mac共用桌面\r1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載\rWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E4%BC%81%E6%A5%AD%E5%85%B1%E7%94%A8%E8%A8%AD%E5%AE%9A/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-06T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="企業共用設定">
-<meta name="twitter:description" content="mac共用桌面 1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載 Win10 掛載NFS appwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV Win 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享 安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n點擊 Install AirPrint Service 設置 Sercvie Startup 為Auto，點Start 選擇Windows User Account，勾選允許空白及啟用來賓帳戶才能無輸入帳號密碼列印 導入AirPrint IOS 5 Fix.reg\n">
+<meta name="twitter:description" content="mac共用桌面\r1.桌面資料夾設定共用\n2.設定開啟smb共用並啟用登入帳號(下方可修改主機名稱)\n3.Win端登入\n帳號：mac主機名\\帳號 mini.local\\PIN\n密碼：mac主機密碼\n關閉連線 net use \\\\192.168.8.120 /delete IPC$\nmacOS 開機自動掛載\rWin10 掛載NFS\rappwiz.cpl啟用Service for NFS/Client for NFS Synology 調整相對應權限，在Windows使用掛載命令 1 2 3 showmount -e \\\\192.168.8.x mount \\\\192.168.8.x\\目錄 z: unmount -f z: WebDAV\rWin 預設WebClient 服務僅支援 https 協議，而本地搭建的 webdav 服務和連結都是基於 http 協議的，因此造成了掛載失敗的情況，若要支援http需修改註冊表 reg add &quot;HKLM\\SYSTEM\\CurrentControlSet\\Services\\WebClient\\Parameters&quot; /v BasicAuthLevel /t REG_DWORD /d 2 /f\n以webdav協議不用webdav:// 只要打上https://即可\nAirPrint 印表機共享\r安裝檔路徑： \\\\192.168.8.106\\20-系統設定\\普通印表機啟用 AirPrint\\\n安裝印表機驅動程式，開啟印表機共享\n安裝Bonjour\n安裝AirPrint installer\n">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -292,6 +292,7 @@
     <li><a href="#windows">Windows</a></li>
     <li><a href="#smb">SMB</a></li>
     <li><a href="#linux-共享smb">Linux 共享SMB</a></li>
+    <li><a href="#cups">CUPS</a></li>
   </ol>
 </nav>
         </div>
@@ -348,7 +349,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -508,6 +509,152 @@ net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
 </span></span><span class="line"><span class="cl">workgroup = WORKGROUP//讓Ubuntu和Win兩台區網電腦同一網域
 </span></span><span class="line"><span class="cl">client min protocol = SMB3
 </span></span><span class="line"><span class="cl">client max protocol = SMB3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="cups">CUPS
+</h2><ol>
+<li>創建CT 容器</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install -y cups cups-client \
+</span></span><span class="line"><span class="cl">  printer-driver-foo2zjs usbutils
+</span></span><span class="line"><span class="cl">systemctl enable --now cups
+</span></span><span class="line"><span class="cl">cups-config --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>
+<p>在UI設定印表機直通，<code>pct set 105 --dev0 path=/dev/usb/lp0,uid=0,gid=7,mode=0660</code>
+<img
+    src="/my-portfolio/Pasted%20image%2020261011203317.png"
+    alt="504"
+    loading="lazy"
+></p>
+</li>
+<li>
+<p>因為預設下載驅動也有問題，把Github下載驅動放到正確位置</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">curl -fL --connect-timeout 10 --max-time 60 \
+</span></span><span class="line"><span class="cl">  -o sihpP1005.img \
+</span></span><span class="line"><span class="cl">  https://raw.githubusercontent.com/faradayfury/printer-all/main/foo2zjs/sihpP1005.img
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">mkdir -p /usr/lib/firmware/hp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/usr/bin/arm2hpdl /tmp/sihpP1005.img \
+</span></span><span class="line"><span class="cl">  &gt; /usr/lib/firmware/hp/sihpP1005.dl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>載入驅動</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">## 手動輸入讓驅動正常載入
+</span></span><span class="line"><span class="cl">cat /lib/firmware/hp/sihpP1005.dl &gt; /dev/usb/lp0
+</span></span><span class="line"><span class="cl">lp -d P1005 /etc/hostname
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>編輯開機自動載入驅動</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nano /etc/systemd/system/p1005-firmware.service
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Unit]
+</span></span><span class="line"><span class="cl">Description=Load HP LaserJet P1005 Firmware
+</span></span><span class="line"><span class="cl">Before=cups.service
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Service]
+</span></span><span class="line"><span class="cl">Type=oneshot
+</span></span><span class="line"><span class="cl">ExecStart=/bin/sh -c &#39;cat /lib/firmware/hp/sihpP1005.dl &gt; /dev/usb/lp0&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Install]
+</span></span><span class="line"><span class="cl">WantedBy=multi-user.target
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>編輯自動開機服務</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">edit</span> <span class="n">cups</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="n">Unit</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">Requires</span><span class="o">=</span><span class="n">p1005</span><span class="o">-</span><span class="n">firmware</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl"><span class="n">After</span><span class="o">=</span><span class="n">p1005</span><span class="o">-</span><span class="n">firmware</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## 重新啟動</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">enable</span> <span class="n">p1005</span><span class="o">-</span><span class="n">firmware</span><span class="o">.</span><span class="n">service</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>HP P1005特性是:你必須先把 HP LaserJet P1005 關機再開機，Firmware 才能重新成功載入；如果只重新啟動 LXC，而印表機保持開機，重新傳送 Firmware 就會卡住。</p>
+<p>設定AirPrint</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install -y avahi-daemon avahi-utils dbus
+</span></span><span class="line"><span class="cl">systemctl enable --now avahi-daemon
+</span></span><span class="line"><span class="cl">systemctl status avahi-daemon
 </span></span></code></pre></td></tr></table>
 </div>
 </div>
@@ -688,7 +835,7 @@ net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

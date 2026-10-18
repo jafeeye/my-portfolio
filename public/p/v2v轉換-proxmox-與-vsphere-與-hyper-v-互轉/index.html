@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、Proxmox 轉 ESXi\r轉換之前要注意一下 Proxmox 要把直通的設備刪除 硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題 轉換的虛擬機名稱不要用破折號跟點號\n方法1、使用 StarWind V2V Converter (缺點速度慢) 方法2、使用P2V 方式 開啟VMware Converter，選擇Powered On ，藉由登入Windows 或Linux 遙控Proxmox VM 備份到ESXi 方法3、土炮, qemu-img+vmkfstools\n以你那顆來源磁碟為例，確認 VM 已關機、輸出位置有足夠空間後，核心轉換指令是：\n1 2 3 qemu-img convert -p -f raw -O vmdk \\ /dev/pve/vm-160-disk-0 \\ /有足夠空間的路徑/ws22-export.vmdk 上傳到 ESXi 後，再匯入成目的磁碟，例如：\n1 vmkfstools -i ws22-export.vmdk ws22.vmdk -d thin 方法4、Proxmox 論壇網友寫的轉換腳本 出處 實測發現錯誤的vmx 會讓vSphere的登入按鈕直接便灰色\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 #!/bin/bash # proxmox-vm_vmware.sh - Convert Proxmox VM to VMware format # Author: 0zzy # Date: 2023-09-10 # Version: 1.0 # License: MIT # # Description: This script converts a Proxmox VM to VMware format. # It can convert to VMware VMX, OVF, or OVA format. # It requires the ovftool command-line tool. # It uses the qemu-img command-line tool to convert disks. # It uses the jq command-line tool to parse # # To use the Script, run the following command: # chmod +x proxmox-vm_vmware.sh # # Then run it with the required VM ID: # ./proxmox-vm_vmware.sh -i VMID # Example: ./proxmox-vm_vmware.sh -i 100 # # Or with additional options: # ./proxmox-vm_vmware.sh -i 100 -n MyVM -d /path/to/output -f ova set -e # Function to display usage information function show_usage() { echo &#34;Usage: $0 -i VMID [-n VM_NAME] [-d DESTINATION] [-f FORMAT]&#34; echo echo &#34;Options:&#34; echo &#34; -i VMID Proxmox VM ID to convert&#34; echo &#34; -n VM_NAME Name for the converted VM (default: uses original VM name)&#34; echo &#34; -d DESTINATION Destination directory for converted files (default: current directory)&#34; echo &#34; -f FORMAT VMware format (vmx, ovf, ova) (default: vmx)&#34; echo &#34; -h Show this help message&#34; exit 1 } # Function to check if a command exists function check_command() { if ! command -v &#34;$1&#34; &amp;&gt; /dev/null; then echo &#34;Error: Required command &#39;$1&#39; not found. Please install it.&#34; exit 1 fi } # Function to log messages function log() { echo &#34;[$(date &#39;+%Y-%m-%d %H:%M:%S&#39;)] $1&#34; } # Parse command line arguments VMID=&#34;&#34; VM_NAME=&#34;&#34; DESTINATION=&#34;$(pwd)&#34; FORMAT=&#34;vmx&#34; while getopts &#34;i:n:d:f:h&#34; opt; do case $opt in i) VMID=&#34;$OPTARG&#34; ;; n) VM_NAME=&#34;$OPTARG&#34; ;; d) DESTINATION=&#34;$OPTARG&#34; ;; f) FORMAT=&#34;$OPTARG&#34; ;; h) show_usage ;; *) show_usage ;; esac done # Check if VMID is provided if [ -z &#34;$VMID&#34; ]; then echo &#34;Error: VM ID is required&#34; show_usage fi # Check required tools check_command qemu-img check_command jq # Check if we&#39;re running on a Proxmox host if [ ! -f /etc/pve/qemu-server/${VMID}.conf ]; then echo &#34;Error: VM with ID ${VMID} not found on this Proxmox host&#34; exit 1 fi # Create temporary working directory TEMP_DIR=$(mktemp -d) log &#34;Created temporary directory: $TEMP_DIR&#34; # Cleanup function function cleanup() { log &#34;Cleaning up temporary files...&#34; rm -rf &#34;$TEMP_DIR&#34; } # Register cleanup function to run on exit trap cleanup EXIT # Get VM details if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=$(grep -E &#34;^name:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=&#34;vm-${VMID}&#34; fi fi log &#34;Converting Proxmox VM ${VMID} (${VM_NAME}) to VMware format&#34; # Create destination directory if it doesn&#39;t exist mkdir -p &#34;$DESTINATION&#34; # Get disk information DISKS=$(grep -E &#34;^(scsi|sata|ide)[0-9]+:&#34; /etc/pve/qemu-server/${VMID}.conf | grep -v &#34;cdrom&#34;) # Check if VM is running if qm status $VMID | grep -q running; then log &#34;Warning: VM is currently running. It&#39;s recommended to shut it down before conversion.&#34; read -p &#34;Do you want to continue anyway? (y/N): &#34; CONTINUE if [[ ! &#34;$CONTINUE&#34; =~ ^[Yy]$ ]]; then log &#34;Conversion aborted&#34; exit 0 fi fi # Process each disk DISK_COUNT=0 VMX_DISK_ENTRIES=&#34;&#34; log &#34;Processing VM disks...&#34; while read -r DISK_LINE; do # Extract disk details DISK_ID=$(echo &#34;$DISK_LINE&#34; | cut -d: -f1) # Extract just the disk path, ignoring additional parameters DISK_PATH=$(echo &#34;$DISK_LINE&#34; | cut -d&#39; &#39; -f2 | cut -d, -f1) log &#34;Processing disk: $DISK_ID with path: $DISK_PATH&#34; if [[ &#34;$DISK_PATH&#34; == *&#34;:&#34;* ]]; then # Handle storage:disk format STORAGE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f1) DISK_FILE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f2) log &#34;Getting full path for storage: $STORAGE, disk: $DISK_FILE&#34; FULL_PATH=$(pvesm path &#34;$STORAGE:$DISK_FILE&#34;) else # Handle direct path FULL_PATH=&#34;$DISK_PATH&#34; fi log &#34;Full disk path: $FULL_PATH&#34; # Get disk format DISK_FORMAT=$(qemu-img info &#34;$FULL_PATH&#34; | grep &#34;file format&#34; | cut -d&#39; &#39; -f3) log &#34;Disk format: $DISK_FORMAT&#34; # Convert disk to VMDK VMDK_NAME=&#34;${VM_NAME}-disk${DISK_COUNT}.vmdk&#34; log &#34;Converting disk $DISK_ID ($FULL_PATH) to VMDK format...&#34; qemu-img convert -f &#34;$DISK_FORMAT&#34; -O vmdk &#34;$FULL_PATH&#34; &#34;$TEMP_DIR/$VMDK_NAME&#34; # Copy to destination cp &#34;$TEMP_DIR/$VMDK_NAME&#34; &#34;$DESTINATION/&#34; # Add to VMX entries VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.present = \\&#34;TRUE\\&#34;\\n&#34; VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.fileName = \\&#34;${VMDK_NAME}\\&#34;\\n&#34; DISK_COUNT=$((DISK_COUNT + 1)) done &lt;&lt;&lt; &#34;$DISKS&#34; # Get memory and CPU information MEMORY=$(grep -E &#34;^memory:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) MEMORY=${MEMORY:-2048} # Default to 2GB if not specified CORES=$(grep -E &#34;^cores:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) CORES=${CORES:-1} # Default to 1 core if not specified SOCKETS=$(grep -E &#34;^sockets:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) SOCKETS=${SOCKETS:-1} # Default to 1 socket if not specified # Create VMX file if [ &#34;$FORMAT&#34; = &#34;vmx&#34; ] || [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Creating VMX file...&#34; cat &gt; &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &lt;&lt; EOF .encoding = &#34;UTF-8&#34; config.version = &#34;8&#34; virtualHW.version = &#34;19&#34; pciBridge0.present = &#34;TRUE&#34; pciBridge4.present = &#34;TRUE&#34; pciBridge4.virtualDev = &#34;pcieRootPort&#34; pciBridge4.functions = &#34;8&#34; pciBridge5.present = &#34;TRUE&#34; pciBridge5.virtualDev = &#34;pcieRootPort&#34; pciBridge5.functions = &#34;8&#34; pciBridge6.present = &#34;TRUE&#34; pciBridge6.virtualDev = &#34;pcieRootPort&#34; pciBridge6.functions = &#34;8&#34; pciBridge7.present = &#34;TRUE&#34; pciBridge7.virtualDev = &#34;pcieRootPort&#34; pciBridge7.functions = &#34;8&#34; vmci0.present = &#34;TRUE&#34; displayName = &#34;${VM_NAME}&#34; numvcpus = &#34;$((CORES * SOCKETS))&#34; memsize = &#34;${MEMORY}&#34; scsi0.virtualDev = &#34;lsisas1068&#34; scsi0.present = &#34;TRUE&#34; $(echo -e &#34;$VMX_DISK_ENTRIES&#34;) ethernet0.virtualDev = &#34;vmxnet3&#34; ethernet0.present = &#34;TRUE&#34; ethernet0.connectionType = &#34;bridged&#34; ethernet0.startConnected = &#34;TRUE&#34; ethernet0.addressType = &#34;generated&#34; bios.bootDelay = &#34;5000&#34; powerType.powerOff = &#34;soft&#34; powerType.powerOn = &#34;hard&#34; powerType.suspend = &#34;hard&#34; powerType.reset = &#34;soft&#34; tools.syncTime = &#34;FALSE&#34; EOF # Copy VMX file to destination cp &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &#34;$DESTINATION/&#34; log &#34;VMX file created at $DESTINATION/${VM_NAME}.vmx&#34; fi # Convert to OVF/OVA if requested if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Converting to $FORMAT format...&#34; check_command ovftool if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ]; then ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ovf&#34; log &#34;OVF file created at $DESTINATION/${VM_NAME}.ovf&#34; else ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ova&#34; log &#34;OVA file created at $DESTINATION/${VM_NAME}.ova&#34; # Remove VMX and VMDK files as they&#39;re now in the OVA rm &#34;$DESTINATION/${VM_NAME}.vmx&#34; for ((i=0; i&lt;DISK_COUNT; i++)); do rm &#34;$DESTINATION/${VM_NAME}-disk${i}.vmdk&#34; done fi fi log &#34;Conversion completed successfully!&#34; log &#34;VM files are available in: $DESTINATION&#34; 原本的腳本有問題，下面為修改版修正scsi 編號不對問題 用法 ```` ./proxmox-vm-to-esxi.sh -i 160 -d /mnt/pve/pve-nfs/win-ws22-hyperv -p &ldquo;VM Network&rdquo;\n">
+<title>V2V轉換 Proxmox 與 vSphere 與 Hyper-V 互轉</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/v2v%E8%BD%89%E6%8F%9B-proxmox-%E8%88%87-vsphere-%E8%88%87-hyper-v-%E4%BA%92%E8%BD%89/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="V2V轉換 Proxmox 與 vSphere 與 Hyper-V 互轉">
+<meta property='og:description' content="一、Proxmox 轉 ESXi\r轉換之前要注意一下 Proxmox 要把直通的設備刪除 硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題 轉換的虛擬機名稱不要用破折號跟點號\n方法1、使用 StarWind V2V Converter (缺點速度慢) 方法2、使用P2V 方式 開啟VMware Converter，選擇Powered On ，藉由登入Windows 或Linux 遙控Proxmox VM 備份到ESXi 方法3、土炮, qemu-img+vmkfstools\n以你那顆來源磁碟為例，確認 VM 已關機、輸出位置有足夠空間後，核心轉換指令是：\n1 2 3 qemu-img convert -p -f raw -O vmdk \\ /dev/pve/vm-160-disk-0 \\ /有足夠空間的路徑/ws22-export.vmdk 上傳到 ESXi 後，再匯入成目的磁碟，例如：\n1 vmkfstools -i ws22-export.vmdk ws22.vmdk -d thin 方法4、Proxmox 論壇網友寫的轉換腳本 出處 實測發現錯誤的vmx 會讓vSphere的登入按鈕直接便灰色\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 #!/bin/bash # proxmox-vm_vmware.sh - Convert Proxmox VM to VMware format # Author: 0zzy # Date: 2023-09-10 # Version: 1.0 # License: MIT # # Description: This script converts a Proxmox VM to VMware format. # It can convert to VMware VMX, OVF, or OVA format. # It requires the ovftool command-line tool. # It uses the qemu-img command-line tool to convert disks. # It uses the jq command-line tool to parse # # To use the Script, run the following command: # chmod +x proxmox-vm_vmware.sh # # Then run it with the required VM ID: # ./proxmox-vm_vmware.sh -i VMID # Example: ./proxmox-vm_vmware.sh -i 100 # # Or with additional options: # ./proxmox-vm_vmware.sh -i 100 -n MyVM -d /path/to/output -f ova set -e # Function to display usage information function show_usage() { echo &#34;Usage: $0 -i VMID [-n VM_NAME] [-d DESTINATION] [-f FORMAT]&#34; echo echo &#34;Options:&#34; echo &#34; -i VMID Proxmox VM ID to convert&#34; echo &#34; -n VM_NAME Name for the converted VM (default: uses original VM name)&#34; echo &#34; -d DESTINATION Destination directory for converted files (default: current directory)&#34; echo &#34; -f FORMAT VMware format (vmx, ovf, ova) (default: vmx)&#34; echo &#34; -h Show this help message&#34; exit 1 } # Function to check if a command exists function check_command() { if ! command -v &#34;$1&#34; &amp;&gt; /dev/null; then echo &#34;Error: Required command &#39;$1&#39; not found. Please install it.&#34; exit 1 fi } # Function to log messages function log() { echo &#34;[$(date &#39;+%Y-%m-%d %H:%M:%S&#39;)] $1&#34; } # Parse command line arguments VMID=&#34;&#34; VM_NAME=&#34;&#34; DESTINATION=&#34;$(pwd)&#34; FORMAT=&#34;vmx&#34; while getopts &#34;i:n:d:f:h&#34; opt; do case $opt in i) VMID=&#34;$OPTARG&#34; ;; n) VM_NAME=&#34;$OPTARG&#34; ;; d) DESTINATION=&#34;$OPTARG&#34; ;; f) FORMAT=&#34;$OPTARG&#34; ;; h) show_usage ;; *) show_usage ;; esac done # Check if VMID is provided if [ -z &#34;$VMID&#34; ]; then echo &#34;Error: VM ID is required&#34; show_usage fi # Check required tools check_command qemu-img check_command jq # Check if we&#39;re running on a Proxmox host if [ ! -f /etc/pve/qemu-server/${VMID}.conf ]; then echo &#34;Error: VM with ID ${VMID} not found on this Proxmox host&#34; exit 1 fi # Create temporary working directory TEMP_DIR=$(mktemp -d) log &#34;Created temporary directory: $TEMP_DIR&#34; # Cleanup function function cleanup() { log &#34;Cleaning up temporary files...&#34; rm -rf &#34;$TEMP_DIR&#34; } # Register cleanup function to run on exit trap cleanup EXIT # Get VM details if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=$(grep -E &#34;^name:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=&#34;vm-${VMID}&#34; fi fi log &#34;Converting Proxmox VM ${VMID} (${VM_NAME}) to VMware format&#34; # Create destination directory if it doesn&#39;t exist mkdir -p &#34;$DESTINATION&#34; # Get disk information DISKS=$(grep -E &#34;^(scsi|sata|ide)[0-9]+:&#34; /etc/pve/qemu-server/${VMID}.conf | grep -v &#34;cdrom&#34;) # Check if VM is running if qm status $VMID | grep -q running; then log &#34;Warning: VM is currently running. It&#39;s recommended to shut it down before conversion.&#34; read -p &#34;Do you want to continue anyway? (y/N): &#34; CONTINUE if [[ ! &#34;$CONTINUE&#34; =~ ^[Yy]$ ]]; then log &#34;Conversion aborted&#34; exit 0 fi fi # Process each disk DISK_COUNT=0 VMX_DISK_ENTRIES=&#34;&#34; log &#34;Processing VM disks...&#34; while read -r DISK_LINE; do # Extract disk details DISK_ID=$(echo &#34;$DISK_LINE&#34; | cut -d: -f1) # Extract just the disk path, ignoring additional parameters DISK_PATH=$(echo &#34;$DISK_LINE&#34; | cut -d&#39; &#39; -f2 | cut -d, -f1) log &#34;Processing disk: $DISK_ID with path: $DISK_PATH&#34; if [[ &#34;$DISK_PATH&#34; == *&#34;:&#34;* ]]; then # Handle storage:disk format STORAGE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f1) DISK_FILE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f2) log &#34;Getting full path for storage: $STORAGE, disk: $DISK_FILE&#34; FULL_PATH=$(pvesm path &#34;$STORAGE:$DISK_FILE&#34;) else # Handle direct path FULL_PATH=&#34;$DISK_PATH&#34; fi log &#34;Full disk path: $FULL_PATH&#34; # Get disk format DISK_FORMAT=$(qemu-img info &#34;$FULL_PATH&#34; | grep &#34;file format&#34; | cut -d&#39; &#39; -f3) log &#34;Disk format: $DISK_FORMAT&#34; # Convert disk to VMDK VMDK_NAME=&#34;${VM_NAME}-disk${DISK_COUNT}.vmdk&#34; log &#34;Converting disk $DISK_ID ($FULL_PATH) to VMDK format...&#34; qemu-img convert -f &#34;$DISK_FORMAT&#34; -O vmdk &#34;$FULL_PATH&#34; &#34;$TEMP_DIR/$VMDK_NAME&#34; # Copy to destination cp &#34;$TEMP_DIR/$VMDK_NAME&#34; &#34;$DESTINATION/&#34; # Add to VMX entries VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.present = \\&#34;TRUE\\&#34;\\n&#34; VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.fileName = \\&#34;${VMDK_NAME}\\&#34;\\n&#34; DISK_COUNT=$((DISK_COUNT + 1)) done &lt;&lt;&lt; &#34;$DISKS&#34; # Get memory and CPU information MEMORY=$(grep -E &#34;^memory:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) MEMORY=${MEMORY:-2048} # Default to 2GB if not specified CORES=$(grep -E &#34;^cores:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) CORES=${CORES:-1} # Default to 1 core if not specified SOCKETS=$(grep -E &#34;^sockets:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) SOCKETS=${SOCKETS:-1} # Default to 1 socket if not specified # Create VMX file if [ &#34;$FORMAT&#34; = &#34;vmx&#34; ] || [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Creating VMX file...&#34; cat &gt; &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &lt;&lt; EOF .encoding = &#34;UTF-8&#34; config.version = &#34;8&#34; virtualHW.version = &#34;19&#34; pciBridge0.present = &#34;TRUE&#34; pciBridge4.present = &#34;TRUE&#34; pciBridge4.virtualDev = &#34;pcieRootPort&#34; pciBridge4.functions = &#34;8&#34; pciBridge5.present = &#34;TRUE&#34; pciBridge5.virtualDev = &#34;pcieRootPort&#34; pciBridge5.functions = &#34;8&#34; pciBridge6.present = &#34;TRUE&#34; pciBridge6.virtualDev = &#34;pcieRootPort&#34; pciBridge6.functions = &#34;8&#34; pciBridge7.present = &#34;TRUE&#34; pciBridge7.virtualDev = &#34;pcieRootPort&#34; pciBridge7.functions = &#34;8&#34; vmci0.present = &#34;TRUE&#34; displayName = &#34;${VM_NAME}&#34; numvcpus = &#34;$((CORES * SOCKETS))&#34; memsize = &#34;${MEMORY}&#34; scsi0.virtualDev = &#34;lsisas1068&#34; scsi0.present = &#34;TRUE&#34; $(echo -e &#34;$VMX_DISK_ENTRIES&#34;) ethernet0.virtualDev = &#34;vmxnet3&#34; ethernet0.present = &#34;TRUE&#34; ethernet0.connectionType = &#34;bridged&#34; ethernet0.startConnected = &#34;TRUE&#34; ethernet0.addressType = &#34;generated&#34; bios.bootDelay = &#34;5000&#34; powerType.powerOff = &#34;soft&#34; powerType.powerOn = &#34;hard&#34; powerType.suspend = &#34;hard&#34; powerType.reset = &#34;soft&#34; tools.syncTime = &#34;FALSE&#34; EOF # Copy VMX file to destination cp &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &#34;$DESTINATION/&#34; log &#34;VMX file created at $DESTINATION/${VM_NAME}.vmx&#34; fi # Convert to OVF/OVA if requested if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Converting to $FORMAT format...&#34; check_command ovftool if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ]; then ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ovf&#34; log &#34;OVF file created at $DESTINATION/${VM_NAME}.ovf&#34; else ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ova&#34; log &#34;OVA file created at $DESTINATION/${VM_NAME}.ova&#34; # Remove VMX and VMDK files as they&#39;re now in the OVA rm &#34;$DESTINATION/${VM_NAME}.vmx&#34; for ((i=0; i&lt;DISK_COUNT; i++)); do rm &#34;$DESTINATION/${VM_NAME}-disk${i}.vmdk&#34; done fi fi log &#34;Conversion completed successfully!&#34; log &#34;VM files are available in: $DESTINATION&#34; 原本的腳本有問題，下面為修改版修正scsi 編號不對問題 用法 ```` ./proxmox-vm-to-esxi.sh -i 160 -d /mnt/pve/pve-nfs/win-ws22-hyperv -p &ldquo;VM Network&rdquo;\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/v2v%E8%BD%89%E6%8F%9B-proxmox-%E8%88%87-vsphere-%E8%88%87-hyper-v-%E4%BA%92%E8%BD%89/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='虛擬化' /><meta property='article:tag' content='PVE' /><meta property='article:tag' content='ESXi' /><meta property='article:published_time' content='2026-10-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-17T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="V2V轉換 Proxmox 與 vSphere 與 Hyper-V 互轉">
+<meta name="twitter:description" content="一、Proxmox 轉 ESXi\r轉換之前要注意一下 Proxmox 要把直通的設備刪除 硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題 轉換的虛擬機名稱不要用破折號跟點號\n方法1、使用 StarWind V2V Converter (缺點速度慢) 方法2、使用P2V 方式 開啟VMware Converter，選擇Powered On ，藉由登入Windows 或Linux 遙控Proxmox VM 備份到ESXi 方法3、土炮, qemu-img+vmkfstools\n以你那顆來源磁碟為例，確認 VM 已關機、輸出位置有足夠空間後，核心轉換指令是：\n1 2 3 qemu-img convert -p -f raw -O vmdk \\ /dev/pve/vm-160-disk-0 \\ /有足夠空間的路徑/ws22-export.vmdk 上傳到 ESXi 後，再匯入成目的磁碟，例如：\n1 vmkfstools -i ws22-export.vmdk ws22.vmdk -d thin 方法4、Proxmox 論壇網友寫的轉換腳本 出處 實測發現錯誤的vmx 會讓vSphere的登入按鈕直接便灰色\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 #!/bin/bash # proxmox-vm_vmware.sh - Convert Proxmox VM to VMware format # Author: 0zzy # Date: 2023-09-10 # Version: 1.0 # License: MIT # # Description: This script converts a Proxmox VM to VMware format. # It can convert to VMware VMX, OVF, or OVA format. # It requires the ovftool command-line tool. # It uses the qemu-img command-line tool to convert disks. # It uses the jq command-line tool to parse # # To use the Script, run the following command: # chmod +x proxmox-vm_vmware.sh # # Then run it with the required VM ID: # ./proxmox-vm_vmware.sh -i VMID # Example: ./proxmox-vm_vmware.sh -i 100 # # Or with additional options: # ./proxmox-vm_vmware.sh -i 100 -n MyVM -d /path/to/output -f ova set -e # Function to display usage information function show_usage() { echo &#34;Usage: $0 -i VMID [-n VM_NAME] [-d DESTINATION] [-f FORMAT]&#34; echo echo &#34;Options:&#34; echo &#34; -i VMID Proxmox VM ID to convert&#34; echo &#34; -n VM_NAME Name for the converted VM (default: uses original VM name)&#34; echo &#34; -d DESTINATION Destination directory for converted files (default: current directory)&#34; echo &#34; -f FORMAT VMware format (vmx, ovf, ova) (default: vmx)&#34; echo &#34; -h Show this help message&#34; exit 1 } # Function to check if a command exists function check_command() { if ! command -v &#34;$1&#34; &amp;&gt; /dev/null; then echo &#34;Error: Required command &#39;$1&#39; not found. Please install it.&#34; exit 1 fi } # Function to log messages function log() { echo &#34;[$(date &#39;+%Y-%m-%d %H:%M:%S&#39;)] $1&#34; } # Parse command line arguments VMID=&#34;&#34; VM_NAME=&#34;&#34; DESTINATION=&#34;$(pwd)&#34; FORMAT=&#34;vmx&#34; while getopts &#34;i:n:d:f:h&#34; opt; do case $opt in i) VMID=&#34;$OPTARG&#34; ;; n) VM_NAME=&#34;$OPTARG&#34; ;; d) DESTINATION=&#34;$OPTARG&#34; ;; f) FORMAT=&#34;$OPTARG&#34; ;; h) show_usage ;; *) show_usage ;; esac done # Check if VMID is provided if [ -z &#34;$VMID&#34; ]; then echo &#34;Error: VM ID is required&#34; show_usage fi # Check required tools check_command qemu-img check_command jq # Check if we&#39;re running on a Proxmox host if [ ! -f /etc/pve/qemu-server/${VMID}.conf ]; then echo &#34;Error: VM with ID ${VMID} not found on this Proxmox host&#34; exit 1 fi # Create temporary working directory TEMP_DIR=$(mktemp -d) log &#34;Created temporary directory: $TEMP_DIR&#34; # Cleanup function function cleanup() { log &#34;Cleaning up temporary files...&#34; rm -rf &#34;$TEMP_DIR&#34; } # Register cleanup function to run on exit trap cleanup EXIT # Get VM details if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=$(grep -E &#34;^name:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) if [ -z &#34;$VM_NAME&#34; ]; then VM_NAME=&#34;vm-${VMID}&#34; fi fi log &#34;Converting Proxmox VM ${VMID} (${VM_NAME}) to VMware format&#34; # Create destination directory if it doesn&#39;t exist mkdir -p &#34;$DESTINATION&#34; # Get disk information DISKS=$(grep -E &#34;^(scsi|sata|ide)[0-9]+:&#34; /etc/pve/qemu-server/${VMID}.conf | grep -v &#34;cdrom&#34;) # Check if VM is running if qm status $VMID | grep -q running; then log &#34;Warning: VM is currently running. It&#39;s recommended to shut it down before conversion.&#34; read -p &#34;Do you want to continue anyway? (y/N): &#34; CONTINUE if [[ ! &#34;$CONTINUE&#34; =~ ^[Yy]$ ]]; then log &#34;Conversion aborted&#34; exit 0 fi fi # Process each disk DISK_COUNT=0 VMX_DISK_ENTRIES=&#34;&#34; log &#34;Processing VM disks...&#34; while read -r DISK_LINE; do # Extract disk details DISK_ID=$(echo &#34;$DISK_LINE&#34; | cut -d: -f1) # Extract just the disk path, ignoring additional parameters DISK_PATH=$(echo &#34;$DISK_LINE&#34; | cut -d&#39; &#39; -f2 | cut -d, -f1) log &#34;Processing disk: $DISK_ID with path: $DISK_PATH&#34; if [[ &#34;$DISK_PATH&#34; == *&#34;:&#34;* ]]; then # Handle storage:disk format STORAGE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f1) DISK_FILE=$(echo &#34;$DISK_PATH&#34; | cut -d: -f2) log &#34;Getting full path for storage: $STORAGE, disk: $DISK_FILE&#34; FULL_PATH=$(pvesm path &#34;$STORAGE:$DISK_FILE&#34;) else # Handle direct path FULL_PATH=&#34;$DISK_PATH&#34; fi log &#34;Full disk path: $FULL_PATH&#34; # Get disk format DISK_FORMAT=$(qemu-img info &#34;$FULL_PATH&#34; | grep &#34;file format&#34; | cut -d&#39; &#39; -f3) log &#34;Disk format: $DISK_FORMAT&#34; # Convert disk to VMDK VMDK_NAME=&#34;${VM_NAME}-disk${DISK_COUNT}.vmdk&#34; log &#34;Converting disk $DISK_ID ($FULL_PATH) to VMDK format...&#34; qemu-img convert -f &#34;$DISK_FORMAT&#34; -O vmdk &#34;$FULL_PATH&#34; &#34;$TEMP_DIR/$VMDK_NAME&#34; # Copy to destination cp &#34;$TEMP_DIR/$VMDK_NAME&#34; &#34;$DESTINATION/&#34; # Add to VMX entries VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.present = \\&#34;TRUE\\&#34;\\n&#34; VMX_DISK_ENTRIES+=&#34;scsi${DISK_COUNT}.fileName = \\&#34;${VMDK_NAME}\\&#34;\\n&#34; DISK_COUNT=$((DISK_COUNT + 1)) done &lt;&lt;&lt; &#34;$DISKS&#34; # Get memory and CPU information MEMORY=$(grep -E &#34;^memory:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) MEMORY=${MEMORY:-2048} # Default to 2GB if not specified CORES=$(grep -E &#34;^cores:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) CORES=${CORES:-1} # Default to 1 core if not specified SOCKETS=$(grep -E &#34;^sockets:&#34; /etc/pve/qemu-server/${VMID}.conf | cut -d&#39; &#39; -f2) SOCKETS=${SOCKETS:-1} # Default to 1 socket if not specified # Create VMX file if [ &#34;$FORMAT&#34; = &#34;vmx&#34; ] || [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Creating VMX file...&#34; cat &gt; &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &lt;&lt; EOF .encoding = &#34;UTF-8&#34; config.version = &#34;8&#34; virtualHW.version = &#34;19&#34; pciBridge0.present = &#34;TRUE&#34; pciBridge4.present = &#34;TRUE&#34; pciBridge4.virtualDev = &#34;pcieRootPort&#34; pciBridge4.functions = &#34;8&#34; pciBridge5.present = &#34;TRUE&#34; pciBridge5.virtualDev = &#34;pcieRootPort&#34; pciBridge5.functions = &#34;8&#34; pciBridge6.present = &#34;TRUE&#34; pciBridge6.virtualDev = &#34;pcieRootPort&#34; pciBridge6.functions = &#34;8&#34; pciBridge7.present = &#34;TRUE&#34; pciBridge7.virtualDev = &#34;pcieRootPort&#34; pciBridge7.functions = &#34;8&#34; vmci0.present = &#34;TRUE&#34; displayName = &#34;${VM_NAME}&#34; numvcpus = &#34;$((CORES * SOCKETS))&#34; memsize = &#34;${MEMORY}&#34; scsi0.virtualDev = &#34;lsisas1068&#34; scsi0.present = &#34;TRUE&#34; $(echo -e &#34;$VMX_DISK_ENTRIES&#34;) ethernet0.virtualDev = &#34;vmxnet3&#34; ethernet0.present = &#34;TRUE&#34; ethernet0.connectionType = &#34;bridged&#34; ethernet0.startConnected = &#34;TRUE&#34; ethernet0.addressType = &#34;generated&#34; bios.bootDelay = &#34;5000&#34; powerType.powerOff = &#34;soft&#34; powerType.powerOn = &#34;hard&#34; powerType.suspend = &#34;hard&#34; powerType.reset = &#34;soft&#34; tools.syncTime = &#34;FALSE&#34; EOF # Copy VMX file to destination cp &#34;$TEMP_DIR/${VM_NAME}.vmx&#34; &#34;$DESTINATION/&#34; log &#34;VMX file created at $DESTINATION/${VM_NAME}.vmx&#34; fi # Convert to OVF/OVA if requested if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ] || [ &#34;$FORMAT&#34; = &#34;ova&#34; ]; then log &#34;Converting to $FORMAT format...&#34; check_command ovftool if [ &#34;$FORMAT&#34; = &#34;ovf&#34; ]; then ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ovf&#34; log &#34;OVF file created at $DESTINATION/${VM_NAME}.ovf&#34; else ovftool &#34;$DESTINATION/${VM_NAME}.vmx&#34; &#34;$DESTINATION/${VM_NAME}.ova&#34; log &#34;OVA file created at $DESTINATION/${VM_NAME}.ova&#34; # Remove VMX and VMDK files as they&#39;re now in the OVA rm &#34;$DESTINATION/${VM_NAME}.vmx&#34; for ((i=0; i&lt;DISK_COUNT; i++)); do rm &#34;$DESTINATION/${VM_NAME}-disk${i}.vmdk&#34; done fi fi log &#34;Conversion completed successfully!&#34; log &#34;VM files are available in: $DESTINATION&#34; 原本的腳本有問題，下面為修改版修正scsi 編號不對問題 用法 ```` ./proxmox-vm-to-esxi.sh -i 160 -d /mnt/pve/pve-nfs/win-ws22-hyperv -p &ldquo;VM Network&rdquo;\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一proxmox-轉-esxi">一、Proxmox 轉 ESXi</a></li>
+    <li><a href="#二vsphere-轉-hyper-v">二、vSphere 轉 Hyper-V</a></li>
+    <li><a href="#esxi-轉-proxmox">ESXi 轉 Proxmox</a>
+      <ol>
+        <li><a href="#遷移-從esxi">遷移: 從ESXi</a></li>
+        <li><a href="#遷移-p2v">遷移: P2V</a></li>
+        <li><a href="#遷移-轉換至esxi">遷移: 轉換至ESXi</a></li>
+      </ol>
+    </li>
+    <li><a href="#三hyper-v-遷移至pve">三、Hyper-V 遷移至PVE</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/v2v%E8%BD%89%E6%8F%9B-proxmox-%E8%88%87-vsphere-%E8%88%87-hyper-v-%E4%BA%92%E8%BD%89/">V2V轉換 Proxmox 與 vSphere 與 Hyper-V 互轉</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-10-17T00:00:00Z'>Oct 17, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    13 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="一proxmox-轉-esxi">一、Proxmox 轉 ESXi
+</h2><p>轉換之前要注意一下
+Proxmox 要把直通的設備刪除
+硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題
+轉換的虛擬機名稱不要用破折號跟點號</p>
+<p>方法1、使用 StarWind V2V Converter (缺點速度慢)
+<img
+    src="/my-portfolio/Pasted%20image%2020261017185606.png"
+    alt=""
+    loading="lazy"
+></p>
+<p>方法2、使用P2V 方式
+開啟VMware Converter，選擇Powered On ，藉由登入Windows 或Linux 遙控Proxmox VM 備份到ESXi
+<img
+    src="/my-portfolio/Pasted%20image%2020261017173605.png"
+    alt="556"
+    loading="lazy"
+></p>
+<p>方法3、土炮, <code>qemu-img</code>+<code>vmkfstools</code></p>
+<p>以你那顆來源磁碟為例，<strong>確認 VM 已關機、輸出位置有足夠空間後</strong>，核心轉換指令是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="nb">convert</span> <span class="o">-</span><span class="n">p</span> <span class="o">-</span><span class="n">f</span> <span class="n">raw</span> <span class="o">-</span><span class="n">O</span> <span class="n">vmdk</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">pve</span><span class="o">/</span><span class="n">vm</span><span class="o">-</span><span class="mi">160</span><span class="o">-</span><span class="n">disk</span><span class="o">-</span><span class="mi">0</span> \
+</span></span><span class="line"><span class="cl">  <span class="o">/</span><span class="err">有足夠空間的路徑</span><span class="o">/</span><span class="n">ws22</span><span class="o">-</span><span class="k">export</span><span class="o">.</span><span class="n">vmdk</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上傳到 ESXi 後，再匯入成目的磁碟，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">vmkfstools</span> <span class="o">-</span><span class="n">i</span> <span class="n">ws22</span><span class="o">-</span><span class="k">export</span><span class="o">.</span><span class="n">vmdk</span> <span class="n">ws22</span><span class="o">.</span><span class="n">vmdk</span> <span class="o">-</span><span class="n">d</span> <span class="n">thin</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>方法4、Proxmox 論壇網友寫的轉換腳本 <a href="https://forum.proxmox.com/threads/how-to-convert-vm-from-proxmox-to-vmware.122124/">出處</a>
+實測發現錯誤的vmx 會讓vSphere的登入按鈕直接便灰色</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># proxmox-vm_vmware.sh - Convert Proxmox VM to VMware format</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Author: 0zzy</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Date: 2023-09-10</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Version: 1.0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># License: MIT</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Description: This script converts a Proxmox VM to VMware format.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#              It can convert to VMware VMX, OVF, or OVA format.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#              It requires the ovftool command-line tool.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#              It uses the qemu-img command-line tool to convert disks.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#              It uses the jq command-line tool to parse</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># To use the Script, run the following command:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># chmod +x proxmox-vm_vmware.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Then run it with the required VM ID:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ./proxmox-vm_vmware.sh -i VMID</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Example: ./proxmox-vm_vmware.sh -i 100</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Or with additional options:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># ./proxmox-vm_vmware.sh -i 100 -n MyVM -d /path/to/output -f ova</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Function to display usage information</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> show_usage<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> -i VMID [-n VM_NAME] [-d DESTINATION] [-f FORMAT]&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Options:&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;  -i VMID         Proxmox VM ID to convert&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;  -n VM_NAME      Name for the converted VM (default: uses original VM name)&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;  -d DESTINATION  Destination directory for converted files (default: current directory)&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;  -f FORMAT       VMware format (vmx, ovf, ova) (default: vmx)&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;  -h              Show this help message&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Function to check if a command exists</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> check_command<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> ! <span class="nb">command</span> -v <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="p">&amp;</span>&gt; /dev/null<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo</span> <span class="s2">&#34;Error: Required command &#39;</span><span class="nv">$1</span><span class="s2">&#39; not found. Please install it.&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Function to log messages</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> log<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[</span><span class="k">$(</span>date <span class="s1">&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class="k">)</span><span class="s2">] </span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Parse command line arguments</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VMID</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VM_NAME</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DESTINATION</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">FORMAT</span><span class="o">=</span><span class="s2">&#34;vmx&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="nb">getopts</span> <span class="s2">&#34;i:n:d:f:h&#34;</span> opt<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nv">$opt</span> in
+</span></span><span class="line"><span class="cl">        i<span class="o">)</span> <span class="nv">VMID</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$OPTARG</span><span class="s2">&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        n<span class="o">)</span> <span class="nv">VM_NAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$OPTARG</span><span class="s2">&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        d<span class="o">)</span> <span class="nv">DESTINATION</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$OPTARG</span><span class="s2">&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        f<span class="o">)</span> <span class="nv">FORMAT</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$OPTARG</span><span class="s2">&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        h<span class="o">)</span> show_usage <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        *<span class="o">)</span> show_usage <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">esac</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check if VMID is provided</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$VMID</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Error: VM ID is required&#34;</span>
+</span></span><span class="line"><span class="cl">    show_usage
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check required tools</span>
+</span></span><span class="line"><span class="cl">check_command qemu-img
+</span></span><span class="line"><span class="cl">check_command jq
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check if we&#39;re running on a Proxmox host</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> ! -f /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;Error: VM with ID </span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2"> not found on this Proxmox host&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create temporary working directory</span>
+</span></span><span class="line"><span class="cl"><span class="nv">TEMP_DIR</span><span class="o">=</span><span class="k">$(</span>mktemp -d<span class="k">)</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Created temporary directory: </span><span class="nv">$TEMP_DIR</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Cleanup function</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> cleanup<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Cleaning up temporary files...&#34;</span>
+</span></span><span class="line"><span class="cl">    rm -rf <span class="s2">&#34;</span><span class="nv">$TEMP_DIR</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Register cleanup function to run on exit</span>
+</span></span><span class="line"><span class="cl"><span class="nb">trap</span> cleanup EXIT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Get VM details</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VM_NAME</span><span class="o">=</span><span class="k">$(</span>grep -E <span class="s2">&#34;^name:&#34;</span> /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f2<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">VM_NAME</span><span class="o">=</span><span class="s2">&#34;vm-</span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Converting Proxmox VM </span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2"> (</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">) to VMware format&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create destination directory if it doesn&#39;t exist</span>
+</span></span><span class="line"><span class="cl">mkdir -p <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Get disk information</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DISKS</span><span class="o">=</span><span class="k">$(</span>grep -E <span class="s2">&#34;^(scsi|sata|ide)[0-9]+:&#34;</span> /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="p">|</span> grep -v <span class="s2">&#34;cdrom&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Check if VM is running</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> qm status <span class="nv">$VMID</span> <span class="p">|</span> grep -q running<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Warning: VM is currently running. It&#39;s recommended to shut it down before conversion.&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">read</span> -p <span class="s2">&#34;Do you want to continue anyway? (y/N): &#34;</span> CONTINUE
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[[</span> ! <span class="s2">&#34;</span><span class="nv">$CONTINUE</span><span class="s2">&#34;</span> <span class="o">=</span>~ ^<span class="o">[</span>Yy<span class="o">]</span>$ <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        log <span class="s2">&#34;Conversion aborted&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">exit</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Process each disk</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DISK_COUNT</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VMX_DISK_ENTRIES</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Processing VM disks...&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="nb">read</span> -r DISK_LINE<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># Extract disk details</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_ID</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$DISK_LINE</span><span class="s2">&#34;</span> <span class="p">|</span> cut -d: -f1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Extract just the disk path, ignoring additional parameters</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_PATH</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$DISK_LINE</span><span class="s2">&#34;</span> <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f2 <span class="p">|</span> cut -d, -f1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Processing disk: </span><span class="nv">$DISK_ID</span><span class="s2"> with path: </span><span class="nv">$DISK_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$DISK_PATH</span><span class="s2">&#34;</span> <span class="o">==</span> *<span class="s2">&#34;:&#34;</span>* <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Handle storage:disk format</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">STORAGE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$DISK_PATH</span><span class="s2">&#34;</span> <span class="p">|</span> cut -d: -f1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">DISK_FILE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$DISK_PATH</span><span class="s2">&#34;</span> <span class="p">|</span> cut -d: -f2<span class="k">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        log <span class="s2">&#34;Getting full path for storage: </span><span class="nv">$STORAGE</span><span class="s2">, disk: </span><span class="nv">$DISK_FILE</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">FULL_PATH</span><span class="o">=</span><span class="k">$(</span>pvesm path <span class="s2">&#34;</span><span class="nv">$STORAGE</span><span class="s2">:</span><span class="nv">$DISK_FILE</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># Handle direct path</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">FULL_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$DISK_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Full disk path: </span><span class="nv">$FULL_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Get disk format</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_FORMAT</span><span class="o">=</span><span class="k">$(</span>qemu-img info <span class="s2">&#34;</span><span class="nv">$FULL_PATH</span><span class="s2">&#34;</span> <span class="p">|</span> grep <span class="s2">&#34;file format&#34;</span> <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f3<span class="k">)</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Disk format: </span><span class="nv">$DISK_FORMAT</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Convert disk to VMDK</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VMDK_NAME</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">-disk</span><span class="si">${</span><span class="nv">DISK_COUNT</span><span class="si">}</span><span class="s2">.vmdk&#34;</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Converting disk </span><span class="nv">$DISK_ID</span><span class="s2"> (</span><span class="nv">$FULL_PATH</span><span class="s2">) to VMDK format...&#34;</span>
+</span></span><span class="line"><span class="cl">    qemu-img convert -f <span class="s2">&#34;</span><span class="nv">$DISK_FORMAT</span><span class="s2">&#34;</span> -O vmdk <span class="s2">&#34;</span><span class="nv">$FULL_PATH</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="nv">$TEMP_DIR</span><span class="s2">/</span><span class="nv">$VMDK_NAME</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Copy to destination</span>
+</span></span><span class="line"><span class="cl">    cp <span class="s2">&#34;</span><span class="nv">$TEMP_DIR</span><span class="s2">/</span><span class="nv">$VMDK_NAME</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1"># Add to VMX entries</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VMX_DISK_ENTRIES</span><span class="o">+=</span><span class="s2">&#34;scsi</span><span class="si">${</span><span class="nv">DISK_COUNT</span><span class="si">}</span><span class="s2">.present = \&#34;TRUE\&#34;\n&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VMX_DISK_ENTRIES</span><span class="o">+=</span><span class="s2">&#34;scsi</span><span class="si">${</span><span class="nv">DISK_COUNT</span><span class="si">}</span><span class="s2">.fileName = \&#34;</span><span class="si">${</span><span class="nv">VMDK_NAME</span><span class="si">}</span><span class="s2">\&#34;\n&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_COUNT</span><span class="o">=</span><span class="k">$((</span>DISK_COUNT <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span> <span class="o">&lt;&lt;&lt;</span> <span class="s2">&#34;</span><span class="nv">$DISKS</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Get memory and CPU information</span>
+</span></span><span class="line"><span class="cl"><span class="nv">MEMORY</span><span class="o">=</span><span class="k">$(</span>grep -E <span class="s2">&#34;^memory:&#34;</span> /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f2<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">MEMORY</span><span class="o">=</span><span class="si">${</span><span class="nv">MEMORY</span><span class="k">:-</span><span class="nv">2048</span><span class="si">}</span>  <span class="c1"># Default to 2GB if not specified</span>
+</span></span><span class="line"><span class="cl"><span class="nv">CORES</span><span class="o">=</span><span class="k">$(</span>grep -E <span class="s2">&#34;^cores:&#34;</span> /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f2<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">CORES</span><span class="o">=</span><span class="si">${</span><span class="nv">CORES</span><span class="k">:-</span><span class="nv">1</span><span class="si">}</span>  <span class="c1"># Default to 1 core if not specified</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SOCKETS</span><span class="o">=</span><span class="k">$(</span>grep -E <span class="s2">&#34;^sockets:&#34;</span> /etc/pve/qemu-server/<span class="si">${</span><span class="nv">VMID</span><span class="si">}</span>.conf <span class="p">|</span> cut -d<span class="s1">&#39; &#39;</span> -f2<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SOCKETS</span><span class="o">=</span><span class="si">${</span><span class="nv">SOCKETS</span><span class="k">:-</span><span class="nv">1</span><span class="si">}</span>  <span class="c1"># Default to 1 socket if not specified</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Create VMX file</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;vmx&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;ovf&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;ova&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Creating VMX file...&#34;</span>
+</span></span><span class="line"><span class="cl">    cat &gt; <span class="s2">&#34;</span><span class="nv">$TEMP_DIR</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span> <span class="s">&lt;&lt; EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">.encoding = &#34;UTF-8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">config.version = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">virtualHW.version = &#34;19&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">vmci0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">displayName = &#34;${VM_NAME}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">numvcpus = &#34;$((CORES * SOCKETS))&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">memsize = &#34;${MEMORY}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0.virtualDev = &#34;lsisas1068&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">$(echo -e &#34;$VMX_DISK_ENTRIES&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.virtualDev = &#34;vmxnet3&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.connectionType = &#34;bridged&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.startConnected = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.addressType = &#34;generated&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">bios.bootDelay = &#34;5000&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.powerOff = &#34;soft&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.powerOn = &#34;hard&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.suspend = &#34;hard&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.reset = &#34;soft&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">tools.syncTime = &#34;FALSE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Copy VMX file to destination</span>
+</span></span><span class="line"><span class="cl">    cp <span class="s2">&#34;</span><span class="nv">$TEMP_DIR</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span> <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/&#34;</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;VMX file created at </span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Convert to OVF/OVA if requested</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;ovf&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;ova&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Converting to </span><span class="nv">$FORMAT</span><span class="s2"> format...&#34;</span>
+</span></span><span class="line"><span class="cl">    check_command ovftool
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$FORMAT</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;ovf&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        ovftool <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span> <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.ovf&#34;</span>
+</span></span><span class="line"><span class="cl">        log <span class="s2">&#34;OVF file created at </span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.ovf&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        ovftool <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span> <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.ova&#34;</span>
+</span></span><span class="line"><span class="cl">        log <span class="s2">&#34;OVA file created at </span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.ova&#34;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c1"># Remove VMX and VMDK files as they&#39;re now in the OVA</span>
+</span></span><span class="line"><span class="cl">        rm <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="o">((</span><span class="nv">i</span><span class="o">=</span>0<span class="p">;</span> i&lt;DISK_COUNT<span class="p">;</span> i++<span class="o">))</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">            rm <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">/</span><span class="si">${</span><span class="nv">VM_NAME</span><span class="si">}</span><span class="s2">-disk</span><span class="si">${</span><span class="nv">i</span><span class="si">}</span><span class="s2">.vmdk&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">done</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Conversion completed successfully!&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;VM files are available in: </span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>原本的腳本有問題，下面為修改版修正scsi 編號不對問題
+用法 ````
+./proxmox-vm-to-esxi.sh <br>
+-i 160 <br>
+-d /mnt/pve/pve-nfs/win-ws22-hyperv <br>
+-p &ldquo;VM Network&rdquo;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span><span class="lnt">321
+</span><span class="lnt">322
+</span><span class="lnt">323
+</span><span class="lnt">324
+</span><span class="lnt">325
+</span><span class="lnt">326
+</span><span class="lnt">327
+</span><span class="lnt">328
+</span><span class="lnt">329
+</span><span class="lnt">330
+</span><span class="lnt">331
+</span><span class="lnt">332
+</span><span class="lnt">333
+</span><span class="lnt">334
+</span><span class="lnt">335
+</span><span class="lnt">336
+</span><span class="lnt">337
+</span><span class="lnt">338
+</span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
+</span><span class="lnt">342
+</span><span class="lnt">343
+</span><span class="lnt">344
+</span><span class="lnt">345
+</span><span class="lnt">346
+</span><span class="lnt">347
+</span><span class="lnt">348
+</span><span class="lnt">349
+</span><span class="lnt">350
+</span><span class="lnt">351
+</span><span class="lnt">352
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/usr/bin/env bash
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Convert a powered-off Proxmox VE VM for import into VMware ESXi.</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># This script creates:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   1. One streamOptimized transfer VMDK per Proxmox disk</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   2. A valid ESXi VMX file</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   3. import-on-esxi.sh, which converts transfer VMDKs to native ESXi thin VMDKs</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Usage:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   chmod +x proxmox-vm-to-esxi.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   ./proxmox-vm-to-esxi.sh -i 160 -d /path/to/output</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># After copying the output directory to an ESXi datastore:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   cd /vmfs/volumes/&lt;datastore&gt;/&lt;vm-directory&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   chmod +x import-on-esxi.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   ./import-on-esxi.sh</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#   vim-cmd solo/registervm &#34;/vmfs/volumes/&lt;datastore&gt;/&lt;vm-directory&gt;/&lt;vm-name&gt;.vmx&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -Eeuo pipefail
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">usage<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    cat <span class="s">&lt;&lt;&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">Usage: proxmox-vm-to-esxi.sh -i VMID [-n VM_NAME] [-d DESTINATION] [-p PORTGROUP]
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">Options:
+</span></span></span><span class="line"><span class="cl"><span class="s">  -i VMID         Proxmox VM ID (required)
+</span></span></span><span class="line"><span class="cl"><span class="s">  -n VM_NAME      Destination VM name (default: name from Proxmox)
+</span></span></span><span class="line"><span class="cl"><span class="s">  -d DESTINATION  Output directory (default: current directory/VM_NAME)
+</span></span></span><span class="line"><span class="cl"><span class="s">  -p PORTGROUP    ESXi port group (default: VM Network)
+</span></span></span><span class="line"><span class="cl"><span class="s">  -h              Show this help
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">printf</span> <span class="s1">&#39;[%s] %s\n&#39;</span> <span class="s2">&#34;</span><span class="k">$(</span>date <span class="s1">&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class="k">)</span><span class="s2">&#34;</span> <span class="s2">&#34;</span><span class="nv">$*</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">die<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">printf</span> <span class="s1">&#39;Error: %s\n&#39;</span> <span class="s2">&#34;</span><span class="nv">$*</span><span class="s2">&#34;</span> &gt;<span class="p">&amp;</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">require_command<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">command</span> -v <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        die <span class="s2">&#34;Required command &#39;</span><span class="nv">$1</span><span class="s2">&#39; was not found.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">escape_vmx<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">printf</span> <span class="s1">&#39;%s&#39;</span> <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl">        sed <span class="s1">&#39;s/\\/\\\\/g; s/&#34;/\\&#34;/g&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">VMID</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">VM_NAME</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DESTINATION</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PORTGROUP</span><span class="o">=</span><span class="s1">&#39;VM Network&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="nb">getopts</span> <span class="s1">&#39;:i:n:d:p:h&#39;</span> opt<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s2">&#34;</span><span class="nv">$opt</span><span class="s2">&#34;</span> in
+</span></span><span class="line"><span class="cl">        i<span class="o">)</span> <span class="nv">VMID</span><span class="o">=</span><span class="nv">$OPTARG</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        n<span class="o">)</span> <span class="nv">VM_NAME</span><span class="o">=</span><span class="nv">$OPTARG</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        d<span class="o">)</span> <span class="nv">DESTINATION</span><span class="o">=</span><span class="nv">$OPTARG</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        p<span class="o">)</span> <span class="nv">PORTGROUP</span><span class="o">=</span><span class="nv">$OPTARG</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        h<span class="o">)</span>
+</span></span><span class="line"><span class="cl">            usage
+</span></span><span class="line"><span class="cl">            <span class="nb">exit</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">            <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        :<span class="o">)</span> die <span class="s2">&#34;Option -</span><span class="nv">$OPTARG</span><span class="s2"> requires a value.&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">        <span class="se">\?</span><span class="o">)</span> die <span class="s2">&#34;Unknown option: -</span><span class="nv">$OPTARG</span><span class="s2">&#34;</span> <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">esac</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$VMID</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    usage
+</span></span><span class="line"><span class="cl">    die <span class="s1">&#39;VM ID is required.&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$VMID</span><span class="s2">&#34;</span> <span class="o">=</span>~ ^<span class="o">[</span>0-9<span class="o">]</span>+$ <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s1">&#39;VM ID must contain digits only.&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">require_command qm
+</span></span><span class="line"><span class="cl">require_command pvesm
+</span></span><span class="line"><span class="cl">require_command qemu-img
+</span></span><span class="line"><span class="cl">require_command sed
+</span></span><span class="line"><span class="cl">require_command awk
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">PVE_CONFIG</span><span class="o">=</span><span class="s2">&#34;/etc/pve/qemu-server/</span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2">.conf&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> -f <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s2">&#34;VM </span><span class="nv">$VMID</span><span class="s2"> was not found on this Proxmox node.&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> qm status <span class="s2">&#34;</span><span class="nv">$VMID</span><span class="s2">&#34;</span> <span class="p">|</span> grep -q <span class="s1">&#39;status: running&#39;</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    die <span class="s2">&#34;VM </span><span class="nv">$VMID</span><span class="s2"> is running. Shut it down before conversion.&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -z <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VM_NAME</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">        awk -F<span class="s1">&#39;: *&#39;</span> <span class="s1">&#39;$1 == &#34;name&#34; {print $2; exit}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">            <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">VM_NAME</span><span class="o">=</span><span class="s2">&#34;vm-</span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">FILE_NAME</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">printf</span> <span class="s1">&#39;%s&#39;</span> <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl">        sed <span class="s1">&#39;s#[/\\:*?&#34;&lt;&gt;|]#-#g; s/[[:space:]]\+/-/g&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$FILE_NAME</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">FILE_NAME</span><span class="o">=</span><span class="s2">&#34;vm-</span><span class="si">${</span><span class="nv">VMID</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> -z <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DESTINATION</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">/</span><span class="si">${</span><span class="nv">FILE_NAME</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mkdir -p <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DESTINATION</span><span class="o">=</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">VMX_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">DESTINATION</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">FILE_NAME</span><span class="si">}</span><span class="s2">.vmx&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">IMPORT_SCRIPT</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">DESTINATION</span><span class="si">}</span><span class="s2">/import-on-esxi.sh&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> ! -e <span class="s2">&#34;</span><span class="nv">$VMX_PATH</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s2">&#34;Output already exists: </span><span class="nv">$VMX_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[[</span> ! -e <span class="s2">&#34;</span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s2">&#34;Output already exists: </span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">MEMORY</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">    awk -F<span class="s1">&#39;: *&#39;</span> <span class="s1">&#39;$1 == &#34;memory&#34; {print $2; exit}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">CORES</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">    awk -F<span class="s1">&#39;: *&#39;</span> <span class="s1">&#39;$1 == &#34;cores&#34; {print $2; exit}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">SOCKETS</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">    awk -F<span class="s1">&#39;: *&#39;</span> <span class="s1">&#39;$1 == &#34;sockets&#34; {print $2; exit}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">BIOS</span><span class="o">=</span><span class="k">$(</span>
+</span></span><span class="line"><span class="cl">    awk -F<span class="s1">&#39;: *&#39;</span> <span class="s1">&#39;$1 == &#34;bios&#34; {print $2; exit}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">MEMORY</span><span class="o">=</span><span class="si">${</span><span class="nv">MEMORY</span><span class="k">:-</span><span class="nv">2048</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">CORES</span><span class="o">=</span><span class="si">${</span><span class="nv">CORES</span><span class="k">:-</span><span class="nv">1</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">SOCKETS</span><span class="o">=</span><span class="si">${</span><span class="nv">SOCKETS</span><span class="k">:-</span><span class="nv">1</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">NUM_VCPUS</span><span class="o">=</span><span class="k">$((</span>CORES <span class="o">*</span> SOCKETS<span class="k">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mapfile -t DISK_LINES &lt; &lt;<span class="o">(</span>
+</span></span><span class="line"><span class="cl">    awk <span class="s1">&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        /^(scsi|sata|ide|virtio)[0-9]+:/ &amp;&amp;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        $0 !~ /(^|,)media=cdrom(,|$)/ &amp;&amp;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        $0 !~ /(^|,)cdrom(,|$)/ &amp;&amp;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        $0 !~ /: *none(,|$)/ &amp;&amp;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        $0 !~ /cloudinit/
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#39;</span> <span class="s2">&#34;</span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">((</span> <span class="si">${#</span><span class="nv">DISK_LINES</span><span class="p">[@]</span><span class="si">}</span> &gt; <span class="m">0</span> <span class="o">))</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s2">&#34;No supported VM disks were found in </span><span class="nv">$PVE_CONFIG</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">((</span> <span class="si">${#</span><span class="nv">DISK_LINES</span><span class="p">[@]</span><span class="si">}</span> &lt;<span class="o">=</span> <span class="m">15</span> <span class="o">))</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">    die <span class="s1">&#39;This script supports at most 15 SCSI disks.&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">DISPLAY_NAME_ESCAPED</span><span class="o">=</span><span class="k">$(</span>escape_vmx <span class="s2">&#34;</span><span class="nv">$VM_NAME</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PORTGROUP_ESCAPED</span><span class="o">=</span><span class="k">$(</span>escape_vmx <span class="s2">&#34;</span><span class="nv">$PORTGROUP</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$BIOS</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s1">&#39;ovmf&#39;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VMWARE_FIRMWARE</span><span class="o">=</span><span class="s1">&#39;efi&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VMWARE_FIRMWARE</span><span class="o">=</span><span class="s1">&#39;bios&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat &gt;<span class="s2">&#34;</span><span class="nv">$VMX_PATH</span><span class="s2">&#34;</span> <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">.encoding = &#34;UTF-8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">config.version = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">virtualHW.version = &#34;19&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">displayName = &#34;${DISPLAY_NAME_ESCAPED}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">numvcpus = &#34;${NUM_VCPUS}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">memsize = &#34;${MEMORY}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">firmware = &#34;${VMWARE_FIRMWARE}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge4.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge5.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge6.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.virtualDev = &#34;pcieRootPort&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">pciBridge7.functions = &#34;8&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0.virtualDev = &#34;lsisas1068&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.virtualDev = &#34;e1000e&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.networkName = &#34;${PORTGROUP_ESCAPED}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.startConnected = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">ethernet0.addressType = &#34;generated&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">vmci0.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">tools.syncTime = &#34;FALSE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.powerOff = &#34;soft&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.powerOn = &#34;hard&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.suspend = &#34;hard&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">powerType.reset = &#34;soft&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">uuid.action = &#34;create&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat &gt;<span class="s2">&#34;</span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span> <span class="s">&lt;&lt;&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="s">set -eu
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">cd &#34;$(dirname &#34;$0&#34;)&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">command -v vmkfstools &gt;/dev/null 2&gt;&amp;1 || {
+</span></span></span><span class="line"><span class="cl"><span class="s">    echo &#39;Error: Run this script from an ESXi shell.&#39; &gt;&amp;2
+</span></span></span><span class="line"><span class="cl"><span class="s">    exit 1
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Converting Proxmox VM </span><span class="nv">$VMID</span><span class="s2"> (</span><span class="nv">$VM_NAME</span><span class="s2">)&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;Output directory: </span><span class="nv">$DESTINATION</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">DISK_INDEX</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> DISK_LINE in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">DISK_LINES</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_ID</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK_LINE</span><span class="p">%%:*</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_SPEC</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK_LINE</span><span class="p">#*:</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_SPEC</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK_SPEC</span><span class="p"># </span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">VOLUME_ID</span><span class="o">=</span><span class="si">${</span><span class="nv">DISK_SPEC</span><span class="p">%%,*</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">[[</span> -n <span class="s2">&#34;</span><span class="nv">$VOLUME_ID</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        die <span class="s2">&#34;Could not parse disk entry: </span><span class="nv">$DISK_LINE</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$VOLUME_ID</span><span class="s2">&#34;</span> <span class="o">==</span> /* <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">SOURCE_PATH</span><span class="o">=</span><span class="nv">$VOLUME_ID</span>
+</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$VOLUME_ID</span><span class="s2">&#34;</span> <span class="o">==</span> *:* <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">SOURCE_PATH</span><span class="o">=</span><span class="k">$(</span>pvesm path <span class="s2">&#34;</span><span class="nv">$VOLUME_ID</span><span class="s2">&#34;</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        die <span class="s2">&#34;Unsupported disk reference &#39;</span><span class="nv">$VOLUME_ID</span><span class="s2">&#39;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">[[</span> -e <span class="s2">&#34;</span><span class="nv">$SOURCE_PATH</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        die <span class="s2">&#34;Source disk does not exist: </span><span class="nv">$SOURCE_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">SCSI_UNIT</span><span class="o">=</span><span class="nv">$DISK_INDEX</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># VMware reserves SCSI unit 7 for the controller.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">((</span> SCSI_UNIT &gt;<span class="o">=</span> <span class="m">7</span> <span class="o">))</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">SCSI_UNIT</span><span class="o">=</span><span class="k">$((</span>SCSI_UNIT <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">TRANSFER_VMDK</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">FILE_NAME</span><span class="si">}</span><span class="s2">-disk</span><span class="si">${</span><span class="nv">DISK_INDEX</span><span class="si">}</span><span class="s2">-transfer.vmdk&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">NATIVE_VMDK</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">FILE_NAME</span><span class="si">}</span><span class="s2">-disk</span><span class="si">${</span><span class="nv">DISK_INDEX</span><span class="si">}</span><span class="s2">.vmdk&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">TRANSFER_PATH</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">DESTINATION</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">TRANSFER_VMDK</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="o">[[</span> ! -e <span class="s2">&#34;</span><span class="nv">$TRANSFER_PATH</span><span class="s2">&#34;</span> <span class="o">]]</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">        die <span class="s2">&#34;Output already exists: </span><span class="nv">$TRANSFER_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Disk </span><span class="nv">$DISK_ID</span><span class="s2">: </span><span class="nv">$SOURCE_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    log <span class="s2">&#34;Creating transfer image: </span><span class="nv">$TRANSFER_VMDK</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    qemu-img convert <span class="se">\
+</span></span></span><span class="line"><span class="cl">        -p <span class="se">\
+</span></span></span><span class="line"><span class="cl">        -O vmdk <span class="se">\
+</span></span></span><span class="line"><span class="cl">        -o <span class="nv">subformat</span><span class="o">=</span>streamOptimized,adapter_type<span class="o">=</span>lsilogic <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$SOURCE_PATH</span><span class="s2">&#34;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">        <span class="s2">&#34;</span><span class="nv">$TRANSFER_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    cat &gt;&gt;<span class="s2">&#34;</span><span class="nv">$VMX_PATH</span><span class="s2">&#34;</span> <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0:${SCSI_UNIT}.present = &#34;TRUE&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0:${SCSI_UNIT}.fileName = &#34;${NATIVE_VMDK}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">scsi0:${SCSI_UNIT}.deviceType = &#34;scsi-hardDisk&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    cat &gt;&gt;<span class="s2">&#34;</span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span> <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">if [ -e &#34;${NATIVE_VMDK}&#34; ] ||
+</span></span></span><span class="line"><span class="cl"><span class="s">   [ -e &#34;${NATIVE_VMDK%.vmdk}-flat.vmdk&#34; ]; then
+</span></span></span><span class="line"><span class="cl"><span class="s">    echo &#34;Error: Destination disk already exists: ${NATIVE_VMDK}&#34; &gt;&amp;2
+</span></span></span><span class="line"><span class="cl"><span class="s">    exit 1
+</span></span></span><span class="line"><span class="cl"><span class="s">fi
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#34;Importing ${TRANSFER_VMDK} -&gt; ${NATIVE_VMDK}&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">vmkfstools \
+</span></span></span><span class="line"><span class="cl"><span class="s">    -i &#34;${TRANSFER_VMDK}&#34; \
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;${NATIVE_VMDK}&#34; \
+</span></span></span><span class="line"><span class="cl"><span class="s">    -d thin
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">DISK_INDEX</span><span class="o">=</span><span class="k">$((</span>DISK_INDEX <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat &gt;&gt;<span class="s2">&#34;</span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span> <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">echo
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#39;Disk import completed.&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#39;Register the VM with:&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">echo &#34;vim-cmd solo/registervm \&#34;\$(pwd)/${FILE_NAME}.vmx\&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">chmod +x <span class="s2">&#34;</span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat &gt;<span class="s2">&#34;</span><span class="si">${</span><span class="nv">DESTINATION</span><span class="si">}</span><span class="s2">/README-ESXI.txt&#34;</span> <span class="s">&lt;&lt;EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">Proxmox VM $VMID was exported for ESXi.
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">1. Copy this complete directory to an ESXi datastore.
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">2. Open an ESXi SSH shell and enter the directory.
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">3. Run:
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">   chmod +x import-on-esxi.sh
+</span></span></span><span class="line"><span class="cl"><span class="s">   ./import-on-esxi.sh
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">4. Register the VM:
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">   vim-cmd solo/registervm \
+</span></span></span><span class="line"><span class="cl"><span class="s">   &#34;/vmfs/volumes/&lt;datastore&gt;/&lt;directory&gt;/${FILE_NAME}.vmx&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">5. Confirm the firmware before first boot:
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">   Proxmox BIOS: ${BIOS:-seabios}
+</span></span></span><span class="line"><span class="cl"><span class="s">   VMware firmware: ${VMWARE_FIRMWARE}
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">Do not attach the *-transfer.vmdk files directly.
+</span></span></span><span class="line"><span class="cl"><span class="s">They are import sources.
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">After the VM boots and is verified, the *-transfer.vmdk files
+</span></span></span><span class="line"><span class="cl"><span class="s">may be removed.
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">log <span class="s1">&#39;Conversion completed successfully.&#39;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;VMX: </span><span class="nv">$VMX_PATH</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s2">&#34;ESXi import script: </span><span class="nv">$IMPORT_SCRIPT</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">log <span class="s1">&#39;Copy the complete output directory to ESXi.&#39;</span>
+</span></span><span class="line"><span class="cl">log <span class="s1">&#39;Then run import-on-esxi.sh from the ESXi shell.&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="二vsphere-轉-hyper-v">二、vSphere 轉 Hyper-V
+</h2><p><img
+    src="/my-portfolio/Pasted%20image%2020261017235747.png"
+    alt=""
+    loading="lazy"
+>
+進到畫面安裝PowerCLI
+<img
+    src="/my-portfolio/Pasted%20image%2020261017235858.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="esxi-轉-proxmox">ESXi 轉 Proxmox
+</h2><h3 id="遷移-從esxi">遷移: 從ESXi
+</h3><p>會有驅動問題，在Windows不能開機就選SATA
+<img
+    src="/my-portfolio/260404-pve.png"
+    alt=""
+    loading="lazy"
+></p>
+<h3 id="遷移-p2v">遷移: P2V
+</h3><ol>
+<li>把目前開機的作業系統,使用對應軟體可直接熱轉換</li>
+</ol>
+<ul>
+<li>Disk2vhd</li>
+<li>StarWind V2V</li>
+</ul>
+<ol start="2">
+<li>先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+<img
+    src="/my-portfolio/260404-v2v.png"
+    alt=""
+    loading="lazy"
+></li>
+</ol>
+<h3 id="遷移-轉換至esxi">遷移: 轉換至ESXi
+</h3><p><img
+    src="/my-portfolio/PixPin_2026-05-02_00-17-16.png"
+    alt=""
+    loading="lazy"
+></p>
+<h2 id="三hyper-v-遷移至pve">三、Hyper-V 遷移至PVE
+</h2><ol>
+<li>將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳</li>
+<li>輸入以下指令</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
+</span></span><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">hdd</span>
+</span></span><span class="line"><span class="cl"><span class="n">qemu</span><span class="o">-</span><span class="n">img</span> <span class="nb">convert</span> <span class="o">-</span><span class="n">O</span> <span class="n">qcow2</span> <span class="n">WIN10</span><span class="o">.</span><span class="n">vhdx</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span>
+</span></span><span class="line"><span class="cl"><span class="n">mv</span> <span class="n">vm</span><span class="o">-</span><span class="mi">103</span><span class="o">-</span><span class="n">disk0</span><span class="o">.</span><span class="n">qcow2</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">images</span><span class="o">/</span><span class="mi">103</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">qm</span> <span class="n">rescan</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>BIOS 選擇<strong>OVMF(UEFI)</strong>、<strong>q35</strong>，網路選擇<strong>E1000</strong></li>
+<li>最後要安裝Vitro-win驅動</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/my-portfolio/tags/%E8%99%9B%E6%93%AC%E5%8C%96/">虛擬化</a>
+        
+            <a href="/my-portfolio/tags/pve/">PVE</a>
+        
+            <a href="/my-portfolio/tags/esxi/">ESXi</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/my-portfolio/p/proxmox-%E6%9E%B6%E8%A8%ADnfs-server%E8%88%87esxi-xenserver%E4%BA%92%E9%80%9A/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Proxmox 架設NFS Server與ESXi XenServer互通</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>SOC on PIN技術筆記</title>
+        <link>http://localhost:1313/my-portfolio/tags/soc/</link>
+        <description>Recent content in SOC on PIN技術筆記</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>Example Person</copyright>
+        <lastBuildDate>Sat, 17 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/soc/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>HostGuard‑AI 審計平台</title>
+        <link>http://localhost:1313/my-portfolio/p/hostguardai-%E5%AF%A9%E8%A8%88%E5%B9%B3%E5%8F%B0/</link>
+        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/p/hostguardai-%E5%AF%A9%E8%A8%88%E5%B9%B3%E5%8F%B0/</guid>
+        <description>&lt;p&gt;原文&lt;a href=&#34;https://blog.hx99.net/Tech/4079.html&#34;&gt;出處&lt;/a&gt;作者在這，軟體使用 FastAPI完成，可以使用LXC部屬
+&lt;img
+    src=&#34;http://localhost:1313/my-portfolio/Pasted%20image%2020261017175606.png&#34;
+    alt=&#34;&#34;
+    loading=&#34;lazy&#34;
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

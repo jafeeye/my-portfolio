@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="OS發行版 FygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統 ZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows Tiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="OS發行版\rFygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統\rZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows\rTiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/ https://massgrave.dev/\n優化指令\r停用Windows Defender 停用 Windows Update 停用 Superfetch 開啟 RDP 關閉休眠 關閉記憶體完整性 1 2 3 4 5 6 7 # 開啟rdp Set-ItemProperty -Path &#39;HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server&#39; -name &#34;fDenyTSConnections&#34; -value 0 # 關閉休眠 powercfg /hibernate off # 關閉記憶體完整性 reg add &#34;HKLM\\System\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity&#34; /v &#34;Enabled&#34; /t REG_DWORD /d 0 /f # Credential Guard (停用會導致hyper-v無法開啟) ">
 <title>OS整理下載</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/os%E6%95%B4%E7%90%86%E4%B8%8B%E8%BC%89/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.21c0a94896465e95652d20b173eac934fb2be9fe692f3b28dda246cd017de86c.css"><meta property='og:title' content="OS整理下載">
-<meta property='og:description' content="OS發行版 FygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統 ZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows Tiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/\n">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="OS整理下載">
+<meta property='og:description' content="OS發行版\rFygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統\rZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows\rTiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/ https://massgrave.dev/\n優化指令\r停用Windows Defender 停用 Windows Update 停用 Superfetch 開啟 RDP 關閉休眠 關閉記憶體完整性 1 2 3 4 5 6 7 # 開啟rdp Set-ItemProperty -Path &#39;HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server&#39; -name &#34;fDenyTSConnections&#34; -value 0 # 關閉休眠 powercfg /hibernate off # 關閉記憶體完整性 reg add &#34;HKLM\\System\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity&#34; /v &#34;Enabled&#34; /t REG_DWORD /d 0 /f # Credential Guard (停用會導致hyper-v無法開啟) ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/os%E6%95%B4%E7%90%86%E4%B8%8B%E8%BC%89/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-05-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-05-29T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="OS整理下載">
-<meta name="twitter:description" content="OS發行版 FygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統 ZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows Tiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/\n">
+<meta name="twitter:description" content="OS發行版\rFygoOS\nParrotOS：另一種Kail Linux 的Debian發行版 Fedora CoreOS：預裝containerd，使用Ignition Config可預裝K8S\nFlatcar：專屬容器的linux系統 NetBSD：硬體支援週期長，從1970s-老舊機器都支援，但不支援Nvidia\nincusOS：所有指令都被禁止，只能建立LXC相關容器\nOpenVZ：\nIBM PowerVC：IBM專屬虛擬化平台，需授權\nTalos Linux/RancherOS ：針對K8s的發行版\nFreeDOS SvarDOS：開源DR-DOS PCDOS FreedomBox\nOpenMediaVault\nUmbrelOS\nRaspberry Pi OS Desktop RetroNAS MS-DOS 8.0\nSolaris 10、11/ OpenIndiana / SmartOS / OmniOS PrimeOS/ Phoenix OS / FydeOS\nNAS 系統\rZimaOS CasaOS fnOS TrueNAS UnRAID OMV\nWindows\rTiny 11 Nano 11 UnCyler 優化系統映像檔 UUP dump https://uupdump.net/ https://massgrave.dev/\n優化指令\r停用Windows Defender 停用 Windows Update 停用 Superfetch 開啟 RDP 關閉休眠 關閉記憶體完整性 1 2 3 4 5 6 7 # 開啟rdp Set-ItemProperty -Path &#39;HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server&#39; -name &#34;fDenyTSConnections&#34; -value 0 # 關閉休眠 powercfg /hibernate off # 關閉記憶體完整性 reg add &#34;HKLM\\System\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity&#34; /v &#34;Enabled&#34; /t REG_DWORD /d 0 /f # Credential Guard (停用會導致hyper-v無法開啟) ">
     </head>
     <body class="
     article-page
@@ -56,7 +56,7 @@
                     
                     
                         
-                        <img src="/my-portfolio/img/avatar_hu_7d70d9a336b4e0d9.png" width="300"
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -287,6 +287,7 @@
     <li><a href="#os發行版">OS發行版</a></li>
     <li><a href="#nas-系統">NAS 系統</a></li>
     <li><a href="#windows">Windows</a></li>
+    <li><a href="#優化指令">優化指令</a></li>
   </ol>
 </nav>
         </div>
@@ -395,8 +396,38 @@ OMV</p>
 </h2><p>Tiny 11
 Nano 11
 <a href="https://home.gamer.com.tw/eason929623">UnCyler</a> 優化系統映像檔
-UUP dump <a href="https://uupdump.net/">https://uupdump.net/</a></p>
-
+UUP dump <a href="https://uupdump.net/">https://uupdump.net/</a>
+<a href="https://massgrave.dev/">https://massgrave.dev/</a></p>
+<h2 id="優化指令">優化指令
+</h2><ul>
+<li>停用Windows Defender</li>
+<li>停用 Windows Update</li>
+<li>停用 Superfetch</li>
+<li>開啟 RDP</li>
+<li>關閉休眠</li>
+<li>關閉記憶體完整性</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 開啟rdp
+</span></span><span class="line"><span class="cl">Set-ItemProperty -Path &#39;HKLM:\System\CurrentControlSet\Control\Terminal Server&#39; -name &#34;fDenyTSConnections&#34; -value 0  
+</span></span><span class="line"><span class="cl"># 關閉休眠
+</span></span><span class="line"><span class="cl">powercfg /hibernate off
+</span></span><span class="line"><span class="cl"># 關閉記憶體完整性
+</span></span><span class="line"><span class="cl">reg add &#34;HKLM\System\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity&#34; /v &#34;Enabled&#34; /t REG_DWORD /d 0 /f
+</span></span><span class="line"><span class="cl"># Credential Guard (停用會導致hyper-v無法開啟)
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
@@ -574,7 +605,7 @@ UUP dump <a href="https://uupdump.net/">https://uupdump.net/</a></p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/my-portfolio/ts/main.7cfa1fa7b02828f9c832f26f71948a281f09ed467c580b2e9b60efcda57bc327.js" defer></script>
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

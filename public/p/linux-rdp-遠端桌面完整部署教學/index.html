@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content=" 適用環境：Ubuntu 24.04 LTS 以上、Rocky Linux 9 / 10、GNOME Desktop、Proxmox VE / VMware ESXi 虛擬機\n最後更新：2026-10-12\n主題：RDP Server 部署、遠端登入、Firewall 設定、NLA 驗證、黑畫面排查與效能調校\n1. 前言\rLinux 遠端桌面常見的方式包含 RDP、VNC 與 SSH X11 Forwarding。\n其中 RDP（Remote Desktop Protocol）是 Microsoft 制定的遠端桌面協定，可以讓 Windows 使用內建的 mstsc 直接連線到 Linux 圖形桌面。\n目前 Linux 遠端桌面方案比較\r技術 日常桌面 影片／動畫 GPU 支援 適合用途 GNOME Remote Desktop（RDP） 很好 中～好 視環境而定 GNOME 遠端管理 xrdp + Xorg 好 普通 通常有限 伺服器、獨立登入工作階段 KDE Plasma + KRdp 好 中～好 Wayland 合成器 KDE 遠端桌面 Sunshine + Moonlight 很好 很好 強，支援硬體編碼 高流暢度桌面、影音、遊戲 傳統 VNC 普通 較弱 視實作而定 簡單管理 本文將分別介紹兩種方案。\n">
+<title>Linux RDP 遠端桌面完整部署教學</title>
+
+<link rel='canonical' href='http://localhost:1313/my-portfolio/p/linux-rdp-%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%95%99%E5%AD%B8/'>
+
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Linux RDP 遠端桌面完整部署教學">
+<meta property='og:description' content=" 適用環境：Ubuntu 24.04 LTS 以上、Rocky Linux 9 / 10、GNOME Desktop、Proxmox VE / VMware ESXi 虛擬機\n最後更新：2026-10-12\n主題：RDP Server 部署、遠端登入、Firewall 設定、NLA 驗證、黑畫面排查與效能調校\n1. 前言\rLinux 遠端桌面常見的方式包含 RDP、VNC 與 SSH X11 Forwarding。\n其中 RDP（Remote Desktop Protocol）是 Microsoft 制定的遠端桌面協定，可以讓 Windows 使用內建的 mstsc 直接連線到 Linux 圖形桌面。\n目前 Linux 遠端桌面方案比較\r技術 日常桌面 影片／動畫 GPU 支援 適合用途 GNOME Remote Desktop（RDP） 很好 中～好 視環境而定 GNOME 遠端管理 xrdp + Xorg 好 普通 通常有限 伺服器、獨立登入工作階段 KDE Plasma + KRdp 好 中～好 Wayland 合成器 KDE 遠端桌面 Sunshine + Moonlight 很好 很好 強，支援硬體編碼 高流暢度桌面、影音、遊戲 傳統 VNC 普通 較弱 視實作而定 簡單管理 本文將分別介紹兩種方案。\n">
+<meta property='og:url' content='http://localhost:1313/my-portfolio/p/linux-rdp-%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%95%99%E5%AD%B8/'>
+<meta property='og:site_name' content='PIN技術筆記'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-10-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-12T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="Linux RDP 遠端桌面完整部署教學">
+<meta name="twitter:description" content=" 適用環境：Ubuntu 24.04 LTS 以上、Rocky Linux 9 / 10、GNOME Desktop、Proxmox VE / VMware ESXi 虛擬機\n最後更新：2026-10-12\n主題：RDP Server 部署、遠端登入、Firewall 設定、NLA 驗證、黑畫面排查與效能調校\n1. 前言\rLinux 遠端桌面常見的方式包含 RDP、VNC 與 SSH X11 Forwarding。\n其中 RDP（Remote Desktop Protocol）是 Microsoft 制定的遠端桌面協定，可以讓 Windows 使用內建的 mstsc 直接連線到 Linux 圖形桌面。\n目前 Linux 遠端桌面方案比較\r技術 日常桌面 影片／動畫 GPU 支援 適合用途 GNOME Remote Desktop（RDP） 很好 中～好 視環境而定 GNOME 遠端管理 xrdp + Xorg 好 普通 通常有限 伺服器、獨立登入工作階段 KDE Plasma + KRdp 好 中～好 Wayland 合成器 KDE 遠端桌面 Sunshine + Moonlight 很好 很好 強，支援硬體編碼 高流暢度桌面、影音、遊戲 傳統 VNC 普通 較弱 視實作而定 簡單管理 本文將分別介紹兩種方案。\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/my-portfolio/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/my-portfolio/img/avatar_hu_b5976aa1afdc1d2e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/my-portfolio">PIN技術筆記</a></h1>
+            <h2 class="site-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/my-portfolio/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>首頁</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>關於我</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/certs/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>考照心得</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜尋文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/web/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>部落好站</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/my-portfolio/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>全部文章</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#1-前言">1. 前言</a></li>
+    <li><a href="#目前-linux-遠端桌面方案比較">目前 Linux 遠端桌面方案比較</a></li>
+    <li><a href="#2-gnome-remote-desktop-與-xrdp-比較">2. GNOME Remote Desktop 與 xrdp 比較</a></li>
+    <li><a href="#一gnome-有兩種-rdp-模式">一、GNOME 有兩種 RDP 模式</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#3-gnome-remote-desktop-運作原理">3. GNOME Remote Desktop 運作原理</a>
+      <ol>
+        <li><a href="#31-desktop-sharing">3.1 Desktop Sharing</a></li>
+        <li><a href="#32-remote-login">3.2 Remote Login</a></li>
+        <li><a href="#33-remote-login-登入流程">3.3 Remote Login 登入流程</a></li>
+      </ol>
+    </li>
+    <li><a href="#4-ubuntu-安裝-gnome-remote-desktop">4. Ubuntu 安裝 GNOME Remote Desktop</a>
+      <ol>
+        <li><a href="#41-確認系統版本">4.1 確認系統版本</a></li>
+        <li><a href="#42-安裝必要套件">4.2 安裝必要套件</a></li>
+        <li><a href="#43-開啟-remote-login">4.3 開啟 Remote Login</a></li>
+        <li><a href="#44-確認-rdp-狀態">4.4 確認 RDP 狀態</a></li>
+      </ol>
+    </li>
+    <li><a href="#5-使用-grdctl-管理-rdp">5. 使用 grdctl 管理 RDP</a>
+      <ol>
+        <li><a href="#51-查看系統層級設定">5.1 查看系統層級設定</a></li>
+        <li><a href="#52-啟用-remote-login-rdp">5.2 啟用 Remote Login RDP</a></li>
+        <li><a href="#53-設定帳號密碼">5.3 設定帳號密碼</a></li>
+        <li><a href="#54-停用-remote-login">5.4 停用 Remote Login</a></li>
+        <li><a href="#55-tls-憑證">5.5 TLS 憑證</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#6-rocky-linux-版本差異">6. Rocky Linux 版本差異</a></li>
+    <li><a href="#7-rocky-linux-10gnome-remote-login">7. Rocky Linux 10：GNOME Remote Login</a>
+      <ol>
+        <li><a href="#71-rocky-linux-防火牆設定">7.1 Rocky Linux 防火牆設定</a></li>
+        <li><a href="#72-selinux-注意事項">7.2 SELinux 注意事項</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#8-ubuntu-安裝-xrdp">8. Ubuntu 安裝 xrdp</a>
+      <ol>
+        <li><a href="#81-安裝套件">8.1 安裝套件</a></li>
+        <li><a href="#82-設定遠端桌面工作階段">8.2 設定遠端桌面工作階段</a></li>
+        <li><a href="#83-啟動-xrdp">8.3 啟動 xrdp</a></li>
+        <li><a href="#84-ubuntu-ufw-防火牆">8.4 Ubuntu UFW 防火牆</a></li>
+        <li><a href="#85-windows-連線">8.5 Windows 連線</a></li>
+      </ol>
+    </li>
+    <li><a href="#9-rocky-linux-9-安裝-xrdp">9. Rocky Linux 9 安裝 xrdp</a>
+      <ol>
+        <li><a href="#91-啟用-crb-與-epel">9.1 啟用 CRB 與 EPEL</a></li>
+        <li><a href="#92-安裝-xrdp">9.2 安裝 xrdp</a></li>
+        <li><a href="#93-啟動服務">9.3 啟動服務</a></li>
+        <li><a href="#94-放行防火牆">9.4 放行防火牆</a></li>
+        <li><a href="#95-檢查">9.5 檢查</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#10-windows-rdp-client">10. Windows RDP Client</a></li>
+    <li><a href="#11-linux-rdp-client">11. Linux RDP Client</a></li>
+    <li><a href="#12-macos-rdp-client">12. macOS RDP Client</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#13-windows-顯示驗證錯誤">13. Windows 顯示驗證錯誤</a>
+      <ol>
+        <li><a href="#131-錯誤原因">13.1 錯誤原因</a></li>
+        <li><a href="#132-清除-windows-rdp-憑證">13.2 清除 Windows RDP 憑證</a></li>
+        <li><a href="#133-查看-gnome-rdp-日誌">13.3 查看 GNOME RDP 日誌</a></li>
+        <li><a href="#134-檢查版本">13.4 檢查版本</a></li>
+      </ol>
+    </li>
+    <li><a href="#14-rdp-登入成功但畫面全黑">14. RDP 登入成功，但畫面全黑</a>
+      <ol>
+        <li><a href="#141-檢查登入工作階段">14.1 檢查登入工作階段</a></li>
+        <li><a href="#142-查看-gdm-日誌">14.2 查看 GDM 日誌</a></li>
+        <li><a href="#143-查看-rdp-日誌">14.3 查看 RDP 日誌</a></li>
+        <li><a href="#144-重新連線測試">14.4 重新連線測試</a></li>
+      </ol>
+    </li>
+    <li><a href="#15-rdp-port-無法連線">15. RDP Port 無法連線</a></li>
+    <li><a href="#16-xrdp-登入黑畫面">16. xrdp 登入黑畫面</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#17-linux-rdp-與-hypervisor-效能">17. Linux RDP 與 Hypervisor 效能</a>
+      <ol>
+        <li><a href="#171-proxmox-cpu-type">17.1 Proxmox CPU Type</a></li>
+        <li><a href="#172-檢查虛擬-gpu">17.2 檢查虛擬 GPU</a></li>
+        <li><a href="#173-檢查磁碟等待">17.3 檢查磁碟等待</a></li>
+        <li><a href="#174-檢查-cpu-等待">17.4 檢查 CPU 等待</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#18-gnome-remote-desktop">18. GNOME Remote Desktop</a></li>
+    <li><a href="#19-xrdp">19. xrdp</a></li>
+    <li><a href="#20-rocky-linux-firewall">20. Rocky Linux Firewall</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#參考資料">參考資料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/my-portfolio/p/linux-rdp-%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%95%99%E5%AD%B8/">Linux RDP 遠端桌面完整部署教學</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-10-12T00:00:00Z'>Oct 12, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    10 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <blockquote>
+<p>適用環境：Ubuntu 24.04 LTS 以上、Rocky Linux 9 / 10、GNOME Desktop、Proxmox VE / VMware ESXi 虛擬機<br>
+最後更新：2026-10-12<br>
+主題：RDP Server 部署、遠端登入、Firewall 設定、NLA 驗證、黑畫面排查與效能調校</p>
+</blockquote>
+<h2 id="1-前言">1. 前言
+</h2><p>Linux 遠端桌面常見的方式包含 RDP、VNC 與 SSH X11 Forwarding。</p>
+<p>其中 RDP（Remote Desktop Protocol）是 Microsoft 制定的遠端桌面協定，可以讓 Windows 使用內建的 <code>mstsc</code> 直接連線到 Linux 圖形桌面。</p>
+<h2 id="目前-linux-遠端桌面方案比較">目前 Linux 遠端桌面方案比較
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>技術</th>
+					<th>日常桌面</th>
+					<th>影片／動畫</th>
+					<th>GPU 支援</th>
+					<th>適合用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>GNOME Remote Desktop（RDP）</td>
+					<td>很好</td>
+					<td>中～好</td>
+					<td>視環境而定</td>
+					<td>GNOME 遠端管理</td>
+			</tr>
+			<tr>
+					<td>xrdp + Xorg</td>
+					<td>好</td>
+					<td>普通</td>
+					<td>通常有限</td>
+					<td>伺服器、獨立登入工作階段</td>
+			</tr>
+			<tr>
+					<td>KDE Plasma + KRdp</td>
+					<td>好</td>
+					<td>中～好</td>
+					<td>Wayland 合成器</td>
+					<td>KDE 遠端桌面</td>
+			</tr>
+			<tr>
+					<td>Sunshine + Moonlight</td>
+					<td>很好</td>
+					<td>很好</td>
+					<td>強，支援硬體編碼</td>
+					<td>高流暢度桌面、影音、遊戲</td>
+			</tr>
+			<tr>
+					<td>傳統 VNC</td>
+					<td>普通</td>
+					<td>較弱</td>
+					<td>視實作而定</td>
+					<td>簡單管理</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>本文將分別介紹兩種方案。</p>
+<h2 id="2-gnome-remote-desktop-與-xrdp-比較">2. GNOME Remote Desktop 與 xrdp 比較
+</h2><h2 id="一gnome-有兩種-rdp-模式">一、GNOME 有兩種 RDP 模式
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>功能</th>
+					<th>Remote Login</th>
+					<th>Desktop Sharing</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>無人登入時連線</td>
+					<td>支援</td>
+					<td>通常不支援</td>
+			</tr>
+			<tr>
+					<td>顯示 GNOME 登入畫面</td>
+					<td></td>
+					<td>不支援</td>
+			</tr>
+			<tr>
+					<td>獨立遠端工作階段</td>
+					<td>支援</td>
+					<td>分享現有桌面</td>
+			</tr>
+			<tr>
+					<td>預設 Port</td>
+					<td>3389</td>
+					<td>3389 或 3390</td>
+			</tr>
+			<tr>
+					<td>適合用途</td>
+					<td>遠端 Linux 工作站</td>
+					<td>遠端協助</td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>項目</th>
+					<th>GNOME Remote Desktop</th>
+					<th>xrdp</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>開發專案</td>
+					<td>GNOME</td>
+					<td>Neutrinolabs</td>
+			</tr>
+			<tr>
+					<td>RDP 協定</td>
+					<td>支援</td>
+					<td>支援</td>
+			</tr>
+			<tr>
+					<td>GNOME 整合</td>
+					<td>原生</td>
+					<td>依工作階段配置</td>
+			</tr>
+			<tr>
+					<td>Wayland</td>
+					<td>原生整合</td>
+					<td>傳統 xrdp 主要使用 Xorg</td>
+			</tr>
+			<tr>
+					<td>Xorg</td>
+					<td>不以此作為新式 Remote Login 的主要後端</td>
+					<td>常用</td>
+			</tr>
+			<tr>
+					<td>GDM 遠端登入</td>
+					<td>支援，依 GNOME 版本</td>
+					<td>使用 xrdp 自身登入流程</td>
+			</tr>
+			<tr>
+					<td>適用環境</td>
+					<td>Ubuntu 24.04+、Rocky Linux 10</td>
+					<td>Ubuntu、Rocky Linux 9 等</td>
+			</tr>
+			<tr>
+					<td>Windows mstsc</td>
+					<td>支援</td>
+					<td>支援</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>建議：</strong>
+如果使用較新的 GNOME，優先考慮 GNOME Remote Desktop。
+如果使用 Rocky Linux 9、較舊的 GNOME，或希望搭配 XFCE 建立遠端桌面，則可以選擇 xrdp。</p>
+<hr>
+<h1 id="part-1gnome-原生-rdp-server">Part 1：GNOME 原生 RDP Server
+</h1><h2 id="3-gnome-remote-desktop-運作原理">3. GNOME Remote Desktop 運作原理
+</h2><p>GNOME Remote Desktop 有兩種主要操作模式。</p>
+<h3 id="31-desktop-sharing">3.1 Desktop Sharing
+</h3><p>Desktop Sharing 用來分享目前已經登入的 GNOME 桌面。</p>
+<p>特性：</p>
+<ul>
+<li>共享目前的桌面工作階段。</li>
+<li>通常需要使用者已登入 GNOME。</li>
+<li>適合遠端協助與桌面操作。</li>
+<li>使用 User-level systemd service。</li>
+</ul>
+<h3 id="32-remote-login">3.2 Remote Login
+</h3><p>Remote Login 可以在使用者尚未登入桌面時，透過 RDP 連線到 GDM 登入畫面。
+特性：</p>
+<ul>
+<li>不需要先登入實體桌面。</li>
+<li>透過 GDM 建立遠端登入工作階段。</li>
+<li>支援不同 Linux 使用者登入。</li>
+<li>使用 System-level systemd service。</li>
+<li>需要兩階段身分驗證。</li>
+</ul>
+<h3 id="33-remote-login-登入流程">3.3 Remote Login 登入流程
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Windows mstsc / Linux Remmina
+</span></span><span class="line"><span class="cl">              |
+</span></span><span class="line"><span class="cl">              | TCP 3389
+</span></span><span class="line"><span class="cl">              v
+</span></span><span class="line"><span class="cl">GNOME Remote Desktop
+</span></span><span class="line"><span class="cl">              |
+</span></span><span class="line"><span class="cl">              | 第一階段
+</span></span><span class="line"><span class="cl">              | RDP 帳號密碼驗證
+</span></span><span class="line"><span class="cl">              v
+</span></span><span class="line"><span class="cl">         NLA / TLS
+</span></span><span class="line"><span class="cl">              |
+</span></span><span class="line"><span class="cl">              v
+</span></span><span class="line"><span class="cl">             GDM
+</span></span><span class="line"><span class="cl">              |
+</span></span><span class="line"><span class="cl">              | 第二階段
+</span></span><span class="line"><span class="cl">              | Linux 使用者登入
+</span></span><span class="line"><span class="cl">              v
+</span></span><span class="line"><span class="cl">       GNOME Wayland Session
+</span></span><span class="line"><span class="cl">              |
+</span></span><span class="line"><span class="cl">              v
+</span></span><span class="line"><span class="cl">         GNOME Desktop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>重要：RDP 登入帳密不一定等於 Linux 系統使用者帳密。</strong></p>
+<p>第一階段使用 GNOME Remote Login 設定的 Login Details。
+第二階段才是 GDM 的 Linux 使用者帳號與密碼。</p>
+<h2 id="4-ubuntu-安裝-gnome-remote-desktop">4. Ubuntu 安裝 GNOME Remote Desktop
+</h2><h3 id="41-確認系統版本">4.1 確認系統版本
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /etc/os-release
+</span></span><span class="line"><span class="cl">gnome-shell --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>GNOME 46 開始提供整合 GDM 的 Remote Login 功能，Ubuntu 24.04 LTS 已包含此功能。</p>
+<h3 id="42-安裝必要套件">4.2 安裝必要套件
+</h3><p>如果已經安裝 Ubuntu Desktop，通常已有部分套件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt update
+</span></span><span class="line"><span class="cl">sudo apt install -y \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop \
+</span></span><span class="line"><span class="cl">  gdm3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認套件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dpkg -l | grep -E &#39;gnome-remote-desktop|gdm3&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果系統尚未安裝 GNOME 桌面，必須先安裝適當的桌面環境。單獨安裝 RDP 套件不會自動建立完整 GNOME Desktop。</p>
+<h3 id="43-開啟-remote-login">4.3 開啟 Remote Login
+</h3><p>在 Ubuntu GNOME：
+<strong>Settings → System → Remote Desktop → Remote Login</strong></p>
+<p>依序操作：</p>
+<ol>
+<li>點擊 Unlock，輸入管理員密碼。</li>
+<li>開啟 Remote Login。</li>
+<li>在 Login Details 設定 RDP 使用者名稱與密碼。</li>
+<li>確認顯示的連線 Port。</li>
+</ol>
+<h3 id="44-確認-rdp-狀態">4.4 確認 RDP 狀態
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cmdkey /delete:TERMSRV/192.168.8.45
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">grdctl</span> <span class="o">--</span><span class="n">system</span> <span class="n">status</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">status</span> <span class="n">gnome</span><span class="o">-</span><span class="n">remote</span><span class="o">-</span><span class="n">desktop</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl"><span class="n">ss</span> <span class="o">-</span><span class="n">lntp</span> <span class="o">|</span> <span class="n">grep</span> <span class="o">-</span><span class="n">E</span> <span class="s1">&#39;3389|3390&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">journalctl</span> <span class="o">-</span><span class="n">u</span> <span class="n">gnome</span><span class="o">-</span><span class="n">remote</span><span class="o">-</span><span class="n">desktop</span><span class="o">.</span><span class="n">service</span> <span class="o">-</span><span class="n">n</span> <span class="mi">50</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">pager</span>
+</span></span><span class="line"><span class="cl"><span class="n">journalctl</span> <span class="o">-</span><span class="n">kf</span> <span class="n">gnome</span><span class="o">-</span><span class="n">remote</span><span class="o">-</span><span class="n">desktop</span><span class="o">.</span><span class="n">servic</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">##建立rdp密碼</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">grdctl</span> <span class="o">--</span><span class="n">system</span> <span class="n">rdp</span> <span class="n">set</span><span class="o">-</span><span class="n">credentials</span> <span class="n">testuser</span> <span class="s1">&#39;你的測試密碼&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">restart</span> <span class="n">gnome</span><span class="o">-</span><span class="n">remote</span><span class="o">-</span><span class="n">desktop</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl"><span class="n">systemctl</span> <span class="n">daemon</span><span class="o">-</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>日誌訊息</th>
+					<th>可能原因</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>nla_recv() error: -1</code></td>
+					<td>NLA/CredSSP 握手失敗</td>
+			</tr>
+			<tr>
+					<td><code>client authentication failure</code></td>
+					<td>帳密錯誤或驗證協定問題</td>
+			</tr>
+			<tr>
+					<td><code>BIO_new failed for certificate</code></td>
+					<td>TLS 憑證路徑或讀取權限問題</td>
+			</tr>
+			<tr>
+					<td><code>Failed to start remote session</code></td>
+					<td>GDM 或桌面工作階段啟動失敗</td>
+			</tr>
+	</tbody>
+</table></div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">Rocky</span> <span class="n">linux</span> <span class="err">放行</span><span class="mi">3389</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">permanent</span> <span class="o">--</span><span class="n">add</span><span class="o">-</span><span class="n">port</span><span class="o">=</span><span class="mi">3389</span><span class="o">/</span><span class="n">tcp</span>
+</span></span><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查 systemd：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看服務是否監聽：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ss -lntp | grep -E &#39;3389|3390&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果是 Remote Login，應檢查系統層級服務。</p>
+<p>如果是 Desktop Sharing，則檢查目前 GNOME 使用者的服務：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl --user status \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意：</strong><code>**sudo systemctl**</code> <strong>與</strong> <code>**systemctl --user**</code> <strong>是不同的 systemd 服務管理範圍，不能混為一談。</strong></p>
+<h2 id="5-使用-grdctl-管理-rdp">5. 使用 grdctl 管理 RDP
+</h2><p><code>grdctl</code> 是 GNOME Remote Desktop 的命令列管理工具。</p>
+<h3 id="51-查看系統層級設定">5.1 查看系統層級設定
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="52-啟用-remote-login-rdp">5.2 啟用 Remote Login RDP
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system rdp enable
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認 GDM 與 RDP Service 已啟動：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable --now \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status gdm3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="53-設定帳號密碼">5.3 設定帳號密碼
+</h3><p>建議優先使用 GNOME Settings 的 Login Details 設定。</p>
+<p>若使用命令列：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grdctl --help
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">grdctl --system rdp --help
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不同 GNOME 版本的 <code>set-credentials</code> 參數及互動式輸入方式可能不同，請以目前安裝版本的說明為準。</p>
+<p>部分版本支援互動式設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system rdp set-credentials
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不建議直接把真實密碼寫在 Shell 指令中，避免留存在 Shell History 或系統日誌。</p>
+<h3 id="54-停用-remote-login">5.4 停用 Remote Login
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system rdp disable
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="55-tls-憑證">5.5 TLS 憑證
+</h3><p>GNOME Remote Desktop 使用 TLS 保護連線。</p>
+<p>如果透過 GNOME Settings 設定，通常不需要自行產生憑證。</p>
+<p>如果透過命令列手動部署，則可能需要使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system rdp set-tls-cert \
+</span></span><span class="line"><span class="cl">  /path/to/tls.crt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system rdp set-tls-key \
+</span></span><span class="line"><span class="cl">  /path/to/tls.key
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>TLS 私鑰必須能被 GNOME Remote Desktop 服務帳號讀取，並應限制其他使用者存取。</p>
+<hr>
+<h1 id="part-2rocky-linux-rdp">Part 2：Rocky Linux RDP
+</h1><h2 id="6-rocky-linux-版本差異">6. Rocky Linux 版本差異
+</h2><p>Rocky Linux 9 與 Rocky Linux 10 的 GNOME 遠端桌面支援不同。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>版本</th>
+					<th>建議方案</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Rocky Linux 9</td>
+					<td>xrdp + Xorg</td>
+			</tr>
+			<tr>
+					<td>Rocky Linux 10</td>
+					<td>GNOME Remote Desktop</td>
+			</tr>
+			<tr>
+					<td>Ubuntu 24.04+</td>
+					<td>GNOME Remote Desktop</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>Rocky Linux 10 官方已將 GNOME Remote Desktop 作為桌面共享、遠端登入與 Headless Session 的主要方案。
+Rocky Linux 9 則可以參考官方 xrdp 教學。</p>
+<h2 id="7-rocky-linux-10gnome-remote-login">7. Rocky Linux 10：GNOME Remote Login
+</h2><p>確認 GNOME 版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gnome-shell --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認套件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">rpm -q gnome-remote-desktop gdm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>若尚未安裝：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf install -y \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop \
+</span></span><span class="line"><span class="cl">  gdm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果系統沒有 GNOME Desktop，應先安裝適合的 GUI 套件群組。</p>
+<p>進入 GNOME：</p>
+<p><strong>Settings → System → Remote Desktop → Remote Login</strong></p>
+<p>啟用後確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo grdctl --system status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status \
+</span></span><span class="line"><span class="cl">  gnome-remote-desktop.service
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="71-rocky-linux-防火牆設定">7.1 Rocky Linux 防火牆設定
+</h3><p>Rocky Linux 使用 firewalld。</p>
+<p>確認狀態：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status firewalld
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看目前啟用的 Zone：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --get-active-zones
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認網路介面所屬 Zone 後，放行 RDP：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --permanent \
+</span></span><span class="line"><span class="cl">  --add-service=rdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果服務定義不存在，也可以直接放行 TCP 3389：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --permanent \
+</span></span><span class="line"><span class="cl">  --add-port=3389/tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查規則：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --list-all
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --query-port=3389/tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：以上未指定 Zone 的指令使用預設 Zone。如果實際網卡位於其他 Zone，必須針對正確 Zone 設定。</p>
+<p>如果 GNOME Remote Desktop 使用的不是 3389，應依實際監聽 Port 調整防火牆。</p>
+<h3 id="72-selinux-注意事項">7.2 SELinux 注意事項
+</h3><p>Rocky Linux 預設可能啟用 SELinux。</p>
+<p>查看：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">getenforce
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 RDP 無法建立工作階段，先檢查 SELinux AVC Denial：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ausearch -m AVC -ts recent
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不要直接永久關閉 SELinux。應先確認是否真的有相關拒絕紀錄，再針對原因處理。</p>
+<hr>
+<h1 id="part-3xrdp-部署">Part 3：xrdp 部署
+</h1><h2 id="8-ubuntu-安裝-xrdp">8. Ubuntu 安裝 xrdp
+</h2><p>如果不想使用 GNOME 原生 Remote Login，可以選擇 xrdp。</p>
+<p>以下以 XFCE 桌面作為範例。</p>
+<h3 id="81-安裝套件">8.1 安裝套件
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt update
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install -y \
+</span></span><span class="line"><span class="cl">  xrdp \
+</span></span><span class="line"><span class="cl">  xorgxrdp \
+</span></span><span class="line"><span class="cl">  xfce4 \
+</span></span><span class="line"><span class="cl">  xfce4-terminal \
+</span></span><span class="line"><span class="cl">  dbus-x11
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="82-設定遠端桌面工作階段">8.2 設定遠端桌面工作階段
+</h3><p>請以準備透過 RDP 登入的普通 Linux 使用者執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">printf &#39;exec startxfce4\n&#39; &gt; ~/.xsession
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不要使用 root 帳號建立一般使用者的 <code>.xsession</code>。</p>
+<h3 id="83-啟動-xrdp">8.3 啟動 xrdp
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable --now xrdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status xrdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認 Port：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ss -lntp | grep 3389
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="84-ubuntu-ufw-防火牆">8.4 Ubuntu UFW 防火牆
+</h3><p>如果 UFW 已啟用，可只允許管理網段存取：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ufw allow from 192.168.8.0/24 \
+</span></span><span class="line"><span class="cl">  to any port 3389 proto tcp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ufw status verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 UFW 沒有啟用，不需要為了 RDP 特別啟用它，但仍須確認其他防火牆或上游 ACL。</p>
+<h3 id="85-windows-連線">8.5 Windows 連線
+</h3><p>在 Windows 執行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mstsc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>輸入 Linux IP：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">192.168.8.45:3389
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>出現 xrdp 登入畫面後，選擇 Xorg 工作階段，輸入 Linux 使用者帳號密碼。</p>
+<h2 id="9-rocky-linux-9-安裝-xrdp">9. Rocky Linux 9 安裝 xrdp
+</h2><p>Rocky Linux 9 可以透過 EPEL 安裝 xrdp。</p>
+<h3 id="91-啟用-crb-與-epel">9.1 啟用 CRB 與 EPEL
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf config-manager --set-enabled crb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf install -y epel-release
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 <code>config-manager</code> 不存在，先安裝對應的 DNF Plugin。</p>
+<h3 id="92-安裝-xrdp">9.2 安裝 xrdp
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo dnf install -y xrdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>依需要確認 Xorg 工作階段相關套件已安裝。</p>
+<h3 id="93-啟動服務">9.3 啟動服務
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable --now xrdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="94-放行防火牆">9.4 放行防火牆
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --permanent \
+</span></span><span class="line"><span class="cl">  --add-service=rdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="95-檢查">9.5 檢查
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl status xrdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ss -lntp | grep 3389
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果登入後黑畫面，應先確認 Xorg 工作階段、使用者登入狀態及 xrdp 日誌。</p>
+<hr>
+<h1 id="part-4windowslinuxmacos-連線方式">Part 4：Windows、Linux、macOS 連線方式
+</h1><h2 id="10-windows-rdp-client">10. Windows RDP Client
+</h2><p>Windows 內建 Remote Desktop Connection。</p>
+<p>開啟：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mstsc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>輸入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">192.168.8.45:3389
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果使用 GNOME Remote Login：</p>
+<ol>
+<li>
+<p>輸入 GNOME 設定的 RDP 帳號密碼。</p>
+</li>
+<li>
+<p>通過 NLA 驗證。</p>
+</li>
+<li>
+<p>進入 GDM。</p>
+</li>
+<li>
+<p>輸入 Linux 使用者帳號密碼。</p>
+</li>
+</ol>
+<p>如果使用 xrdp，通常會進入 xrdp 的登入介面。</p>
+<h2 id="11-linux-rdp-client">11. Linux RDP Client
+</h2><p>Linux 可以使用 Remmina：</p>
+<p>Ubuntu：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install -y remmina
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Rocky Linux 則依套件庫或 Flatpak 提供情況安裝。</p>
+<p>Remmina 新增連線時：</p>
+<ul>
+<li>
+<p>Protocol：RDP</p>
+</li>
+<li>
+<p>Server：Linux RDP Server IP</p>
+</li>
+<li>
+<p>Port：3389 或實際設定 Port</p>
+</li>
+<li>
+<p>Username / Password：依 RDP Server 模式設定</p>
+</li>
+</ul>
+<h2 id="12-macos-rdp-client">12. macOS RDP Client
+</h2><p>macOS 可以安裝 Microsoft Windows App 或其他支援 RDP 的用戶端，連線到 Linux RDP Server。</p>
+<p>但要區分：</p>
+<ul>
+<li>
+<p>macOS 作為 RDP Client：可以。</p>
+</li>
+<li>
+<p>macOS 作為原生 RDP Server：系統沒有內建 Microsoft RDP Server。</p>
+</li>
+</ul>
+<p>macOS 原生螢幕共享主要使用 VNC / Apple Remote Desktop 協定。</p>
+<hr>
+<h1 id="part-5常見錯誤與-troubleshooting">Part 5：常見錯誤與 Troubleshooting
+</h1><h2 id="13-windows-顯示驗證錯誤">13. Windows 顯示驗證錯誤
+</h2><p>Windows 可能出現：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">發生驗證錯誤。
+</span></span><span class="line"><span class="cl">有更多資訊可供使用。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>GNOME Remote Desktop 日誌可能顯示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[transport_accept_nla]: client authentication failure
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[rdp_server_accept_nego]:
+</span></span><span class="line"><span class="cl">server supports only NLA Security
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Protocol security negotiation failure
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[freerdp_tls_handshake]:
+</span></span><span class="line"><span class="cl">BIO_do_handshake failed
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="131-錯誤原因">13.1 錯誤原因
+</h3><p>可能原因：</p>
+<ol>
+<li>
+<p>RDP 第一階段帳號密碼錯誤。</p>
+</li>
+<li>
+<p>Windows 使用了舊的快取憑證。</p>
+</li>
+<li>
+<p>GNOME Remote Desktop 與 Windows NLA / CredSSP 存在相容性問題。</p>
+</li>
+<li>
+<p>TLS 憑證或握手失敗。</p>
+</li>
+<li>
+<p>RDP 用戶端嘗試了伺服器不支援的安全模式。</p>
+</li>
+</ol>
+<p>這些日誌可能是多次協商嘗試的結果，不一定代表每一行都是獨立故障。</p>
+<h3 id="132-清除-windows-rdp-憑證">13.2 清除 Windows RDP 憑證
+</h3><p>Windows CMD：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cmdkey /delete:TERMSRV/192.168.8.45
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新開啟：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mstsc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再次輸入 GNOME Remote Login 的帳號密碼。</p>
+<h3 id="133-查看-gnome-rdp-日誌">13.3 查看 GNOME RDP 日誌
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl \
+</span></span><span class="line"><span class="cl">  -u gnome-remote-desktop.service \
+</span></span><span class="line"><span class="cl">  -f
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重新連線並觀察錯誤。</p>
+<h3 id="134-檢查版本">13.4 檢查版本
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gnome-shell --version
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apt policy gnome-remote-desktop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Rocky Linux：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">rpm -q gnome-remote-desktop
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>部分 GNOME Remote Desktop 版本可能存在用戶端相容性問題，應優先確認更新及已知問題。</p>
+<p>不建議為了排除問題，直接停用 NLA 或降低 TLS 安全性。</p>
+<h2 id="14-rdp-登入成功但畫面全黑">14. RDP 登入成功，但畫面全黑
+</h2><p>這是 GNOME Remote Login 另一類常見問題。</p>
+<p>與前面的 NLA 驗證錯誤不同，黑畫面代表連線可能已經進入工作階段建立或圖形顯示階段。</p>
+<p>可能原因：</p>
+<ul>
+<li>
+<p>GDM 無法正常建立遠端工作階段。</p>
+</li>
+<li>
+<p>GNOME Shell 啟動失敗。</p>
+</li>
+<li>
+<p>Wayland / Mutter 問題。</p>
+</li>
+<li>
+<p>虛擬 GPU 或渲染相容性問題。</p>
+</li>
+<li>
+<p>已存在的登入工作階段造成衝突。</p>
+</li>
+<li>
+<p>GNOME Remote Desktop 特定版本的 Bug。</p>
+</li>
+</ul>
+<h3 id="141-檢查登入工作階段">14.1 檢查登入工作階段
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">loginctl list-sessions
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看 GNOME 相關程序：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ps aux | grep -E \
+</span></span><span class="line"><span class="cl">  &#39;gnome-shell|gnome-session|gdm&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="142-查看-gdm-日誌">14.2 查看 GDM 日誌
+</h3><p>Ubuntu：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -u gdm3 \
+</span></span><span class="line"><span class="cl">  -b -n 100 --no-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Rocky Linux：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -u gdm \
+</span></span><span class="line"><span class="cl">  -b -n 100 --no-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="143-查看-rdp-日誌">14.3 查看 RDP 日誌
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl \
+</span></span><span class="line"><span class="cl">  -u gnome-remote-desktop.service \
+</span></span><span class="line"><span class="cl">  -b -n 100 --no-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="144-重新連線測試">14.4 重新連線測試
+</h3><p>如果登入後黑畫面，可以先：</p>
+<ol>
+<li>
+<p>關閉 RDP 視窗。</p>
+</li>
+<li>
+<p>等待數秒。</p>
+</li>
+<li>
+<p>重新建立 RDP 連線。</p>
+</li>
+<li>
+<p>觀察是否能正常顯示桌面。</p>
+</li>
+</ol>
+<p>如果重新連線後恢復，應進一步檢查 GNOME 工作階段建立與交接問題。</p>
+<h2 id="15-rdp-port-無法連線">15. RDP Port 無法連線
+</h2><p>Linux 檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ss -lntp | grep -E &#39;3389|3390&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Windows PowerShell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Test-NetConnection 192.168.8.45 -Port 3389
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果 <code>TcpTestSucceeded</code> 為 <code>False</code>，檢查：</p>
+<ul>
+<li>
+<p>RDP Server 是否啟動。</p>
+</li>
+<li>
+<p>是否監聽正確 IP / Port。</p>
+</li>
+<li>
+<p>Linux Firewall。</p>
+</li>
+<li>
+<p>Proxmox Firewall。</p>
+</li>
+<li>
+<p>VMware 虛擬網路設定。</p>
+</li>
+<li>
+<p>上游網路 ACL。</p>
+</li>
+</ul>
+<p>如果 TCP 已連通但驗證失敗，應轉往 NLA / TLS / 帳密方向調查。</p>
+<h2 id="16-xrdp-登入黑畫面">16. xrdp 登入黑畫面
+</h2><p>先檢查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -u xrdp \
+</span></span><span class="line"><span class="cl">  -b -n 100 --no-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo journalctl -u xrdp-sesman \
+</span></span><span class="line"><span class="cl">  -b -n 100 --no-pager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>確認使用者的桌面工作階段設定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat ~/.xsession
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果使用 XFCE，應確認：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">exec startxfce4
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>另外，避免同一個 Linux 使用者同時在本機及 xrdp 建立互相衝突的桌面工作階段。</p>
+<hr>
+<h1 id="part-6proxmox-ve--esxi-虛擬機注意事項">Part 6：Proxmox VE / ESXi 虛擬機注意事項
+</h1><h2 id="17-linux-rdp-與-hypervisor-效能">17. Linux RDP 與 Hypervisor 效能
+</h2><p>GNOME Remote Desktop 的效能不只取決於網路頻寬，也與以下因素有關：</p>
+<ul>
+<li>
+<p>CPU 虛擬化設定。</p>
+</li>
+<li>
+<p>虛擬 GPU 與顯示驅動。</p>
+</li>
+<li>
+<p>GNOME Shell / Mutter。</p>
+</li>
+<li>
+<p>Wayland 工作階段。</p>
+</li>
+<li>
+<p>Guest 記憶體。</p>
+</li>
+<li>
+<p>磁碟 I/O 延遲。</p>
+</li>
+<li>
+<p>Hypervisor CPU 排程。</p>
+</li>
+</ul>
+<h3 id="171-proxmox-cpu-type">17.1 Proxmox CPU Type
+</h3><p>Proxmox 常見 CPU Type：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">host
+</span></span><span class="line"><span class="cl">x86-64-v2-AES
+</span></span><span class="line"><span class="cl">x86-64-v3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>host</code> 通常能暴露較完整的實體 CPU 功能，但不保證所有 Guest 工作負載都具有最佳延遲表現。</p>
+<p>如果變更 CPU Type 後發現明顯差異，應在相同 VM、相同負載下進行 A/B 測試。</p>
+<p>修改 CPU Type 後應完整關機，再重新啟動 VM。</p>
+<h3 id="172-檢查虛擬-gpu">17.2 檢查虛擬 GPU
+</h3><p>在 Linux VM：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lspci -nnk | grep -A 4 -Ei \
+</span></span><span class="line"><span class="cl">  &#39;VGA|Display|3D&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安裝 Mesa 工具：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install -y mesa-utils
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看渲染器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">glxinfo -B
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果顯示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">llvmpipe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>代表該 OpenGL 測試目前使用 CPU 軟體渲染。</p>
+<p>但必須注意：<code>glxinfo</code> 只能反映執行該命令的圖形環境，不能單獨證明 GNOME RDP 遠端工作階段的實際渲染路徑。</p>
+<h3 id="173-檢查磁碟等待">17.3 檢查磁碟等待
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install -y sysstat
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">iostat -xz 1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重點觀察：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">r_await
+</span></span><span class="line"><span class="cl">w_await
+</span></span><span class="line"><span class="cl">aqu-sz
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="174-檢查-cpu-等待">17.4 檢查 CPU 等待
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">vmstat 1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重點觀察：</p>
+<ul>
+<li>
+<p><code>wa</code>：I/O Wait。</p>
+</li>
+<li>
+<p><code>st</code>：CPU Steal Time。</p>
+</li>
+<li>
+<p><code>r</code>：等待 CPU 執行的工作數量。</p>
+</li>
+</ul>
+<p>不要在尚未確認瓶頸前，直接認定 LVM-Thin、Cache 或 GPU 是卡頓主因。</p>
+<hr>
+<h1 id="part-7常用指令速查表">Part 7：常用指令速查表
+</h1><h2 id="18-gnome-remote-desktop">18. GNOME Remote Desktop
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>用途</th>
+					<th>指令</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>查看 Remote Login</td>
+					<td><code>sudo grdctl --system status</code></td>
+			</tr>
+			<tr>
+					<td>查看 Desktop Sharing</td>
+					<td><code>grdctl status</code></td>
+			</tr>
+			<tr>
+					<td>啟用 Remote Login RDP</td>
+					<td><code>sudo grdctl --system rdp enable</code></td>
+			</tr>
+			<tr>
+					<td>停用 Remote Login RDP</td>
+					<td><code>sudo grdctl --system rdp disable</code></td>
+			</tr>
+			<tr>
+					<td>查看 System Service</td>
+					<td><code>sudo systemctl status gnome-remote-desktop.service</code></td>
+			</tr>
+			<tr>
+					<td>查看 User Service</td>
+					<td><code>systemctl --user status gnome-remote-desktop.service</code></td>
+			</tr>
+			<tr>
+					<td>即時查看 System 日誌</td>
+					<td><code>sudo journalctl -u gnome-remote-desktop.service -f</code></td>
+			</tr>
+			<tr>
+					<td>查看 RDP Port</td>
+					<td><code>sudo ss -lntp | grep 3389</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="19-xrdp">19. xrdp
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>用途</th>
+					<th>指令</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>啟動 xrdp</td>
+					<td><code>sudo systemctl enable --now xrdp</code></td>
+			</tr>
+			<tr>
+					<td>查看狀態</td>
+					<td><code>sudo systemctl status xrdp</code></td>
+			</tr>
+			<tr>
+					<td>查看日誌</td>
+					<td><code>sudo journalctl -u xrdp -f</code></td>
+			</tr>
+			<tr>
+					<td>查看 Sesman 日誌</td>
+					<td><code>sudo journalctl -u xrdp-sesman -f</code></td>
+			</tr>
+			<tr>
+					<td>重新啟動</td>
+					<td><code>sudo systemctl restart xrdp</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="20-rocky-linux-firewall">20. Rocky Linux Firewall
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --get-active-zones
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --permanent --add-service=rdp
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">sudo</span> <span class="n">firewall</span><span class="o">-</span><span class="n">cmd</span> <span class="o">--</span><span class="n">reload</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo firewall-cmd --list-all
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h1 id="part-8安全性建議">Part 8：安全性建議
+</h1><p>RDP 屬於遠端管理服務，應避免直接暴露在公網。</p>
+<p>建議：</p>
+<ol>
+<li>
+<p>優先透過 VPN、Tailscale 或其他安全存取通道連線。</p>
+</li>
+<li>
+<p>使用強密碼，避免共用管理員帳號。</p>
+</li>
+<li>
+<p>只允許必要來源網段存取 TCP 3389。</p>
+</li>
+<li>
+<p>定期更新 GNOME Remote Desktop、FreeRDP、xrdp。</p>
+</li>
+<li>
+<p>使用可信任的 TLS 憑證，或確認伺服器憑證指紋。</p>
+</li>
+<li>
+<p>保留系統日誌以利問題追蹤。</p>
+</li>
+<li>
+<p>不要為了排錯直接停用 SELinux 或整個防火牆。</p>
+</li>
+</ol>
+<h1 id="21-結論">21. 結論
+</h1><p>Linux RDP 已經不再只有傳統的 xrdp。</p>
+<p>GNOME 46 之後，GNOME Remote Desktop 已能整合 GDM、Wayland 與 RDP，提供更接近 Windows Remote Desktop 的登入體驗。</p>
+<p>對於不同 Linux 發行版，可以採取以下方向：</p>
+<ul>
+<li>
+<p><strong>Ubuntu 24.04+</strong>：優先使用 GNOME Remote Login。</p>
+</li>
+<li>
+<p><strong>Rocky Linux 10</strong>：優先使用 GNOME Remote Desktop。</p>
+</li>
+<li>
+<p><strong>Rocky Linux 9</strong>：可使用 xrdp + Xorg。</p>
+</li>
+<li>
+<p><strong>舊版 Linux 或 XFCE 環境</strong>：xrdp 仍是實用方案。</p>
+</li>
+</ul>
+<p>部署時應先確認 RDP 模式、服務狀態、監聽 Port 與防火牆，再處理 NLA 驗證及圖形工作階段問題。</p>
+<p>尤其要區分：</p>
+<p><strong>NLA 驗證失敗、登入後黑畫面，以及操作延遲，是三種不同階段的問題。</strong></p>
+<p>只要依照網路連通性、RDP 驗證、GDM 工作階段、圖形渲染的順序排查，就能有效縮小問題範圍。</p>
+<hr>
+<h2 id="參考資料">參考資料
+</h2><ol>
+<li>
+<p>GNOME 官方 Remote Login 文件<br>
+<a href="https://help.gnome.org/gnome-help/remote-login.html">https://help.gnome.org/gnome-help/remote-login.html</a></p>
+</li>
+<li>
+<p>GNOME Remote Desktop 官方專案<br>
+<a href="https://github.com/GNOME/gnome-remote-desktop">https://github.com/GNOME/gnome-remote-desktop</a></p>
+</li>
+<li>
+<p>GNOME Remote Desktop Configuration<br>
+<a href="https://github.com/GNOME/gnome-remote-desktop/blob/main/docs/configuration.md">https://github.com/GNOME/gnome-remote-desktop/blob/main/docs/configuration.md</a></p>
+</li>
+<li>
+<p>Rocky Linux 官方 RDP 教學<br>
+<a href="https://docs.rockylinux.org/desktop/gnome/rdp-server/">https://docs.rockylinux.org/desktop/gnome/rdp-server/</a></p>
+</li>
+<li>
+<p>Rocky Linux 10 Release Notes<br>
+<a href="https://docs.rockylinux.org/latest/releases/release_notes/10_0/">https://docs.rockylinux.org/latest/releases/release_notes/10_0/</a></p>
+</li>
+<li>
+<p>xrdp 官方 GitHub<br>
+<a href="https://github.com/neutrinolabs/xrdp">https://github.com/neutrinolabs/xrdp</a></p>
+</li>
+<li>
+<p>Ubuntu xrdp Community Documentation<br>
+<a href="https://help.ubuntu.com/community/xrdp">https://help.ubuntu.com/community/xrdp</a></p>
+</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+		<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+	
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Example Person
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/my-portfolio/ts/main.e7f414ec2cf9a8c78769be7f607c64a8e6e389f8b91d058865918acf6b28c0a1.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
