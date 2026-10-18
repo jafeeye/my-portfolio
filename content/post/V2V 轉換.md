@@ -7,6 +7,11 @@ tags:
   - PVE
   - ESXi
 ---
+```toc
+```
+
+## 一、Proxmox 轉 ESXi
+
 轉換之前要注意一下
 Proxmox 要把直通的設備刪除
 硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題
@@ -287,7 +292,40 @@ log "VM files are available in: $DESTINATION"
 ```
 
 
-## vSphere 轉 Hyper-V
+## 二、vSphere 轉 Hyper-V
 ![](static/Pasted%20image%2020261017235747.png)
 進到畫面安裝PowerCLI
 ![](static/Pasted%20image%2020261017235858.png)
+
+
+## ESXi 轉 Proxmox
+### 遷移: 從ESXi 
+會有驅動問題，在Windows不能開機就選SATA
+![](260404-pve.png)
+
+### 遷移: P2V
+1. 把目前開機的作業系統,使用對應軟體可直接熱轉換
+- Disk2vhd
+- StarWind V2V
+2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
+![](260404-v2v.png)
+
+
+
+### 遷移: 轉換至ESXi
+![](PixPin_2026-05-02_00-17-16.png)
+
+
+
+## 三、Hyper-V 遷移至PVE
+1. 將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳
+2.  輸入以下指令
+```
+mkdir /var/lib/vz/hdd
+cd /var/lib/vz/hdd
+qemu-img convert -O qcow2 WIN10.vhdx vm-103-disk0.qcow2
+mv vm-103-disk0.qcow2 /var/lib/vz/images/103/
+qm rescan
+```
+3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
+4. 最後要安裝Vitro-win驅動

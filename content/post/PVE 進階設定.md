@@ -39,127 +39,12 @@ nano /etc/sysctl.conf >> vm.swappiness=0
 ```
 - [排障笔记-解决PVE中节点SWAP占用过高问题&一些关于PVE宿主硬盘的题外话](https://blog.welain.com/articles/2023/notes-about-pve/)
 
-## 優化: E1000斷線問題
-通常再過一段時間網站PVE入口連不上或ESXi插拔網線後連不上，通常是驅動問題導致
-除錯顯示log
-
-```
-journalctl -b -1 -e 
-journalctl --until "2026-02-27 11:00:00" -n 100 -r
-```
-
-發現這條，懷疑是驅動出現 `Detected Hardware Unit Hang`，關閉電源休眠可解決問題
-`Feb 27 15:25:25 pve-server kernel: e1000e 0000:00:1f.6 eno1: NIC Link is Up 1000 Mbps Full Duplex, Flow`
-
-```
-# 關閉卸載功能 Hardware Unit Hang
-ethtool -K enx00e01c680083 tso off gso off 
-ethtool -K eno1 tso off gso off 
-# 重新啟動網卡服務 
-systemctl restart networking
-```
-
-Proxmox 重啟後 `ethtool` 的設定會消失，請編輯網路設定檔：
-1. 在 `iface eno1 inet manual` 下方增加一行： `post-up /usr/sbin/ethtool -K eno1 tso off gso off`
 
 ## 優化: 刪除local-lvm
 ```
 lvremove pve/data
 lvextend -l +100%FREE -r pve/root
 ```
-
-## 優化: 固定網卡名稱
-
-实现方案(pve9)
-
-| **網卡名稱範例**          | **命名類型**     | **實際代表的硬體意義**            | **常見出現場景**          |
-| ------------------- | ------------ | ------------------------ | ------------------- |
-| **`eno1`**          | 板載 (Onboard) | 主機板內建的有線網卡               | 實體伺服器、PC 主機板原生網口    |
-| **`ens18`**         | 插槽 (Slot)    | 虛擬或實體熱插拔插槽第 18 號         | **PVE 虛擬機 (VM) 內部** |
-| **`enp1s0`**        | 匯流排 (PCIe)   | PCIe Bus 1, Slot 0 的實體網卡 | 實體機補插的獨立網卡、擴充卡      |
-| **`nic0` / `eth0`** | 自訂 / 傳統      | 人為綁定 MAC 或老舊核心隨機分配       | 經維運優化後的環境、老舊 Linux  |
-注意：在 Proxmox VE 9（基于 Debian 13）中，固定网卡名称的方式与 PVE 8（基于 Debian 12）有所不同，主要是因为 Debian 13 对 udev 规则的处理逻辑做了调整，传统的 70-persistent-net.rules 方式可能不再生效。
-在 PVE 9 中，推荐通过 systemd 的 .link 配置文件 来固定网卡名称，这是更现代且兼容的方式。
-步骤如下：
-1. 找出需要固定的网卡 MAC 地址
-```
-$ ip addr
-2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000
-link/ether 04:d4:c4:57:af:9d brd ff:ff:ff:ff:ff:ff
-```
-2. 创建 .link 配置文件`vi /etc/systemd/network/10-static-en219v.link` 内容为
-```
-[Match] 
-MACAddress=04:d4:c4:57:af:9d
-[Link] 
-Name=en219v
-```
-3. 修改 vmbr0 的配置
-因为一般都是远程操作，为了安全起见，重命名前后的两个网卡名字都加入到 vmbr0，以防万一出错时无法连接管理网络：`nano /etc/network/interfaces`内容为：
-
-目前对设备名称使用以下命名约定：
-
-- 以太网设备：en*，systemd 网络接口名称。此命名方案用于自版本 5.0 以来的新 Proxmox VE 安装。
-- 以太网设备：eth[N]，其中 0 ≤ N （eth0， eth1， …）此命名方案用于在5.0版本之前安装的Proxmox VE主机。升级到 5.0 时，名称将保持原样。
-- 网桥名称：vmbr[N]，其中 0 ≤ N ≤ 4094 （vmbr0 - vmbr4094）
-- bond：bond[N]，其中 0 ≤ N （bond0， bond1， …）
-- VLAN：只需将 VLAN 编号添加到设备名称中，用句点分隔（eno1.50、bond1.30）
-
-```
-iface en219v inet manual
-iface eno1 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-       ......
-       bridge-ports eno1 en219v
-
-```
-
-4. 更新`update-initramfs -u -k all` 重启`reboot`之后查看网卡名称发现已经固定：
-```
-$ ip addr 
-2: en100g1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq master vmbr0 state UP group default qlen 1000 link/ether 8c:3a:8e:88:7d:5a brd ff:ff:ff:ff:ff:ff altname enx8c2a8e886d5a
-```
-5. 修复 vmbr0 的 bridge-ports，把改名之前的网卡名字去掉。
-对于只有多个网卡的情况，操作要复杂一下，主要是需要区分是哪些网卡。如我这里有一台机器上有 100g 和 25g 两块双头网卡， 提供四个网口，其中 100g 网卡提供两个网口，25g 网卡提供两个网口。需要通过下面两个命令找出哪些网卡是 100g 网卡，哪些网卡是 25g 网卡， 记录好 mac 地址，然后再逐个网口进行操作：
-```
-ip addr
-lspci | grep Ethernet
-
-vi /etc/systemd/network/10-static-en25g1.link
-vi /etc/systemd/network/10-static-en25g2.link
-vi /etc/systemd/network/10-static-en100g1.link
-vi /etc/systemd/network/10-static-en100g2.link
-
-```
-
-
-## USB 網卡優化設定
-
-想在不插網卡下加增加速度，方式是bridge 一張USB網卡，因為USB網卡也會有斷線問題，解決方式為一樣關閉休眠功能
-
-```
-auto lo
-iface lo inet loopback
-
-iface nic0 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-        address 192.168.8.90/24
-        gateway 192.168.8.1
-        bridge-ports nic0 enx00e01c680083
-        bridge-stp off
-        bridge-fd 0
-        post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off
-
-iface nic1 inet manual
-source /etc/network/interfaces.d/*
-```
-
-- bridge-ports nic0 enx00e01c680083 //bridge到enx00e01c680083這張USB網卡
-- post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso off  //關閉休眠功能
 
 
 ## 使用NVME開機
@@ -170,9 +55,6 @@ source /etc/network/interfaces.d/*
 cat /sys/module/kvm_intel/parameters/nested   //檢查輸出為Y
 qm set <vmid> --cpu host
 ```
-
-
-
 
 
 
@@ -252,104 +134,8 @@ systemctl enable frr.service
 1. Node/System/Network 在橋接網口開啟vlan aware
 2. 建立VM那邊vlan填上設定的數值
 
-### PVE網口設定
-在banner會放上IP位置是從檔案去改的 nano /etc/issue
-修改主機ip
-1. nano /etc/network/interfaces
-2. nano /etc/hosts
-![](static/default-network-setup-bridge.svg)
-如果硬碟拔去新機器，無法進入畫面去檢查 `/etc/network/interfaces` ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可
-
-在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做
-預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔
-nano /etc/network/interfaces
-```
-auto lo iface lo inet loopback 
-iface enp1s0 inet manual 
-iface enp2s0 inet manual 
-iface enp3s0 inet manual 
-auto vmbr0 
-iface vmbr0 inet static 
-address 192.168.1.100/24 
-gateway 192.168.1.1 
-bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 
-bridge-stp on # 關鍵：開啟 STP,不然會網路風暴
-bridge-fd 2
-```
-也可以指定不同vmbr 其他Ip 這樣就是雙管理口
-
-```
-auto lo
-iface lo inet loopback
-
-auto nic0
-iface nic0 inet manual
-auto nic1
-iface nic1 inet manual
-auto nic2
-iface nic2 inet manual
-auto nic3
-iface nic3 inet manual
-iface wlp4s0 inet manual
-
-auto vmbr0
-iface vmbr0 inet static
-        address 192.168.1.5/24
-        gateway 192.168.1.1
-        bridge-ports nic2
-        bridge-stp on
-
-auto vmbr1
-iface vmbr1 inet manual
-        address 192.168.8.49/24
-        gateway 192.168.8.1
-        bridge-ports nic1
-        bridge-stp off
-        bridge-fd 0
-
-source /etc/network/interfaces.d/*
-```
-
-關閉USB網卡 tso gso `post-up /usr/sbin/ethtool -K enx00e01c680083 tso off gso`
-![](Pasted%20image%2020260524123306.png)
-
-修改 hosts
-![](Pasted%20image%2020260524125131.png)
 
 
-### BOND
-
-### OSPF
-
-### 網路路由
-![](static/default-network-setup-routed.svg)
-
-```
-种常见情况是，你有一个公共 IP（在本例中假定为 198.51.100.5），以及一个用于 VM 的额外 IP 块 （203.0.113.16/28）。对于此类情况，我们建议进行以下设置：
-
-auto lo
-iface lo inet loopback
-
-auto eno0
-iface eno0 inet static
-        address  198.51.100.5/29
-        gateway  198.51.100.1
-        post-up echo 1 > /proc/sys/net/ipv4/ip_forward
-        post-up echo 1 > /proc/sys/net/ipv4/conf/eno0/proxy_arp
-
-
-auto vmbr0
-iface vmbr0 inet static
-        address  203.0.113.17/28
-        bridge-ports none
-        bridge-stp off
-        bridge-fd 0
-
-```
-
-### OpenVSwtch
-
-https://www.zenwen.tw/proxmox-network-config-ovs-and-sdn/
 
 ## 去虛擬化
 
@@ -536,16 +322,6 @@ swap pve -wi-ao----    8.00g
 ![](static/Pasted%20image%2020260718223625.png)
 
 ## 遷移
-### 遷移: 從ESXi 
-會有驅動問題，在Windows不能開機就選SATA
-![](260404-pve.png)
-
-### 遷移: P2V
-1. 把目前開機的作業系統,使用對應軟體可直接熱轉換
-- Disk2vhd
-- StarWind V2V
-2. 先不要使用上傳Proxmox功能(9.0.1.848)，不穩定速度慢
-![](260404-v2v.png)
 
 ### 遷移: Migrate
 在PDM刪除Local-LVM 還是有辦法進行遷移，無法遷移是因為小版本號不一致，盡量保持不同台版本一致
@@ -554,8 +330,6 @@ swap pve -wi-ao----    8.00g
 ![](static/Pasted%20image%2020260711175052.png)
 如果之前刪除local-LVM會導致無法移轉raw硬碟檔去local分區，解決方法是創一個local-LVM分區或是重新Resign把硬碟轉成qcow
 
-### 遷移: 轉換至ESXi
-![](PixPin_2026-05-02_00-17-16.png)
 
 
 ## 啟用防火牆
@@ -604,92 +378,6 @@ qm set 147 --scsi1 local:104/vm-104-disk-1.qcow2
 
 
 
-
-## 直通技術
-SR-IOV：Intel主機板晶片做出限制，必須Server主板才能啟用，目的讓直通的設備能多VM共享使用，目前11代Intel核顯已經可以使用此技術
-
-ACS Patch
-Iommu group
-Gvt-g
-Io-pathrough
-ASUS BIOS 可開啟項目
-Iommu group
-SR-IOV
-VT-d
-進階/VMX
-Advanced/System Agent(SA)/VT-d
-PCH-FW Configuration/PTT，PTT Enable
-AMD RESET BUG
-
-使用SPICE 虛擬視窗+noVNC不偏移安裝方法[https://pvecli.xuan2host.com/spice-novnc/](https://pvecli.xuan2host.com/spice-novnc/)
-
-#### Hyper-V 遷移至PVE
-1. 將vhdx上傳至PVE目錄，因為UI不能直接傳vhdx，所以使用SFTP上傳
-2.  輸入以下指令
-```
-mkdir /var/lib/vz/hdd
-cd /var/lib/vz/hdd
-qemu-img convert -O qcow2 WIN10.vhdx vm-103-disk0.qcow2
-mv vm-103-disk0.qcow2 /var/lib/vz/images/103/
-qm rescan
-```
-3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
-4. 最後要安裝Vitro-win驅動
-
-## 顯卡直通
-
-1. 開啟主機板對應功能
-- intel vt-d
-- amd IOMMU SVM
-
-2. 追加grub
-nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 `intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
-
-- intel_iommu 和 amd_iommu=on 為開啟IOMMU
-- video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）
-- pcie_acs_override=downstream 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）
-
-2. 更新grub
-update-grub
-
-3. 增加vfio
-
-
-屏蔽顯卡
-nano /etc/modprobe.d/pve-blacklist.conf
-```
-# nvidia
-blacklist nouveau
-blacklist nvidia
-blacklist nvidiafb
-# amd
-blacklist amdgpu
-blacklist radeon
-# intel
-blacklist snd_hda_codec_hdmi
-blacklist snd_hda_intel
-blacklist snd_hda_codec
-blacklist snd_hda_core
-```
-
->無法正常關機Deadlock有時是開源驅動對顯卡的 **電源狀態切換 (D3 state)** 記得沒直通需求也要屏蔽nouveau
->GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on pcie_aspm=off acpi=force"
-
-
-針對nvidia 
-/etc/modprobe.d/kvm.conf
-```
-options kvm ignore_msrs=1 report_ignored_msrs=0
-```
-
-重新編譯內核
-update-initramfs -u -k all
-
-如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
-
-6. `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
-
-
 ## 常用位置
 ```
 查看所有位置
@@ -710,50 +398,7 @@ cat /etc/pve/storage.cfg
 
 > 主要GPU勾選會讓終端不顯示畫面，可以再安裝完驅動再勾
 
-## 正確刪除節點
-因為會有`corosync.conf` 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C (**此方法適用只退一台**)
-1. 先把Node C 關機 (用意為不送出Corosync 叢集廣播)
-2. 在Node A或Node B 其中一台下指令 (A,B其中一台做完設定會自動同步)
-```
-# 1.先切去看節點名稱並記下
-ls -la /etc/pve/nodes/
-# 2. 透過官方指令，將C節點的開會投票名單中移除
-pvecm delnode C節點名稱 
-# 3. 透過官方指令，徹底清除C節點在網頁UI殘留問號資料夾 
-rm -rf /etc/pve/nodes/C節點名稱
-```
-3. Node C重開機 (要真的安全就把Node A跟B 都先關了)
-```
-# 停止 C 機器殘留的叢集通訊服務 
-systemctl stop corosync.service 
-# 刪除舊的通訊錄檔案 
-rm -f /etc/pve/corosync.conf
-```
-## 全部退出節點
-1. 前面那個方法適用只退其中一台，如果一次20台退群用下面方法
-```
-#1. 在20台一次下停止叢集服務 
-systemctl stop pve-cluster.service 
-systemctl stop corosync.service
 
-#2. 在20台將系統設置為本地模式，刪除corosync
-pmxcfs -l  # 強制解鎖成本地模式
-rm /etc/pve/corosync.conf
-rm -rf /etc/corosync/*
-killall pmxcfs
-
-#3. 重啟節點服務
-systemctl start pve-cluster.service 
-
-# 4.重啟服務後,在webui並不會刪除,所以要再刪除自己以外節點 (千萬不要刪自己)
-ls -la /etc/pve/nodes
-rm -rf /etc/pve/nodes/自己以外節點名稱
-```
-
-## 叢集設定
-如果單純要以一個WebUI 管理把多台機器做叢集，這樣是不好的，光是一個SMB服務就會卡死
-PVE HA兩個群集設定
-https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he
 
 
 

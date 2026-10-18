@@ -27,12 +27,40 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Proxmox 實體網卡設定與斷線除錯.md",
+                "file": "content/post/NAMP.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Proxmox 實體網卡設定與斷線除錯"
+              "title": "NAMP"
+            }
+          },
+          {
+            "id": "8c43b2b8e7dc89c8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/Proxmox 直通設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Proxmox 直通設定"
+            }
+          },
+          {
+            "id": "8808e4c807b097cd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/Proxmox 叢集節點刪除.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Proxmox 叢集節點刪除"
             }
           },
           {
@@ -41,15 +69,44 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Proxmox NFS Server.md",
+                "file": "content/post/Proxmox NFS Server.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "Proxmox NFS Server"
             }
+          },
+          {
+            "id": "e5cb76887f2c7fe1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/V2V 轉換.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "V2V 轉換"
+            }
+          },
+          {
+            "id": "79fba67c765a8c6f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/Proxmox EVPN 設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Proxmox EVPN 設定"
+            }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -111,8 +168,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "bf396298f79400d2",
@@ -221,28 +277,72 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "871e5f3f8c0d1fe8",
+  "floating": {
+    "id": "20c0e19d46ad315d",
+    "type": "floating",
+    "children": [
+      {
+        "id": "19f549272304dd34",
+        "type": "window",
+        "children": [
+          {
+            "id": "415f346463899b23",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "e3ba3355ccc6ed8c",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/PVE 進階設定.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "PVE 進階設定"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical",
+        "x": 1516,
+        "y": 342,
+        "width": 984,
+        "height": 984,
+        "maximize": false,
+        "zoom": 0
+      }
+    ]
+  },
+  "active": "e5cb76887f2c7fe1",
   "lastOpenFiles": [
-    "Proxmox 實體網卡設定與斷線除錯.md",
-    "Proxmox NFS Server.md",
-    "V2V 轉換.md",
-    "content/post/ESXi 安裝與配置.md",
+    "content/post/Proxmox 直通設定.md",
+    "content/post/Proxmox NFS Server.md",
+    "content/post/Proxmox 叢集節點刪除.md",
+    "content/post/NAMP.md",
+    "toc.md",
+    "MindMap 2026-08-16 16.11.11.smm.md",
+    "content/post/QANP 安裝指引.md",
+    "ng.md",
+    "content/post/HostGuard‑AI.md",
+    "content/post/V2V 轉換.md",
     "content/post/PVE 進階設定.md",
-    "QANP 安裝指引.md",
+    "content/post/Proxmox 實體網卡設定與斷線除錯.md",
+    "content/post/Proxmox EVPN 設定.md",
+    "content/post/SSO.md",
+    "content/post/ESXi 安裝與配置.md",
     "static/Pasted image 20261017235858.png",
     "static/Pasted image 20261017235833.png",
     "static/Pasted image 20261017235747.png",
     "static/Pasted image 20261017235715.png",
-    "HostGuard‑AI.md",
-    "NAMP.md",
     "static/Pasted image 20261017185606.png",
-    "content/post/SSO.md",
     "static/Pasted image 20261017175606.png",
     "static/Pasted image 20261017175252.png",
     "static/Pasted image 20261017173605.png",
     "content/post/Kata Containers.md",
     "content/post/網頁伺服器.md",
-    "ng.md",
     "content/post/illumio 2x2 DR.md",
     "content/post/illumio Debug.md"
   ]
