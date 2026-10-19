@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/illumio 流量模擬.md",
+                "file": "content/web/index.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "illumio 流量模擬"
+              "title": "index"
             }
           },
           {
@@ -35,8 +35,7 @@
               "title": "ESXi 安裝與配置"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -208,13 +207,15 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "44f446c802aeb085",
+  "active": "d5573ef561d1fdd5",
   "lastOpenFiles": [
+    "content/page/archives/index.md",
+    "content/post/illumio 流量模擬.md",
+    "content/post/ESXi 安裝與配置.md",
     "content/web/index.md",
     "content/post/Proxmox 實用腳本.md",
     "public/p/proxmox-實用腳本/index.html",
     "public/p/proxmox-實用腳本",
-    "content/post/illumio 流量模擬.md",
     "content/post/NAMP.md",
     "未命名 2.md",
     "content/post/靜態網站製作.md",
@@ -241,10 +242,8 @@
     "content/post/虛擬機器比較.md",
     "content/post/VirtualBox.md",
     "content/post/各系統安裝.md",
-    "content/post/ESXi 安裝與配置.md",
     "content/post/CloudPanel.md",
     "public/page/29/index.html",
-    "content/page/archives/index.md",
     "public/Pasted image 20261017235858.png",
     "public/Pasted image 20261017235747.png",
     "public/Pasted image 20261017185606.png",
