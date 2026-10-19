@@ -692,3 +692,9 @@ qm rescan
 ```
 3. BIOS 選擇**OVMF(UEFI)**、**q35**，網路選擇**E1000**
 4. 最後要安裝Vitro-win驅動
+
+
+
+## 四、格式轉換
+OVA = Open Virtualization Archive
+OVF= Ovftool
