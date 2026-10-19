@@ -168,3 +168,123 @@ ESXI 7升8
 | **混雜模式** Promiscuous Mode        | VM 通常只收到發給自己 MAC 的封包，以及適用的廣播／多播              | 允許 VM 收到該虛擬網路中原本不是發給自己 MAC 的封包 |
 | **MAC 位址變更** MAC Address Changes | 客體 OS 將網卡 MAC 改成與 VMware 設定不同時，阻止送到新 MAC 的流量 | 允許送到變更後 MAC 的流量                |
 | **偽造傳輸** Forged Transmits        | 送出的封包，來源 MAC 與網卡目前有效 MAC 不同時，丟棄封包            | 允許送出來源 MAC 不同的封包               |
+
+## VMware VCSA 8 修改主机名和重置证书
+## 第一步使用 VAMI 界面修改域名
+
+### [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A "步骤：")步骤：
+
+1. **登录 VAMI 管理界面（VCSA后台）**
+    
+    |   |
+    |---|
+    |https://<vcsa-ip>:5480|
+    
+    使用 root 账户登录
+    
+2. **导航到网络设置**
+    
+    - 点击左侧菜单 **“Networking”** 或 **“网络”**
+    - 选择 **“Edit”** 或 **“编辑”**
+3. **修改主机名**
+    
+    - 在 **“Hostname”** 字段输入新的 FQDN
+    - 保存更改
+4. **重启服务**
+    
+    |   |
+    |---|
+    |service-control --stop --all  <br>service-control --start --all|
+    
+
+## [](https://songxwn.com/vcsa8-resetCA/#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%87%8D%E7%BD%AE%E8%AF%81%E4%B9%A6 "第二步：重置证书")第二步：重置证书
+
+### [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1 "步骤：")步骤：
+
+0. **登录 VAMI 管理界面（VCSA后台）**
+
+开启SSH，bash等服务。
+
+1. **SSH 登录到 vCSA**
+    
+    |   |
+    |---|
+    |ssh root@<vcsa-ip>|
+    
+2. **启用 Bash Shell**
+    
+    |   |
+    |---|
+    |shell|
+    
+3. **修改主机名 - 确保老的域名已删除**
+    
+    |   |
+    |---|
+    |# 设置新主机名  <br>hostnamectl set-hostname <new-hostname.domain.com>  <br>  <br># 验证修改  <br>hostnamectl|
+    
+4. **更新 /etc/hosts 文件**
+    
+    |   |
+    |---|
+    |vi /etc/hosts|
+    
+    确保包含：
+    
+    |   |
+    |---|
+    |<IP地址>  <new-hostname.domain.com>  <new-hostname>|
+    
+5. **重新生成证书（如果需要，或证书过期）**
+    
+    |   |
+    |---|
+    |/usr/lib/vmware-vmca/bin/certificate-manager|
+    
+    选择选项 8（Reset all Certificates）- 注意过程中要求输入IP和FQDN 得是VCSA的。
+    
+6. **重启所有服务 - 可选**
+    
+    |   |
+    |---|
+    |service-control --stop --all  <br>service-control --start --all|
+    
+
+## [](https://songxwn.com/vcsa8-resetCA/#%E9%87%8D%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 "重要注意事项")重要注意事项
+
+⚠️ **修改前必须做：**
+
+1. **完整备份**
+    
+    - 使用文件级备份或快照
+    - 备份数据库
+2. **DNS 记录更新**
+    
+    - 在 DNS 服务器上更新 A 记录和 PTR 记录
+    - 确保正向和反向解析都正确
+3. **证书考虑**
+    
+    - 如果使用自定义证书，需要重新申请
+    - 默认证书需要重新生成
+4. **检查依赖关系**
+    
+    - vCenter HA 配置
+    - 外部 PSC（如果有）
+    - 已集成的解决方案（vROps, vRLI 等）
+
+## [](https://songxwn.com/vcsa8-resetCA/#%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4 "验证步骤")验证步骤
+
+|   |
+|---|
+|# 检查主机名  <br>hostname  <br>hostname -f  <br>  <br># 检查 DNS 解析  <br>nslookup <new-hostname>  <br>  <br># 检查服务状态  <br>service-control --status --all  <br>  <br># 检查 vCenter 服务  <br>vmon-cli --list --all|
+
+## [](https://songxwn.com/vcsa8-resetCA/#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98 "常见问题")常见问题
+
+**Q: 是否需要重启 vCSA？**  
+A: 不需要完全重启，重启服务即可
+
+**Q: 会影响虚拟机吗？**  
+A: 不会，但管理功能会短暂中断
+
+**Q: 许可证需要重新激活吗？**  
+A: 不需要

@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/Proxmox 實用腳本.md",
+                "file": "content/post/ESXi 安裝與配置.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Proxmox 實用腳本"
+              "title": "ESXi 安裝與配置"
             }
           }
         ],
@@ -210,12 +210,13 @@
   },
   "active": "44f446c802aeb085",
   "lastOpenFiles": [
+    "content/web/index.md",
+    "content/post/Proxmox 實用腳本.md",
     "public/p/proxmox-實用腳本/index.html",
     "public/p/proxmox-實用腳本",
     "content/post/illumio 流量模擬.md",
     "content/post/NAMP.md",
     "未命名 2.md",
-    "content/post/Proxmox 實用腳本.md",
     "content/post/靜態網站製作.md",
     "public/p/備份/還原軟體/index.html",
     "public/p/備份/還原軟體",
@@ -234,7 +235,6 @@
     "content/post/虛擬化方案.md",
     "public/p/proxmox-softgpu/index.html",
     "public/p/proxmox-softgpu",
-    "content/web/index.md",
     "public/p/虛擬化方案/index.html",
     "public/p/虛擬化方案",
     "content/post/PVE 進階設定.md",
@@ -244,7 +244,6 @@
     "content/post/ESXi 安裝與配置.md",
     "content/post/CloudPanel.md",
     "public/page/29/index.html",
-    "public/page/29",
     "content/page/archives/index.md",
     "public/Pasted image 20261017235858.png",
     "public/Pasted image 20261017235747.png",
