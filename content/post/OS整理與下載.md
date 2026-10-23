@@ -53,6 +53,9 @@ https://massgrave.dev/
 - 開啟 RDP
 - 關閉休眠
 - 關閉記憶體完整性
+- 關閉VBS (虛擬化安全性)
+- 關閉HVCI
+- 關閉遙測服務
 ```
 # 開啟rdp
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0  

@@ -119,3 +119,6 @@ done
 
 ### PVE-clone:大量複製範本生成CT
 
+
+## PVE -vmid Update
+https://github.com/sannier3/proxmox-vmid-updater
