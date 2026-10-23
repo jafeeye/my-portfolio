@@ -7,7 +7,31 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>Example Person</copyright>
-        <lastBuildDate>Sun, 18 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 23 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/my-portfolio/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Proxmox</title>
+        <link>http://localhost:1313/my-portfolio/tags/proxmox/</link>
+        <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/proxmox/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>RollbackRx</title>
+        <link>http://localhost:1313/my-portfolio/tags/rollbackrx/</link>
+        <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/rollbackrx/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>SMB</title>
+        <link>http://localhost:1313/my-portfolio/tags/smb/</link>
+        <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/smb/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>EVPN</title>
         <link>http://localhost:1313/my-portfolio/tags/evpn/</link>
         <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
@@ -24,11 +48,27 @@
         <description></description>
         </item>
         <item>
+        <title>使用中工具</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</link>
+        <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>直通</title>
         <link>http://localhost:1313/my-portfolio/tags/%E7%9B%B4%E9%80%9A/</link>
         <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/my-portfolio/tags/%E7%9B%B4%E9%80%9A/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>資料庫</title>
+        <link>http://localhost:1313/my-portfolio/tags/%E8%B3%87%E6%96%99%E5%BA%AB/</link>
+        <pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/my-portfolio/tags/%E8%B3%87%E6%96%99%E5%BA%AB/</guid>
         <description></description>
         </item>
         <item>
@@ -61,14 +101,6 @@
         <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/my-portfolio/tags/synology/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>使用中工具</title>
-        <link>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</link>
-        <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
-        
-        <guid>http://localhost:1313/my-portfolio/tags/%E4%BD%BF%E7%94%A8%E4%B8%AD%E5%B7%A5%E5%85%B7/</guid>
         <description></description>
         </item>
         <item>

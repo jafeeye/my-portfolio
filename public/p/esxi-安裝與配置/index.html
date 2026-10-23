@@ -302,6 +302,20 @@
     <li><a href="#斷線除錯">斷線除錯</a></li>
     <li><a href="#嵌套式虛擬化">嵌套式虛擬化</a></li>
     <li><a href="#網路關係">網路關係</a></li>
+    <li><a href="#vmware-vcsa-8-修改主机名和重置证书">VMware VCSA 8 修改主机名和重置证书</a></li>
+    <li><a href="#第一步使用-vami-界面修改域名">第一步使用 VAMI 界面修改域名</a>
+      <ol>
+        <li><a href="#步骤">步骤：</a></li>
+      </ol>
+    </li>
+    <li><a href="#第二步重置证书">第二步：重置证书</a>
+      <ol>
+        <li><a href="#步骤-1">步骤：</a></li>
+      </ol>
+    </li>
+    <li><a href="#重要注意事项">重要注意事项</a></li>
+    <li><a href="#验证步骤">验证步骤</a></li>
+    <li><a href="#常见问题">常见问题</a></li>
   </ol>
 </nav>
         </div>
@@ -358,7 +372,7 @@
 
 
                 <time class="article-time--reading">
-                    2 minute read
+                    3 minute read
                 </time>
             </div>
         
@@ -671,6 +685,221 @@ vcsa-ui-installer\win32\resources\app\resources\layout.json</p>
 			</tr>
 	</tbody>
 </table></div>
+<h2 id="vmware-vcsa-8-修改主机名和重置证书">VMware VCSA 8 修改主机名和重置证书
+</h2><h2 id="第一步使用-vami-界面修改域名">第一步使用 VAMI 界面修改域名
+</h2><h3 id="步骤"><a href="https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A" title="步骤："></a>步骤：
+</h3><ol>
+<li>
+<p><strong>登录 VAMI 管理界面（VCSA后台）</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>https://<vcsa-ip>:5480</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>使用 root 账户登录</p>
+</li>
+<li>
+<p><strong>导航到网络设置</strong></p>
+<ul>
+<li>点击左侧菜单 <strong>“Networking”</strong> 或 <strong>“网络”</strong></li>
+<li>选择 <strong>“Edit”</strong> 或 <strong>“编辑”</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>修改主机名</strong></p>
+<ul>
+<li>在 <strong>“Hostname”</strong> 字段输入新的 FQDN</li>
+<li>保存更改</li>
+</ul>
+</li>
+<li>
+<p><strong>重启服务</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>service-control &ndash;stop &ndash;all  <br>service-control &ndash;start &ndash;all</td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+</ol>
+<h2 id="第二步重置证书"><a href="https://songxwn.com/vcsa8-resetCA/#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%87%8D%E7%BD%AE%E8%AF%81%E4%B9%A6" title="第二步：重置证书"></a>第二步：重置证书
+</h2><h3 id="步骤-1"><a href="https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1" title="步骤："></a>步骤：
+</h3><ol start="0">
+<li><strong>登录 VAMI 管理界面（VCSA后台）</strong></li>
+</ol>
+<p>开启SSH，bash等服务。</p>
+<ol>
+<li>
+<p><strong>SSH 登录到 vCSA</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>ssh root@<vcsa-ip></td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>启用 Bash Shell</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>shell</td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>修改主机名 - 确保老的域名已删除</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td># 设置新主机名  <br>hostnamectl set-hostname &lt;new-hostname.domain.com&gt;  <br>  <br># 验证修改  <br>hostnamectl</td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>更新 /etc/hosts 文件</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>vi /etc/hosts</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>确保包含：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>&lt;IP地址&gt;  &lt;new-hostname.domain.com&gt;  <new-hostname></td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+<li>
+<p><strong>重新生成证书（如果需要，或证书过期）</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>/usr/lib/vmware-vmca/bin/certificate-manager</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>选择选项 8（Reset all Certificates）- 注意过程中要求输入IP和FQDN 得是VCSA的。</p>
+</li>
+<li>
+<p><strong>重启所有服务 - 可选</strong></p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>service-control &ndash;stop &ndash;all  <br>service-control &ndash;start &ndash;all</td>
+			</tr>
+	</tbody>
+</table></div>
+</li>
+</ol>
+<h2 id="重要注意事项"><a href="https://songxwn.com/vcsa8-resetCA/#%E9%87%8D%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" title="重要注意事项"></a>重要注意事项
+</h2><p>⚠️ <strong>修改前必须做：</strong></p>
+<ol>
+<li>
+<p><strong>完整备份</strong></p>
+<ul>
+<li>使用文件级备份或快照</li>
+<li>备份数据库</li>
+</ul>
+</li>
+<li>
+<p><strong>DNS 记录更新</strong></p>
+<ul>
+<li>在 DNS 服务器上更新 A 记录和 PTR 记录</li>
+<li>确保正向和反向解析都正确</li>
+</ul>
+</li>
+<li>
+<p><strong>证书考虑</strong></p>
+<ul>
+<li>如果使用自定义证书，需要重新申请</li>
+<li>默认证书需要重新生成</li>
+</ul>
+</li>
+<li>
+<p><strong>检查依赖关系</strong></p>
+<ul>
+<li>vCenter HA 配置</li>
+<li>外部 PSC（如果有）</li>
+<li>已集成的解决方案（vROps, vRLI 等）</li>
+</ul>
+</li>
+</ol>
+<h2 id="验证步骤"><a href="https://songxwn.com/vcsa8-resetCA/#%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4" title="验证步骤"></a>验证步骤
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td># 检查主机名  <br>hostname  <br>hostname -f  <br>  <br># 检查 DNS 解析  <br>nslookup <new-hostname>  <br>  <br># 检查服务状态  <br>service-control &ndash;status &ndash;all  <br>  <br># 检查 vCenter 服务  <br>vmon-cli &ndash;list &ndash;all</td>
+			</tr>
+	</tbody>
+</table></div>
+<h2 id="常见问题"><a href="https://songxwn.com/vcsa8-resetCA/#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98" title="常见问题"></a>常见问题
+</h2><p><strong>Q: 是否需要重启 vCSA？</strong><br>
+A: 不需要完全重启，重启服务即可</p>
+<p><strong>Q: 会影响虚拟机吗？</strong><br>
+A: 不会，但管理功能会短暂中断</p>
+<p><strong>Q: 许可证需要重新激活吗？</strong><br>
+A: 不需要</p>
 
 </section>
 
@@ -870,5 +1099,6 @@ vcsa-ui-installer\win32\resources\app\resources\layout.json</p>
     }());
 </script>
 
+        
     </body>
 </html>

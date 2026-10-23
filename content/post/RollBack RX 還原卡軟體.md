@@ -6,12 +6,14 @@ tags:
   - RollbackRx
 ---
 ```mermaid
-flowchart TB
-    M["管理電腦<br/>RollBack Rx Endpoint Manager"]
-    S["Windows Server<br/>RollBack Rx Server"]
+flowchart TD
+    G["管理電腦<br/>Endpoint Manager GUI"]
+    S["另一台電腦<br/>Endpoint Manager Server Services"]
+    R["Windows Server<br/>RollBack Rx Server"]
     P["一般 Windows 電腦<br/>RollBack Rx Pro"]
-    M -->|"發現與管理"| S
-    M -->|"發現與管理"| P
-    %% mermaid-flow:pos M=253,90 S=362,200 P=145,200
+
+    G -->|"管理操作"| S
+    S -->|"發現與管理"| R
+    S -->|"發現與管理"| P
 ```
 

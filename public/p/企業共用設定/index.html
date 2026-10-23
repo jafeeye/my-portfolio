@@ -289,9 +289,6 @@
     <li><a href="#win10-掛載nfs">Win10 掛載NFS</a></li>
     <li><a href="#webdav">WebDAV</a></li>
     <li><a href="#airprint-印表機共享">AirPrint 印表機共享</a></li>
-    <li><a href="#windows">Windows</a></li>
-    <li><a href="#smb">SMB</a></li>
-    <li><a href="#linux-共享smb">Linux 共享SMB</a></li>
     <li><a href="#cups">CUPS</a></li>
   </ol>
 </nav>
@@ -445,73 +442,7 @@
     alt="gh|350"
     loading="lazy"
 ></p>
-<p>Windows 共享
-如果無法共享在認證管理員儲存
-<img
-    src="https://raw.githubusercontent.com/jafeeye/imglib/main/obsidian/1742819159000r3q28b.png"
-    alt="gh"
-    loading="lazy"
-></p>
-<blockquote>
-<p>[!Note] 實驗結果
-這個程式會導致macOS莫名無法儲存密碼列印，必須要每次輸入密碼才能原因不明，有可能是密碼多次儲存的關係</p>
-</blockquote>
-<h2 id="windows">Windows
-</h2><p>掛載指令<br>
-net share：顯示目前共用資料夾<br>
-<code>net use Z:\\192.168.8.106\Software /user:PIN Yster86a /persistent:no</code>
-persistent: 不會自動連線<br>
-中斷網路磁碟機<br>
-<code>net use /delete *</code></p>
-<blockquote>
-<p>在Windows中，Windows 檔案總管無法阻止它「自動嘗試連線」已掛載但尚未連線的 SMB 網路磁碟機(GPT)，</p>
-</blockquote>
-<p>出現共享文件：目前的帳戶已被鎖定無法登陸<br>
-<code>cmdkey /add:ip位置 /user:用戶名 /pass:密碼</code></p>
-<p>Win11 無法共享原因 (提高安全性，預設不能用伺服端的權限帳戶強制要設密碼)
-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation\AllowInsecureGuestAuth =1 或 - 編輯「啟用不安全的來賓登入」原則，將其設定為「已啟用」。做gpudate
-發生延伸錯誤 <code>Set-Smb Client Configuration -RequireSecuritySignature $false</code></p>
-<h2 id="smb">SMB
-</h2><p>這是如果你電腦沒有設定密碼(空密碼)情況可以下以下<br>
-net use z: \IP-ADDRESS\share-folder /user:username \login
-有密碼:<br>
-net use X: \server\share /user:user abc<br>
-你們也可以這樣下，沒有login，他會跳出來要你打帳號密碼。沒密碼就按enter鍵如下<br>
-net use z: \IP-ADDRESS\share-folder<br>
-如果要清掉或取消連線可以用 \delete 如下:<br>
-net use z: /delete<br>
-列出所有網路磁碟: net use<br>
-可以不用指定drive letter，用* 當做temp如下:<br>
-net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
-<h2 id="linux-共享smb">Linux 共享SMB
-</h2><ol>
-<li>
-<p>在在本機安全性原則/網路清單管理原則，點擊修改的網路連線，改成網路類型：私人
-<img
-    src="/my-portfolio/Pasted%20image%2020260621115753.png"
-    alt=""
-    loading="lazy"
-></p>
-</li>
-<li>
-<p><code>etc/samba/smb.conf</code></p>
-</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Global]
-</span></span><span class="line"><span class="cl">workgroup = WORKGROUP//讓Ubuntu和Win兩台區網電腦同一網域
-</span></span><span class="line"><span class="cl">client min protocol = SMB3
-</span></span><span class="line"><span class="cl">client max protocol = SMB3
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="cups">CUPS
+<h2 id="cups">CUPS
 </h2><ol>
 <li>創建CT 容器</li>
 </ol>
@@ -848,5 +779,6 @@ net use * &ldquo;\server\my media&rdquo; /persistent:no</p>
     }());
 </script>
 
+        
     </body>
 </html>
