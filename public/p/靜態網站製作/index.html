@@ -548,8 +548,45 @@ GitHub 官方也採用這個方式發布 Hugo 網站。<a href="https://gohugo.i
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="hugo-讀取mermaid">Hugo 讀取Mermaid
-</h2><p>在</p>
-
+</h2><ol>
+<li>在<code>layouts/_default/_markup/render-codeblock-mermaid.html</code> 底下加入</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;pre class=&#34;mermaid&#34;&gt;
+</span></span><span class="line"><span class="cl">  {{ .Inner | htmlEscape | safeHTML }}
+</span></span><span class="line"><span class="cl">&lt;/pre&gt;
+</span></span><span class="line"><span class="cl">{{ .Page.Store.Set &#34;hasMermaid&#34; true }}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>在 baseof.html 裡面的 <code>&lt;/body&gt;</code> 前面加入</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{{ if .Store.Get &#34;hasMermaid&#34; }}
+</span></span><span class="line"><span class="cl">&lt;script type=&#34;module&#34;&gt;
+</span></span><span class="line"><span class="cl">  import mermaid from &#39;https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs&#39;;
+</span></span><span class="line"><span class="cl">  mermaid.initialize({ startOnLoad: true });
+</span></span><span class="line"><span class="cl">&lt;/script&gt;
+</span></span><span class="line"><span class="cl">{{ end }}
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
 </section>
 
 
