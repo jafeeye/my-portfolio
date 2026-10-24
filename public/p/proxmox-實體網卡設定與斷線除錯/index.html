@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="\r一、PVE網口設定 二、固定網卡名稱 三、斷線除錯 一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
 <title>Proxmox 實體網卡設定與斷線除錯</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/proxmox-%E5%AF%A6%E9%AB%94%E7%B6%B2%E5%8D%A1%E8%A8%AD%E5%AE%9A%E8%88%87%E6%96%B7%E7%B7%9A%E9%99%A4%E9%8C%AF/'>
 
 <link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Proxmox 實體網卡設定與斷線除錯">
-<meta property='og:description' content="一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
+<meta property='og:description' content="\r一、PVE網口設定 二、固定網卡名稱 三、斷線除錯 一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/proxmox-%E5%AF%A6%E9%AB%94%E7%B6%B2%E5%8D%A1%E8%A8%AD%E5%AE%9A%E8%88%87%E6%96%B7%E7%B7%9A%E9%99%A4%E9%8C%AF/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='PVE' /><meta property='article:published_time' content='2026-10-17T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-17T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="Proxmox 實體網卡設定與斷線除錯">
-<meta name="twitter:description" content="一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
+<meta name="twitter:description" content="\r一、PVE網口設定 二、固定網卡名稱 三、斷線除錯 一、PVE網口設定\r在banner會放上IP位置是從檔案去改的 nano /etc/issue 修改主機ip\nnano /etc/network/interfaces nano /etc/hosts 如果硬碟拔去新機器，無法進入畫面去檢查 /etc/network/interfaces ，裡面的vmbr0 的bridge port 是不是指派成新機器的網孔，因為新的機器被指成eno1，再去下ifup vmbr0即可 在一般安裝時,PVE只會綁定安裝時的網孔做管理孔,在一般裝況下多網口的機器一定只能有一個管理口,不然會導致網路風暴,如果想暫時綁定多網口可以都登入PVE,可以這樣做 預設PVE給一個橋接網口vmbr0, bridge port 為目前管理孔 nano /etc/network/interfaces\n1 2 3 4 5 6 7 8 9 10 11 auto lo iface lo inet loopback iface enp1s0 inet manual iface enp2s0 inet manual iface enp3s0 inet manual auto vmbr0 iface vmbr0 inet static address 192.168.1.100/24 gateway 192.168.1.1 bridge-ports enp1s0 enp2s0 enp3s0 # 把本機三個孔都綁進來 bridge-stp on # 關鍵：開啟 STP,不然會網路風暴 bridge-fd 2 也可以指定不同vmbr 其他Ip 這樣就是雙管理口\n">
     </head>
     <body class="
     article-page
@@ -358,7 +358,16 @@
     <section class="article-content">
     
     
-    <h2 id="一pve網口設定">一、PVE網口設定
+    <nav class="article-toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一pve網口設定">一、PVE網口設定</a></li>
+    <li><a href="#二固定網卡名稱">二、固定網卡名稱</a></li>
+    <li><a href="#三斷線除錯">三、斷線除錯</a></li>
+  </ol>
+</nav>
+</nav>
+<h2 id="一pve網口設定">一、PVE網口設定
 </h2><p>在banner會放上IP位置是從檔案去改的 nano /etc/issue
 修改主機ip</p>
 <ol>

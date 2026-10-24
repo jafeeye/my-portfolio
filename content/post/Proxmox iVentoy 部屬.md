@@ -8,12 +8,12 @@ tags:
 ---
 ```toc
 ```
-
-## iVentoy LXC PXE 部屬
+## 一、iVentoy LXC PXE 部屬
 1. 敲入參數
 ```
 bash -c "$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)"
 ```
+
 2. 參考 [YT影片](https://www.youtube.com/watch?v=TNseK41A0DQ)，使用Advanced 並且輸入`192.168.8.X/24` 自訂成以下參數
 ![](iventoy260228.png)
 
@@ -62,7 +62,4 @@ pct set 100 -mp0 /mnt/pve/iso/09-OS,mp=/opt/iventoy/iso
 7. 也可以用成不同網卡做PXE
 ![](static/Pasted%20image%2020260710162448.png)
 
-
-
-
-## netboot.xyz
+## 二、netboot.xyz

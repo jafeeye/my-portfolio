@@ -13,7 +13,24 @@
         <pubDate>Sat, 17 Oct 2026 00:00:00 +0000</pubDate>
         
         <guid>http://localhost:1313/my-portfolio/p/v2v%E8%BD%89%E6%8F%9B-proxmox-%E8%88%87-vsphere-%E8%88%87-hyper-v-%E4%BA%92%E8%BD%89/</guid>
-        <description>&lt;h2 id=&#34;一proxmox-轉-esxi&#34;&gt;一、Proxmox 轉 ESXi
+        <description>&lt;nav class=&#34;article-toc&#34;&gt;
+    &lt;nav id=&#34;TableOfContents&#34;&gt;
+  &lt;ol&gt;
+    &lt;li&gt;&lt;a href=&#34;#一proxmox-轉-esxi&#34;&gt;一、Proxmox 轉 ESXi&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#二vsphere-轉-hyper-v&#34;&gt;二、vSphere 轉 Hyper-V&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#esxi-轉-proxmox&#34;&gt;ESXi 轉 Proxmox&lt;/a&gt;
+      &lt;ol&gt;
+        &lt;li&gt;&lt;a href=&#34;#遷移-從esxi&#34;&gt;遷移: 從ESXi&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#遷移-p2v&#34;&gt;遷移: P2V&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&#34;#遷移-轉換至esxi&#34;&gt;遷移: 轉換至ESXi&lt;/a&gt;&lt;/li&gt;
+      &lt;/ol&gt;
+    &lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#三hyper-v-遷移至pve&#34;&gt;三、Hyper-V 遷移至PVE&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&#34;#四格式轉換&#34;&gt;四、格式轉換&lt;/a&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;
+&lt;/nav&gt;
+&lt;h2 id=&#34;一proxmox-轉-esxi&#34;&gt;一、Proxmox 轉 ESXi
 &lt;/h2&gt;&lt;p&gt;轉換之前要注意一下
 Proxmox 要把直通的設備刪除
 硬碟確保不能用同名稱的硬碟，因為放在不同磁碟會出現硬碟同名問題

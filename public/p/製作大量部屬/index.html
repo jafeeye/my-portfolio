@@ -284,19 +284,9 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#iventoy-lxc-pxe-部屬">iVentoy LXC PXE 部屬</a></li>
-    <li><a href="#netbootxyz">netboot.xyz</a></li>
     <li><a href="#clonezilla-對拷-pve-p2v">Clonezilla 對拷 PVE (P2V)</a></li>
     <li><a href="#gparted">GParted</a></li>
-    <li><a href="#iac-ct">IaC CT</a>
-      <ol>
-        <li><a href="#思路二proxy-dhcp-旁路做法你說的新思路">思路二：Proxy DHCP 旁路做法（你說的「新思路」）</a>
-          <ol>
-            <li><a href="#當你的裝機電腦client開機時網路上演的精彩小劇場">當你的裝機電腦（Client）開機時，網路上演的精彩小劇場：</a></li>
-          </ol>
-        </li>
-      </ol>
-    </li>
+    <li><a href="#iac-ct">IaC CT</a></li>
     <li><a href="#注意事項">注意事項</a></li>
     <li><a href="#gitlab一專案更改多台lxc設定檔">gitlab一專案更改多台LXC設定檔</a>
       <ol>
@@ -482,59 +472,7 @@
 </span></span><span class="line"><span class="cl">→ Convert to Template
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="iventoy-lxc-pxe-部屬">iVentoy LXC PXE 部屬
-</h2><ol>
-<li>敲入參數</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bash -c &#34;$(wget -qLO - https://raw.githubusercontent.com/jafeeye/MyScripts/refs/heads/main/iventoy.sh)&#34;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol start="2">
-<li>參考 <a href="https://www.youtube.com/watch?v=TNseK41A0DQ">YT影片</a>，使用Advanced 並且輸入<code>192.168.8.X/24</code> 自訂成以下參數
-<img
-    src="/my-portfolio/iventoy260228.png"
-    alt=""
-    loading="lazy"
-></li>
-<li>安裝後豋入SCP把ISO檔放進去就可以啟動服務
-<img
-    src="/my-portfolio/iventoyscr260228.png"
-    alt=""
-    loading="lazy"
-></li>
-<li>用成不同網卡做PXE
-<img
-    src="/my-portfolio/Pasted%20image%2020260710162448.png"
-    alt=""
-    loading="lazy"
-></li>
-<li>iVentoy LXC 掛載Storage ISO</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cat /etc/pve/storage.cfg
-</span></span></code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">pct</span> <span class="n">config</span> <span class="o">&lt;</span><span class="n">vmid</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="n">pct</span> <span class="n">set</span> <span class="mi">100</span> <span class="o">-</span><span class="n">mp0</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">vz</span><span class="o">/</span><span class="n">template</span><span class="o">/</span><span class="n">iso</span><span class="p">,</span><span class="n">mp</span><span class="o">=/</span><span class="n">mnt</span><span class="o">/</span><span class="n">pve</span><span class="o">-</span><span class="n">iso</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="netbootxyz">netboot.xyz
-</h2><h2 id="clonezilla-對拷-pve-p2v">Clonezilla 對拷 PVE (P2V)
+</div><h2 id="clonezilla-對拷-pve-p2v">Clonezilla 對拷 PVE (P2V)
 </h2><ol>
 <li>VM開機選擇Clonezilla 的ISO檔</li>
 <li>選擇<code>device-device</code> -&gt; <code>remote</code></li>
@@ -611,23 +549,7 @@
 </span></span><span class="line"><span class="cl">echo -e &#34;\n=== 【 這是你的自動化 SSH 公鑰，請複製它 】 ===&#34; &amp;&amp; cat /home/gitlab-runner/.ssh/id_ed25519.pub ;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="思路二proxy-dhcp-旁路做法你說的新思路">思路二：Proxy DHCP 旁路做法（你說的「新思路」）
-</h3><ul>
-<li>
-<p><strong>條件：</strong> <strong>主路由器完全不動</strong>，直接維持原樣。</p>
-</li>
-<li>
-<p><strong>玩法：</strong> 你把 iVentoy 的 DHCP 模式切換為 <strong>「外部 Proxy (External Proxy)」</strong>。這時候，iVentoy 內部其實就是啟動了我們上一題聊到的 <code>dnsmasq</code>（或是類似的 PXE Proxy 服務）。</p>
-</li>
-</ul>
-<h4 id="當你的裝機電腦client開機時網路上演的精彩小劇場">當你的裝機電腦（Client）開機時，網路上演的精彩小劇場：
-</h4><ol>
-<li><strong>Client 廣播：</strong> 「有沒有人能給我 IP 順便讓我 PXE 開機？」</li>
-<li><strong>主路由器（笨小烏龜）回應：</strong> 「IP 給你 <code>192.168.8.50</code>，其他我什麼都不知道！」</li>
-<li><strong>iVentoy (Proxy DHCP) 同時回應：</strong> 「我聽到了！我不會發 IP 給你（不跟主路由搶工作），但我手上有一份開機檔案叫 <code>ipxe.efi</code>，在 <code>192.168.8.200</code> 這裡，你拿去用！」</li>
-<li><strong>Client 網卡大腦：</strong> 把主路由給的 IP，和 iVentoy 給的開機引導<strong>完美合體</strong>，成功載入 iVentoy 的隨身碟裝機選單！</li>
-</ol>
-<h2 id="注意事項">注意事項
+</div><h2 id="注意事項">注意事項
 </h2><p>複製linux 範本記得去改 <code>/etc/machine-id</code></p>
 <h2 id="gitlab一專案更改多台lxc設定檔">gitlab一專案更改多台LXC設定檔
 </h2><p><strong>建立一個 GitLab 專案（例如叫 <code>lxc-infrastructure</code>）</strong>，就能輕鬆掌控所有 LXC 的檔案</p>

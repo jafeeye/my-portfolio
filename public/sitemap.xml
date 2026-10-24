@@ -8,10 +8,16 @@
     <loc>http://localhost:1313/my-portfolio/post/</loc>
     <lastmod>2026-10-24T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/my-portfolio/p/proxmox-iventoy-%E9%83%A8%E5%B1%AC/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/my-portfolio/p/proxmox-sdn-%E8%A8%AD%E5%AE%9A/</loc>
     <lastmod>2026-10-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/my-portfolio/tags/pve/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/my-portfolio/tags/pxe/</loc>
     <lastmod>2026-10-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/my-portfolio/tags/rdp/</loc>
@@ -142,6 +148,12 @@
   </url><url>
     <loc>http://localhost:1313/my-portfolio/p/%E8%B3%87%E6%96%99%E5%BA%AB%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7-dbsyncer/</loc>
     <lastmod>2026-10-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/my-portfolio/p/windows-ad-%E9%99%A4%E9%8C%AF/</loc>
+    <lastmod>2026-10-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/my-portfolio/p/%E8%AD%89%E7%85%A7%E6%AD%B7%E7%A8%8B/</loc>
+    <lastmod>2026-10-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/my-portfolio/tags/veyon/</loc>
     <lastmod>2026-10-03T00:00:00+00:00</lastmod>

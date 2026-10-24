@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><script src="/my-portfolio/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=my-portfolio/livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="\r一、MailHog 二、Mailpit Mailcow iRedmail Zimbra 五、寄送除錯指令 一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
 <title>郵件Server 架設</title>
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E9%83%B5%E4%BB%B6server-%E6%9E%B6%E8%A8%AD/'>
 
 <link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="郵件Server 架設">
-<meta property='og:description' content="一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
+<meta property='og:description' content="\r一、MailHog 二、Mailpit Mailcow iRedmail Zimbra 五、寄送除錯指令 一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E9%83%B5%E4%BB%B6server-%E6%9E%B6%E8%A8%AD/'>
 <meta property='og:site_name' content='PIN技術筆記'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-06-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-06-29T00:00:00&#43;00:00'/>
 <meta name="twitter:title" content="郵件Server 架設">
-<meta name="twitter:description" content="一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
+<meta name="twitter:description" content="\r一、MailHog 二、Mailpit Mailcow iRedmail Zimbra 五、寄送除錯指令 一、MailHog\r先安裝docker，跑mailhog服務 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog 在 /etc/illumio-pce/runtime_env.yml 中把smtp的 IP:Port 從預設127.0.0.1:587改成 1 2 3 4 ## 改變前 smtp_relay_address: 127.0.0.1:587 ## 改變後 smtp_relay_address: 192.168.8.30:1025 在docker主機用瀏覽器打開 127.0.0.1:8025 去收信測試 腳本改法 把smtp.sendmail(from_, recipients, msg.as_bytes()) 改成 smtp.sendmail(from_, recipients, msg.as_string())\n二、Mailpit\r1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 services: mailpit: image: axllent/mailpit:latest container_name: mailpit restart: unless-stopped ports: - &#34;587:1025&#34; - &#34;8025:8025&#34; environment: MP_SMTP_TLS_CERT: /certs/fullchain.cer MP_SMTP_TLS_KEY: /certs/wildcard.bd1.dev.key MP_SMTP_REQUIRE_STARTTLS: &#34;true&#34; MP_SMTP_AUTH: &#34;testuser:testpass123&#34; volumes: - ./certs:/certs:ro Mailcow\r架設前要做DNS設定\n">
     </head>
     <body class="
     article-page
@@ -361,7 +361,19 @@
     <section class="article-content">
     
     
-    <h2 id="一mailhog">一、MailHog
+    <nav class="article-toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一mailhog">一、MailHog</a></li>
+    <li><a href="#二mailpit">二、Mailpit</a></li>
+    <li><a href="#mailcow">Mailcow</a></li>
+    <li><a href="#iredmail">iRedmail</a></li>
+    <li><a href="#zimbra">Zimbra</a></li>
+    <li><a href="#五寄送除錯指令">五、寄送除錯指令</a></li>
+  </ol>
+</nav>
+</nav>
+<h2 id="一mailhog">一、MailHog
 </h2><ol>
 <li>先安裝docker，跑mailhog服務
 docker run -d -p 1025:1025 -p 8025:8025 &ndash;name local_mailhog mailhog/mailhog</li>

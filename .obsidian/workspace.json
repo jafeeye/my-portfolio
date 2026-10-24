@@ -48,8 +48,23 @@
               "icon": "lucide-file",
               "title": "illumio 流量模擬"
             }
+          },
+          {
+            "id": "9817339e334c5d12",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/靜態網站製作.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "靜態網站製作"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -222,10 +237,21 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "ad2fc1792de2c140",
+  "active": "937461533ad6990a",
   "lastOpenFiles": [
-    "content/post/RollBack RX 還原卡軟體.md",
+    "content/post/靜態網站製作.md",
     "content/post/Proxmox iVentoy 部屬.md",
+    "public/tags/pxe/page/1/index.html",
+    "public/tags/pxe/page/1",
+    "public/tags/pxe/page",
+    "public/tags/pxe/index.xml",
+    "public/tags/pxe/index.html",
+    "public/tags/pxe",
+    "public/Pasted image 20261024222313.png",
+    "public/Pasted image 20261024174523.png",
+    "public/p/proxmox-iventoy-部屬/index.html",
+    "public/p/proxmox-iventoy-部屬",
+    "content/post/RollBack RX 還原卡軟體.md",
     "content/post/illumio 流量模擬.md",
     "content/post/製作大量部屬.md",
     "static/Pasted image 20261024222313.png",
@@ -238,15 +264,6 @@
     "content/post/Windows AD 除錯.md",
     "未命名 2.md",
     "未命名 1.md",
-    "public/p/windows-ad-除錯/index.html",
-    "public/p/windows-ad-除錯",
-    "content/post/靜態網站製作.md",
-    "public/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css",
-    "public/p/veyon-遠端遙控軟體/index.html",
-    "public/p/veyon-遠端遙控軟體",
-    "assets/scss/_mermaid.scss",
-    "assets/scss/新文字文件.txt",
-    "public/p/連線軟體-mremoteng-設定/index.html",
     "public/Pasted image 20261024131936.png",
     "public/Pasted image 20261024130639.png",
     "public/Pasted image 20261023233438.png",
@@ -256,10 +273,8 @@
     "static/Pasted image 20261024130639.png",
     "content/post/Veyon.md",
     "content/post/OS整理與下載.md",
-    "static/Pasted image 20261023233438.png",
     "content/post/SMB 協定共享設定.md",
     "content/post/企業共享設定.md",
-    "public/Pasted image 20261023192506.png",
     "content/post/Proxmox 傳遞CPU設定.md",
     "content/post/SSL 憑證.md",
     "content/post/PVE 進階設定.md",
