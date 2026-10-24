@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/x11/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="X11">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="X11">
 <meta property='og:description' content="1、解析度模式已存在\n1.如何查詢是否存在： 圖形介面：在System Settings/Displays/Resolution欄檢視下拉列表。 控制檯：在控制檯輸入命令：xrandr，即會輸出當前已存在的解析度模式。 2.如何配置： 圖形介面：在System Settings/Displays/Resolution欄下拉列表中設定。 控制檯：使用命令xrandr &ndash;output 顯示器名稱 &ndash;mode 模式名稱，如：xrandr &ndash;output Virtual1 &ndash;mode &ldquo;1440x900&rdquo;\u00a02、解析度模式不存在 總體操作流程如下： 1）使用ctv或gtf命令計算mode line引數； 2）使用xrandr &ndash;newmode 新建一個模式； 3）使用xrandr &ndash;add新增一個模式到指定的顯示器； 4）使用xrandr -s 設定指定顯示器的解析度； 5）持久化模式與設定，即設定引數重啟後有效。\n以下為操作例項，新建一個解析度模式1600x900_60.00，並將解析度設定為該模式，同時持久化該配置： 測試環境： 1）ubuntu16.04（執行在win7 + vmware workstation 12） 2）對ubunut的顯示器Virtual1進行設定\n操作與輸出如下：\n$ gtf 1600 900 60 # 1600x900 @ 60.00 Hz (GTF) hsync: 55.92 kHz; pclk: 119.00 MHz Modeline &ldquo;1600x900_60.00&rdquo;\u00a0119.00\u00a01600 1696 1864 2128\u00a0900 901 904 932\u00a0-HSync +Vsync $ xrandr &ndash;newmode &ldquo;1600x900_60.00&rdquo;\u00a0119.00\u00a01600 1696 1864 2128\u00a0900 901 904 932\u00a0-HSync +Vsync\u00a0//新建一個顯示模式，將上一行的後半部分作為xrandr &ndash;newmode的引數 $ xrandr &ndash;addmode Virtual1 &ldquo;1600x900_60.00&rdquo;\u00a0//增加一個顯示模式到Virtual1\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/x11/'>
 <meta property='og:site_name' content='PIN技術筆記'>

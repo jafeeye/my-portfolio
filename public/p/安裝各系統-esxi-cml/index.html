@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%AE%89%E8%A3%9D%E5%90%84%E7%B3%BB%E7%B5%B1-esxi-cml/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="安裝各系統 ESXi CML">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="安裝各系統 ESXi CML">
 <meta property='og:description' content="CML\r新版CML採用Ubuntu 24.10發行版製作，原理是開機先將cml_2.9.1xx.iso進行掛載，此時會自動進行安裝程式把cml跟GRUB安裝好，在第二次開機會出現GRUB的CML選單，接續才進行帳號及IP位置初始化設定。 會一起安裝cookpit port為9090，可透過這邊設定一些選項\nBIOS：OVMF (UEFI)\n硬碟：EFI Disk (預設大小)、Hard Disk (scsi0)100G，並設定Async IO為native\nCD/DVD (ide0)：cml_2.9.1xx.iso (第一次自動安裝完可以移除)\nCD/DVD (ide1)：refplat-20250616-fcs.iso\n在安裝時使用了固定IP,但因為用了IPAM,這邊就給他自動取得\n.\nESXi Nested\r先確認PVE系統設定檔 1 2 3 4 cat /etc/modprobe.d/kvm-intel.conf options kvm-intel nested=Y //Intel開啟嵌套虛擬化 options kvm ignore_msrs=y //Intel開啟嵌套虛擬化 options kvm-amd nested=Y ept=Y //amd開啟嵌套虛擬化 安裝嵌套式ESXi，要在PVE中啟用Enable NUMA，才能進入使用畫面 類型 設定 說明 Processors Type Host、Enable NUMA BIOS Type SeaBIOS Network Type VMware vmxnet3 Guest OS Linux,6.x - 2.6 Kernel SCSI Controller VMware PVSCSI Bus/Device SATA - Ensure you’re using SATA controller for the disk (not SCSI or VirtIO) Discard Checked EVE-NG\r最小大小為50G，但為擴充開機磁碟設定為100G、Vitro SCSI Single\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%AE%89%E8%A3%9D%E5%90%84%E7%B3%BB%E7%B5%B1-esxi-cml/'>
 <meta property='og:site_name' content='PIN技術筆記'>

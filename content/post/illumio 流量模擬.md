@@ -6,15 +6,25 @@ toc: true
 ```toc
 ```
 
-## 一、測試步驟
+### 一、測試前置步驟
 1. 使用Debian 13 LXC 安裝，腳本安裝前先裝以下套件
 ```
-# 1.安裝套件
+# 1.Debian LXC 安裝套件
 apt update && apt install -y uuid-runtime iproute2 iptables ipset ca-certificates curl diffutils dnsutils libnfnetlink0 libcap2 libgmp10 mawk
+
+# Ubuntu LXC 安裝套件
+apt install curl
 
 # 2.systemd-resolved 讓容器可以讀取PVE DNS欄位
 apt update && apt install systemd-resolved -y
 ```
+
+或者是避免hosts被覆蓋
+```
+touch /etc/.pve-ignore.hosts
+echo "192.168.8.8 illumio-kevin.dev" >> /etc/hosts
+```
+
 2. 找一台設定好LXC，把Script 設定好執行
 ```
 (
@@ -111,16 +121,27 @@ done
 )
 ```
 
-
-
-
-## LXC安裝前置作業
-
-避免hosts被覆蓋
+### 二、加入Windows AD
 ```
-touch /etc/.pve-ignore.hosts
-echo "192.168.8.8 illumio-kevin.dev" >> /etc/hosts
+apt update
+apt install -y sssd-ad sssd-tools realmd adcli libnss-sss libpam-sss samba-common-bin krb5-user
 ```
+
+```
+dig @192.168.8.131 ad.test
+dig @192.168.8.131 _ldap._tcp.ad.test SRV
+dig @192.168.8.131 _kerberos._tcp.ad.test SRV
+dig @192.168.8.131 _ldap._tcp.dc._msdcs.ad.test 
+
+##
+realm join -v ad.test -U Administrator
+```
+
+
+
+
+
+
 安裝 openssh server
 ```
 # 如果沒反應，代表沒裝或沒開，直接物理安裝： 
@@ -133,18 +154,12 @@ systemctl restart sshd
 apt update && apt install openssh-server
 systemctl enable --now ssh
 ```
-### Ubuntu LXC
-使用非特權容器 22.04 LTS，裝完curl後直接執行 `illumio-ven-ctl` 無任何問題
-```
-apt install curl
-```
-
 
 看安裝錯誤訊息
 /var/log/illumio_install.log
 hostname做restart 就會同步過去
 
-## Rocky Linux
+### Rocky Linux
 使用Rocky Linux 9 LXC 安裝
 ```
 dnf install -y dmidecode ipset
@@ -204,7 +219,7 @@ systemctl enable rc-local.service
 systemctl start rc-local.service
 ```
 
-## 查看nft
+### 查看nft
 ```
 # 看有多少個清單
 nft list tables
@@ -221,7 +236,7 @@ nft delete table inet ILO-FILTER-X
 
 
 
-## nc 模擬流量
+### nc 模擬流量
 ```
 dnf install -y nmap-ncat
 apt update && apt install ncat -y

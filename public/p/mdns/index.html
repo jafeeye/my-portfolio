@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/mdns/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="mDNS">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="mDNS">
 <meta property='og:description' content="Avahi是一个免费的零配置网络（zeroconf）实现，包括一个用于组播DNS/DNS-SD服务发现的系统。它允许程序发布和发现在本地网络上运行的服务和主机.而无需特定配置。例如.traefik.local homepage.local`\n安装Avahi\rUbuntu /Debian $ sudo apt install avahi-daemon avahi-utils CentoS $ sudo yum installnss-mdns avahi avahi-tools\n如果提示nss-mdns找不到，就安装一下epel源 开启服务 systemctl restart avahi-daemon.service\nDocker\r1 2 3 4 5 6 7 8 9 10 avahi-helper: #这个容器会将以.Local结尾的Host广播出去 #在同一个同一个局域网的用户就都能访问到了 image:hardillb/traefik-avahi-helper:latest restart: unless-stopped volumes: - /var/run/docker.sock:/var/run/docker.sock - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket networks: - web-network mDNS Reflector\rmDNS-Bridge\r將mDNS 轉給 DNS Server\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/mdns/'>
 <meta property='og:site_name' content='PIN技術筆記'>

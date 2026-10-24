@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/docker/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="docker">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="docker">
 <meta property='og:description' content="Volume 用法\n1 2 3 4 environment: MP_SMTP_TLS_CERT: /certs/wildcard.bd1.dev.crt volumes: - ./mailpit/certs:/certs:ro docker ps docker logs &lt;容器名稱&gt; Arcane Portainer\rLXC 安裝方式\n1 2 3 4 5 6 7 8 9 10 sudo docker volume create portainer_data sudo docker run -d \\ -p 8000:8000 \\ -p 9443:9443 \\ --name=portainer \\ --restart=always \\ -v /var/run/docker.sock:/var/run/docker.sock \\ -v portainer_data:/data \\ portainer/portainer-ce:latest 改連線過去IP 重啟加參數\n1 2 3 4 5 6 7 8 9 10 11 12 sudo docker stop portainer sudo docker rm portainer sudo docker run -d \\ -p 8000:8000 \\ -p 9443:9443 \\ --name=portainer \\ --restart=always \\ -v /var/run/docker.sock:/var/run/docker.sock \\ -v portainer_data:/data \\ portainer/portainer-ce:latest \\ --trusted-origins portainer.bd1.dev ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/docker/'>
 <meta property='og:site_name' content='PIN技術筆記'>

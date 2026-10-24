@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-aix/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="常用指令-AIX">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="常用指令-AIX">
 <meta property='og:description' content="常用指令\rcd - ls -l ipfstat -io shutdown -F errpt //log檔是用errlog lspv prtconf\nchdev -l inet0 -a hostname=aix01 //修改hostname hostname // 顯示hostname\n顯示目前任務(迴圈) 方法1：while true; do tput clear; ps auxw | head -n 1 ; ps auxw | grep ven ; sleep 2; done 方法2：nmon -C &lt;程式名稱&gt;，進入畫面再按t\n快速鍵\r鍵盤Backspace 無法使用 stty erase ^? ，其實在unix Ctrl+H跟Ctrl+? 都是退格鍵意思 set -o emacs 模式\n動作 現代鍵盤按鍵 Emacs 模式標準按鍵 (完全不會噴亂碼) 記憶口訣 往回刪除一格 Backspace Ctrl + H 取代傳統退格鍵 游標往左移一格 ← (左方向鍵) Ctrl + B Backward (後退) 游標往右移一格 → (右方向鍵) Ctrl + F Forward (前進) 移到指令最前面 Home Ctrl + A Ahead (最前) 移到指令最後面 End Ctrl + E End (最後) 清除游標後整行 無 Ctrl + K Kill (殺掉後半段) 往後刪除一整個字 無 Esc 放開再按 Backspace 批次刪除 在 AIX 的 Emacs 模式下，想找上一條敲過的指令，按「上方向鍵 ↑」一定會噴亂碼（通常會噴 ^[OA 這種怪字）。請改用這個極致優雅的盲操按法： 找上一條指令（Up）： 按 Ctrl + P（Previous，上一條） 找下一條指令（Down）： 按 Ctrl + N（Next，下一條） 關鍵字搜尋歷史（Reverse Search）： 按 Ctrl + R，然後直接輸入你記得的指令關鍵字（例如輸入 ifconfig） stty eof ^D 一直跳出系統日誌 歷史指令搜尋（取代上、下方向鍵）\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4-aix/'>
 <meta property='og:site_name' content='PIN技術筆記'>

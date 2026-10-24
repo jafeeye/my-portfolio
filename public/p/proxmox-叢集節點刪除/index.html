@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/proxmox-%E5%8F%A2%E9%9B%86%E7%AF%80%E9%BB%9E%E5%88%AA%E9%99%A4/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Proxmox 叢集節點刪除">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Proxmox 叢集節點刪除">
 <meta property='og:description' content="退出節點 (適用叢集只要退一台)\r因為會有corosync.conf 同步問題，正確的刪除方法如下，假設有三台Node A,B,C ，要踢掉Node C\n先把Node C 關機 (用意為不送出Corosync 叢集廣播) 在Node A或Node B 其中一台下指令 (A,B其中一台做完設定會自動同步) 1 2 3 4 5 6 # 1.先切去看節點名稱並記下 ls -la /etc/pve/nodes/ # 2. 透過官方指令，將C節點的開會投票名單中移除 pvecm delnode C節點名稱 # 3. 透過官方指令，徹底清除C節點在網頁UI殘留問號資料夾 rm -rf /etc/pve/nodes/C節點名稱 Node C重開機，把 Node A與Node A 關機 1 2 3 4 # 停止 C 機器殘留的叢集通訊服務 systemctl stop corosync.service # 刪除舊的通訊錄檔案 rm -f /etc/pve/corosync.conf 退出節點 (適用拆掉所有叢集)\r前面那個方法適用只退其中一台，如果一次20台退群用下面方法 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 #1. 在20台一次下停止叢集服務 systemctl stop pve-cluster.service systemctl stop corosync.service #2. 在20台將系統設置為本地模式，刪除corosync pmxcfs -l # 強制解鎖成本地模式 rm /etc/pve/corosync.conf rm -rf /etc/corosync/* killall pmxcfs #3. 重啟節點服務 systemctl start pve-cluster.service # 4.重啟服務後,在webui並不會刪除,所以要再刪除自己以外節點 (千萬不要刪自己) ls -la /etc/pve/nodes rm -rf /etc/pve/nodes/自己以外節點名稱 叢集設定\r如果單純要以一個WebUI 管理把多台機器做叢集，這樣是不好的，光是一個SMB服務就會卡死 PVE HA兩個群集設定 https://youtu.be/TXFYTQKYlno?si=QSdXq5UpXMrB__he\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/proxmox-%E5%8F%A2%E9%9B%86%E7%AF%80%E9%BB%9E%E5%88%AA%E9%99%A4/'>
 <meta property='og:site_name' content='PIN技術筆記'>

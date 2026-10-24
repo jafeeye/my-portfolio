@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/podman-%E8%88%87-godoxy-%E5%81%9A%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Podman 與 GoDoxy 做反向代理">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Podman 與 GoDoxy 做反向代理">
 <meta property='og:description' content="本身無守護進程，可允許一般使用者執行，所以要開機啟動容器也要寫腳本 高度相容Docker，並且能使用K8s 指令，創立Pod\n![[static/Diagram 13.svg]] 可以。你這台是 Debian，而且目前用 root 操作，完整安裝流程改成下面這套。前面 Rocky Linux 的 dnf、EPEL、SELinux、firewall-cmd 都不需要。\n安裝 Podman 與 Compose 1 2 apt update apt install -y podman podman-compose wget openssl 確認：\n1 2 3 podman --version podman-compose --version podman compose version 如果仍找不到，暫時指定 provider：\n1 2 export PODMAN_COMPOSE_PROVIDER=/usr/bin/podman-compose podman compose version 2.啟用 rootful Podman API\n1 2 systemctl enable --now podman.socket systemctl status podman.socket 確認 Socket：\n1 ls -l /run/podman/podman.sock 也可以測試 API：\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/podman-%E8%88%87-godoxy-%E5%81%9A%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/'>
 <meta property='og:site_name' content='PIN技術筆記'>

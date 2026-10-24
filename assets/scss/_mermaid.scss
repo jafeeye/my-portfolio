@@ -1,0 +1,42 @@
+.mermaid {
+  margin: 1.75rem auto;
+  padding: 1.5rem;
+  overflow-x: auto;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+  }
+
+  .node {
+    rect,
+    polygon,
+    circle {
+      filter: drop-shadow(0 3px 4px rgba(15, 23, 42, 0.12));
+      stroke-width: 1.5px !important;
+    }
+  }
+
+  .edgePath path {
+    stroke-width: 1.6px !important;
+  }
+
+  .edgeLabel {
+    color: #475569 !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .mermaid {
+    background: #111827;
+    border-color: #334155;
+    box-shadow: none;
+  }
+}

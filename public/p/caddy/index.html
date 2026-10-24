@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/caddy/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Caddy">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Caddy">
 <meta property='og:description' content="DNS Chanllage 提供 http-01 / dns-01 / tls-alpn-01 Caddyfile 已經有一個 {} global block 而是要合併\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 那不能再新增第二個，而是要合併 { ## email xxx@example.com local_certs pki { ca local { name &#34;Caddy Local Authority&#34; intermediate_lifetime 730d } } } # 下面才放其他所有網站 acme-ca.test:9000 { acme_server { ca local lifetime 365d } } 1. 確認 Caddy ACME CA 正常\r1 2 3 sudo caddy validate --config /etc/caddy/Caddyfile sudo systemctl restart caddy systemctl status caddy --no-pager 然後測 ACME directory：\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/caddy/'>
 <meta property='og:site_name' content='PIN技術筆記'>

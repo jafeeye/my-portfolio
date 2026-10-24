@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="SSL 憑證">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="SSL 憑證">
 <meta property='og:description' content=" 軟體 開源免費自架 Web UI 帳密/API Key 憑證/私有 CA 功能 OpenBao ✅ ✅ ✅ ✅ 最接近完整替代 Smallstep step-ca ✅ 基本功能偏 CLI ❌ ✅ 很強 最適合管理三層憑證 SOPS + age ✅ ❌ ✅ 只能當加密檔案保存 適合 GitOps/K8s Bitwarden Secrets Manager 部分限制 ✅ ✅ 普通 免費自架條件不如 OpenBao Infisical CE ✅ ✅ 最漂亮 ✅ ✅ 其實你現在用的就是開源版，但部分進階功能收費 以現在目前大家能通過SSL憑證，不外乎以下幾種 買網域,有公網憑證去信任本地網址 使用免費Let&rsquo;s Crypt 使用免費DuckDNS,後墜為DuckDNS 反向代理騙過驗證 把lan 又代理成 duckdns 常用指令\r列出所有憑證PEM Base64、簽發者 openssl crl2pkcs7 -nocrl -certfile fullchain.pem | openssl pkcs7 -print_certs 列出憑證所有訊息 1 2 3 openssl x509 \\ -in /var/lib/illumio-pce/cert/server.crt \\ -noout -text 遠端匯憑證 1 2 3 4 5 # 抓下網站SSL憑證 openssl s_client -showcerts -connect IP位置:443 &lt;/dev/null 2&gt;/dev/null | openssl x509 -outform PEM &gt; /usr/local/share/ca-certificates/netbox.crt #更新系統信任清單 update-ca-certificates 憑證簽發流程\r數位憑證簽發（PKI）流程：像是戶政事務所開張，然後你跑去申請身分證\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/ssl-%E6%86%91%E8%AD%89/'>
 <meta property='og:site_name' content='PIN技術筆記'>

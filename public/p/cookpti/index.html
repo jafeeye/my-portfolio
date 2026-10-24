@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/cookpti/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="cookpti">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="cookpti">
 <meta property='og:description' content="RockyLinux 安裝\r官方預設把ppc64鎖死，只能模擬x86-64，更新系统并安装组件 1 2 3 4 5 ## 記得先更新，不然裝完大套件因為OpenSSL系統直接炸 dnf update -y ## 安裝虛擬化套件 dnf install -y cockpit-machines libvirt qemu-kvm virt-install virt-viewer dnf install -y wget lrzsz net-tools 啟動服務 1 2 3 4 5 6 ## 啟用服務 systemctl enable --now libvirtd systemctl enable --now cockpit.socket ## 確認服務是否正常運作 systemctl status libvirtd systemctl status cockpit.socket 允许 Cockpit 使用 root 登录 1 echo &#34;#root&#34; | tee /etc/cockpit/disallowed-users 开放防火墙端口（默认无需操作） 1 2 firewall-cmd --add-port=9090/tcp --permanent firewall-cmd --reload Debian 跑powerppc64\r可用Debian LXC跑qemu在機器再跑PowerPC\nCockpit 註冊/取消註冊虛擬機\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/cookpti/'>
 <meta property='og:site_name' content='PIN技術筆記'>

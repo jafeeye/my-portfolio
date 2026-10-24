@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/rollback-rx-%E9%82%84%E5%8E%9F%E5%8D%A1%E8%BB%9F%E9%AB%94/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="RollBack RX 還原卡軟體">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="RollBack RX 還原卡軟體">
 <meta property='og:description' content="\rflowchart TD G[&#34;管理電腦&lt;br/&gt;Endpoint Manager GUI&#34;] S[&#34;另一台電腦&lt;br/&gt;Endpoint Manager Server Services&#34;] R[&#34;Windows Server&lt;br/&gt;RollBack Rx Server&#34;] P[&#34;一般 Windows 電腦&lt;br/&gt;RollBack Rx Pro&#34;] G --&gt;|&#34;管理操作&#34;| S S --&gt;|&#34;發現與管理&#34;| R S --&gt;|&#34;發現與管理&#34;| P\r">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/rollback-rx-%E9%82%84%E5%8E%9F%E5%8D%A1%E8%BB%9F%E9%AB%94/'>
 <meta property='og:site_name' content='PIN技術筆記'>
@@ -325,7 +325,7 @@
     <section class="article-content">
     
     
-    <pre class="mermaid">
+    <div class="mermaid">
   flowchart TD
     G[&#34;管理電腦&lt;br/&gt;Endpoint Manager GUI&#34;]
     S[&#34;另一台電腦&lt;br/&gt;Endpoint Manager Server Services&#34;]
@@ -335,7 +335,7 @@
     G --&gt;|&#34;管理操作&#34;| S
     S --&gt;|&#34;發現與管理&#34;| R
     S --&gt;|&#34;發現與管理&#34;| P
-</pre>
+</div>
 
 </section>
 
@@ -536,7 +536,40 @@
         
         <script type="module">
           import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-          mermaid.initialize({ startOnLoad: true });
+          mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            securityLevel: "strict",
+            flowchart: {
+              curve: "basis",
+              nodeSpacing: 45,
+              rankSpacing: 55,
+              padding: 15,
+              useMaxWidth: true
+            },
+            themeVariables: {
+              fontFamily: "Inter, Noto Sans TC, system-ui, sans-serif",
+              fontSize: "16px",
+          
+              primaryColor: "#EFF6FF",
+              primaryTextColor: "#172033",
+              primaryBorderColor: "#3B82F6",
+          
+              secondaryColor: "#F0FDF4",
+              secondaryTextColor: "#172033",
+              secondaryBorderColor: "#22C55E",
+          
+              tertiaryColor: "#F8FAFC",
+              tertiaryTextColor: "#172033",
+              tertiaryBorderColor: "#94A3B8",
+          
+              lineColor: "#64748B",
+              edgeLabelBackground: "#FFFFFF",
+          
+              clusterBkg: "#F8FAFC",
+              clusterBorder: "#CBD5E1"
+            }
+          });
         </script>
         
     </body>

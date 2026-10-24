@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E9%9D%9C%E6%85%8B%E7%B6%B2%E7%AB%99%E8%A3%BD%E4%BD%9C/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="靜態網站製作">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="靜態網站製作">
 <meta property='og:description' content="1. 建立 GitHub Repository\r在 GitHub 建立一個 repository：\n一般專案網站：名稱可自訂，例如 my-hugo-site 網址會是 https://你的帳號.github.io/my-hugo-site/ 個人首頁：repository 必須命名為 你的帳號.github.io 網址會是 https://你的帳號.github.io/ 2. 把 Hugo 專案推送到 GitHub\r在 Hugo 專案根目錄執行：\n1 2 3 4 5 6 git init git add . git commit -m &#34;Initial Hugo site&#34; git branch -M main git remote add origin https://github.com/你的帳號/你的Repository.git git push -u origin main 建議在 .gitignore 加入：\n1 2 3 public/ resources/_gen/ .hugo_build.lock public 不需要上傳；GitHub Actions 會自動產生它。 排除不關聯檔案\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E9%9D%9C%E6%85%8B%E7%B6%B2%E7%AB%99%E8%A3%BD%E4%BD%9C/'>
 <meta property='og:site_name' content='PIN技術筆記'>
@@ -566,7 +566,7 @@ GitHub 官方也採用這個方式發布 Hugo 網站。<a href="https://gohugo.i
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
-<li>在 baseof.html 裡面的 <code>&lt;/body&gt;</code> 前面加入</li>
+<li>因為模板是在Theme是在Git submodule，如果直接去改<code>themes\hugo-theme-stack\layouts\_default\baseof.html</code> 檔案是無效的，必須把<code>baseof.html</code>檔案複製到一份專案根目錄下<code>layouts/_default/baseof.html</code>， 然後打開檔案在<code>&lt;/body&gt;</code> 前面加入</li>
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -584,6 +584,27 @@ GitHub 官方也採用這個方式發布 Hugo 網站。<a href="https://gohugo.i
 </span></span><span class="line"><span class="cl">  mermaid.initialize({ startOnLoad: true });
 </span></span><span class="line"><span class="cl">&lt;/script&gt;
 </span></span><span class="line"><span class="cl">{{ end }}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>因為是用 Hugo Theme Stack，不要改 submodule，這個主題已經預留自訂 SCSS，去修改custom.scss就好</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">my-portfolio
+</span></span><span class="line"><span class="cl">├─ assets
+</span></span><span class="line"><span class="cl">│  └─ scss
+</span></span><span class="line"><span class="cl">│     └─ custom.scss       ← 放這裡
+</span></span><span class="line"><span class="cl">└─ themes
+</span></span><span class="line"><span class="cl">   └─ hugo-theme-stack     ← 不要修改
 </span></span></code></pre></td></tr></table>
 </div>
 </div>

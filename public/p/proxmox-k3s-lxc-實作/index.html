@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/proxmox-k3s-lxc-%E5%AF%A6%E4%BD%9C/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Proxmox K3s LXC 實作">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Proxmox K3s LXC 實作">
 <meta property='og:description' content="一、基本概念\rK8s K3s 本身是透過CoreDNS去讀IP，本地的hosts無法使用，如果用掛載方式也會出現問題，不然就是resolvectl 使用DNS Server\n什麼是 K3s？\rK3s 是一个专为资源受限环境设计的轻量级 Kubernetes 发行版，具备完整的 Kubernetes 兼容性，同时去除了一些不必要的组件，部署更快、使用更简单。 适用于边缘计算、IoT 设备、小型生产环境和开发测试等场景。\nK3s 的核心优势：\n轻量简洁：二进制体积小，依赖少 部署快速：一条命令即可启动 Kubernetes 资源占用低：最低可运行在 512MB 内存设备上 为什么选择 LXC 容器？ 更高效：相比完整虚拟机，占用资源更少 更隔离：提供安全、独立的运行环境 更灵活：在 Proxmox 中便于扩容和管理 通过使用 LXC 容器运行 K3s，可以在不牺牲性能的前提下实现更高的资源利用率。 为什么要将 K3s 与 Proxmox 容器结合？ 将 K3s 部署在 Proxmox 容器中，可以充分发挥两者的轻量与高效特性。这一组合非常适合： 对 Kubernetes 感兴趣的 Homelab 爱好者 资源有限的边缘计算场景 预算有限的中小型企业 Proxmox 容器安装 K3s\r已知問題： 目前發現重開機export KUBECONFIG=/etc/rancher/k3s/k3s.yaml 這個設定會不見，需寫入.bashrc\n1 2 echo &#39;export KUBECONFIG=/etc/rancher/k3s/k3s.yaml&#39; &gt;&gt; /root/.bashrc source /root/.bashrc Step 1：创建 LXC 容器 在 Proxmox 用户界面中，单击 “创建 CT”。填写 LXC 容器的详细信息。确保取消选中“无特权的容器”复选框： (不要在建立好unprivileged=1改回0，權限會大亂) 选择模板，本例使用 Ubuntu 20.04：\n磁盘、CPU、内存，网络根据实际情况设置，并在最后一页，确认你的设置，然后单击“完成”。Proxmox 将创建容器：\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/proxmox-k3s-lxc-%E5%AF%A6%E4%BD%9C/'>
 <meta property='og:site_name' content='PIN技術筆記'>

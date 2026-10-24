@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/linux-rdp-%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%95%99%E5%AD%B8/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="Linux RDP 遠端桌面完整部署教學">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="Linux RDP 遠端桌面完整部署教學">
 <meta property='og:description' content=" 適用環境：Ubuntu 24.04 LTS 以上、Rocky Linux 9 / 10、GNOME Desktop、Proxmox VE / VMware ESXi 虛擬機\n最後更新：2026-10-12\n主題：RDP Server 部署、遠端登入、Firewall 設定、NLA 驗證、黑畫面排查與效能調校\n1. 前言\rLinux 遠端桌面常見的方式包含 RDP、VNC 與 SSH X11 Forwarding。\n其中 RDP（Remote Desktop Protocol）是 Microsoft 制定的遠端桌面協定，可以讓 Windows 使用內建的 mstsc 直接連線到 Linux 圖形桌面。\n目前 Linux 遠端桌面方案比較\r技術 日常桌面 影片／動畫 GPU 支援 適合用途 GNOME Remote Desktop（RDP） 很好 中～好 視環境而定 GNOME 遠端管理 xrdp + Xorg 好 普通 通常有限 伺服器、獨立登入工作階段 KDE Plasma + KRdp 好 中～好 Wayland 合成器 KDE 遠端桌面 Sunshine + Moonlight 很好 很好 強，支援硬體編碼 高流暢度桌面、影音、遊戲 傳統 VNC 普通 較弱 視實作而定 簡單管理 本文將分別介紹兩種方案。\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/linux-rdp-%E9%81%A0%E7%AB%AF%E6%A1%8C%E9%9D%A2%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%95%99%E5%AD%B8/'>
 <meta property='og:site_name' content='PIN技術筆記'>

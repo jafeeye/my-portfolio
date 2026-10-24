@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="負載平衡">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="負載平衡">
 <meta property='og:description' content="負載平衡軟體一覽\ristio HAProxy Nginx Caddy Traefik\nHA Proxy ＋ Keepalived 綁在一起？\r大家會把這兩個放在一起，是為了追求「100% 的無單點故障（No Single Point of Failure）」。\n只用單台 HAProxy： 如果 Illumio Core 0 掛了，HAProxy 會把流量導向 Core 1（沒問題）。 但如果 HAProxy 這台主機本身死機了（例如硬體壞了或斷電），那就算後端的 Illumio Core 都活著，下方的 VEN 也全部連不上 PCE。 加上 Keepalived： 你可以準備「兩台」HAProxy 主機，透過 Keepalived 創立一個虛擬 IP（VIP）。平常流量走第一台 HAProxy，第一台死機時，VIP 自動飄移到第二台 HAProxy。 istio\renvoy\r安裝HAProxy\rRoxy-WI\nhttps://support.illumio.com/knowledge-base/articles/How-to-configure-F5.html\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/%E8%B2%A0%E8%BC%89%E5%B9%B3%E8%A1%A1/'>
 <meta property='og:site_name' content='PIN技術筆記'>

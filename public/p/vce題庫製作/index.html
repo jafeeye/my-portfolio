@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/vce%E9%A1%8C%E5%BA%AB%E8%A3%BD%E4%BD%9C/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="VCE題庫製作">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="VCE題庫製作">
 <meta property='og:description' content="清理PDF格式 1.在Acrobat先轉成docx 2.Word取代：^b取代為空字串、統一頁面邊界1.5、段落單行間距前後段0行 因為要在Question #1… 前面一行加入1. 讓Designer 判別，使用VBA\n1 2 3 4 5 6 1. Question #1 Answer: 2. Question #2 Answer: 1 2 3 4 5 6 7 8 9 10 11 12 Sub InsertNumberBeforeQuestions() Dim para As Paragraph Dim count As Integer count = 1 For Each para In ActiveDocument.Paragraphs If InStr(1, para.Range.Text, &#34;Question #&#34;, vbTextCompare) &gt; 0 Then para.Range.InsertBefore count &amp; &#34;.&#34; &amp; vbCrLf count = count + 1 End If Next para End Sub 刪掉大量分節符號 ^b 取代為空\n匯入畫面 ">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/vce%E9%A1%8C%E5%BA%AB%E8%A3%BD%E4%BD%9C/'>
 <meta property='og:site_name' content='PIN技術筆記'>

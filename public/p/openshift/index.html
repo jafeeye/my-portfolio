@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='http://localhost:1313/my-portfolio/p/openshift/'>
 
-<link rel="stylesheet" href="/my-portfolio/scss/style.min.38886999c0edbc5cb2d76c2c55494b40bdd901c54237a2f477ce656b9547d814.css"><meta property='og:title' content="OpenShift">
+<link rel="stylesheet" href="/my-portfolio/scss/style.min.37a2313a5742719760b0d03c5bef88d4f44c037f7489c5fb637d0fe2bd3db243.css"><meta property='og:title' content="OpenShift">
 <meta property='og:description' content=" 單機環境 -&gt; 有的，裝\u00a0Red Hat OpenShift Local (formerly Red Hat CodeReady Containers)\u00a0/ 以前的名字叫做 CRC &hellip; 現在叫做 OpenShift Local。 自建免費叢集 -&gt; 社群版\u00a0OKD。 自建試用叢集 -&gt; 試用版，要去註冊 Hed Hat 帳號，並申請試用 OCP。 一、單節點部屬\rSNO deploy：https://www.youtube.com/watch?v=TcN6EJVduwk 可以，下面我幫你整理成「Proxmox VE 安裝 OKD 4.13 單節點 SNO」的完整順序。這版會修正原本誤用 master.ign、缺少 DNS 和 bootstrapInPlace 的問題。\n以下假設：\n安裝工具主機：192.168.8.83 OKD SNO：192.168.8.84 Cluster Name：okd-sno Base Domain：myk8s.local 磁碟：/dev/vda Gateway：192.168.8.1 DNS：使用你現有的 PowerDNS OKD 版本：4.13.0-0.okd-2023-06-04-080300 Step1.準備 DNS 在 PowerDNS 建立以下紀錄，全部指向 SNO 的 IP：\n類型 名稱 IP A api.okd-sno.myk8s.test 192.168.8.24 A api-int.okd-sno.myk8s.test 192.168.8.24 A *.apps.okd-sno.myk8s.test 192.168.8.24 A sno.okd-sno.myk8s.test 192.168.8.24 最好也建立 PTR：\n">
 <meta property='og:url' content='http://localhost:1313/my-portfolio/p/openshift/'>
 <meta property='og:site_name' content='PIN技術筆記'>
