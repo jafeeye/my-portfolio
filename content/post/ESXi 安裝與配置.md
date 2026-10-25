@@ -37,6 +37,17 @@ set:
 [[1]](#_ftnref1) https://communities.vmware.com/t5/vCenter-Server-Discussions/Not-enough-memory/td-p/2658357
 
 
+## VMtools 開啟複製
+在vmx 加入以下參數：
+```
+isolation.tools.copy.disable = "FALSE"
+isolation.tools.paste.disable = "FALSE"
+isolation.tools.dnd.disable = "FALSE"
+```
+
+
+
+
 ## 直通設定
 ### 直通內顯
 UHD 630 直通方法

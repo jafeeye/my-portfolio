@@ -147,55 +147,6 @@ systemctl start keycloak
 
 
 
-
-
-![](Pasted%20image%2020260703143859.png)
-
-
-4. 分別填入下面資訊
-Issuer URL= Keycloak Client ID
-https://illumio-kevin.bd1.dev:8443/login
-Assertion Consumer URL (ACS)= Keycloak Valid Redirect URIs
-https://illumio-kevin.bd1.dev:8443/login/acs/a1183a40...
-Master SAML Processing URL
-https://illumio-kevin.bd1.dev:8443/login/acs/a1183a40...
-
-![](Pasted%20image%2020260703145756.png)
-
-![](Pasted%20image%2020260703145531.png)
-
-![](Pasted%20image%2020260703145928.png)
-
-![](Pasted%20image%2020260703150337.png)
-
-要新增一個Mapper 對應 `NameID Format urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress`
-![](Pasted%20image%2020260703150721.png)
-
-![](Pasted%20image%2020260703150824.png)
-
-
-![](Pasted%20image%2020260703152209.png)
-
-
-![](Pasted%20image%2020260703152246.png)
-自簽也要關掉
-![](Pasted%20image%2020260706115337.png)
-
-
-
-回到illumio 填三個框框，在SAML Identity Provider Certificate 加入Begin Certificate 跟 End Certificate 、Remote Login URL 、Logout Landing URL
-
-
-![](Pasted%20image%2020260703152507.png)
-
-
-✔ SSO 正常  
-✔ 登入正常  
-
-最後在illumio 加入Local Account 要有跟SAML一樣帳號才可以登入
-Force Re-authentication：Yes
-Sign SAML Request：Yes
-
 ### LDAP
 
 ![](Pasted%20image%2020260706162802.png)

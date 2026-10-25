@@ -1,8 +1,10 @@
 ---
-title: 企業遠端桌面方案
+title: Windows RDP 設定
 toc: true
 date: 2026-04-06
 ---
+
+
 
 ## 顯卡直通技術
 Intel B580
@@ -10,15 +12,21 @@ PVE在 cpu 下 hidden=0
 
 
 
-## RDP
+
+### 二、RDP
+
+在Windows 預設使用遠端桌面連線 會把硬體加速關掉，完成後執行 gpupdate/force
+![](static/Pasted%20image%2020261025163824.png)
+在瀏覽器硬體加速都有開才正常
+![](static/Pasted%20image%2020261025163931.png)
+
+
 
 freeRDP、RDCMAN
 
 
 
-
-
-### 遠端桌面方案 RemoteAPP
+### 三、遠端桌面方案 RemoteAPP
 RemoteAPP本身是一個微軟利用RDP協議遠端到特定程式畫面，因為無邊框就像在本地開一個APP技術，但實際體驗會隨延遲影響，這邊有各實作技術
 RemoteAppTool：Github逆向技術
 RDS伺服器
@@ -26,7 +34,7 @@ TSplus Remote Access：第三方廠商利用RDS推出解決方案
 
 
 
-### 解決多用戶登入問題
+### 四、解決多用戶登入問題
 先使用RDP Wrapper解決多用戶登入
 
 
