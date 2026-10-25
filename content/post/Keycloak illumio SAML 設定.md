@@ -51,8 +51,8 @@ User=keycloak
 Group=keycloak
 Environment=KEYCLOAK_ADMIN=admin
 Environment=KEYCLOAK_ADMIN_PASSWORD=你的安全密碼
-# 注意：--http-enabled=true 是方便測試。生產環境建議 HTTPS Reverse Proxy (Nginx)
-ExecStart=/opt/keycloak/bin/kc.sh start-dev --http-enabled=true --http-port=8080
+#注意：--http-enabled=true 是方便測試。生產環境建議 HTTPS Reverse Proxy (Nginx)
+ExecStart=/opt/keycloak/bin/kc.sh start-dev --http-enabled=true --http-host=0.0.0.0 --http-port=8080
 WorkingDirectory=/opt/keycloak
 Restart=always
 
