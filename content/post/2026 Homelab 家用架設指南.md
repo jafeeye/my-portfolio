@@ -1,5 +1,5 @@
 ---
-title: 2026 家用Homelab架設指南
+title: 2026 Homelab 家用架設指南
 date: 2026-02-28
 toc: true
 ---
