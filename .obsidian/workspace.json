@@ -62,9 +62,37 @@
               "icon": "lucide-file",
               "title": "illumio 流量模擬"
             }
+          },
+          {
+            "id": "8446f3005e55a0af",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "儲存技術.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "儲存技術"
+            }
+          },
+          {
+            "id": "cf6f4bc10337d85f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "content/post/瀏覽器對比及插件設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "瀏覽器對比及插件設定"
+            }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -238,13 +266,18 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "da75f4257e52d450",
+  "active": "5fa0ce37b9c9c8ed",
   "lastOpenFiles": [
     "Keycloak illumio SAML 設定.md",
-    "static/Pasted image 20261025203401.png",
-    "content/post/illumio 流量模擬.md",
-    "content/post/Proxmox LXC Dockur.md",
     "content/post/SSO.md",
+    "content/post/瀏覽器對比及插件設定.md",
+    "static/Pasted image 20261025214409.png",
+    "static/Pasted image 20261025212926.png",
+    "static/Pasted image 20261025212711.png",
+    "content/post/Proxmox LXC Dockur.md",
+    "content/post/illumio 流量模擬.md",
+    "儲存技術.md",
+    "static/Pasted image 20261025203401.png",
     "static/Pasted image 20261025174617.png",
     "static/Pasted image 20261025172827.png",
     "static/Pasted image 20261025172321.png",
@@ -253,7 +286,6 @@
     "static/Pasted image 20261025163824.png",
     "content/post/ESXi 安裝與配置.md",
     "content/post/Linux RDP 設定.md",
-    "content/post/各瀏覽器對比及插件設定.md",
     "content/post/2026 Homelab 家用架設指南.md",
     "content/post/OS整理與下載.md",
     "content/post/RDP 連線實作.md",
@@ -269,13 +301,10 @@
     "public/tags/pxe/index.xml",
     "public/tags/pxe/index.html",
     "public/tags/pxe",
-    "public/Pasted image 20261024222313.png",
-    "public/Pasted image 20261024174523.png",
     "public/p/proxmox-iventoy-部屬/index.html",
     "public/p/proxmox-iventoy-部屬",
     "content/post/RollBack RX 還原卡軟體.md",
     "content/post/製作大量部屬.md",
-    "static/Pasted image 20261024222313.png",
     "content/post/連線軟體 mRemoteNG.md",
     "public/p/證照歷程/index.html",
     "public/p/證照歷程",
@@ -283,7 +312,6 @@
     "MindMap 2026-08-16 16.11.11.smm.md",
     "content/post/Windows AD 除錯.md",
     "未命名 2.md",
-    "content/post/Proxmox SDN 設定.md",
-    "content/post/Veyon.md"
+    "content/post/Proxmox SDN 設定.md"
   ]
 }
