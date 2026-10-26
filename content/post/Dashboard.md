@@ -1,15 +1,19 @@
 ---
-title: Dashboard 方案
+title: Dashboard 各種方案
 toc: true
 date: 2026-07-10
 ---
+```toc
+```
 
-| 軟體/功能    |     | 缺點        |
-| -------- | --- | --------- |
-| Homer    |     |           |
-| Heimdall |     |           |
-| nextDash |     |           |
-| Homarr   |     | 速度太慢且太吃資源 |
+
+| 軟體/功能       |          | 缺點        |
+| ----------- | -------- | --------- |
+| Bujic Panel |          |           |
+| Heimdall    | 輕量,php撰寫 |           |
+| Homer       | 純靜態網頁    |           |
+| nextDash    |          |           |
+| Homarr      |          | 速度太慢且太吃資源 |
 
 ## Homer
 ```
@@ -39,7 +43,7 @@ https://github.com/daledavies/jump
 ![](static/i-really-like-how-easy-it-is-to-custom-glance-dynacat-v0-k1lom1cndv0h1.webp)
 
 
-```
+```fold
           - type: group
             widgets:
               - type: reddit
@@ -68,7 +72,7 @@ https://github.com/daledavies/jump
                 collapse-after: 8
 ```
 
-```censored.yaml
+```censored.yaml fold
 ## BRANDING ###
 server:
   assets-path: /app/assets
@@ -379,7 +383,7 @@ tail -n 50 /var/log/nginx/error.log
 
 ![](static/Pasted%20image%2020260712220933.png)
 
-```
+```fold
 `body {  
 background: #eee;  
 }  
