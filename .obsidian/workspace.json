@@ -27,7 +27,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Windows OS系統優化.md",
+                "file": "content/post/Windows OS系統優化.md",
                 "mode": "source",
                 "source": false
               },
@@ -35,7 +35,8 @@
               "title": "Windows OS系統優化"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -97,8 +98,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 265.5,
-    "collapsed": true
+    "width": 265.5
   },
   "right": {
     "id": "bf396298f79400d2",
@@ -209,13 +209,13 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "9c87e044229d7693",
+  "active": "ad2fc1792de2c140",
   "lastOpenFiles": [
-    "Windows OS系統優化.md",
     "content/post/OS整理與下載.md",
+    "content/post/Windows OS系統優化.md",
     "static/Pasted image 20261026114924.png",
     "static/Pasted image 20261026104842.png",
-    "Powershell.md",
+    "content/post/Powershell.md",
     "content/post/Proxmox K3s LXC.md",
     "content/post/反向代理工具.md",
     "content/post/ESXi 安裝與配置.md",
