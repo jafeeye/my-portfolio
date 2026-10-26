@@ -8,59 +8,31 @@
         "type": "tabs",
         "children": [
           {
-            "id": "a4ff23b0a8c31a75",
+            "id": "9c87e044229d7693",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/SSO.md",
+                "file": "content/post/OS整理與下載.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "SSO"
+              "title": "OS整理與下載"
             }
           },
           {
-            "id": "5fa0ce37b9c9c8ed",
+            "id": "cd45a45b668c63ed",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/post/Rclone.md",
+                "file": "Windows OS系統優化.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Rclone"
-            }
-          },
-          {
-            "id": "398fc72d78f23f10",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/Keycloak illumio SAML 設定.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Keycloak illumio SAML 設定"
-            }
-          },
-          {
-            "id": "da75f4257e52d450",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/illumio 流量模擬.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "illumio 流量模擬"
+              "title": "Windows OS系統優化"
             }
           }
         ]
@@ -125,7 +97,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 265.5
+    "width": 265.5,
+    "collapsed": true
   },
   "right": {
     "id": "bf396298f79400d2",
@@ -236,13 +209,22 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "a4ff23b0a8c31a75",
+  "active": "9c87e044229d7693",
   "lastOpenFiles": [
-    "content/post/Proxmox LXC Dockur.md",
-    "content/post/Keycloak illumio SAML 設定.md",
+    "Windows OS系統優化.md",
+    "content/post/OS整理與下載.md",
+    "static/Pasted image 20261026114924.png",
+    "static/Pasted image 20261026104842.png",
+    "Powershell.md",
+    "content/post/Proxmox K3s LXC.md",
+    "content/post/反向代理工具.md",
+    "content/post/ESXi 安裝與配置.md",
+    "content/post/Proxmox 實用腳本.md",
     "content/post/Rclone.md",
-    "content/post/SSO.md",
     "content/post/illumio 流量模擬.md",
+    "content/post/Keycloak illumio SAML 設定.md",
+    "content/post/SSO.md",
+    "content/post/Proxmox LXC Dockur.md",
     "content/post/瀏覽器對比及插件設定.md",
     "content/post/儲存技術.md",
     "static/Pasted image 20261025214409.png",
@@ -254,16 +236,12 @@
     "static/Pasted image 20261025172321.png",
     "content/post/Windows RDP 設定.md",
     "static/Pasted image 20261025163931.png",
-    "static/Pasted image 20261025163824.png",
-    "content/post/ESXi 安裝與配置.md",
     "content/post/Linux RDP 設定.md",
     "content/post/2026 Homelab 家用架設指南.md",
-    "content/post/OS整理與下載.md",
     "content/post/RDP 連線實作.md",
     "content/post/封包抓包工具.md",
     "content/post/靜態網站製作.md",
     "content/post/Proxmox SoftGPU.md",
-    "static/Pasted image 20261025110441.png",
     "未命名.md",
     "content/post/Proxmox iVentoy 部屬.md",
     "public/tags/pxe/page/1/index.html",
@@ -278,11 +256,6 @@
     "content/post/製作大量部屬.md",
     "content/post/連線軟體 mRemoteNG.md",
     "public/p/證照歷程/index.html",
-    "public/p/證照歷程",
-    "content/post/證照歷程.md",
-    "MindMap 2026-08-16 16.11.11.smm.md",
-    "content/post/Windows AD 除錯.md",
-    "未命名 2.md",
-    "content/post/Proxmox SDN 設定.md"
+    "public/p/證照歷程"
   ]
 }

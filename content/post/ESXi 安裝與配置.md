@@ -6,12 +6,98 @@ tags:
   - vmware
   - 虛擬化
 ---
+```toc
+```
+
+
 RVTools：好用Windows管理ESXi虛擬機軟體
 PowerCLI：Windows管理ESXi虛擬機命令列
 ## 常用指令
 ```
 esxcfg-nics -l   //檢查所有網孔
 ```
+
+
+### 腳本
+- PowerCLI 磁碟擴容
+```bash fold
+# ==============================================================================
+# VMware & Windows 磁碟線上自動擴容腳本 (PowerCLI)
+# ==============================================================================
+
+# 1. 設定基礎變數
+$vCenter = "vcenter.yourdomain.local"        # vCenter 或 ESXi 的 IP / FQDN
+$VMName  = "Your-Windows-VM-Name"            # 目的虛擬機名稱
+$TargetDiskLabel = "Hard disk 1"             # 要擴容的 VMware 硬碟名稱 (通常是 Hard disk 1)
+$NewSizeGB = 100                             # 擴容後的新總容量 (單位: GB)
+$DriveLetter = "C"                           # Windows 內對應的磁碟代號
+
+# 2. 連線至 vCenter / ESXi
+Connect-VIServer -Server $vCenter
+
+# 3. 調整 VMware 底層虛擬磁碟大小
+Write-Host "正在調整 VMware 底層磁碟容量至 ${NewSizeGB}GB..." -ForegroundColor Cyan
+$HD = Get-VM -Name $VMName | Get-HardDisk -Name $TargetDiskLabel
+Set-HardDisk -HardDisk $HD -CapacityGB $NewSizeGB -Confirm:$false
+
+# 4. 透過 Invoke-VMScript 遠端觸使 Windows 系統內部重新整理並擴充分割區
+Write-Host "正在遠端觸發 Windows 內部分區延伸..." -ForegroundColor Cyan
+
+# 組裝 Windows PowerShell 內部執行的命令
+$ScriptToRun = @"
+Update-Disk -Number 0
+Get-Partition -DriveLetter $DriveLetter | Resize-Partition -Size (Get-PartitionSupportedSize -DriveLetter $DriveLetter).SizeMax
+"@
+
+# 執行遠端指令（會跳出視窗要求輸入該 Windows VM 的系統管理員帳密）
+$Cred = Get-Credential
+Invoke-VMScript -VM $VMName -ScriptType PowerShell -ScriptText $ScriptToRun -GuestCredential $Cred
+
+# 5. 中斷連線
+Disconnect-VIServer -Server $vCenter -Confirm:$false
+Write-Host "擴容作業已成功完成！" -ForegroundColor Green
+```
+- Windows VM 擴容
+```bash fold
+# ==============================================================================
+# Windows Guest OS 內部分區一鍵自動延伸腳本
+# ==============================================================================
+
+# 設定您想要延伸的磁碟代號（例如 C 槽或 D 槽）
+$DriveLetter = "C"
+
+try {
+    Write-Host "1. 正在重新掃描磁碟以偵測 VMware 新配置的空間..." -ForegroundColor Cyan
+    # 觸發系統重新掃描所有磁碟
+    Get-Disk | Update-Disk
+
+    # 取得該磁碟代號的分區資訊
+    $Partition = Get-Partition -DriveLetter $DriveLetter
+    
+    Write-Host "2. 正在計算最大可延伸容量..." -ForegroundColor Cyan
+    # 取得該分區支援的最大 Size
+    $MaxSize = (Get-PartitionSupportedSize -DriveLetter $DriveLetter).SizeMax
+    
+    # 檢查是否已有可擴容的空間
+    if ($Partition.Size -ge $MaxSize) {
+        Write-Host "提示：磁碟 ${DriveLetter}: 已經是最大容量，後方無未分配空間，無需擴容。" -ForegroundColor Yellow
+    } else {
+        Write-Host "3. 正在將磁碟 ${DriveLetter}: 延伸至最大容量..." -ForegroundColor Cyan
+        # 調整分區大小至最大化
+        Resize-Partition -DriveLetter $DriveLetter -Size $MaxSize
+        Write-Host "成功：磁碟 ${DriveLetter}: 擴容完成！" -ForegroundColor Green
+    }
+}
+catch {
+    Write-Error "擴容過程中發生錯誤: $_"
+}
+
+```
+
+
+
+
+
 ### 取消ESXi 虛擬內存
 開機後按`Shift+o` 在cdromBoot runweasel 後面加入`autoPartitionOSDataSize = 4096`  
 
@@ -180,10 +266,29 @@ ESXI 7升8
 | **MAC 位址變更** MAC Address Changes | 客體 OS 將網卡 MAC 改成與 VMware 設定不同時，阻止送到新 MAC 的流量 | 允許送到變更後 MAC 的流量                |
 | **偽造傳輸** Forged Transmits        | 送出的封包，來源 MAC 與網卡目前有效 MAC 不同時，丟棄封包            | 允許送出來源 MAC 不同的封包               |
 
-## VMware VCSA 8 修改主机名和重置证书
-## 第一步使用 VAMI 界面修改域名
+## Log 除錯排除
 
-### [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A "步骤：")步骤：
+一直發生複製範本發生錯誤，初步斷定nfs忙碌導致ESXi 發生問題
+- 懷疑NFS也放在VCSA的主機導致過於忙碌，同一個 NFS datastore 掛給兩台 ESXi / 兩個 Compute Resource
+
+```
+tail -f /var/log/vmkernel.log
+
+##查看最近100行
+tail -n 100 /var/log/vmkernel.log
+## 只搜尋error
+grep -i "error" /var/log/vmkernel.log
+## 搜尋vmx錯誤
+grep -iE "vmx|vt-x|nested|monitor" /var/log/vmkernel.log
+
+```
+
+
+## VMware VCSA 8 修改主机名和重置证书
+
+第一步使用 VAMI 界面修改域名
+
+ [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A "步骤：")步骤：
 
 1. **登录 VAMI 管理界面（VCSA后台）**
     
@@ -208,9 +313,9 @@ ESXI 7升8
     |service-control --stop --all  <br>service-control --start --all|
     
 
-## [](https://songxwn.com/vcsa8-resetCA/#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%87%8D%E7%BD%AE%E8%AF%81%E4%B9%A6 "第二步：重置证书")第二步：重置证书
+[](https://songxwn.com/vcsa8-resetCA/#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%87%8D%E7%BD%AE%E8%AF%81%E4%B9%A6 "第二步：重置证书")第二步：重置证书
 
-### [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1 "步骤：")步骤：
+[](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1 "步骤：")步骤：
 
 0. **登录 VAMI 管理界面（VCSA后台）**
 
@@ -261,7 +366,7 @@ ESXI 7升8
     |service-control --stop --all  <br>service-control --start --all|
     
 
-## [](https://songxwn.com/vcsa8-resetCA/#%E9%87%8D%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 "重要注意事项")重要注意事项
+[](https://songxwn.com/vcsa8-resetCA/#%E9%87%8D%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 "重要注意事项")重要注意事项
 
 ⚠️ **修改前必须做：**
 
@@ -283,13 +388,13 @@ ESXI 7升8
     - 外部 PSC（如果有）
     - 已集成的解决方案（vROps, vRLI 等）
 
-## [](https://songxwn.com/vcsa8-resetCA/#%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4 "验证步骤")验证步骤
+[](https://songxwn.com/vcsa8-resetCA/#%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4 "验证步骤")验证步骤
 
 |   |
 |---|
 |# 检查主机名  <br>hostname  <br>hostname -f  <br>  <br># 检查 DNS 解析  <br>nslookup <new-hostname>  <br>  <br># 检查服务状态  <br>service-control --status --all  <br>  <br># 检查 vCenter 服务  <br>vmon-cli --list --all|
 
-## [](https://songxwn.com/vcsa8-resetCA/#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98 "常见问题")常见问题
+[](https://songxwn.com/vcsa8-resetCA/#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98 "常见问题")常见问题
 
 **Q: 是否需要重启 vCSA？**  
 A: 不需要完全重启，重启服务即可

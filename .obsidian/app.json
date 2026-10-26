@@ -3,5 +3,6 @@
   "attachmentFolderPath": "static",
   "newLinkFormat": "absolute",
   "useMarkdownLinks": true,
-  "promptDelete": false
+  "promptDelete": false,
+  "defaultViewMode": "preview"
 }
