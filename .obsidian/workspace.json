@@ -35,8 +35,7 @@
               "title": "Windows OS系統優化"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -209,10 +208,10 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "ad2fc1792de2c140",
+  "active": "9c87e044229d7693",
   "lastOpenFiles": [
-    "content/post/OS整理與下載.md",
     "content/post/Windows OS系統優化.md",
+    "content/post/OS整理與下載.md",
     "static/Pasted image 20261026114924.png",
     "static/Pasted image 20261026104842.png",
     "content/post/Powershell.md",

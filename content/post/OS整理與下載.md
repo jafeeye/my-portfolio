@@ -21,7 +21,7 @@ date: 2026-05-29
 | Tiny Core Linux                               |           |                                     |
 | Debian minimal+LXDE + Openbox                 |           |                                     |
 | Solaris 10、11/ OpenIndiana / SmartOS / OmniOS |           |                                     |
-| Windows [優化文章]                                |           |                                     |
+| Windows [優化文章](./windows-os系統優化/)             |           |                                     |
 
 參考資料
 https://archiveos.org/
