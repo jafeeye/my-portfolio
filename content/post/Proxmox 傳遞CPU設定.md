@@ -3,7 +3,7 @@ title: Proxmox 傳遞CPU設定
 toc: true
 date: 2026-10-23
 tags:
-  - Proxmox
+  - PVE
 ---
 
 1. 確認主機已啟用 nested

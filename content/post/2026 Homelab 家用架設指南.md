@@ -14,7 +14,7 @@ Mointor VM：
 
 
 
-![](homelab-diagram.svg)
+![](/static/homelab-diagram.svg)
 
 LXC (Router)
 - Adguard 
