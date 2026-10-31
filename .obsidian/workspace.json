@@ -18,72 +18,15 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "Proxmox 路由設定.md",
+                    "file": "共享區域網路SMB設定.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "Proxmox 路由設定"
-                }
-              },
-              {
-                "id": "d2faac09d2c2647f",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/Proxmox EVPN 設定.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Proxmox EVPN 設定"
-                }
-              },
-              {
-                "id": "c7ae53bd98edcae0",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/製作大量部屬.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "製作大量部屬"
-                }
-              },
-              {
-                "id": "294d0f02cf2fdc07",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/Linux 系統優化部署.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Linux 系統優化部署"
-                }
-              },
-              {
-                "id": "8dbe52017c288edf",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/Windows OS系統優化.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Windows OS系統優化"
+                  "title": "共享區域網路SMB設定"
                 }
               }
-            ],
-            "currentTab": 1
+            ]
           },
           {
             "id": "e17aa472c378566c",
@@ -197,8 +140,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 271.76171875,
-    "collapsed": true
+    "width": 271.76171875
   },
   "right": {
     "id": "bf396298f79400d2",
@@ -311,14 +253,15 @@
   },
   "active": "325e985eba5e6c2a",
   "lastOpenFiles": [
+    "共享區域網路SMB設定.md",
     "content/post/Proxmox EVPN 設定.md",
-    "Proxmox 路由設定.md",
+    "content/post/Proxmox 路由設定.md",
     "content/post/Windows OS系統優化.md",
     "content/post/Linux 系統優化部署.md",
     "content/post/製作大量部屬.md",
     "content/post/OS整理與下載.md",
     "content/post/Proxmox 實用腳本.md",
-    "監控面板-KPanel.md",
+    "content/post/監控面板-KPanel.md",
     "static/Pasted image 20261030213722.png",
     "content/post/Proxmox 實體網卡設定與斷線除錯.md",
     "content/post/程式語言/Python.md",
@@ -329,7 +272,6 @@
     "content/post/Keycloak illumio SAML 設定.md",
     "content/post/Proxmox 安裝K3s LXC.md",
     "content/post/下載相依套件.md",
-    "共享區域網路SMB設定.md",
     "content/post/Proxmox 安裝Photon OS.md",
     "content/post/Proxmox 安裝Harbor LXC.md",
     "content/post/Proxmox 安裝GitLab LXC.md",
