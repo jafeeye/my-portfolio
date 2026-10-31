@@ -18,15 +18,30 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "共享區域網路SMB設定.md",
+                    "file": "content/post/ESXi 安裝與配置.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "共享區域網路SMB設定"
+                  "title": "ESXi 安裝與配置"
+                }
+              },
+              {
+                "id": "5c52e7823d38a3fb",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/架設 CUPS 網路列印伺服器.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "架設 CUPS 網路列印伺服器"
                 }
               }
-            ]
+            ],
+            "currentTab": 1
           },
           {
             "id": "e17aa472c378566c",
@@ -235,7 +250,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "switcher:開啟快速切換": false,
       "graph:查看關聯圖": false,
       "canvas:建立新畫布": false,
@@ -254,6 +269,11 @@
   },
   "active": "325e985eba5e6c2a",
   "lastOpenFiles": [
+    "content/post/架設 CUPS 網路列印伺服器.md",
+    "static/Pasted image 20261031230840.png",
+    "content/post/ESXi 安裝與配置.md",
+    "static/Pasted image 20261031201916.png",
+    "static/Pasted image 20261031201755.png",
     "共享區域網路SMB設定.md",
     "content/post/Proxmox EVPN 設定.md",
     "content/post/Proxmox 路由設定.md",
@@ -278,18 +298,12 @@
     "content/post/Proxmox 安裝GitLab LXC.md",
     "content/post/Proxmox 安裝Dockur.md",
     "content/post/Proxmox 安裝Flatcar Linux.md",
-    "content/post/各系統安裝.md",
-    "content/post/Proxmox 安裝Photon OS拷貝.md",
-    "content/post/Proxmox 直通設定.md",
     "static/Pasted image 20261026114924.png",
     "static/Pasted image 20261026104842.png",
     "static/Pasted image 20261025214409.png",
     "static/Pasted image 20261025212926.png",
     "static/Pasted image 20261025212711.png",
     "static/Pasted image 20261025203401.png",
-    "static/Pasted image 20261025174617.png",
-    "static/Pasted image 20261025172827.png",
-    "static/Pasted image 20261025172321.png",
     "public/tags/pxe/page/1/index.html",
     "public/tags/pxe/page/1",
     "public/tags/pxe/page",

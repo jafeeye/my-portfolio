@@ -288,39 +288,26 @@ grep -iE "vmx|vt-x|nested|monitor" /var/log/vmkernel.log
 
 第一步使用 VAMI 界面修改域名
 
- [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A "步骤：")步骤：
-
-1. **登录 VAMI 管理界面（VCSA后台）**
-    
-    |   |
-    |---|
-    |https://<vcsa-ip>:5480|
-    
-    使用 root 账户登录
+ [](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A "步骤：")步骤：1. **登录 VAMI 管理界面（VCSA后台）** `https://<vcsa-ip>:5480|`，使用 root 账户登录
     
 2. **导航到网络设置**
-    
     - 点击左侧菜单 **“Networking”** 或 **“网络”**
     - 选择 **“Edit”** 或 **“编辑”**
 3. **修改主机名**
-    
     - 在 **“Hostname”** 字段输入新的 FQDN
     - 保存更改
 4. **重启服务**
     
-    |   |
-    |---|
-    |service-control --stop --all  <br>service-control --start --all|
-    
-
-[](https://songxwn.com/vcsa8-resetCA/#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E9%87%8D%E7%BD%AE%E8%AF%81%E4%B9%A6 "第二步：重置证书")第二步：重置证书
-
-[](https://songxwn.com/vcsa8-resetCA/#%E6%AD%A5%E9%AA%A4%EF%BC%9A-1 "步骤：")步骤：
-
-0. **登录 VAMI 管理界面（VCSA后台）**
-
+    ```
+    service-control --stop --all  
+    service-control --start --all
+    ```
+  
+第二步：重置证书"第二步：重置证书
+2. **登录 VAMI 管理界面（VCSA后台）**
 开启SSH，bash等服务。
 
+```
 1. **SSH 登录到 vCSA**
     
     |   |
@@ -364,35 +351,30 @@ grep -iE "vmx|vt-x|nested|monitor" /var/log/vmkernel.log
     |   |
     |---|
     |service-control --stop --all  <br>service-control --start --all|
+```
     
-
-[](https://songxwn.com/vcsa8-resetCA/#%E9%87%8D%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 "重要注意事项")重要注意事项
 
 ⚠️ **修改前必须做：**
 
 1. **完整备份**
-    
     - 使用文件级备份或快照
     - 备份数据库
 2. **DNS 记录更新**
-    
     - 在 DNS 服务器上更新 A 记录和 PTR 记录
     - 确保正向和反向解析都正确
 3. **证书考虑**
-    
     - 如果使用自定义证书，需要重新申请
     - 默认证书需要重新生成
 4. **检查依赖关系**
-    
     - vCenter HA 配置
     - 外部 PSC（如果有）
     - 已集成的解决方案（vROps, vRLI 等）
 
 [](https://songxwn.com/vcsa8-resetCA/#%E9%AA%8C%E8%AF%81%E6%AD%A5%E9%AA%A4 "验证步骤")验证步骤
 
-|   |
-|---|
-|# 检查主机名  <br>hostname  <br>hostname -f  <br>  <br># 检查 DNS 解析  <br>nslookup <new-hostname>  <br>  <br># 检查服务状态  <br>service-control --status --all  <br>  <br># 检查 vCenter 服务  <br>vmon-cli --list --all|
+|                                                                                                                                                                                                          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| # 检查主机名  <br>hostname  <br>hostname -f  <br>  <br># 检查 DNS 解析  <br>nslookup <new-hostname>  <br>  <br># 检查服务状态  <br>service-control --status --all  <br>  <br># 检查 vCenter 服务  <br>vmon-cli --list --all |
 
 [](https://songxwn.com/vcsa8-resetCA/#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98 "常见问题")常见问题
 
@@ -404,3 +386,11 @@ A: 不会，但管理功能会短暂中断
 
 **Q: 许可证需要重新激活吗？**  
 A: 不需要
+
+
+## 指派授權
+1. 在授權那邊可以新增Key
+![](static/Pasted%20image%2020261031201755.png)
+
+2. 從這邊指派授權
+![](static/Pasted%20image%2020261031201916.png)

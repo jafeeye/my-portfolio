@@ -53,92 +53,67 @@ Windows / macOS / iPhone / iPad
 
 ## 二、建立 Debian LXC
 
-在 Proxmox 建立 Debian 13 Container。
-
-建議配置：
+在 Proxmox 建立 Debian 13 Container。建議配置：
 
 - CPU：1 Core
-    
 - RAM：512 MB
-    
 - Disk：2～4 GB
-    
 - Network：vmbr0
-    
 - IP：DHCP 或固定 IP
-    
 
 本次使用 CT ID `193`。
-
 建立完成後，先將 HP LaserJet P1005 的 USB 直接連接至 Proxmox Host。
 
 ## 三、確認 Proxmox Host 辨識印表機
 
 以下指令均在 Proxmox Host 執行。
-
 ### 1. 檢查 USB 裝置
-
 ```
 lsusb
 ```
-
 預期顯示：
-
 ```
 Bus 001 Device 004: ID 03f0:3d17 HP, Inc LaserJet P1005
 ```
-
 ### 2. 確認 usblp 驅動
 
 ```
 modprobe usblp
 lsusb -t
 ```
-
 預期可看到：
-
 ```
 Class=Printer, Driver=usblp
 ```
 
 ### 3. 確認 USB Printer Device
-
 ```
 ls -l /dev/usb/lp0
 ```
-
 預期顯示：
-
 ```
 crw-rw---- 1 root lp 180, 0 /dev/usb/lp0
 ```
-
 也可以透過以下指令確認裝置對應的印表機：
-
 ```
 udevadm info -a -n /dev/usb/lp0 | grep -E 'idVendor|idProduct|product'
 ```
-
 確認 Vendor ID 為 `03f0`、Product ID 為 `3d17`。
 
 ## 四、將 USB 裝置映射到 LXC
 
 在 Proxmox Web UI 操作：
+**CT 193 → Resources → Add → Device** 設定如下：
 
-**CT 193 → Resources → Add → Device**
-
-設定如下：
-
-|項目|設定|
-|---|---|
-|Device Path|`/dev/usb/lp0`|
-|UID in CT|`0`|
-|GID in CT|`7`|
-|Access Mode in CT|`0660`|
-|Read only|不勾選|
+| 項目                | 設定             |
+| ----------------- | -------------- |
+| Device Path       | `/dev/usb/lp0` |
+| UID in CT         | `0`            |
+| GID in CT         | `7`            |
+| Access Mode in CT | `0660`         |
+| Read only         | 不勾選            |
 
 或者直接透過 Proxmox Host CLI：
-
 ```
 pct stop 193
 
@@ -148,33 +123,27 @@ pct start 193
 ```
 
 完成後，容器設定檔應包含：
-
 ```
 dev0: /dev/usb/lp0,uid=0,gid=7,mode=0660
 ```
-
 這個方式不需要另外映射 `/dev/bus/usb/001`，因為本次實作採用 Linux `usblp` 裝置介面。
 
 ### 確認容器內裝置
 
 進入 LXC：
-
 ```
 pct enter 193
 ```
 
 執行：
-
 ```
 ls -l /dev/usb/lp0
 ```
 
 預期顯示：
-
 ```
 crw-rw---- 1 root lp 180, 0 /dev/usb/lp0
 ```
-
 其中 GID `7` 是 Debian 的 `lp` 群組，提供 CUPS 列印服務存取裝置的權限。
 
 ---
@@ -182,38 +151,29 @@ crw-rw---- 1 root lp 180, 0 /dev/usb/lp0
 ## 五、安裝 CUPS 與印表機驅動
 
 在 Debian LXC 執行：
-
 ```
 apt update
 apt install -y cups cups-client \
   printer-driver-foo2zjs \
   wget usbutils
 ```
-
 啟用 CUPS：
-
 ```
 systemctl enable --now cups
 ```
-
 確認：
-
 ```
 systemctl status cups
 ```
 
 ### 確認 P1005 驅動
-
 ```
 lpinfo -m | grep -i P1005
 ```
-
 選擇：
-
 ```
 HP LaserJet P1005 Foomatic/foo2xqx
 ```
-
 注意，P1005 不建議使用 Generic PCL 或 PostScript 驅動。
 
 ## 六、下載 HP LaserJet P1005 Firmware
@@ -291,7 +251,6 @@ cat /lib/firmware/hp/sihpP1005.dl > /dev/usb/lp0
 ```
 
 此指令會將 Firmware 資料直接傳送到 USB 印表機。
-
 成功傳送後，觀察印表機是否有反應，再進行列印測試。
 
 ### 重要注意事項
@@ -299,11 +258,8 @@ cat /lib/firmware/hp/sihpP1005.dl > /dev/usb/lp0
 本次測試發現：
 
 - 印表機重新通電後，手動傳送 Firmware 可以正常運作。
-    
 - 如果印表機已經載入 Firmware，重複執行上傳指令可能造成 USB 寫入卡住。
-    
 - 單純重新啟動 LXC，不代表印表機需要再次載入 Firmware。
-    
 - 不建議將上述 `cat` 指令無條件綁定在每次 CUPS 或 LXC 啟動流程。
     
 
@@ -314,15 +270,11 @@ cat /lib/firmware/hp/sihpP1005.dl > /dev/usb/lp0
 ## 八、設定 CUPS 印表機
 
 使用瀏覽器進入：
-
 ```
 http://192.168.8.86:631
 ```
-
 前往：
-
 Administration → Add Printer
-
 選擇 HP LaserJet P1005，並使用：
 
 ```
@@ -330,7 +282,6 @@ HP LaserJet P1005 Foomatic/foo2xqx
 ```
 
 本次實測發現，使用標準 CUPS `usb://` Backend 時，雖然能偵測裝置，但無法正常列印。
-
 因此最後使用：
 
 ```
@@ -379,37 +330,27 @@ Maintenance → Print Test Page
 為了讓 iPhone、iPad、macOS 裝置透過網路找到印表機，可以使用 CUPS + Avahi。
 
 ### 1. 安裝 Avahi
-
 ```
 apt install -y avahi-daemon avahi-utils dbus
 ```
-
 啟用：
-
 ```
 systemctl enable --now avahi-daemon
 ```
-
 ### 2. 開啟 CUPS 共享
-
 ```
 cupsctl --share-printers
 
 lpadmin -p P1005 -o printer-is-shared=true
 ```
-
 重新啟動：
-
 ```
 systemctl restart cups avahi-daemon
 ```
-
 ### 3. 檢查 IPP 廣播
-
 ```
 avahi-browse -rt _ipp._tcp
 ```
-
 確認區網中可以探索到共享的 P1005。
 
 iPhone AirPrint 還需要適當的 DNS-SD 能力資訊及相容的文件格式；若能探索但不能列印，應進一步檢查 AirPrint TXT 紀錄及 IPP 格式支援。
@@ -417,16 +358,10 @@ iPhone AirPrint 還需要適當的 DNS-SD 能力資訊及相容的文件格式�
 ### 4. iPhone 測試
 
 iPhone 連接相同區網後：
-
 1. 開啟照片、Safari 或 PDF。
-    
 2. 點選分享 → 列印。
-    
 3. 選擇 HP LaserJet P1005。
-    
 4. 送出測試列印。
-    
-
 若 Proxmox 防火牆有啟用，需確認內網允許：
 
 |通訊|Port|
@@ -509,3 +444,8 @@ cat /lib/firmware/hp/sihpP1005.dl > /dev/usb/lp0
 只要完成 Firmware 載入、正確 USB 裝置映射及 CUPS 驅動設定，即可讓這台舊款印表機繼續透過現代 Linux 列印伺服器提供網路列印服務。
 
 
+## 十二、Windows 新增印表機
+
+選名稱選取共用的印表機，使用http輸入CUPS網址就好
+
+![](static/Pasted%20image%2020261031230840.png)
