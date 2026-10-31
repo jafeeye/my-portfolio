@@ -31,6 +31,8 @@ tags:
 | UnRAID                                        |           |                                      | NAS          |
 | OMV                                           |           |                                      | NAS          |
 | Flatcar                                       |           |                                      | 專屬容器的linux系統 |
+| CentOS Stream                                 |           |                                      |              |
+| Loc-OS                                        |           | 超輕量發行版，不使用systemd，使用LXDE環境           |              |
 
 參考資料
 https://archiveos.org/

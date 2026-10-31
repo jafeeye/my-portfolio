@@ -1,3 +1,21 @@
+---
+title: Python 腳本
+toc: true
+date: 2026-10-30
+tags:
+---
+macOS 安裝 python 3 
+```
+pip3 --version
+python3 --version
+brew install python
+which python3       //查看python3路徑
+```
+
+
+
+
+
 
 ```
 pip3 install pyautogui

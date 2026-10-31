@@ -4,24 +4,110 @@
     "type": "split",
     "children": [
       {
-        "id": "9d7bbd029ab39b0b",
-        "type": "tabs",
+        "id": "9284d63e62213b3a",
+        "type": "split",
         "children": [
           {
-            "id": "306b6a7f98ed3dec",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "content/post/Dashboard.md",
-                "mode": "preview",
-                "source": false
+            "id": "9d7bbd029ab39b0b",
+            "type": "tabs",
+            "dimension": 76.63551401869158,
+            "children": [
+              {
+                "id": "15bbdac4894232f7",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "Proxmox 路由設定.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "Proxmox 路由設定"
+                }
               },
-              "icon": "lucide-file",
-              "title": "Dashboard"
-            }
+              {
+                "id": "d2faac09d2c2647f",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/Proxmox EVPN 設定.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "Proxmox EVPN 設定"
+                }
+              },
+              {
+                "id": "c7ae53bd98edcae0",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "content/post/OS整理與下載.md",
+                    "mode": "source",
+                    "source": false
+                  },
+                  "icon": "lucide-file",
+                  "title": "OS整理與下載"
+                }
+              }
+            ],
+            "currentTab": 2
+          },
+          {
+            "id": "e17aa472c378566c",
+            "type": "tabs",
+            "dimension": 23.364485981308412,
+            "children": [
+              {
+                "id": "325e985eba5e6c2a",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/kevin_ni/Desktop/公司檔案/obsidian/my-portfolio",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "serial": null
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "終端：zsh"
+                }
+              }
+            ]
           }
-        ]
+        ],
+        "direction": "horizontal"
       }
     ],
     "direction": "vertical"
@@ -83,7 +169,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 271.76171875
+    "width": 271.76171875,
+    "collapsed": true
   },
   "right": {
     "id": "bf396298f79400d2",
@@ -177,7 +264,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
       "switcher:開啟快速切換": false,
       "graph:查看關聯圖": false,
       "canvas:建立新畫布": false,
@@ -194,16 +281,23 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "306b6a7f98ed3dec",
+  "active": "c7ae53bd98edcae0",
   "lastOpenFiles": [
-    "content/post/Graylog.md",
+    "Proxmox 路由設定.md",
+    "content/post/Proxmox EVPN 設定.md",
+    "content/post/Proxmox 實用腳本.md",
+    "監控面板-KPanel.md",
+    "static/Pasted image 20261030213722.png",
+    "content/post/Proxmox 實體網卡設定與斷線除錯.md",
+    "content/post/程式語言/Python.md",
+    "content/post/Proxmox 安裝vDSM.md",
+    "content/post/OS整理與下載.md",
     "content/post/Dashboard.md",
+    "content/post/Graylog.md",
     "content/post/2026 Homelab 家用架設指南.md",
     "content/post/Keycloak illumio SAML 設定.md",
     "content/post/Proxmox 安裝K3s LXC.md",
-    "content/post/Proxmox 實用腳本.md",
     "content/post/下載相依套件.md",
-    "content/post/OS整理與下載.md",
     "共享區域網路SMB設定.md",
     "content/post/Proxmox 安裝Photon OS.md",
     "content/post/Proxmox 安裝Harbor LXC.md",
@@ -211,17 +305,10 @@
     "content/post/Proxmox 安裝Dockur.md",
     "content/post/Proxmox 安裝Flatcar Linux.md",
     "content/post/各系統安裝.md",
-    "content/post/Proxmox 安裝vDSM.md",
     "content/post/Proxmox 安裝Photon OS拷貝.md",
     "content/post/Proxmox 直通設定.md",
     "content/post/Proxmox 安裝QANP.md",
     "content/post/各式生產力工具整理.md",
-    "content/post/虛擬機設定-VMware Workstation.md",
-    "content/post/虛擬機設定-VirtualBox.md",
-    "content/post/常用指令Windows.md",
-    "content/post/Proxmox 傳遞CPU設定.md",
-    "content/post/Solaris.md",
-    "content/post/Windows 7 更新.md",
     "static/Pasted image 20261026114924.png",
     "static/Pasted image 20261026104842.png",
     "static/Pasted image 20261025214409.png",
@@ -231,7 +318,6 @@
     "static/Pasted image 20261025174617.png",
     "static/Pasted image 20261025172827.png",
     "static/Pasted image 20261025172321.png",
-    "static/Pasted image 20261025163931.png",
     "public/tags/pxe/page/1/index.html",
     "public/tags/pxe/page/1",
     "public/tags/pxe/page",
