@@ -4,13 +4,13 @@ toc: true
 date: 2026-05-19
 ---
 預設用PVE Script 安裝完VM,結束後用 `homeassisant.local:8123`  
-HACS  OS/Core 都可以安裝 `https://hacs.xyz/docs/use/download/download/`  
-如果HA 一樣是用 docker 裝 container 或 core 版本，那麼，也是宣告了你沒有 Add-ons 可以用
+HACS  OS VM /Container 都可以安裝 `https://hacs.xyz/docs/use/download/download/`  
+如果HA Container  是使用Docker 安裝，那麼也是宣告了你沒有 Add-ons Store 可以用
 - File editor
 - MQTT + HASS.Agent
 - Mosquitto MQTT Broker
 - Cloudflared
-橋接 Google Nest Mini 2 跟 HomeAssisant：Home Assistant Matter Hub
+- Home Assistant Matter Hub：橋接 Google Nest Mini 2 跟 HomeAssisant
 
 ## configuration.yaml
 1. 一般可透過`configuration.yaml` 進行細項，雖然可透過 Terminal修改，但大家還是會透過File Editor 設定，安裝為附加元件：設定 /應用程式/安裝應用程式/File Editor
@@ -28,13 +28,13 @@ HACS  OS/Core 都可以安裝 `https://hacs.xyz/docs/use/download/download/`
 
 bash
 ```
-      timeout 2 sshpass -p 'Password' ssh root@192.168.8.12 'shutdown -h now';
-      timeout 2 sshpass -p 'Password' ssh root@192.168.8.14 'shutdown -h now';
-      timeout 2 sshpass -p 'Password' ssh root@192.168.8.16 'shutdown -h now';
-      timeout 2 sshpass -p 'Password' ssh root@192.168.8.17 'poweroff';
-      timeout 2 sshpass -p 'Password' ssh PIN@192.168.8.103 'shutdown /s /t 0';
-      timeout 2 sshpass -p 'Password' ssh root@192.168.8.18 'poweroff';
-      timeout 2 sshpass -p 'Password' ssh root@192.168.1.5 'shutdown -h now';
+timeout 2 sshpass -p 'Password' ssh root@192.168.8.12 'shutdown -h now';
+timeout 2 sshpass -p 'Password' ssh root@192.168.8.14 'shutdown -h now';
+timeout 2 sshpass -p 'Password' ssh root@192.168.8.16 'shutdown -h now';
+timeout 2 sshpass -p 'Password' ssh root@192.168.8.17 'poweroff';
+timeout 2 sshpass -p 'Password' ssh PIN@192.168.8.103 'shutdown /s /t 0';
+timeout 2 sshpass -p 'Password' ssh root@192.168.8.18 'poweroff';
+timeout 2 sshpass -p 'Password' ssh root@192.168.1.5 'shutdown -h now';
 ```
 
 

@@ -22,7 +22,7 @@ PCE -> vmbr0 172.16.8.68
 ### 方法1
 1. PVE 原本vmbr0 為 172.16.9.14/16 (同時也是PVE登入IP) ,PCE在172.16.8.68
 2. PVE 加一張vmbr1，只填10.8.203.1/24，其他都不要填包括GW
-3. 開通sysctl net.ipv4.ip_forward=1
+3. pve host shell 開通sysctl net.ipv4.ip_forward=1
 4. 輸入指令確認狀態
 ```
 root@isbdtester02:~# ip route show  ## 使用ip route 看目前網卡路由
