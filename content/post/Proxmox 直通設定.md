@@ -31,20 +31,8 @@ AMD RESET BUG
 - intel vt-d
 - amd IOMMU SVM
 
-2. 追加grub
-nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 `intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
 
-- intel_iommu 和 amd_iommu=on 為開啟IOMMU
-- video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）
-- pcie_acs_override=downstream 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）
-
-2. 更新grub
-update-grub
-
-3. 增加vfio
-
-
-屏蔽顯卡
+2. 屏蔽顯卡
 nano /etc/modprobe.d/pve-blacklist.conf
 ```
 # nvidia
@@ -65,15 +53,42 @@ blacklist snd_hda_core
 >GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on pcie_aspm=off acpi=force"
 
 
-針對nvidia 
-/etc/modprobe.d/kvm.conf
+3. 增加vfio /etc/modprobe.d/vfio.conf，單一屏蔽使用
+```
+options vfio-pci ids=8086:56a0 disable_idle_d3=1
+```
+
+4. 追加grub並更新
+nano /etc/default/grub，在 GRUB_CMDLINE_LINUX_DEFAULT="quiet" 後面打上 
+```
+intel_iommu=on iommu=pt initcall_blacklist=sysfb_init pcie_acs_override=downstream`
+```
+
+- intel_iommu 和 amd_iommu=on 為開啟IOMMU
+- 要保留顯卡共享`initcall_blacklist=sysfb_init` 不要加上去
+- video=vesafb:off video=efifb:off 不載入 vesafb 是 veas設備 的 fb ，efifb 是指 uefi設備 的 fb ，在 PVE 7.3 之後版本用initcall_blacklist=sysfb_init 替代（來源於PVE 7.3 優化和顯卡直通）
+- `pcie_acs_override=downstream` 是為了將 iommu groups拆分，方便直通一些板載的設備（來源於加強硬體直通的功能）
+
+更新grub
+```
+update-grub
+```
+
+5. 重新編譯內核
+```
+update-initramfs -u -k all
+```
+
+
+
+
+## 問題
+
+- 如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
+- `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
+- 針對nvidia /etc/modprobe.d/kvm.conf
 ```
 options kvm ignore_msrs=1 report_ignored_msrs=0
 ```
 
-重新編譯內核
-update-initramfs -u -k all
-
-如果發現VM直通驚嘆號,可能是HDMI欺騙器沒插好也會
-
-6. `VM/Hardwares/Display` 選擇none,關閉虛擬螢幕顯示
+ 

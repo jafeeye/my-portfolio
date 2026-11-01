@@ -449,3 +449,17 @@ cat /lib/firmware/hp/sihpP1005.dl > /dev/usb/lp0
 選名稱選取共用的印表機，使用http輸入CUPS網址就好
 
 ![](static/Pasted%20image%2020261031230840.png)
+
+## 十三 進階直通USB
+
+編輯nano /etc/pve/lxc/101.conf  (加上optional參數)
+```
+lxc.cgroup2.devices.allow: c 189:* rwm
+lxc.cgroup2.devices.allow: c 180:* rwm
+lxc.mount.entry: /dev/bus/usb dev/bus/usb none bind,optional,create=dir
+lxc.mount.entry: /dev/usb dev/usb none bind,optional,create=dir
+```
+- 這個問題沒有想像中好解決，在PVE Shell 會看到有ls -l /dev/usb/lp0 有權限c 但容器裡面沒有
+- 保留 `/dev/bus/usb` bind mount，確保熱插拔後能出現。
+- 使用 cgroup／udev 權限限制印表機的 Vendor ID 和 Product ID。
+- 不必直通整張 USB 控制器。
