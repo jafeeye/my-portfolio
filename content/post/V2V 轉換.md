@@ -698,3 +698,18 @@ qm rescan
 ## 四、格式轉換
 OVA = Open Virtualization Archive
 OVF= Ovftool
+
+vmdk轉vhd
+```
+qemu-img convert -p -f vmdk -O vhdx xshield-disk1.vmdk xshield.vhdx
+```
+
+|參數|說明|
+|---|---|
+|`qemu-img`|QEMU 的虛擬磁碟管理工具|
+|`convert`|執行虛擬磁碟格式轉換|
+|`-p`|顯示轉換進度百分比（Progress）|
+|`-f vmdk`|指定來源磁碟格式為 VMDK|
+|`-O vhdx`|指定輸出磁碟格式為 VHDX，注意是大寫 O|
+|`xshield-disk1.vmdk`|來源檔案，也就是 VMware 虛擬硬碟|
+|`xshield.vhdx`|輸出檔案，也就是轉換後的 Hyper-V 虛擬硬碟|

@@ -683,3 +683,7 @@ df -h /var/lib/vz
 ## 進階功能
 保護 - 可保護虛擬機器設定值不被更動
 
+
+
+## Proxmox 進階參數
+args: -cpu SandyBridge,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+vmx args: -cpu Cascadelake-Server-noTSX,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time,+vmx args: -cpu host,hv_passthrough,level=30

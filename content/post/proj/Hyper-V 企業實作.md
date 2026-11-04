@@ -17,6 +17,16 @@ EXHyperV
 WSLDashboard
 NatMappingManager | Windows NAT Manager GUI
 
+
+## 確認可運行Hyper-V
+```
+bcdedit /enum {current}
+```
+![](static/Pasted%20image%2020261103134909.png)
+2. Get-Service vmms,vmcompute
+![](static/Pasted%20image%2020261103134959.png)
+
+
 ## 網路設定
 建立NAT
 ```powershell
