@@ -13,6 +13,16 @@ toc: true
 - 第二代強制UEFI然後只能SCSI開機(不支援MBR)
 - Hyper-V 的進階功能，記得使用主機板BIOS要開啟intel VMX、 SR-IOV、 VT-D
 
+### 修改設定
+韌體：調整開機順序
+安全開機：安全開機已停用
+整合服務：勾選客體服務
+檢查點：不要勾選`使用自動檢查點`
+關閉自動停止動作：這個會先將RAM放置在硬碟上，很佔空間
+![490](static/Pasted%20image%2020261104233621.png)
+
+
+
 EXHyperV
 WSLDashboard
 NatMappingManager | Windows NAT Manager GUI
@@ -25,6 +35,11 @@ bcdedit /enum {current}
 ![](static/Pasted%20image%2020261103134909.png)
 2. Get-Service vmms,vmcompute
 ![](static/Pasted%20image%2020261103134959.png)
+
+
+
+
+
 
 
 ## 網路設定
