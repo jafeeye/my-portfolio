@@ -34,8 +34,23 @@
               "icon": "lucide-file",
               "title": "Linux 檢查腳本"
             }
+          },
+          {
+            "id": "997a5e918ee622ab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "OCS Inventory.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "OCS Inventory"
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -114,7 +129,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MOSDNS.md",
+                "file": "OCS Inventory.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -175,7 +190,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MOSDNS.md",
+                "file": "OCS Inventory.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -211,12 +226,13 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "4e0fe530a30aa45d",
+  "active": "997a5e918ee622ab",
   "lastOpenFiles": [
+    "OCS Inventory.md",
     "Linux 檢查腳本.md",
+    "MOSDNS.md",
     "Linux 防火牆腳本.md",
     "content/post/NAMP.md",
-    "MOSDNS.md",
     "content/post/homeassisant.md",
     "OxiDNS.md",
     "content/post/PVE 進階設定.md",
@@ -248,7 +264,6 @@
     "content/post/編譯 Openwrt.md",
     "content/post/OpenWRT.md",
     "static/Pasted image 20261101190415.png",
-    "content/post/跳板機.md",
     "public/tags/pxe/page/1/index.html",
     "public/tags/pxe/page/1",
     "public/tags/pxe/page",
