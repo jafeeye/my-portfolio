@@ -4,124 +4,38 @@
     "type": "split",
     "children": [
       {
-        "id": "9284d63e62213b3a",
-        "type": "split",
+        "id": "9d7bbd029ab39b0b",
+        "type": "tabs",
         "children": [
           {
-            "id": "9d7bbd029ab39b0b",
-            "type": "tabs",
-            "dimension": 76.63551401869158,
-            "children": [
-              {
-                "id": "7ed5728d518166c7",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/proj/Hyper-V 企業實作.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "Hyper-V 企業實作"
-                }
+            "id": "4e0fe530a30aa45d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "MOSDNS.md",
+                "mode": "source",
+                "source": false
               },
-              {
-                "id": "d67a86c85d690e51",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/PVE 進階設定.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "PVE 進階設定"
-                }
-              },
-              {
-                "id": "c4dcfcfedb16695b",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "content/post/資產盤點軟體.md",
-                    "mode": "preview",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "資產盤點軟體"
-                }
-              },
-              {
-                "id": "10fa9e6f14f9237c",
-                "type": "leaf",
-                "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "jt-ipam.md",
-                    "mode": "source",
-                    "source": false
-                  },
-                  "icon": "lucide-file",
-                  "title": "jt-ipam"
-                }
-              }
-            ],
-            "currentTab": 3
+              "icon": "lucide-file",
+              "title": "MOSDNS"
+            }
           },
           {
-            "id": "e17aa472c378566c",
-            "type": "tabs",
-            "dimension": 23.364485981308412,
-            "children": [
-              {
-                "id": "325e985eba5e6c2a",
-                "type": "leaf",
-                "pinned": true,
-                "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/kevin_ni/Desktop/公司檔案/obsidian/my-portfolio",
-                      "focus": false,
-                      "profile": {
-                        "args": [
-                          "--login"
-                        ],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "終端：zsh"
-                }
-              }
-            ]
+            "id": "ae8ff4bfecfcd79a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux 檢查腳本.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Linux 檢查腳本"
+            }
           }
-        ],
-        "direction": "horizontal"
+        ]
       }
     ],
     "direction": "vertical"
@@ -200,7 +114,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/post/Proxmox 實用腳本.md",
+                "file": "MOSDNS.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -261,6 +175,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "MOSDNS.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -269,7 +184,8 @@
               "title": "大綱"
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -278,7 +194,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-excalidraw-plugin:New drawing": false,
+      "obsidian-excalidraw-plugin:新建繪圖檔案": false,
       "switcher:開啟快速切換": false,
       "graph:查看關聯圖": false,
       "canvas:建立新畫布": false,
@@ -295,44 +211,44 @@
       "mermaid-flow:Mermaid Flow Editor": false
     }
   },
-  "active": "325e985eba5e6c2a",
+  "active": "4e0fe530a30aa45d",
   "lastOpenFiles": [
-    "jt-ipam.md",
-    "content/post/資產盤點軟體.md",
-    "static/Pasted image 20261104233621.png",
-    "static/Pasted image 20261104232854.png",
-    "static/Pasted image 20261101000811.png",
-    "content/post/虛擬機設定-Podman Desktop.md",
-    "content/post/Malcolm.md",
+    "Linux 檢查腳本.md",
+    "Linux 防火牆腳本.md",
+    "content/post/NAMP.md",
+    "MOSDNS.md",
+    "content/post/homeassisant.md",
+    "OxiDNS.md",
     "content/post/PVE 進階設定.md",
+    "content/post/OlivTin Docker安裝.md",
+    "content/post/2026 Homelab 家用架設指南.md",
+    "static/Pasted image 20261108162656.png",
+    "static/Pasted image 20261108125444.png",
+    "static/Pasted image 20261108125420.png",
+    "static/Pasted image 20261108125148.png",
+    "content/post/架設 CUPS 網路列印伺服器.md",
+    "content/post/各式 DNS Server 方案.md",
+    "MikroTik.md",
     "content/post/proj/Hyper-V 企業實作.md",
+    "content/post/Proxmox 直通設定.md",
+    "Windows 網路除錯.md",
+    "static/Pasted image 20261107103858.png",
+    "jt-ipam.md",
+    "static/Pasted image 20261104233621.png",
+    "content/post/Malcolm.md",
+    "static/Pasted image 20261104232854.png",
     "content/post/Proxmox NFS Server.md",
     "static/Pasted image 20261103134959.png",
     "static/Pasted image 20261103134909.png",
     "content/post/V2V 轉換.md",
     "content/post/HomeAssisant.md",
     "content/post/Proxmox LXC 安裝GDM.md",
-    "content/post/Proxmox 直通設定.md",
     "content/post/Proxmox 路由設定.md",
     "content/post/Proxmox 折騰操作.md",
     "content/post/編譯 Openwrt.md",
     "content/post/OpenWRT.md",
     "static/Pasted image 20261101190415.png",
     "content/post/跳板機.md",
-    "content/post/ESXi 安裝與配置.md",
-    "content/post/架設 CUPS 網路列印伺服器.md",
-    "static/Pasted image 20261031230840.png",
-    "static/Pasted image 20261031201916.png",
-    "static/Pasted image 20261031201755.png",
-    "content/post/共享區域網路SMB設定.md",
-    "content/post/Proxmox EVPN 設定.md",
-    "content/post/Windows OS系統優化.md",
-    "content/post/Linux 系統優化部署.md",
-    "content/post/製作大量部屬.md",
-    "content/post/OS整理與下載.md",
-    "content/post/Proxmox 實用腳本.md",
-    "content/post/監控面板-KPanel.md",
-    "static/Pasted image 20261030213722.png",
     "public/tags/pxe/page/1/index.html",
     "public/tags/pxe/page/1",
     "public/tags/pxe/page",

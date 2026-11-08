@@ -6,7 +6,18 @@ tags:
   - 資安
   - 使用中工具
 ---
-原文[出處](https://blog.hx99.net/Tech/4075.html)作者在這，軟體使用 FastAPI完成，可以使用LXC部屬
+原文[出處](https://blog.hx99.net/Tech/4075.html)ㄐ及[源碼](https://gitee.com/cncsrf/nmap-scanner-web)作者在這，軟體使用 FastAPI完成，可以使用LXC部屬
+
+###### 1、方式一：一键安装脚本（Ubuntu/Debian 推荐）
+
+全自动安装 Python、nmap、依赖、生成密钥、注册 systemd 自启
+
+```
+git clone https://gitee.com/cncsrf/nmap-scanner-web.git
+cd nmap-scanner-web
+sudo bash install.sh
+```
+
 
 安裝完LXC ，可以執行以下
 ```

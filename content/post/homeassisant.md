@@ -38,8 +38,19 @@ timeout 2 sshpass -p 'Password' ssh root@192.168.1.5 'shutdown -h now';
 ```
 
 
+### Olivetin
+
+Port:1337
+
 ## Terminal
 
 Terminal 鍵入 docker exec -it homeassistant bash 這行指令：
 chris@chris-Default-string:~$ docker exec -it homeassistant bash
 chris@chris-Default-string:~$bash-5.1# wget -q -O - https://install.hacs.xyz | bash
+
+
+
+
+## 相關套件
+- RPC Shutdown ：使用HA關閉電腦
+- Blueprint Studio
